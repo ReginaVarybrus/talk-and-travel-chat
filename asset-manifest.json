@@ -1,14 +1,14 @@
 {
   "files": {
-    "main.css": "/talk-and-travel-chat/static/css/main.da8cdec4.css",
-    "main.js": "/talk-and-travel-chat/static/js/main.6a14fbc5.js",
+    "main.css": "/talk-and-travel-chat/static/css/main.a3a57e07.css",
+    "main.js": "/talk-and-travel-chat/static/js/main.0540865b.js",
     "static/media/sprite.svg": "/talk-and-travel-chat/static/media/sprite.246b15437d483852293663fcffecc1b9.svg",
     "index.html": "/talk-and-travel-chat/index.html",
-    "main.da8cdec4.css.map": "/talk-and-travel-chat/static/css/main.da8cdec4.css.map",
-    "main.6a14fbc5.js.map": "/talk-and-travel-chat/static/js/main.6a14fbc5.js.map"
+    "main.a3a57e07.css.map": "/talk-and-travel-chat/static/css/main.a3a57e07.css.map",
+    "main.0540865b.js.map": "/talk-and-travel-chat/static/js/main.0540865b.js.map"
   },
   "entrypoints": [
-    "static/css/main.da8cdec4.css",
-    "static/js/main.6a14fbc5.js"
+    "static/css/main.a3a57e07.css",
+    "static/js/main.0540865b.js"
   ]
 }
