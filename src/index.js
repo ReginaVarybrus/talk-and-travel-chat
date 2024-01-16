@@ -1,6 +1,6 @@
 import React from 'react';
-// import { BrowserRouter } from 'react-router-dom';
-import { HashRouter } from 'react-router-dom';
+import { BrowserRouter } from 'react-router-dom';
+// import { HashRouter } from 'react-router-dom';
 import ReactDOM from 'react-dom/client';
 import './index.css';
 import App from './App';
@@ -12,24 +12,24 @@ import { PersistGate } from 'redux-persist/integration/react';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
-  // <React.StrictMode>
-  //   <GlobalStyles />
-  //   <BrowserRouter basename="/talk-and-travel-chat">
-  //     <Provider store={store}>
-  //       <PersistGate loading={null} persistor={persistor}>
-  //         <App />
-  //       </PersistGate>
-  //     </Provider>
-  //   </BrowserRouter>
-  // </React.StrictMode>
   <React.StrictMode>
-  <GlobalStyles />
-  <HashRouter>
-    <Provider store={store}>
-      <PersistGate loading={null} persistor={persistor}>
-        <App />
-      </PersistGate>
-    </Provider>
-  </HashRouter>
-</React.StrictMode>
+    <GlobalStyles />
+    <BrowserRouter basename="/talk-and-travel-chat">
+      <Provider store={store}>
+        <PersistGate loading={null} persistor={persistor}>
+          <App />
+        </PersistGate>
+      </Provider>
+    </BrowserRouter>
+  </React.StrictMode>
+//   <React.StrictMode>
+//   <GlobalStyles />
+//   <HashRouter>
+//     <Provider store={store}>
+//       <PersistGate loading={null} persistor={persistor}>
+//         <App />
+//       </PersistGate>
+//     </Provider>
+//   </HashRouter>
+// </React.StrictMode>
 );
