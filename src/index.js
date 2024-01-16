@@ -24,7 +24,7 @@ root.render(
   // </React.StrictMode>
   <React.StrictMode>
   <GlobalStyles />
-  <Router>
+  <Router basename="/">
     <Provider store={store}>
       <PersistGate loading={null} persistor={persistor}>
         <App />
