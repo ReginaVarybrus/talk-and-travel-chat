@@ -1,6 +1,5 @@
 import React from 'react';
 import { BrowserRouter } from 'react-router-dom';
-// import { HashRouter } from 'react-router-dom';
 import ReactDOM from 'react-dom/client';
 import './index.css';
 import App from './App';
@@ -22,14 +21,4 @@ root.render(
       </Provider>
     </BrowserRouter>
   </React.StrictMode>
-//   <React.StrictMode>
-//   <GlobalStyles />
-//   <HashRouter>
-//     <Provider store={store}>
-//       <PersistGate loading={null} persistor={persistor}>
-//         <App />
-//       </PersistGate>
-//     </Provider>
-//   </HashRouter>
-// </React.StrictMode>
 );

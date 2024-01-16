@@ -1,6 +1,6 @@
 
 // import './App.css';
-// import { Suspense } from 'react';
+import { Suspense } from 'react';
 import { Routes, Route } from "react-router-dom";
 
 import MainPage from 'pages/MainPage/MainPage';
@@ -10,7 +10,7 @@ import AccountPage from 'pages/AccountPage/AccountPage';
 import ChatPage from 'pages/ChatPage/ChatPage'
 import Layout from 'components/Layout/Layout';
 // import Page404 from 'page/Page404/Page404';
-// import Loader from './components/Loader/Loader';
+import Loader from './components/Loader/Loader';
 // import VerificationPage from 'pages/VerificationPage/VerificationPage'
 import PrivateRoute from 'PrivateRoute';
 import RestrictedRoute from 'RestrictedRoute';
@@ -19,7 +19,7 @@ export default function App() {
  
   return (
     <>
-    {/* <Suspense fallback={<Loader />}> */}
+    <Suspense fallback={<Loader />}>
     <Routes>
 
     <Route path="/" element={<Layout />}>
@@ -68,7 +68,7 @@ export default function App() {
       </Route>
 
     </Routes>
-    {/* </Suspense> */}
+    </Suspense>
     </>
   );
 }
