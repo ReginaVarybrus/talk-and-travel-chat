@@ -5,9 +5,10 @@ import {
   logOut,
   fetchCurrentUser,
   updateUser,
+  sendDataCountryToBackend,
 } from '../AuthOperations/AuthOperations';
 
-import { sendDataCountryToBackend } from '../AuthOperations/DataCountryOperation';
+// import { sendDataCountryToBackend } from '../AuthOperations/DataCountryOperation';
 
 const initialState = {
   token: null,
@@ -18,6 +19,11 @@ const initialState = {
     // birthday: '',
     // phone: '',
   },
+  countryDto: {
+    name: '',
+    flagCode: '',
+  },
+  userId: '',
 
   isLoggedIn: false,
   isRefresh: true,
@@ -81,11 +87,26 @@ export const authSlice = createSlice({
       })
 
       .addCase(sendDataCountryToBackend.pending, handlePending)
-      .addCase(sendDataCountryToBackend.rejected, handleRejected)
+      .addCase(sendDataCountryToBackend.rejected, (state, action) => {
+        console.error(
+          'sendDataCountryToBackend failed with error:',
+          action.error
+        );
+        console.log('action:', action);
+        console.log('action.payload:', action.payload);
+        console.log('action.meta.arg:', action.meta.arg);
+        handleRejected(state, action);
+      })
       .addCase(sendDataCountryToBackend.fulfilled, (state, action) => {
-        state.data = action.payload.data;
+        // return {
+        //   ...state,
+        //   countryDto: action.payload.countryDto,
+        //   token: action.payload.token,
+        //   isLoggedIn: true,
+        // };
+        state.countryDto = action.payload.countryDto;
+        console.log('action', action);
       }),
-
 });
 
 export default authSlice.reducer;

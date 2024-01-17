@@ -9,7 +9,7 @@ import {
   Item,
   Flag,
 } from './SearchInputStyled';
-import { sendDataCountryToBackend } from '../../redux-store/AuthOperations/DataCountryOperation.js';
+import { sendDataCountryToBackend } from '../../redux-store/AuthOperations/AuthOperations.js';
 import { getUserId } from 'redux-store/AuthOperations/selectors';
 import SimpleBar from 'simplebar-react';
 import 'simplebar-react/dist/simplebar.min.css';
@@ -39,19 +39,20 @@ export default function SearchInput() {
   };
 
   const handleCountryClick = country => {
-    const data = {
-      data: {
-        name: country.properties.ADMIN, 
-      flagCode: country.properties.code,
-      }
+    const countryDto = {
+      countryDto: {
+        name: country.properties.ADMIN,
+        flagCode: country.properties.code,
+      },
+      userId: userId,
     };
 
     setSearchedValue(country.properties.ADMIN);
     setShowItem(false);
-    console.log('choose country', country.properties.ADMIN);
+    // console.log('choose country', country.properties.ADMIN);
 
-    dispatch(sendDataCountryToBackend(userId, data));
-    console.log('data to send', userId, data);
+    dispatch(sendDataCountryToBackend(countryDto));
+    console.log('data to send', countryDto);
   };
 
   useEffect(() => {
@@ -86,19 +87,27 @@ export default function SearchInput() {
         <ListWrapper>
           <ListItems>
             <SimpleBar style={{ maxHeight: 570 }}>
-              {filterCountries === 0 ? (<p>BlaBla</p>) :
-              (<>{filterCountries.map((country, index) => (
-                <Item key={index} onClick={() => handleCountryClick(country)}>
-                  <Flag
-                    loading="lazy"
-                    width="32"
-                    srcSet={`https://flagcdn.com/w40/${country.properties.code}.png 2x`}
-                    src={`https://flagcdn.com/w20/${country.properties.code}.png`}
-                    alt={`${country.properties.ADMIN} flag`}
-                  />
-                  <p>{country.properties.ADMIN}</p>
-                </Item>
-              ))}</>)}
+              {filterCountries === 0 ? (
+                <p>BlaBla</p>
+              ) : (
+                <>
+                  {filterCountries.map((country, index) => (
+                    <Item
+                      key={index}
+                      onClick={() => handleCountryClick(country)}
+                    >
+                      <Flag
+                        loading="lazy"
+                        width="32"
+                        srcSet={`https://flagcdn.com/w40/${country.properties.code}.png 2x`}
+                        src={`https://flagcdn.com/w20/${country.properties.code}.png`}
+                        alt={`${country.properties.ADMIN} flag`}
+                      />
+                      <p>{country.properties.ADMIN}</p>
+                    </Item>
+                  ))}
+                </>
+              )}
             </SimpleBar>
           </ListItems>
         </ListWrapper>
