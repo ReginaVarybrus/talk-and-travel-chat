@@ -3,7 +3,7 @@ import {
   register,
   logIn,
   logOut,
-  fetchCurrentUser,
+  // fetchCurrentUser,
   updateUser,
   sendDataCountryToBackend,
 } from '../AuthOperations/AuthOperations';
@@ -19,10 +19,8 @@ const initialState = {
     // birthday: '',
     // phone: '',
   },
-  countryDto: {
-    name: '',
-    flagCode: '',
-  },
+  name: '',
+  flagCode: '',
   userId: '',
 
   isLoggedIn: false,
@@ -58,10 +56,10 @@ export const authSlice = createSlice({
       .addCase(logIn.pending, handlePending)
       .addCase(logIn.rejected, handleRejected)
       .addCase(logIn.fulfilled, (state, action) => {
+        console.log('login action', action);
         state.userDto = action.payload.userDto;
         state.token = action.payload.token;
 
-        console.log('login action', action);
         state.isLoggedIn = true;
         state.error = null;
       })
@@ -75,37 +73,44 @@ export const authSlice = createSlice({
         state.isRefresh = false;
       })
 
-      .addCase(fetchCurrentUser.pending, handlePending)
-      .addCase(fetchCurrentUser.rejected, handleRejected)
-      .addCase(fetchCurrentUser.fulfilled, (state, action) => {
-        state.userDto = action.payload.userDto;
-        state.isLoggedIn = true;
-        state.isRefresh = false;
-      })
+      // .addCase(fetchCurrentUser.pending, handlePending)
+      // .addCase(fetchCurrentUser.rejected, handleRejected)
+      // .addCase(fetchCurrentUser.fulfilled, (state, action) => {
+      //   state.userDto = action.payload.userDto;
+      //   state.isLoggedIn = true;
+      //   state.isRefresh = false;
+      // })
       .addCase(updateUser.fulfilled, (state, action) => {
         state.userDto = { ...state.userDto, ...action.payload };
       })
 
       .addCase(sendDataCountryToBackend.pending, handlePending)
       .addCase(sendDataCountryToBackend.rejected, (state, action) => {
-        console.error(
-          'sendDataCountryToBackend failed with error:',
-          action.error
-        );
+        console.error('failed with error:', action.error.message);
         console.log('action:', action);
         console.log('action.payload:', action.payload);
         console.log('action.meta.arg:', action.meta.arg);
+        // handleRejected(state, action);
+
+        if (action.payload && action.payload.data) {
+          console.error('Ошибка в ответе:', action.payload.data.message);
+        } else {
+          console.error(
+            'Ошибка в ответе, свойство data отсутствует:',
+            action.payload
+          );
+        }
         handleRejected(state, action);
       })
       .addCase(sendDataCountryToBackend.fulfilled, (state, action) => {
-        // return {
-        //   ...state,
-        //   countryDto: action.payload.countryDto,
-        //   token: action.payload.token,
-        //   isLoggedIn: true,
-        // };
-        state.countryDto = action.payload.countryDto;
-        console.log('action', action);
+        console.log('Fulfilled Action:', action);
+        console.log('Fulfilled Payload:', action.payload);
+        state.countryDto = action.payload.data;
+
+        // state.token = action.payload.token;
+        state.isLoggedIn = true;
+
+        // console.log('action', action);
       }),
 });
 

@@ -1,4 +1,5 @@
 import React from 'react';
+// import { useSelector } from 'react-redux';
 import {
   Wrapper,
   Header,
@@ -10,13 +11,16 @@ import {
   Button,
 } from './ChatStyled';
 import Icons from '../Icons/Icons';
+// import { getCountryName } from 'redux-store/AuthOperations/selectors';
 
 export default function Chat() {
+  // const countryName = useSelector(getCountryName);
+
   return (
     <Wrapper>
       <Header>
         <HeaderContent>
-          <h5>Chat name</h5>
+          <h5>Country Name</h5>
           <p>members</p>
         </HeaderContent>
       </Header>

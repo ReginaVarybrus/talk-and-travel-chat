@@ -6,3 +6,6 @@ export const getUserPassword = state => state.auth.userDto.password;
 export const getVerifyToken = state => state.auth.userDto.verificationToken;
 export const getUserRefresh = state => state.auth.isRefresh;
 export const getUser = state => state.auth;
+export const getPersistedToken = state => state.auth.token;
+
+export const getCountryName = state => state.auth.countryDto.name;

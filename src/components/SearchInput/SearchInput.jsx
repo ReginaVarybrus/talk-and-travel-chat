@@ -10,7 +10,7 @@ import {
   Flag,
 } from './SearchInputStyled';
 import { sendDataCountryToBackend } from '../../redux-store/AuthOperations/AuthOperations.js';
-import { getUserId } from 'redux-store/AuthOperations/selectors';
+import { getUserId, getPersistedToken } from 'redux-store/AuthOperations/selectors';
 import SimpleBar from 'simplebar-react';
 import 'simplebar-react/dist/simplebar.min.css';
 
@@ -23,6 +23,7 @@ export default function SearchInput() {
   const autoCompleteRef = useRef(null);
   const dispatch = useDispatch();
   const userId = useSelector(getUserId);
+  const token = useSelector(getPersistedToken);
 
   const filterCountries = mapData.features.filter(name =>
     name.properties.ADMIN.toLowerCase().includes(searchedValue.toLowerCase())
@@ -39,20 +40,24 @@ export default function SearchInput() {
   };
 
   const handleCountryClick = country => {
-    const countryDto = {
-      countryDto: {
-        name: country.properties.ADMIN,
-        flagCode: country.properties.code,
-      },
-      userId: userId,
-    };
+    // const countryDto = {
+    //   // countryDto: {
+    //     name: country.properties.ADMIN,
+    //     flagCode: country.properties.code,
+    //   // },
+    // };
+
+    const countryData = {
+      name: country.properties.ADMIN,
+      flagCode: country.properties.code,
+  };
 
     setSearchedValue(country.properties.ADMIN);
     setShowItem(false);
     // console.log('choose country', country.properties.ADMIN);
 
-    dispatch(sendDataCountryToBackend(countryDto));
-    console.log('data to send', countryDto);
+    dispatch(sendDataCountryToBackend({userId, countryDto: countryData, token}));
+    console.log('data to send', countryData);
   };
 
   useEffect(() => {
