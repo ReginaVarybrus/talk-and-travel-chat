@@ -78,26 +78,26 @@ export const logOut = createAsyncThunk('auth/logout', async () => {
   }
 });
 
-export const fetchCurrentUser = createAsyncThunk(
-  'auth/refresh',
-  async (_, thunkAPI) => {
-    const state = thunkAPI.getState();
-    const persistedToken = state.auth.token;
+// export const fetchCurrentUser = createAsyncThunk(
+//   'auth/refresh',
+//   async (_, thunkAPI) => {
+//     const state = thunkAPI.getState();
+//     const persistedToken = state.auth.token;
 
-    if (persistedToken === null) {
-      return thunkAPI.rejectWithValue('No valid token');
-    }
+//     if (persistedToken === null) {
+//       return thunkAPI.rejectWithValue('No valid token');
+//     }
 
-    try {
-      token.set(persistedToken);
-      const user = await axios.get(`auth/current`);
+//     try {
+//       token.set(persistedToken);
+//       const user = await axios.get(`auth/current`);
 
-      return user.data;
-    } catch (error) {
-      return thunkAPI.rejectWithValue(error.message);
-    }
-  }
-);
+//       return user.data;
+//     } catch (error) {
+//       return thunkAPI.rejectWithValue(error.message);
+//     }
+//   }
+// );
 
 export const updateUser = createAsyncThunk(
   'user/update',
@@ -116,39 +116,35 @@ export const updateUser = createAsyncThunk(
 
 export const sendDataCountryToBackend = createAsyncThunk(
   'auth/sendDataCountryToBackend',
-  async ({ userId, countryDto }, { rejectWithValue }) => {
+  async ({ userId, countryDto, token }, { rejectWithValue }) => {
     try {
-      const response = await axios.post(`/api/country/${userId}`, countryDto, {
+      console.log('token before request', token);
+
+      const response = await axios.post(`/api/countries/${userId}`, countryDto, {
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token.get()}`
+          'Authorization': `Bearer ${token}`,
         },
       });
-      // token.set(response.data.token);
-      
+
+      if (!response.data) {
+        throw rejectWithValue('Response data is missing');
+      }
+
+      console.log('token', token);
       console.log('data country', response);
-      return response.data;
+      return response;
     } catch (e) {
       if (e.response && e.response.data) {
         console.log('Error response data:', e.response.data);
         throw rejectWithValue(e.response.data.message);
       } else {
-        console.error('Error response is missing or does not have data property:', e.response);
+        console.error(
+          'Error response is missing or does not have data property:',
+          e.response
+        );
         throw rejectWithValue('Unknown error occurred');
       }
-
-      // rejectWithValue(e.response.data.message);
-      // console.log(e.response.data);
-
-
-      // if (
-      //   e.response.status === 400 ||
-      //   e.response.status === 401 ||
-      //   e.response.status === 409
-      // ) {
-      //   throw rejectWithValue(e.response.data.message);
-      // }
-      // throw e;
     }
   }
 );
