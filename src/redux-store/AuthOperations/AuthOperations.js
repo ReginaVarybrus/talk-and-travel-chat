@@ -10,10 +10,7 @@ export const token = {
   },
   unset() {
     axios.defaults.headers.common.Authorization = '';
-  },
-  get() {
-    return axios.defaults.headers.common.Authorization.split(' ')[1] || null;
-  },
+  }
 };
 
 export const register = createAsyncThunk('auth/register', async userData => {
@@ -71,33 +68,33 @@ export const logIn = createAsyncThunk('auth/login', async userData => {
 
 export const logOut = createAsyncThunk('auth/logout', async () => {
   try {
-    await axios.post('/auth/logout');
+    await axios.post('/api/authentication/logout');
     token.unset();
   } catch (e) {
     console.log(e.message);
   }
 });
 
-// export const fetchCurrentUser = createAsyncThunk(
-//   'auth/refresh',
-//   async (_, thunkAPI) => {
-//     const state = thunkAPI.getState();
-//     const persistedToken = state.auth.token;
+export const fetchCurrentUser = createAsyncThunk(
+  'auth/refresh',
+  async (_, thunkAPI) => {
+    const state = thunkAPI.getState();
+    const persistedToken = state.auth.token;
 
-//     if (persistedToken === null) {
-//       return thunkAPI.rejectWithValue('No valid token');
-//     }
+    if (persistedToken === null) {
+      return thunkAPI.rejectWithValue('No valid token');
+    }
 
-//     try {
-//       token.set(persistedToken);
-//       const user = await axios.get(`auth/current`);
+    try {
+      token.set(persistedToken);
+      const user = await axios.get(`auth/current`);
 
-//       return user.data;
-//     } catch (error) {
-//       return thunkAPI.rejectWithValue(error.message);
-//     }
-//   }
-// );
+      return user.data;
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error.message);
+    }
+  }
+);
 
 export const updateUser = createAsyncThunk(
   'user/update',
@@ -118,8 +115,6 @@ export const sendDataCountryToBackend = createAsyncThunk(
   'auth/sendDataCountryToBackend',
   async ({ userId, countryDto, token }, { rejectWithValue }) => {
     try {
-      console.log('token before request', token);
-
       const response = await axios.post(`/api/countries/${userId}`, countryDto, {
         headers: {
           'Content-Type': 'application/json',
@@ -133,7 +128,7 @@ export const sendDataCountryToBackend = createAsyncThunk(
 
       console.log('token', token);
       console.log('data country', response);
-      return response;
+      return response.data;
     } catch (e) {
       if (e.response && e.response.data) {
         console.log('Error response data:', e.response.data);

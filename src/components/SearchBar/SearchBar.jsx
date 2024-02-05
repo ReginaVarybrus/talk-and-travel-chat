@@ -2,34 +2,60 @@ import React, { useState } from 'react';
 import Backdrop from '@mui/material/Backdrop';
 import Modal from '@mui/material/Modal';
 import Fade from '@mui/material/Fade';
+// import io from 'socket.io-client';
 
-import { Wrapper, Text, ButtonMapOpen, MapBox } from './SearchBarStyled';
+import { Wrapper, ButtonMapOpen, MapBox } from './SearchBarStyled';
 import SearchInput from '../SearchInput/SearchInput';
 import DMsList from '../DMsList/DMsList';
 import RoomsList from '../RoomsList/RoomsList';
 import ChatMap from '../ChatMap/ChatMap';
 import PropTypes from 'prop-types';
 
-function SearchBar({isOpen}) {
+function SearchBar({ isOpen }) {
   const [openMap, setOpenMap] = useState(false);
+  // const [socket, setSocket] = useState(null);
+  // const [selectedCountryRooms, setSelectedCountryRooms] = useState([]);
   const handleOpen = () => setOpenMap(true);
   const handleClose = () => setOpenMap(false);
 
+  // useEffect(() => {
+  //   const socketInstance = io('#');
+
+  //   socketInstance.on('updateRoomList', rooms => {
+  //     setSelectedCountryRooms(rooms);
+  //   });
+
+  //   setSocket(socketInstance);
+
+  //   return () => {
+  //     socketInstance.disconnect();
+  //   };
+  // }, []);
+
   return (
     <Wrapper>
-      <SearchInput />
+      <SearchInput 
+      // socket={socket}
+       />
       <ButtonMapOpen onClick={handleOpen}>Search by map</ButtonMapOpen>
-      <Text>
+      {/* <Text>
         There are no rooms in the list.
         <br /> Find chat of a country and it will be shown here
-      </Text>
-      {isOpen === 'component1' ? <DMsList /> : <RoomsList />}
-      
+      </Text> */}
+      {isOpen === 'component2' ? (
+        <RoomsList 
+        // rooms={selectedCountryRooms}
+         />
+      ) : (
+        <DMsList />
+      )}
+
       <Modal
         aria-labelledby="transition-modal-title"
         aria-describedby="transition-modal-description"
         open={openMap}
         onClose={handleClose}
+        // onClick={handleClose}
         closeAfterTransition
         slots={{ backdrop: Backdrop }}
         slotProps={{
@@ -40,7 +66,7 @@ function SearchBar({isOpen}) {
       >
         <Fade in={openMap}>
           <MapBox>
-            <ChatMap />
+            <ChatMap closeMap={handleClose} />
           </MapBox>
         </Fade>
       </Modal>

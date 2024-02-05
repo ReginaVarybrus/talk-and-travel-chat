@@ -1,6 +1,11 @@
 import React from 'react';
 
 import { useNavigate } from 'react-router-dom';
+import {
+  Wrapper,
+  RegisterButton,
+  LoginButton
+} from './MainPageStyled';
 
 export default function MainPage() {
   const navigate = useNavigate();
@@ -14,15 +19,15 @@ export default function MainPage() {
   };
 
   return (
-    <div>
+    <Wrapper>
       <h2>MainPage</h2>
-      <button onClick={handleRegisterOpen}>
+      <RegisterButton onClick={handleRegisterOpen}>
         Sign up
-      </button>
-      <button onClick={handleLoginOpen}>
+      </RegisterButton>
+      <LoginButton onClick={handleLoginOpen}>
         Login
-      </button>
-    </div>
+      </LoginButton>
+    </Wrapper>
   );
 }
 

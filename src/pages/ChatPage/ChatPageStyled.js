@@ -1,10 +1,14 @@
 import styled from 'styled-components';
 
-export const Container = styled.div`
+export const ChatWrapper = styled.div`
   display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
   width: 100%;
-  min-height: 100vh;
+  max-height: 100vh;
   margin: 0 auto;
+  background: var(--white-color);
 
   @media screen and (min-width: 375px) {
     max-width: 375px;
@@ -17,14 +21,14 @@ export const Container = styled.div`
   }
 `;
 
-export const ChatWrapper = styled.div`
+export const LogoBlock = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  width: 100%;
-  height: 100vh;
-  background: var(--white-color);
+  & > p {
+    color: var(--color-dark);
+  }
 `;
 
 export const Logo = styled.img`

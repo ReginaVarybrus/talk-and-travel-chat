@@ -1,5 +1,5 @@
 import React from 'react';
-import sprite from '../../images/sprite.svg';
+import sprite from '../../public/sprite.svg';
 import PropTypes from 'prop-types';
 
 function Icons({ name, fill, stroke, size }) {

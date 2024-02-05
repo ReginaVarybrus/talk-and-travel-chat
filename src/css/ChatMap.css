@@ -1,10 +1,3 @@
-.map-container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-}
-
 .leaflet-container {
     position: relative;
     background: var(--white-color);
@@ -13,9 +6,12 @@
 }
 
 .leaflet-control-zoom {
-    position: absolute;
-    top: 696px;
-    left: 533px;
+    /* position: absolute;
+    top: 655px;
+    left: 50%; */
+    /* bottom: 50px; */
+    /* transform: translate(-50%, 0); */
+    visibility: hidden;
 }
 
 .leaflet-bar {

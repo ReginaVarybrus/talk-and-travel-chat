@@ -1,47 +1,50 @@
 import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { MapContainer } from 'react-leaflet/MapContainer';
+import PropTypes from 'prop-types';
+// import { MapContainer } from 'react-leaflet/MapContainer';
 import { GeoJSON } from 'react-leaflet';
 import mapData from '../../data/countries.json';
 import 'leaflet/dist/leaflet.css';
 import '../../css/ChatMap.css';
 
-import { sendDataCountryToBackend } from '../../redux-store/AuthOperations/DataCountryOperation.js';
-import { getUserId } from 'redux-store/AuthOperations/selectors';
-import { CountryName } from './ChatMapStyled';
+import { sendDataCountryToBackend } from '../../redux-store/AuthOperations/AuthOperations.js';
+import {
+  getUserId,
+  getPersistedToken,
+} from 'redux-store/AuthOperations/selectors';
+import { CountryName, ShowCountry, MainMapBlock, MapWrapper } from './ChatMapStyled';
 // import { TileLayer } from 'react-leaflet/TileLayer';
 // import { useMap } from 'react-leaflet/hooks';
 // import { TileLayer, useMap } from 'react-leaflet';
 
-export default function ChatMap() {
+function ChatMap({closeMap}) {
   const dispatch = useDispatch();
   const userId = useSelector(getUserId);
+  const token = useSelector(getPersistedToken);
   const [selectedCountry, setSelectedCountry] = useState(null);
-
-  const onCountryHover = e => {
-    const countryName = e;
-    setSelectedCountry(countryName);
-  };
-
-
-  console.log(mapData);
+  const [countryData, setCountryData] = useState({});
+  
+  // const onCountryHover = e => {
+  //   const countryName = e.target.feature.properties.ADMIN;
+  //   setSelectedCountry(countryName);
+  // };
 
   let color = [
-    '#e9f0fb',
-    '#cbdbf4',
-    '#a1bfec',
-    '#76a1e3',
-    '#4c85da',
-    '#256ad2',
-    '#1f5ab3',
-    '#1a4b95',
-    '#153c78',
-    '#11305e',
+    'var(--color-blue-1)',
+    'var(--color-blue-2)',
+    'var(--color-blue-3)',
+    'var(--color-blue-4)',
+    'var(--color-blue-5)',
+    'var(--color-brand-blue)',
+    'var(--color-blue-7)',
+    'var(--color-blue-8)',
+    'var(--color-blue-9)',
+    'var(--color-blue-10)',
   ];
 
   const countryStyle = {
     fillOpacity: 1,
-    color: '#140951',
+    color: 'var(--color-dark)',
     weight: 1,
   };
 
@@ -59,39 +62,59 @@ export default function ChatMap() {
           name: e.target.feature.properties.ADMIN,
           flagCode: e.target.feature.properties.code,
         };
-        dispatch(sendDataCountryToBackend(userId, data));
-        console.log('data to send', userId, data);
+        setSelectedCountry(data.name);
+        setCountryData(data);
+        // dispatch(
+        //   sendDataCountryToBackend({ userId, countryDto: countryData, token })
+        // );
+        console.log('data to send', countryData);
       },
       mouseover: e => {
-        const countryName = e.target.feature.properties.ADMIN;
-        onCountryHover(countryName);
-        e.target.setStyle({
-          color: '#ffffff',
-        });
+        // e.target.setStyle({
+        //   color: 'var(--white-color)',
+        //   // fillOpacity: 0.2,
+        // });
+        // const countryName = e.target.feature.properties.ADMIN;
+        // onCountryHover(e);
+
         // layer.bindPopup(e.target.feature.properties.ADMIN).openPopup();
       },
-      mouseout: e => {
-        e.target.setStyle({
-          color: '#140951',
-        });
-      },
+      // mouseout: e => {
+      //   e.target.setStyle({
+      //     color: 'var(--color-dark)',
+      //     // fillOpacity: 1,
+      //   });
+      // },
     });
   };
 
+  const handleClick = () => {
+    dispatch(
+      sendDataCountryToBackend({ userId, countryDto: countryData, token })
+    );
+    closeMap();
+  }
+
   return (
-    <div className="map-container">
-      <MapContainer
-        style={{ width: '1150px', height: '750px' }}
-        zoom={2.3}
-        center={[40, 0]}
-      >
+    <MainMapBlock>
+      <MapWrapper zoom={2.3} center={[40, 0]}>
         <GeoJSON
           style={countryStyle}
           data={mapData.features}
           onEachFeature={onEachCountry}
         />
-        <CountryName>{selectedCountry}</CountryName>
-      </MapContainer>
-    </div>
+        <ShowCountry>
+          <CountryName>{selectedCountry}</CountryName>
+          <button onClick={handleClick} >Join</button>
+        </ShowCountry>
+        {/* <CountryName>{selectedCountry}</CountryName> */}
+      </MapWrapper>
+    </MainMapBlock>
   );
-}
+};
+
+ChatMap.propTypes = {
+  closeMap: PropTypes.func,
+};
+
+export default ChatMap;

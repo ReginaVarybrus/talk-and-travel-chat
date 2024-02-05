@@ -1,78 +1,53 @@
-
-// import './App.css';
 import { Suspense } from 'react';
-import { Routes, Route } from "react-router-dom";
+import { Navigate, Routes, Route } from 'react-router-dom';
 
 import MainPage from 'pages/MainPage/MainPage';
 import LoginPage from 'pages/LoginPage/LoginPage';
 import RegisterPage from 'pages/RegisterPage/RegisterPage';
 import AccountPage from 'pages/AccountPage/AccountPage';
-import ChatPage from 'pages/ChatPage/ChatPage'
+import ChatPage from 'pages/ChatPage/ChatPage';
 import Layout from 'components/Layout/Layout';
-// import Page404 from 'page/Page404/Page404';
+import Page404 from 'pages/Page404/Page404';
 import Loader from './components/Loader/Loader';
 // import VerificationPage from 'pages/VerificationPage/VerificationPage'
 import PrivateRoute from 'PrivateRoute';
 import RestrictedRoute from 'RestrictedRoute';
 
 export default function App() {
- 
   return (
     <>
-    <Suspense fallback={<Loader />}>
-    <Routes>
-
-    <Route path="/" element={<Layout />}>
-    <Route index element={
-              <RestrictedRoute
-                redirectTo={`/chat`}
-                component={<MainPage />}
-              />
-            }
-          />
-      <Route path="/"
-            element={
-              <RestrictedRoute
-                redirectTo={`/chat`} component={<MainPage />}
-              />
-            }
-          />
-       <Route
+      <Suspense fallback={<Loader />}>
+        <Routes>
+          <Route path="/" element={<MainPage />} />
+          <Route
             path="/login"
             element={
-              <RestrictedRoute
-                redirectTo={`/chat`} component={<LoginPage />}
-              />
+              <RestrictedRoute redirectTo={`/app`} component={<LoginPage />} />
             }
           />
-       <Route
+          <Route
             path="/register"
             element={
               <RestrictedRoute
-                redirectTo={`/chat`} component={<RegisterPage />}
+                redirectTo={`/app`}
+                component={<RegisterPage />}
               />
             }
           />
-       {/* <Route path="/register/:token" element={<VerificationPage />} />; */}
-       <Route
-            path="/"
+          {/* <Route path="/register/:token" element={<VerificationPage />} />; */}
+          <Route
+            path="/app"
             element={
               <PrivateRoute redirectTo="/login" component={<Layout />} />
             }
-          ></Route>
-
-
-      <Route path='/account' element={<AccountPage/>}/>
-      <Route path='/chat' element={<ChatPage/>}/>
-      {/* <Route path="*" element={<Page404/>} /> */}
-      </Route>
-
-    </Routes>
-    </Suspense>
+          >
+            <Route index element={<Navigate to="./chat" />} />
+            <Route path="account" element={<AccountPage />} />
+            <Route path="chat" element={<ChatPage />} />
+          </Route>
+          <Route path="*" element={<Page404 />} />
+        </Routes>
+      </Suspense>
     </>
   );
 }
-
-
-
-

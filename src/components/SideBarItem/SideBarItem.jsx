@@ -8,7 +8,6 @@ function SideBarItem({
   isActive,
   alt,
   name,
-  fill,
   stroke,
   size,
   children,
@@ -22,7 +21,7 @@ function SideBarItem({
       }}
     >
       <SideBarIcon alt={alt}>
-        <Icons name={name} fill={fill} stroke={stroke} size={size} />
+        <Icons name={name} stroke={stroke} size={size} fill={isActive ? 'var(--color-brand-blue)' : 'var(--color-grey-9)'} />
       </SideBarIcon>
       <Text>{children}</Text>
     </SideBarButton>
@@ -34,7 +33,6 @@ SideBarItem.propTypes = {
   isActive: PropTypes.bool,
   alt: PropTypes.string,
   name: PropTypes.string,
-  fill: PropTypes.string,
   stroke: PropTypes.string,
   size: PropTypes.string,
   children: PropTypes.string,

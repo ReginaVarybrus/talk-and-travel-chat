@@ -1,17 +1,27 @@
 import { Outlet } from 'react-router-dom';
 
-// import MainPage from '../../pages/MainPage/MainPage';
 // import ChatPage from '../../pages/ChatPage/ChatPage';
-// import SideBar from 'components/SideBar/SideBar';
-// import SearchBar from 'components/SearchBar/SearchBar';
+import SideBar from 'components/SideBar/SideBar';
+import SearchBar from 'components/SearchBar/SearchBar';
 // import Chat from 'components/Chat/Chat';
 import { Suspense } from 'react';
 import { Wrapper } from './LayoutStyled';
-// import { useEffect, useState } from 'react';
+import { useState } from 'react';
 
 import Loader from 'components/Loader/Loader';
 
 export default function Layout() {
+  const [activeComponent, setActiveComponent] = useState('component2');
+
+  const handleDmsListOpen = () => {
+    setActiveComponent('component1');
+    console.log('DMs', activeComponent);
+  };
+
+  const handleRoomsListOpen = () => {
+    setActiveComponent('component2');
+    console.log('Rooms', activeComponent);
+  };
   // const [chatOpen, setChatOpen] = useState(window.innerWidth >= 1920);
 
   // const handleChatOpen = () => {
@@ -36,12 +46,16 @@ export default function Layout() {
   return (
     <>
       {/* <SideBar isOpen={sidebarOpen} onCloseClick={handleSidebarOpen} />
-        <SearchBar />
-        <Chat /> */}
-      {/* <MainPage /> */}
+        <SearchBar />*/}
       {/* <ChatPage isOpen={chatOpen} onCloseClick={handleChatOpen}/> */}
       <Wrapper>
         <Suspense fallback={<Loader />}>
+          <SideBar
+            onClickDms={handleDmsListOpen}
+            onClickRooms={handleRoomsListOpen}
+            isActive={activeComponent}
+          />
+          <SearchBar isOpen={activeComponent} />
           <Outlet />
         </Suspense>
       </Wrapper>

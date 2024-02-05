@@ -18,14 +18,10 @@ import styled from 'styled-components';
 // `;
 
 export const Wrapper = styled.div`
+display: flex;
   /* padding: 24px 20px; */
-  /* width: 100%; */
-  min-height: 100vh;
-  background-color: var(--outlet-background-color);
-  flex-grow: 1;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
+  width: 100%;
+  max-height: 100vh;
 
  /* @media screen and (min-width: 768px) {
     padding: 24px 32px;

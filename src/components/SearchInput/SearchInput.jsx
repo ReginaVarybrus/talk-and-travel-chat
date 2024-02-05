@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+// import io from 'socket.io-client';
 import {
   AutocompleteInputWrapper,
   AutocompleteInput,
@@ -9,7 +10,8 @@ import {
   Item,
   Flag,
 } from './SearchInputStyled';
-import { sendDataCountryToBackend } from '../../redux-store/AuthOperations/AuthOperations.js';
+import { sendDataCountryToBackend} from '../../redux-store/AuthOperations/AuthOperations.js';
+// import { addCountryRoom } from '../../redux-store/slices/roomSlise.js';
 import { getUserId, getPersistedToken } from 'redux-store/AuthOperations/selectors';
 import SimpleBar from 'simplebar-react';
 import 'simplebar-react/dist/simplebar.min.css';
@@ -17,9 +19,11 @@ import 'simplebar-react/dist/simplebar.min.css';
 import Icons from '../Icons/Icons';
 import mapData from '../../data/countries.json';
 
-export default function SearchInput() {
+export default function SearchInput({socket}) {
   const [searchedValue, setSearchedValue] = useState('');
   const [showItem, setShowItem] = useState(false);
+  // const [socket, setSocket] = useState(null);
+  // const [selectedCountryRooms, setSelectedCountryRooms] = useState([]);
   const autoCompleteRef = useRef(null);
   const dispatch = useDispatch();
   const userId = useSelector(getUserId);
@@ -40,24 +44,21 @@ export default function SearchInput() {
   };
 
   const handleCountryClick = country => {
-    // const countryDto = {
-    //   // countryDto: {
-    //     name: country.properties.ADMIN,
-    //     flagCode: country.properties.code,
-    //   // },
-    // };
-
     const countryData = {
       name: country.properties.ADMIN,
       flagCode: country.properties.code,
-  };
+    };
+
+    if (socket) {
+      socket.emit('createRoom', country);
+    }
 
     setSearchedValue(country.properties.ADMIN);
     setShowItem(false);
-    // console.log('choose country', country.properties.ADMIN);
-
+    // dispatch(addCountryRoom(country));
     dispatch(sendDataCountryToBackend({userId, countryDto: countryData, token}));
     console.log('data to send', countryData);
+    // console.log('choose country', country.properties.ADMIN);
   };
 
   useEffect(() => {
@@ -75,6 +76,20 @@ export default function SearchInput() {
     };
   }, []);
 
+  // useEffect(() => {
+  //   const socketInstance = io(''); 
+
+  //   socketInstance.on('updateRoomList', (rooms) => {
+  //     setSelectedCountryRooms(rooms);
+  //   });
+
+  //   setSocket(socketInstance);
+
+  //   return () => {
+  //     socketInstance.disconnect();
+  //   };
+  // }, []);
+
   return (
     <AutocompleteInputWrapper ref={autoCompleteRef}>
       <AutocompleteInput
@@ -91,7 +106,7 @@ export default function SearchInput() {
       {showItem && (
         <ListWrapper>
           <ListItems>
-            <SimpleBar style={{ maxHeight: 570 }}>
+            <SimpleBar style={{ maxHeight: 570 }} autoHide={false}>
               {filterCountries === 0 ? (
                 <p>BlaBla</p>
               ) : (

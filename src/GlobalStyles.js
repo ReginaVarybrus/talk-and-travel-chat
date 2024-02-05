@@ -6,20 +6,11 @@ export const GlobalStyles = createGlobalStyle`
 /* !!!Додати стилі після затвердження макету!!! */
 
 :root {
-  --white-color: #ffffff;
-  --red-color: red;
-  --button-bgd-color: #3e85f3;
-  --color-task-low-priority: #3e85f3;
-  --bgc-task-low-priority: #ceeefd;
-  --color-task-medium-priority: #f3b249;
-  --bgc-task-medium-priority: #fcf0d4;
-  --color-task-high-priority: #ea3d65;
-  --bgc-task-high-priority: #ffd2dd; 
-
   --color-success: #33d844;
   --color-error: #d83333;
   --color-info: #569aff;
 
+  --white-color: #ffffff;
   --color-grey-2: #fdfdfd;
   --color-grey-3: #f6f6f6;
   --color-grey-4: #f2f2f2;
@@ -117,6 +108,13 @@ h5 {
   font-size: 16px;
   font-weight: 700;
   line-height: 19px;
+} 
+
+h6 {
+  font-size: 18px;
+  font-weight: 400;
+  line-height: 21.6px;
+  color: var(--color-dark);
 }
 
 svg{
