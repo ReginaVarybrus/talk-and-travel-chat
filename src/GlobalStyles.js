@@ -1,9 +1,7 @@
 import { createGlobalStyle } from 'styled-components';
 
 export const GlobalStyles = createGlobalStyle`
-/* styled-components */
-
-/* !!!Додати стилі після затвердження макету!!! */
+/* !!!Add styles after layout approval!!! */
 
 :root {
   --color-success: #33d844;
@@ -72,7 +70,7 @@ export const GlobalStyles = createGlobalStyle`
         local("Coolvetica-Regular"),
         url("fonts/Coolvetica-Regular.ttf") format("ttf");
   font-display: swap;
-} */
+} 
 
 body {
   margin: 0;

@@ -1,4 +1,6 @@
 import styled from 'styled-components';
+import Button from '@mui/material/Button';
+import { TextareaAutosize as BaseTextareaAutosize } from '@mui/base/TextareaAutosize';
 
 export const Wrapper = styled.div`
   display: flex;
@@ -44,7 +46,8 @@ export const MessageBarWrapper = styled.footer`
   min-height: 112px;
   max-height: 444px;
   background: var(--white-color);
-  border-top: 1px solid var(--color-grey-6);width: 100%;
+  border-top: 1px solid var(--color-grey-6);
+  width: 100%;
   transition: height 0.3s ease;
 `;
 
@@ -55,61 +58,56 @@ export const MessageBar = styled.div`
   margin: 32px;
 `;
 
-export const Input = styled.textarea`
+export const TextareaAutosize = styled(BaseTextareaAutosize)`
+  box-sizing: border-box;
   width: 100%;
-  min-height: 48px;
-  max-height: 190px; 
-  height: auto;
-  border: 1px solid var(--color-grey-6);
-  border-radius: 8px;
+  max-height: 200px; 
   margin-left: 16px;
   margin-right: 16px;
-  padding: 5.7px 16px;
-  box-sizing: border-box;
-  outline: none;
+  font-size: 0.875rem;
+  font-weight: 400;
+  line-height: 1.5;
+  padding: 13.2px 16px;
+  border-radius: 8px;
   color: var(--color-grey-8);
+  border: 1px solid var(--color-grey-6);
   resize: none;
-  overflow: hidden;
-  line-height: 32px;
-  position: relative;
-
-  &::before {
-    content: '';
-    position: absolute;
-    width: 2px; 
-    height: 100%;
-    background-color: #000; 
-    left: 16px; 
-    box-sizing: border-box;
-  }
-
-   &::first-line {
-    line-height: 32px;
-  } 
+  outline: none;
 
   &::placeholder {
-    font-family: Roboto;
     font-size: 16px;
     font-weight: 400;
     line-height: 19px;
-    text-align: left;
     color: var(--color-grey-7);
   }
 
   &:focus {
+    border: 1px solid var(--color-grey-8);
     &::placeholder {
       color: transparent;
     }
   }
 `;
 
-export const ButtonAddFile = styled.button`
+export const ButtonAttachFile = styled(Button)`
   min-width: 48px;
   height: 48px;
   background: var(--white-color);
   border: 1px solid var(--color-grey-6);
   border-radius: 8px;
   cursor: pointer;
+`;
+
+export const VisuallyHiddenInput = styled.input`
+  clip: rect(0 0 0 0);
+  clipPath: inset(50%);
+  height: 1;
+  overflow: hidden;
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  whiteSpace: nowrap;
+  width: 1;
 `;
 
 export const ButtonSendMessage = styled.button`
@@ -118,4 +116,5 @@ export const ButtonSendMessage = styled.button`
   background: var(--white-color);
   border-radius: 8px;
   cursor: pointer;
+  border: ${props => props.border ? '1px solid var(--color-brand-blue)' : '1px solid var(--color-grey-6)'};
 `;

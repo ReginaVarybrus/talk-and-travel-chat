@@ -1,34 +1,13 @@
 import React from 'react';
-// import { useSelector } from 'react-redux';
-// import { countryRooms } from 'redux-store/AuthOperations/selectors';
 
 import { Wrapper, Text, Item, ListItems } from './RoomsListStyled';
 import SimpleBar from 'simplebar-react';
 import 'simplebar-react/dist/simplebar.min.css';
 
-export default function RoomsList() {
-  // const rooms = useSelector(countryRooms);
+const RoomsList = () => {
   const rooms = [];
-  // const rooms = [
-  //   'Ukraine', 
-  //   'Ireland', 
-  //   'Poland', 
-  //   'Germany', 
-  //   'Austria',
-  //   'Canada',
-  //   'China',
-  //   'Georgia',
-  //   'Latvia'
-  // ];
-  // const [countryRoom, setCountryRoom] = useState([]);
 
-  //   const addCountry = () => {
-  //     setCountryRoom([...countryRoom]);
-  // };
-
-  const handleClick = () => {
-
-  };
+  const handleClick = () => {};
 
   return (
     <Wrapper>
@@ -42,13 +21,6 @@ export default function RoomsList() {
         <SimpleBar style={{ maxHeight: 570 }}>
           {rooms.map(room => (
             <Item key={room} onClick={handleClick}>
-              {/* <Flag
-            loading="lazy"
-            width="32"
-            srcSet={`https://flagcdn.com/w40/${country.properties.code}.png 2x`}
-            src={`https://flagcdn.com/w20/${country.properties.code}.png`}
-            alt={`${country.properties.ADMIN} flag`}
-            /> */}
               <p>{room}</p>
             </Item>
           ))}
@@ -56,4 +28,6 @@ export default function RoomsList() {
       </ListItems>
     </Wrapper>
   );
-}
+};
+
+export default RoomsList;

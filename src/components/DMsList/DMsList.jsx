@@ -11,19 +11,8 @@ import {
 import SimpleBar from 'simplebar-react';
 import 'simplebar-react/dist/simplebar.min.css';
 
-export default function DMsList() {
+const DMsList = () => {
   const chats = [];
-  // const chats = [
-  //   'Vitalii',
-  //   'Olha',
-  //   'Kostiantyn',
-  //   'Kateryna',
-  //   'Anton',
-  //   'Regina',
-  //   'Natali',
-  //   'Oksana',
-  //   'Yaroslava',
-  // ];
 
   return (
     <Wrapper>
@@ -53,4 +42,7 @@ export default function DMsList() {
       </ListItems>
     </Wrapper>
   );
-}
+};
+
+export default DMsList;
+

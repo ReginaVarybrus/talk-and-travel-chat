@@ -7,7 +7,6 @@ export const Wrapper = styled.div`
   align-items: center;
   width: 300px;
   height: 100vh;
-  /* background: var(--color-blue-2); */
 `;
 
 export const Text = styled.p`

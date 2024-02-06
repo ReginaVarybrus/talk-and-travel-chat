@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import PropTypes from 'prop-types';
-// import { MapContainer } from 'react-leaflet/MapContainer';
 import { GeoJSON } from 'react-leaflet';
 import mapData from '../../data/countries.json';
 import 'leaflet/dist/leaflet.css';
@@ -13,17 +12,17 @@ import {
   getPersistedToken,
 } from 'redux-store/AuthOperations/selectors';
 import { CountryName, ShowCountry, MainMapBlock, MapWrapper } from './ChatMapStyled';
-// import { TileLayer } from 'react-leaflet/TileLayer';
+// TODO
 // import { useMap } from 'react-leaflet/hooks';
-// import { TileLayer, useMap } from 'react-leaflet';
 
-function ChatMap({closeMap}) {
+const ChatMap = ({closeMap}) => {
   const dispatch = useDispatch();
   const userId = useSelector(getUserId);
   const token = useSelector(getPersistedToken);
   const [selectedCountry, setSelectedCountry] = useState(null);
   const [countryData, setCountryData] = useState({});
   
+  // TODO
   // const onCountryHover = e => {
   //   const countryName = e.target.feature.properties.ADMIN;
   //   setSelectedCountry(countryName);
@@ -49,10 +48,7 @@ function ChatMap({closeMap}) {
   };
 
   const onEachCountry = (country, layer) => {
-    // const countryName = country.properties.ADMIN;
-    // layer.bindPopup(countryName);
 
-    // layer.options.fillOpacity = Math.random();
     const colorIndex = Math.floor(Math.random() * color.length);
     layer.options.fillColor = color[colorIndex];
 
@@ -64,27 +60,17 @@ function ChatMap({closeMap}) {
         };
         setSelectedCountry(data.name);
         setCountryData(data);
-        // dispatch(
-        //   sendDataCountryToBackend({ userId, countryDto: countryData, token })
-        // );
-        console.log('data to send', countryData);
       },
       mouseover: e => {
-        // e.target.setStyle({
-        //   color: 'var(--white-color)',
-        //   // fillOpacity: 0.2,
-        // });
-        // const countryName = e.target.feature.properties.ADMIN;
-        // onCountryHover(e);
-
-        // layer.bindPopup(e.target.feature.properties.ADMIN).openPopup();
+        e.target.setStyle({
+          color: 'var(--white-color)'
+        });
       },
-      // mouseout: e => {
-      //   e.target.setStyle({
-      //     color: 'var(--color-dark)',
-      //     // fillOpacity: 1,
-      //   });
-      // },
+      mouseout: e => {
+        e.target.setStyle({
+          color: 'var(--color-dark)'
+        });
+      },
     });
   };
 
@@ -107,7 +93,6 @@ function ChatMap({closeMap}) {
           <CountryName>{selectedCountry}</CountryName>
           <button onClick={handleClick} >Join</button>
         </ShowCountry>
-        {/* <CountryName>{selectedCountry}</CountryName> */}
       </MapWrapper>
     </MainMapBlock>
   );

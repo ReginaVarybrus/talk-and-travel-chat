@@ -17,6 +17,8 @@ export const SideBarButton = styled.button`
   background: none;
   border: none;
   cursor: pointer;
+  color: ${props => props.color ? 'var(--color-brand-blue)' : 'var(--color-grey-9)'};
+  font-weight: ${props => props.fontWeight ? '700' : '400'};
   &:hover {
     svg {
       fill: var(--color-blue-3);

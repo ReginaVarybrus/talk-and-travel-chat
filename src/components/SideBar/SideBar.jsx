@@ -7,17 +7,14 @@ import {
   Wrapper,
   ProfileBox,
   LogOutBox,
-  Frame,
-  // ProfileBoxAvatar,
-  // LogOutButton,
+  Frame
 } from './SideBarStyled';
 
 import { getUserName } from 'redux-store/AuthOperations/selectors';
 import { logOut } from 'redux-store/AuthOperations/AuthOperations';
-// import Icons from '../Icons/Icons';
 import SideBarItem from '../SideBarItem/SideBarItem';
 
-function SideBar({ onClickDms, onClickRooms, isActive }) {
+const SideBar = ({ onClickDms, onClickRooms, isActive }) => {
   const userName = useSelector(getUserName);
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -26,7 +23,6 @@ function SideBar({ onClickDms, onClickRooms, isActive }) {
 
   const handleProfileOpen = () => {
     navigate('account');
-    console.log('clicked profile');
   };
 
   const handleLogOut = async (event, values) => {
@@ -42,14 +38,6 @@ function SideBar({ onClickDms, onClickRooms, isActive }) {
   return (
     <Wrapper>
       <ProfileBox>
-        {/* <ProfileBoxAvatar
-          onClick={handleProfileOpen}
-          src=""
-          alt="Profile Avatar"
-        >
-          <Icons name='photo-icon' color='#222222' size='24' />
-        </ProfileBoxAvatar>
-        <Text>Anton</Text> */}
         <SideBarItem
           onClick={handleProfileOpen}
           isActive={currentPage === '/app/account'}
@@ -89,8 +77,6 @@ function SideBar({ onClickDms, onClickRooms, isActive }) {
         >
           LogOut
         </SideBarItem>
-        {/* <LogOutButton onClick={handleLogOut}></LogOutButton>
-        <Text>LogOut</Text> */}
       </LogOutBox>
     </Wrapper>
   );

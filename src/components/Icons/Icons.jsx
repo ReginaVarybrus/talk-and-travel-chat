@@ -2,7 +2,7 @@ import React from 'react';
 import sprite from '../../public/sprite.svg';
 import PropTypes from 'prop-types';
 
-function Icons({ name, fill, stroke, size }) {
+const Icons = ({ name, fill, stroke, size }) => {
   return (
     <svg
       className="icon"

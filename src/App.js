@@ -13,7 +13,7 @@ import Loader from './components/Loader/Loader';
 import PrivateRoute from 'PrivateRoute';
 import RestrictedRoute from 'RestrictedRoute';
 
-export default function App() {
+const App = () => {
   return (
     <>
       <Suspense fallback={<Loader />}>
@@ -50,4 +50,6 @@ export default function App() {
       </Suspense>
     </>
   );
-}
+};
+
+export default App;

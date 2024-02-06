@@ -3,22 +3,20 @@ import PropTypes from 'prop-types';
 import { SideBarButton, SideBarIcon, Text } from './SideBarItemStyled';
 import Icons from '../Icons/Icons';
 
-function SideBarItem({
+const SideBarItem = ({
   onClick,
   isActive,
   alt,
   name,
   stroke,
   size,
-  children,
-}) {
+  children
+}) => {
   return (
     <SideBarButton
       onClick={() => onClick()}
-      style={{
-        color: isActive ? 'var(--color-brand-blue)' : 'var(--color-grey-9)',
-        fontWeight: isActive ? '700' : '400',
-      }}
+      color={isActive}
+      fontWeight={isActive}
     >
       <SideBarIcon alt={alt}>
         <Icons name={name} stroke={stroke} size={size} fill={isActive ? 'var(--color-brand-blue)' : 'var(--color-grey-9)'} />
