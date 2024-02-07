@@ -10,7 +10,10 @@ import {
   Flag,
 } from './SearchInputStyled';
 import { sendDataCountryToBackend } from '../../redux-store/AuthOperations/AuthOperations.js';
-import { getUserId, getPersistedToken } from 'redux-store/AuthOperations/selectors';
+import {
+  getUserId,
+  getPersistedToken,
+} from '../../redux-store/AuthOperations/selectors';
 import SimpleBar from 'simplebar-react';
 import 'simplebar-react/dist/simplebar.min.css';
 
@@ -50,13 +53,15 @@ export default function SearchInput() {
     const countryData = {
       name: country.properties.ADMIN,
       flagCode: country.properties.code,
-  };
+    };
 
     setSearchedValue(country.properties.ADMIN);
     setShowItem(false);
     // console.log('choose country', country.properties.ADMIN);
 
-    dispatch(sendDataCountryToBackend({userId, countryDto: countryData, token}));
+    dispatch(
+      sendDataCountryToBackend({ userId, countryDto: countryData, token })
+    );
     console.log('data to send', countryData);
   };
 

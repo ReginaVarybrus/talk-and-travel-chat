@@ -6,8 +6,8 @@ import mapData from '../../data/countries.json';
 import 'leaflet/dist/leaflet.css';
 import '../../css/ChatMap.css';
 
-import { sendDataCountryToBackend } from '../../redux-store/AuthOperations/DataCountryOperation.js';
-import { getUserId } from 'redux-store/AuthOperations/selectors';
+import { sendDataCountryToBackend } from '../../redux-store/AuthOperations/DataCountryOperation';
+import { getUserId } from '../../redux-store/AuthOperations/selectors';
 import { CountryName } from './ChatMapStyled';
 // import { TileLayer } from 'react-leaflet/TileLayer';
 // import { useMap } from 'react-leaflet/hooks';
@@ -22,7 +22,6 @@ export default function ChatMap() {
     const countryName = e;
     setSelectedCountry(countryName);
   };
-
 
   console.log(mapData);
 

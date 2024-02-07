@@ -1,7 +1,6 @@
 import React from 'react';
-import LoginForm  from 'components/LoginForm/LoginForm'
+import LoginForm from '@components/LoginForm/LoginForm';
 // import {SignUpBtn} from './LoginPageStyled'
-
 
 export default function LoginPage() {
   return (

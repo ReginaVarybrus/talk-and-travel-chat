@@ -9,7 +9,7 @@ import { Suspense } from 'react';
 import { Wrapper } from './LayoutStyled';
 // import { useEffect, useState } from 'react';
 
-import Loader from 'components/Loader/Loader';
+import Loader from '@components/Loader/Loader';
 
 export default function Layout() {
   // const [chatOpen, setChatOpen] = useState(window.innerWidth >= 1920);

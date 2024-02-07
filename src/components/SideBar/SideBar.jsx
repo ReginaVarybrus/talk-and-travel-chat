@@ -12,8 +12,8 @@ import {
   // LogOutButton,
 } from './SideBarStyled';
 
-import { getUserName } from 'redux-store/AuthOperations/selectors';
-import { logOut } from 'redux-store/AuthOperations/AuthOperations';
+import { getUserName } from '../../redux-store/AuthOperations/selectors';
+import { logOut } from '../../redux-store/AuthOperations/AuthOperations';
 // import Icons from '../Icons/Icons';
 import SideBarItem from '../SideBarItem/SideBarItem';
 
@@ -95,7 +95,7 @@ function SideBar({ onClickDms, onClickRooms, isActive }) {
 
 SideBar.propTypes = {
   onClickDms: PropTypes.func,
-  onClickRooms: PropTypes.func
+  onClickRooms: PropTypes.func,
 };
 
 export default SideBar;

@@ -1,11 +1,13 @@
 import { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { Formik, ErrorMessage } from 'formik';
-import { object, string,
-    //  date
-     } from 'yup';
-import { getUser } from 'redux-store/AuthOperations/selectors';
-import { updateUser } from 'redux-store/AuthOperations/AuthOperations';
+import {
+  object,
+  string,
+  //  date
+} from 'yup';
+import { getUser } from '../../redux-store/AuthOperations/selectors';
+import { updateUser } from '../../redux-store/AuthOperations/AuthOperations';
 import {
   // ContainerImg,
   Wrapper,
@@ -15,7 +17,7 @@ import {
   BlockInput,
   Forms,
   // InputFile,
-//   ImgBtn,
+  //   ImgBtn,
   // ImgAvatar,
   LabelBtn,
   // LabelImg,
@@ -29,11 +31,11 @@ import {
 
 const validationFormikSchema = object({
   name: string().max(40, 'too long!').required(),
-//   birthday: date(),
+  //   birthday: date(),
   email: string()
     .matches(/^([a-z0-9_.-]+)@([a-z09_.-]+).([a-z]{2,6})$/, 'enter valid email')
     .required(),
-//   phone: string().matches(/^\+[\d-]+$/, 'number should start from +'),
+  //   phone: string().matches(/^\+[\d-]+$/, 'number should start from +'),
 });
 
 const Profile = () => {
@@ -52,8 +54,8 @@ const Profile = () => {
     const data = {
       name: user ? user.name : '',
       email: user ? user.email : '',
-    //   phone: user ? user.phone : '',
-    //   birthday: user.birthday ? new Date(user.birthday) : new Date(),
+      //   phone: user ? user.phone : '',
+      //   birthday: user.birthday ? new Date(user.birthday) : new Date(),
     };
     // setAvatarURL(user.avatarURL);
     setInitialValues({ ...data });
@@ -66,7 +68,7 @@ const Profile = () => {
     // if (values.phone) {
     //   formData.append('phone', values.phone);
     // }
-  
+
     // formData.append('birthday', values.birthday);
 
     // if (avatarURL !== avatarURL.toString()) {
@@ -96,7 +98,6 @@ const Profile = () => {
           touched,
         }) => (
           <Forms autoComplete="off" onSubmit={handleSubmit}>
-
             {/* <ContainerImg>
               {avatarURL && avatarURL === avatarURL.toString() ? (
                 <ImgAvatar src={avatarURL} alt="avatar" />
@@ -127,7 +128,7 @@ const Profile = () => {
                 </ErrorMessage>
               </LabelImg>
             </ContainerImg> */}
-            
+
             <h2>{user?.name} </h2>
             <User>User</User>
             <BlockInput>
@@ -163,7 +164,6 @@ const Profile = () => {
                 </ErrorMessage>
               </LabelBtn> */}
 
-
               {/* <LabelBtn htmlFor="birthday">
                 <p>Birthday</p>
                 <DatePick
@@ -181,8 +181,7 @@ const Profile = () => {
                   dateFormat="dd/MM/yyyy"
                 /> */}
 
-
-                {/* <VectorPng>
+              {/* <VectorPng>
                   <use href={Icon + '#icon-chevron-right'}></use>
                 </VectorPng>
 
@@ -191,7 +190,6 @@ const Profile = () => {
                 </ErrorMessage> */}
               {/* </LabelBtn> */}
 
-              
               <LabelBtn htmlFor="email">
                 <p>Email</p>
                 <Input

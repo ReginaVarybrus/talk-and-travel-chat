@@ -1,6 +1,6 @@
 import { useFormik } from 'formik';
 import * as yup from 'yup';
-import { register } from 'redux-store/AuthOperations/AuthOperations';
+import { register } from '../../redux-store/AuthOperations/AuthOperations';
 import { useDispatch } from 'react-redux';
 import {
   ItemWrapp,
@@ -31,12 +31,24 @@ let schema = yup.object().shape({
     .required('The field is empty'),
   password: yup
     .string()
-    .min(8, 'password must contain 8 or more characters with at least one of each: uppercase, lowercase, number and special')
+    .min(
+      8,
+      'password must contain 8 or more characters with at least one of each: uppercase, lowercase, number and special'
+    )
     .max(30, 'To long')
-    .matches(/(?=.*[a-z])/, 'password must contain at least 1 lower case letter')
-    .matches(/(?=.*[A-Z])/, 'password must contain at least 1 upper case letter')
+    .matches(
+      /(?=.*[a-z])/,
+      'password must contain at least 1 lower case letter'
+    )
+    .matches(
+      /(?=.*[A-Z])/,
+      'password must contain at least 1 upper case letter'
+    )
     .matches(/(?=.*[0-9])/, 'password must contain at least 1 number')
-    .matches(/(?=.*[!@#$%^&*])/, 'password must contain at least 1 special character')
+    .matches(
+      /(?=.*[!@#$%^&*])/,
+      'password must contain at least 1 special character'
+    )
     .required('The field is empty'),
 });
 
@@ -67,7 +79,10 @@ const RegisterForm = () => {
     <form onSubmit={formik.handleSubmit} autoComplete="off">
       <ItemWrapp>
         <StyledLabel
-          color={{ error: formik.errors.userName, touched: formik.touched.userName }}
+          color={{
+            error: formik.errors.userName,
+            touched: formik.touched.userName,
+          }}
           htmlFor="Name"
         >
           Name
@@ -79,7 +94,10 @@ const RegisterForm = () => {
           onChange={formik.handleChange}
           value={formik.values.userName}
           placeholder="Enter your name"
-          color={{ error: formik.errors.userName, touched: formik.touched.userName }}
+          color={{
+            error: formik.errors.userName,
+            touched: formik.touched.userName,
+          }}
         />
 
         {formik.errors.userName ? (
@@ -91,7 +109,10 @@ const RegisterForm = () => {
 
       <ItemWrapp>
         <StyledLabel
-          color={{ error: formik.errors.userEmail, touched: formik.touched.userEmail }}
+          color={{
+            error: formik.errors.userEmail,
+            touched: formik.touched.userEmail,
+          }}
           htmlFor="email"
         >
           Email
@@ -103,7 +124,10 @@ const RegisterForm = () => {
           onChange={formik.handleChange}
           value={formik.values.userEmail}
           placeholder="Enter email"
-          color={{ error: formik.errors.userEmail, touched: formik.touched.userEmail }}
+          color={{
+            error: formik.errors.userEmail,
+            touched: formik.touched.userEmail,
+          }}
         />
 
         {formik.errors.userEmail ? (
@@ -141,8 +165,7 @@ const RegisterForm = () => {
           <Error>{formik.errors.password}</Error>
         ) : !formik.errors.password && formik.touched.password ? (
           <Success>Field is not empty</Success>
-        ) : 
-        null}
+        ) : null}
       </ItemWrapp>
 
       <SignUpBtn type="submit">Sign Up</SignUpBtn>

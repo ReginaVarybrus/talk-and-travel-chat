@@ -12,7 +12,7 @@ import {
 // import LogIn from '../../images/icons/logIn.png';
 // import ErrorImg from '../../images/icons/error.png';
 // import SuccessImg from '../../images/icons/Done.png';
-import { logIn } from 'redux-store/AuthOperations/AuthOperations';
+import { logIn } from '../../redux-store/AuthOperations/AuthOperations';
 import { useDispatch } from 'react-redux';
 
 let schema = yup.object().shape({
@@ -27,11 +27,7 @@ let schema = yup.object().shape({
       'Invalid email address'
     )
     .required('The field is empty'),
-  password: yup
-    .string()
-    .min(8)
-    .max(30)
-    .required('The field is empty'),
+  password: yup.string().min(8).max(30).required('The field is empty'),
 });
 
 const LoginForm = () => {
@@ -55,7 +51,10 @@ const LoginForm = () => {
     <form onSubmit={formik.handleSubmit} autoComplete="off">
       <ItemWrapp>
         <StyledLabel
-          color={{ error: formik.errors.userEmail, touched: formik.touched.userEmail }}
+          color={{
+            error: formik.errors.userEmail,
+            touched: formik.touched.userEmail,
+          }}
           htmlFor="email"
         >
           Email
@@ -67,7 +66,10 @@ const LoginForm = () => {
           onChange={formik.handleChange}
           value={formik.values.userEmail}
           placeholder="Enter email"
-          color={{ error: formik.errors.userEmail, touched: formik.touched.userEmail }}
+          color={{
+            error: formik.errors.userEmail,
+            touched: formik.touched.userEmail,
+          }}
         />
 
         {formik.errors.userEmail ? (

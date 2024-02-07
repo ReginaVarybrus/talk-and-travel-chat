@@ -6,9 +6,9 @@ import {
   // Logo
 } from './ChatPageStyled.js';
 
-import SideBar from 'components/SideBar/SideBar';
-import SearchBar from 'components/SearchBar/SearchBar';
-import Chat from 'components/Chat/Chat';
+import SideBar from '@components/SideBar/SideBar';
+import SearchBar from '@components/SearchBar/SearchBar';
+import Chat from '@components/Chat/Chat';
 
 // import logo from '../../images/logo.svg';
 
