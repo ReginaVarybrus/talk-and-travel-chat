@@ -9,11 +9,10 @@ import {
   Success,
   LogInBtn,
 } from './LoginFormStyled';
-// import LogIn from '../../images/icons/logIn.png';
-// import ErrorImg from '../../images/icons/error.png';
-// import SuccessImg from '../../images/icons/Done.png';
+import { useNavigate } from 'react-router-dom';
 import { logIn } from '../../redux-store/AuthOperations/AuthOperations';
 import { useDispatch } from 'react-redux';
+import { routesPath } from '@/routes/routesConfig';
 
 let schema = yup.object().shape({
   userEmail: yup
@@ -32,6 +31,7 @@ let schema = yup.object().shape({
 
 const LoginForm = () => {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const formik = useFormik({
     initialValues: {
@@ -42,7 +42,7 @@ const LoginForm = () => {
     validateOnChange: false,
     onSubmit: (values, { resetForm }) => {
       dispatch(logIn(values));
-
+      navigate(routesPath.CHAT);
       resetForm();
     },
   });
@@ -79,15 +79,9 @@ const LoginForm = () => {
         ) : null}
 
         {formik.errors.userEmail ? (
-          <ValidationIcon
-            // src={ErrorImg}
-            alt="error"
-          />
+          <ValidationIcon alt="error" />
         ) : !formik.errors.userEmail && formik.touched.userEmail ? (
-          <ValidationIcon
-            // src={SuccessImg}
-            alt="Success"
-          />
+          <ValidationIcon alt="Success" />
         ) : null}
       </ItemWrapp>
 
@@ -122,26 +116,13 @@ const LoginForm = () => {
         ) : null}
 
         {formik.errors.password ? (
-          <ValidationIcon
-            // src={ErrorImg}
-            alt="error"
-          />
+          <ValidationIcon alt="error" />
         ) : !formik.errors.password && formik.touched.password ? (
-          <ValidationIcon
-            // src={SuccessImg}
-            alt="Success"
-          />
+          <ValidationIcon alt="Success" />
         ) : null}
       </ItemWrapp>
 
-      <LogInBtn type="submit">
-        Log In
-        {/* <img
-          style={{ marginLeft: 11 }}
-          // src={LogIn}
-          alt="logIn"
-        /> */}
-      </LogInBtn>
+      <LogInBtn type="submit">Log In</LogInBtn>
     </form>
   );
 };

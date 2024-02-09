@@ -23,7 +23,7 @@ function SideBar({ onClickDms, onClickRooms, isActive }) {
   const dispatch = useDispatch();
 
   const handleProfileOpen = () => {
-    navigate('/account');
+    navigate('/app/account');
     console.log('clicked profile');
   };
 

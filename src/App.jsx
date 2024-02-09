@@ -1,75 +1,27 @@
-// import './App.css';
-import { Suspense } from 'react';
-import { Routes, Route } from 'react-router-dom';
+import React, { Suspense } from 'react';
+import { GlobalStyles } from './GlobalStyles';
 
-import MainPage from './pages/MainPage/MainPage';
-import LoginPage from './pages/LoginPage/LoginPage';
-import RegisterPage from './pages/RegisterPage/RegisterPage';
-import AccountPage from './pages/AccountPage/AccountPage';
-import ChatPage from './pages/ChatPage/ChatPage';
-import Layout from './components/Layout/Layout';
-// import Page404 from 'page/Page404/Page404';
-import Loader from './components/Loader/Loader';
-// import VerificationPage from 'pages/VerificationPage/VerificationPage'
-import PrivateRoute from './PrivateRoute';
-import RestrictedRoute from './RestrictedRoute';
+import { Provider } from 'react-redux';
+import { persistor, store } from './redux-store/store';
+import { PersistGate } from 'redux-persist/integration/react';
+import { RouterProvider } from 'react-router-dom';
 
-export default function App() {
+import Loader from '@/components/Loader/Loader';
+import { router } from '@/routes/routesConfig';
+
+const App = () => {
   return (
-    <>
+    <React.StrictMode>
       <Suspense fallback={<Loader />}>
-        <Routes>
-          <Route path="/" element={<Layout />}>
-            <Route
-              index
-              element={
-                <RestrictedRoute
-                  redirectTo={`/chat`}
-                  component={<MainPage />}
-                />
-              }
-            />
-            <Route
-              path="/"
-              element={
-                <RestrictedRoute
-                  redirectTo={`/chat`}
-                  component={<MainPage />}
-                />
-              }
-            />
-            <Route
-              path="/login"
-              element={
-                <RestrictedRoute
-                  redirectTo={`/chat`}
-                  component={<LoginPage />}
-                />
-              }
-            />
-            <Route
-              path="/register"
-              element={
-                <RestrictedRoute
-                  redirectTo={`/chat`}
-                  component={<RegisterPage />}
-                />
-              }
-            />
-            {/* <Route path="/register/:token" element={<VerificationPage />} />; */}
-            <Route
-              path="/"
-              element={
-                <PrivateRoute redirectTo="/login" component={<Layout />} />
-              }
-            ></Route>
-
-            <Route path="/account" element={<AccountPage />} />
-            <Route path="/chat" element={<ChatPage />} />
-            {/* <Route path="*" element={<Page404/>} /> */}
-          </Route>
-        </Routes>
+        <Provider store={store}>
+          <PersistGate loading={null} persistor={persistor}>
+            <GlobalStyles />
+            <RouterProvider router={router} />
+          </PersistGate>
+        </Provider>
       </Suspense>
-    </>
+    </React.StrictMode>
   );
-}
+};
+
+export default App;
