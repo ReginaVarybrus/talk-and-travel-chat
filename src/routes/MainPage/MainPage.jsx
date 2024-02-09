@@ -16,13 +16,8 @@ export default function MainPage() {
   return (
     <div>
       <h2>MainPage</h2>
-      <button onClick={handleRegisterOpen}>
-        Sign up
-      </button>
-      <button onClick={handleLoginOpen}>
-        Login
-      </button>
+      <button onClick={handleRegisterOpen}>Sign up</button>
+      <button onClick={handleLoginOpen}>Login</button>
     </div>
   );
 }
-

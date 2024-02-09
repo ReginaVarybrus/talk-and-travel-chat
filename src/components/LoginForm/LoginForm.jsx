@@ -9,11 +9,10 @@ import {
   Success,
   LogInBtn,
 } from './LoginFormStyled';
-// import LogIn from '../../images/icons/logIn.png';
-// import ErrorImg from '../../images/icons/error.png';
-// import SuccessImg from '../../images/icons/Done.png';
-import { logIn } from 'redux-store/AuthOperations/AuthOperations';
+import { useNavigate } from 'react-router-dom';
+import { logIn } from '../../redux-store/AuthOperations/AuthOperations';
 import { useDispatch } from 'react-redux';
+import { routesPath } from '@/routes/routesConfig';
 
 let schema = yup.object().shape({
   userEmail: yup
@@ -27,15 +26,12 @@ let schema = yup.object().shape({
       'Invalid email address'
     )
     .required('The field is empty'),
-  password: yup
-    .string()
-    .min(8)
-    .max(30)
-    .required('The field is empty'),
+  password: yup.string().min(8).max(30).required('The field is empty'),
 });
 
 const LoginForm = () => {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const formik = useFormik({
     initialValues: {
@@ -46,7 +42,7 @@ const LoginForm = () => {
     validateOnChange: false,
     onSubmit: (values, { resetForm }) => {
       dispatch(logIn(values));
-
+      navigate(routesPath.CHAT);
       resetForm();
     },
   });
@@ -55,7 +51,10 @@ const LoginForm = () => {
     <form onSubmit={formik.handleSubmit} autoComplete="off">
       <ItemWrapp>
         <StyledLabel
-          color={{ error: formik.errors.userEmail, touched: formik.touched.userEmail }}
+          color={{
+            error: formik.errors.userEmail,
+            touched: formik.touched.userEmail,
+          }}
           htmlFor="email"
         >
           Email
@@ -67,7 +66,10 @@ const LoginForm = () => {
           onChange={formik.handleChange}
           value={formik.values.userEmail}
           placeholder="Enter email"
-          color={{ error: formik.errors.userEmail, touched: formik.touched.userEmail }}
+          color={{
+            error: formik.errors.userEmail,
+            touched: formik.touched.userEmail,
+          }}
         />
 
         {formik.errors.userEmail ? (
@@ -77,15 +79,9 @@ const LoginForm = () => {
         ) : null}
 
         {formik.errors.userEmail ? (
-          <ValidationIcon
-            // src={ErrorImg}
-            alt="error"
-          />
+          <ValidationIcon alt="error" />
         ) : !formik.errors.userEmail && formik.touched.userEmail ? (
-          <ValidationIcon
-            // src={SuccessImg}
-            alt="Success"
-          />
+          <ValidationIcon alt="Success" />
         ) : null}
       </ItemWrapp>
 
@@ -120,26 +116,13 @@ const LoginForm = () => {
         ) : null}
 
         {formik.errors.password ? (
-          <ValidationIcon
-            // src={ErrorImg}
-            alt="error"
-          />
+          <ValidationIcon alt="error" />
         ) : !formik.errors.password && formik.touched.password ? (
-          <ValidationIcon
-            // src={SuccessImg}
-            alt="Success"
-          />
+          <ValidationIcon alt="Success" />
         ) : null}
       </ItemWrapp>
 
-      <LogInBtn type="submit">
-        Log In
-        {/* <img
-          style={{ marginLeft: 11 }}
-          // src={LogIn}
-          alt="logIn"
-        /> */}
-      </LogInBtn>
+      <LogInBtn type="submit">Log In</LogInBtn>
     </form>
   );
 };

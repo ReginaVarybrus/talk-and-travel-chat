@@ -17,24 +17,8 @@ import styled from 'styled-components';
 //   }
 // `;
 
-export const Wrapper = styled.div`
-  /* padding: 24px 20px; */
-  /* width: 100%; */
-  min-height: 100vh;
+export const LayoutStyled = styled.div`
+  display: grid;
+  grid-template-columns: 120px 1fr;
   background-color: var(--outlet-background-color);
-  flex-grow: 1;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-
- /* @media screen and (min-width: 768px) {
-    padding: 24px 32px;
-  }
-  @media screen and (min-width: 1440px) {
-    padding: 40px 32px;
-  }
-
-  @media screen and (min-width: 1440px) {
-    margin-left: 289px;
-  } */
 `;

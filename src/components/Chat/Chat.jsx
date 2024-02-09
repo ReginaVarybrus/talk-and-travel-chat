@@ -32,7 +32,7 @@ export default function Chat() {
           </Button>
           <Input type="text" placeholder="Type here" />
           <Button>
-          <Icons name="send" fill="var(--color-grey-9)" size="24" />
+            <Icons name="send" fill="var(--color-grey-9)" size="24" />
           </Button>
         </MessageBar>
       </MessageBarWrapper>
