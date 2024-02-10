@@ -10,7 +10,7 @@ import { sendDataCountryToBackend } from '../../redux-store/AuthOperations/AuthO
 import {
   getUserId,
   getPersistedToken,
-} from 'redux-store/AuthOperations/selectors';
+} from '../../redux-store/AuthOperations/selectors';
 import {
   CountryName,
   ShowCountry,
