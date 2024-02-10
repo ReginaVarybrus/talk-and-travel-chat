@@ -1,20 +1,9 @@
 import styled from 'styled-components';
 
-export const Wrapper = styled.div`
-  display: flex;
-  width: 100%;
-  max-height: 100vh;
-
- /* @media screen and (min-width: 768px) {
-    padding: 24px 32px;
-  }
-  @media screen and (min-width: 1440px) {
-    padding: 40px 32px;
-  }
-
-  @media screen and (min-width: 1440px) {
-    margin-left: 289px;
-  } */
+export const LayoutStyled = styled.div`
+  display: grid;
+  grid-template-columns: 120px 1fr;
+  background-color: var(--outlet-background-color);
 `;
 
 export const LogoBlock = styled.div`

@@ -3,15 +3,11 @@ import { useNavigate, useLocation } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import PropTypes from 'prop-types';
 
-import {
-  Wrapper,
-  ProfileBox,
-  LogOutBox,
-  Frame
-} from './SideBarStyled';
+import { Wrapper, ProfileBox, LogOutBox, Frame } from './SideBarStyled';
 
-import { getUserName } from 'redux-store/AuthOperations/selectors';
-import { logOut } from 'redux-store/AuthOperations/AuthOperations';
+import { getUserName } from '../../redux-store/AuthOperations/selectors';
+import { logOut } from '../../redux-store/AuthOperations/AuthOperations';
+// import Icons from '../Icons/Icons';
 import SideBarItem from '../SideBarItem/SideBarItem';
 
 const SideBar = ({ onClickDms, onClickRooms, isActive }) => {
@@ -80,7 +76,7 @@ const SideBar = ({ onClickDms, onClickRooms, isActive }) => {
       </LogOutBox>
     </Wrapper>
   );
-}
+};
 
 SideBar.propTypes = {
   onClickDms: PropTypes.func,

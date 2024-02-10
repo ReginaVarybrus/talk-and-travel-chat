@@ -19,11 +19,7 @@ const SearchBar = ({ isOpen }) => {
     <Wrapper>
       <SearchInput />
       <ButtonMapOpen onClick={handleOpen}>Search by map</ButtonMapOpen>
-      {isOpen === 'component2' ? (
-        <RoomsList />
-      ) : (
-        <DMsList />
-      )}
+      {isOpen === 'component2' ? <RoomsList /> : <DMsList />}
 
       <Modal
         aria-labelledby="transition-modal-title"
@@ -46,7 +42,7 @@ const SearchBar = ({ isOpen }) => {
       </Modal>
     </Wrapper>
   );
-}
+};
 
 SearchBar.propTypes = {
   isOpen: PropTypes.string,

@@ -11,17 +11,22 @@ import {
   getUserId,
   getPersistedToken,
 } from 'redux-store/AuthOperations/selectors';
-import { CountryName, ShowCountry, MainMapBlock, MapWrapper } from './ChatMapStyled';
+import {
+  CountryName,
+  ShowCountry,
+  MainMapBlock,
+  MapWrapper,
+} from './ChatMapStyled';
 // TODO
 // import { useMap } from 'react-leaflet/hooks';
 
-const ChatMap = ({closeMap}) => {
+const ChatMap = ({ closeMap }) => {
   const dispatch = useDispatch();
   const userId = useSelector(getUserId);
   const token = useSelector(getPersistedToken);
   const [selectedCountry, setSelectedCountry] = useState(null);
   const [countryData, setCountryData] = useState({});
-  
+
   // TODO
   // const onCountryHover = e => {
   //   const countryName = e.target.feature.properties.ADMIN;
@@ -48,7 +53,6 @@ const ChatMap = ({closeMap}) => {
   };
 
   const onEachCountry = (country, layer) => {
-
     const colorIndex = Math.floor(Math.random() * color.length);
     layer.options.fillColor = color[colorIndex];
 
@@ -63,12 +67,12 @@ const ChatMap = ({closeMap}) => {
       },
       mouseover: e => {
         e.target.setStyle({
-          color: 'var(--white-color)'
+          color: 'var(--white-color)',
         });
       },
       mouseout: e => {
         e.target.setStyle({
-          color: 'var(--color-dark)'
+          color: 'var(--color-dark)',
         });
       },
     });
@@ -79,7 +83,7 @@ const ChatMap = ({closeMap}) => {
       sendDataCountryToBackend({ userId, countryDto: countryData, token })
     );
     closeMap();
-  }
+  };
 
   return (
     <MainMapBlock>
@@ -91,7 +95,7 @@ const ChatMap = ({closeMap}) => {
         />
         <ShowCountry>
           <CountryName>{selectedCountry}</CountryName>
-          <button onClick={handleClick} >Join</button>
+          <button onClick={handleClick}>Join</button>
         </ShowCountry>
       </MapWrapper>
     </MainMapBlock>

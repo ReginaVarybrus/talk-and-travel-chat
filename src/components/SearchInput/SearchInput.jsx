@@ -9,8 +9,11 @@ import {
   Item,
   Flag,
 } from './SearchInputStyled';
-import { sendDataCountryToBackend} from '../../redux-store/AuthOperations/AuthOperations.js';
-import { getUserId, getPersistedToken } from 'redux-store/AuthOperations/selectors';
+import { sendDataCountryToBackend } from '../../redux-store/AuthOperations/AuthOperations.js';
+import {
+  getUserId,
+  getPersistedToken,
+} from 'redux-store/AuthOperations/selectors';
 import SimpleBar from 'simplebar-react';
 import 'simplebar-react/dist/simplebar.min.css';
 
@@ -46,7 +49,9 @@ const SearchInput = () => {
 
     setSearchedValue(country.properties.ADMIN);
     setShowItem(false);
-    dispatch(sendDataCountryToBackend({userId, countryDto: countryData, token}));
+    dispatch(
+      sendDataCountryToBackend({ userId, countryDto: countryData, token })
+    );
   };
 
   useEffect(() => {
