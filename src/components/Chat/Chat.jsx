@@ -54,7 +54,7 @@ const Chat = () => {
             ref={textAreaRef}
             maxLength="1000"
           />
-          <ButtonSendMessage isInputNotEmpty>
+          <ButtonSendMessage isInputNotEmpty={isInputNotEmpty}>
             <Icons name="send" fill="var(--color-grey-9)" size="24" />
           </ButtonSendMessage>
         </MessageBar>

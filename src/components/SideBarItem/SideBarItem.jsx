@@ -13,11 +13,7 @@ const SideBarItem = ({
   children,
 }) => {
   return (
-    <SideBarButton
-      onClick={() => onClick()}
-      color={isActive}
-      fontWeight={isActive}
-    >
+    <SideBarButton onClick={() => onClick()} isActive={isActive}>
       <SideBarIcon alt={alt}>
         <Icons
           name={name}
