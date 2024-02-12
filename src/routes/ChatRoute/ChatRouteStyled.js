@@ -7,7 +7,7 @@ export const Container = styled.div`
   margin: 0 auto;
 `;
 
-export const ChatWrapper = styled.div`
+export const ChatStyled = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -15,10 +15,4 @@ export const ChatWrapper = styled.div`
   width: 100%;
   height: 100vh;
   background: var(--white-color);
-`;
-
-export const Logo = styled.img`
-  width: 240px;
-  height: 200px;
-  margin-bottom: 16px;
 `;
