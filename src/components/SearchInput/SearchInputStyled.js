@@ -1,6 +1,7 @@
 import styled from 'styled-components';
+import SimpleBar from 'simplebar-react';
 
-export const AutocompleteInputWrapper = styled.div`
+export const AutocompleteInputStyled = styled.div`
   position: relative;
   min-width: 100%;
 `;
@@ -42,7 +43,7 @@ export const IconSearch = styled.div`
 
 export const ListWrapper = styled.div`
   position: absolute;
-  top: 133px;
+  top: 130px;
   left: -17px;
   width: 299.4px;
   height: 600px;
@@ -50,6 +51,7 @@ export const ListWrapper = styled.div`
   background: var(--white-color);
   border-left: 1px solid var(--color-grey-6);
   border-right: 1px solid var(--color-grey-6);
+  z-index: 10;
 `;
 
 export const ListItems = styled.ul`
@@ -65,7 +67,7 @@ export const Item = styled.li`
   padding: 0 16px;
   background: var(--white-color);
   &:hover {
-    background: var(--color-blue-1);
+    background: var(--color-grey-3);
   }
 `;
 
@@ -73,4 +75,8 @@ export const Flag = styled.img`
   width: 32px;
   height: 24px;
   padding-right: 12px;
+`;
+
+export const ScrollBar = styled(SimpleBar)`
+  max-height: 570px;
 `;

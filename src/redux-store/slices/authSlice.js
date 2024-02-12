@@ -3,9 +3,10 @@ import {
   register,
   logIn,
   logOut,
-  // fetchCurrentUser,
+  fetchCurrentUser,
   updateUser,
   sendDataCountryToBackend,
+  // addCountryRoom
 } from '../AuthOperations/AuthOperations';
 
 // import { sendDataCountryToBackend } from '../AuthOperations/DataCountryOperation';
@@ -22,6 +23,7 @@ const initialState = {
   name: '',
   flagCode: '',
   userId: '',
+  countryRooms: [],
 
   isLoggedIn: false,
   isRefresh: true,
@@ -73,13 +75,14 @@ export const authSlice = createSlice({
         state.isRefresh = false;
       })
 
-      // .addCase(fetchCurrentUser.pending, handlePending)
-      // .addCase(fetchCurrentUser.rejected, handleRejected)
-      // .addCase(fetchCurrentUser.fulfilled, (state, action) => {
-      //   state.userDto = action.payload.userDto;
-      //   state.isLoggedIn = true;
-      //   state.isRefresh = false;
-      // })
+      .addCase(fetchCurrentUser.pending, handlePending)
+      .addCase(fetchCurrentUser.rejected, handleRejected)
+      .addCase(fetchCurrentUser.fulfilled, (state, action) => {
+        state.userDto = action.payload.userDto;
+        state.isLoggedIn = true;
+        state.isRefresh = false;
+      })
+
       .addCase(updateUser.fulfilled, (state, action) => {
         state.userDto = { ...state.userDto, ...action.payload };
       })
@@ -90,28 +93,14 @@ export const authSlice = createSlice({
         console.log('action:', action);
         console.log('action.payload:', action.payload);
         console.log('action.meta.arg:', action.meta.arg);
-        // handleRejected(state, action);
-
-        if (action.payload && action.payload.data) {
-          console.error('Ошибка в ответе:', action.payload.data.message);
-        } else {
-          console.error(
-            'Ошибка в ответе, свойство data отсутствует:',
-            action.payload
-          );
-        }
         handleRejected(state, action);
       })
       .addCase(sendDataCountryToBackend.fulfilled, (state, action) => {
         console.log('Fulfilled Action:', action);
-        console.log('Fulfilled Payload:', action.payload);
-        state.countryDto = action.payload.data;
-
-        // state.token = action.payload.token;
+        state.name = action.payload.name;
+        state.flagCode = action.payload.flagCode;
         state.isLoggedIn = true;
-
-        // console.log('action', action);
-      }),
+      })
 });
 
 export default authSlice.reducer;

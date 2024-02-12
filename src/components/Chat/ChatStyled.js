@@ -1,13 +1,16 @@
 import styled from 'styled-components';
+import Button from '@mui/material/Button';
+import { TextareaAutosize as BaseTextareaAutosize } from '@mui/base/TextareaAutosize';
 
-export const Wrapper = styled.div`
+export const ChatStyled = styled.div`
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  justify-content: space-between;
   align-items: center;
   width: 100%;
-  height: 100vh;
+  min-height: 100vh;
   background: var(--white-color);
+  position: relative;
 `;
 
 export const Header = styled.header`
@@ -32,43 +35,89 @@ export const HeaderContent = styled.div`
 `;
 
 export const MessageBlock = styled.div`
+  flex-grow: 1;
   width: 100%;
-  height: 100%;
   background: var(--color-grey-3);
+  transition: height 0.3s ease;
 `;
 
 export const MessageBarWrapper = styled.footer`
   width: 100%;
   min-height: 112px;
+  max-height: 444px;
   background: var(--white-color);
   border-top: 1px solid var(--color-grey-6);
+  width: 100%;
+  transition: height 0.3s ease;
 `;
 
 export const MessageBar = styled.div`
   display: flex;
   justify-content: space-between;
-  align-items: center;
+  align-items: end;
   margin: 32px;
 `;
 
-export const Input = styled.input`
+export const TextareaAutosize = styled(BaseTextareaAutosize)`
+  box-sizing: border-box;
   width: 100%;
-  height: 44.4px;
-  border: 1px solid var(--color-grey-6);
-  border-radius: 8px;
+  max-height: 200px;
   margin-left: 16px;
   margin-right: 16px;
-  padding-left: 16px;
-  padding-right: 16px;
-  outline: none;
+  font-size: 0.875rem;
+  font-weight: 400;
+  line-height: 1.5;
+  padding: 13.2px 16px;
+  border-radius: 8px;
   color: var(--color-grey-8);
+  border: 1px solid var(--color-grey-6);
+  resize: none;
+  outline: none;
+
+  &::placeholder {
+    font-size: 16px;
+    font-weight: 400;
+    line-height: 19px;
+    color: var(--color-grey-7);
+  }
+
+  &:focus {
+    border: 1px solid var(--color-grey-8);
+    &::placeholder {
+      color: transparent;
+    }
+  }
 `;
 
-export const Button = styled.button`
+export const ButtonAttachFile = styled(Button)`
   min-width: 48px;
   height: 48px;
   background: var(--white-color);
   border: 1px solid var(--color-grey-6);
   border-radius: 8px;
   cursor: pointer;
+`;
+
+export const VisuallyHiddenInput = styled.input`
+  clip: rect(0 0 0 0);
+  clippath: inset(50%);
+  height: 1;
+  overflow: hidden;
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  whitespace: nowrap;
+  width: 1;
+`;
+
+export const ButtonSendMessage = styled.button`
+  min-width: 48px;
+  height: 48px;
+  background: var(--white-color);
+  border-radius: 8px;
+  cursor: pointer;
+  border: ${props =>
+    props.isInputNotEmpty
+      ? '1px solid var(--color-brand-blue)'
+      : '1px solid var(--color-grey-6)'};
 `;

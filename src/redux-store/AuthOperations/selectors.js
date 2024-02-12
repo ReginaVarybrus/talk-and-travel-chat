@@ -8,4 +8,6 @@ export const getUserRefresh = state => state.auth.isRefresh;
 export const getUser = state => state.auth;
 export const getPersistedToken = state => state.auth.token;
 
-export const getCountryName = state => state.auth.countryDto.name;
+export const getCountryName = state => state.auth.name;
+export const getNumberOfParticipants = state => state.auth.participants;
+export const countryRooms = state => state.room.countryRooms;

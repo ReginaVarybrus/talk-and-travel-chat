@@ -10,8 +10,7 @@ import {
   REGISTER,
 } from 'redux-persist';
 import storage from 'redux-persist/lib/storage';
-import { authSlice } from './AuthOperations/slice';
-
+import { authSlice } from './slices/authSlice';
 import axios from 'axios';
 
 const authPersistConfig = {

@@ -1,41 +1,66 @@
-import React from 'react';
-// import { useSelector } from 'react-redux';
+import React, { useState, useRef } from 'react';
+import { useSelector } from 'react-redux';
 import {
-  Wrapper,
+  ChatStyled,
   Header,
   HeaderContent,
   MessageBlock,
   MessageBarWrapper,
   MessageBar,
-  Input,
-  Button,
+  ButtonAttachFile,
+  VisuallyHiddenInput,
+  TextareaAutosize,
+  ButtonSendMessage,
 } from './ChatStyled';
 import Icons from '../Icons/Icons';
-// import { getCountryName } from 'redux-store/AuthOperations/selectors';
+import {
+  getCountryName,
+  getNumberOfParticipants,
+} from '../../redux-store/AuthOperations/selectors.js';
 
-export default function Chat() {
-  // const countryName = useSelector(getCountryName);
+const Chat = () => {
+  const countryName = useSelector(getCountryName);
+  const participants = useSelector(getNumberOfParticipants);
+  const [value, setValue] = useState('');
+
+  const textAreaRef = useRef(null);
+
+  const isInputNotEmpty = Boolean(value?.trim().length);
+
+  const handleChange = e => {
+    setValue(e.target.value);
+  };
 
   return (
-    <Wrapper>
+    <ChatStyled>
       <Header>
         <HeaderContent>
-          <h5>Country Name</h5>
-          <p>members</p>
+          {<h5>{countryName || 'Country Name'}</h5>}
+          {<p>{participants || 0} members</p>}
         </HeaderContent>
       </Header>
-      <MessageBlock></MessageBlock>
+      <MessageBlock />
       <MessageBarWrapper>
         <MessageBar>
-          <Button>
+          <ButtonAttachFile component="label" variant="contained">
             <Icons name="attach-file" fill="var(--color-grey-9)" size="24" />
-          </Button>
-          <Input type="text" placeholder="Type here" />
-          <Button>
+            <VisuallyHiddenInput type="file" />
+          </ButtonAttachFile>
+          <TextareaAutosize
+            aria-label="empty textarea"
+            placeholder="Type here"
+            value={value}
+            onChange={handleChange}
+            ref={textAreaRef}
+            maxLength="1000"
+          />
+          <ButtonSendMessage isInputNotEmpty={isInputNotEmpty}>
             <Icons name="send" fill="var(--color-grey-9)" size="24" />
-          </Button>
+          </ButtonSendMessage>
         </MessageBar>
       </MessageBarWrapper>
-    </Wrapper>
+    </ChatStyled>
   );
-}
+};
+
+export default Chat;

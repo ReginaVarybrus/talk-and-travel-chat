@@ -1,26 +1,25 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import {
-  AutocompleteInputWrapper,
+  AutocompleteInputStyled,
   AutocompleteInput,
   IconSearch,
   ListWrapper,
   ListItems,
   Item,
   Flag,
+  ScrollBar,
 } from './SearchInputStyled';
 import { sendDataCountryToBackend } from '../../redux-store/AuthOperations/AuthOperations.js';
 import {
   getUserId,
   getPersistedToken,
 } from '../../redux-store/AuthOperations/selectors';
-import SimpleBar from 'simplebar-react';
-import 'simplebar-react/dist/simplebar.min.css';
 
 import Icons from '../Icons/Icons';
 import mapData from '../../data/countries.json';
 
-export default function SearchInput() {
+const SearchInput = () => {
   const [searchedValue, setSearchedValue] = useState('');
   const [showItem, setShowItem] = useState(false);
   const autoCompleteRef = useRef(null);
@@ -39,17 +38,9 @@ export default function SearchInput() {
     } else {
       event.target.style.border = '1px solid var(--color-grey-7)';
     }
-    console.log(event.target.value);
   };
 
   const handleCountryClick = country => {
-    // const countryDto = {
-    //   // countryDto: {
-    //     name: country.properties.ADMIN,
-    //     flagCode: country.properties.code,
-    //   // },
-    // };
-
     const countryData = {
       name: country.properties.ADMIN,
       flagCode: country.properties.code,
@@ -57,12 +48,9 @@ export default function SearchInput() {
 
     setSearchedValue(country.properties.ADMIN);
     setShowItem(false);
-    // console.log('choose country', country.properties.ADMIN);
-
     dispatch(
       sendDataCountryToBackend({ userId, countryDto: countryData, token })
     );
-    console.log('data to send', countryData);
   };
 
   useEffect(() => {
@@ -81,7 +69,7 @@ export default function SearchInput() {
   }, []);
 
   return (
-    <AutocompleteInputWrapper ref={autoCompleteRef}>
+    <AutocompleteInputStyled ref={autoCompleteRef}>
       <AutocompleteInput
         type="text"
         value={searchedValue}
@@ -96,7 +84,7 @@ export default function SearchInput() {
       {showItem && (
         <ListWrapper>
           <ListItems>
-            <SimpleBar style={{ maxHeight: 570 }}>
+            <ScrollBar>
               {filterCountries === 0 ? (
                 <p>BlaBla</p>
               ) : (
@@ -118,10 +106,12 @@ export default function SearchInput() {
                   ))}
                 </>
               )}
-            </SimpleBar>
+            </ScrollBar>
           </ListItems>
         </ListWrapper>
       )}
-    </AutocompleteInputWrapper>
+    </AutocompleteInputStyled>
   );
-}
+};
+
+export default SearchInput;

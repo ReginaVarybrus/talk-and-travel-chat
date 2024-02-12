@@ -1,7 +1,6 @@
 import styled from 'styled-components';
 
 export const Text = styled.p`
-  /* font-family: Roboto; */
   font-size: 16px;
   line-height: 20px;
   letter-spacing: -0.011em;
@@ -17,6 +16,9 @@ export const SideBarButton = styled.button`
   background: none;
   border: none;
   cursor: pointer;
+  color: ${props =>
+    props.isActive ? 'var(--color-brand-blue)' : 'var(--color-grey-9)'};
+  font-weight: ${props => (props.isActive ? '700' : '400')};
   &:hover {
     svg {
       fill: var(--color-blue-3);
