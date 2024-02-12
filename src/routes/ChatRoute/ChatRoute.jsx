@@ -1,16 +1,16 @@
 import React from 'react';
-import { Container, ChatStyled } from './ChatRouteStyled.js';
+import { Container } from './ChatRouteStyled.js';
 
 import SearchBar from '@/components/SearchBar/SearchBar';
 import Chat from '@/components/Chat/Chat';
 
-export default function ChatPage() {
+const ChatRoute = () => {
   return (
     <Container>
       <SearchBar />
-      <ChatStyled>
-        <Chat />
-      </ChatStyled>
+      <Chat />
     </Container>
   );
-}
+};
+
+export default ChatRoute;

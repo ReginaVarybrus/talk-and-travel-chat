@@ -1,10 +1,12 @@
 import React from 'react';
 import Profile from '@/components/Profile/Profile';
 
-export default function AccountPage() {
+const AccountRoute = () => {
   return (
     <div>
       <Profile />
     </div>
   );
-}
+};
+
+export default AccountRoute;

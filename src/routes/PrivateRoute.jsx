@@ -4,7 +4,7 @@ import { useSelector } from 'react-redux';
 import {
   getIsLoggedIn,
   getUserRefresh,
-} from '../redux-store/AuthOperations/selectors';
+} from '@/redux-store/AuthOperations/selectors';
 
 export default function PrivateRoute({
   component: Component,

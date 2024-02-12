@@ -1,10 +1,12 @@
 import React from 'react';
 import RegisterForm from '@/components/RegisterForm/RegisterForm';
 
-export default function RegisterPage() {
+const RegisterRoute = () => {
   return (
     <div>
       <RegisterForm />
     </div>
   );
-}
+};
+
+export default RegisterRoute;

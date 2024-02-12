@@ -1,10 +1,12 @@
 import React from 'react';
 import LoginForm from '@/components/LoginForm/LoginForm';
 
-export default function LoginPage() {
+const LoginRoute = () => {
   return (
     <div>
       <LoginForm />
     </div>
   );
-}
+};
+
+export default LoginRoute;

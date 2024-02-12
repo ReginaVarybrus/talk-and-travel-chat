@@ -10,7 +10,7 @@ import {
   LogInBtn,
 } from './LoginFormStyled';
 import { useNavigate } from 'react-router-dom';
-import { logIn } from '../../redux-store/AuthOperations/AuthOperations';
+import { logIn } from '@/redux-store/AuthOperations/AuthOperations';
 import { useDispatch } from 'react-redux';
 import { routesPath } from '@/routes/routesConfig';
 
