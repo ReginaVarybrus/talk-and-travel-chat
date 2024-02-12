@@ -4,10 +4,9 @@ import { useDispatch, useSelector } from 'react-redux';
 import PropTypes from 'prop-types';
 
 import { Wrapper, ProfileBox, LogOutBox, Frame } from './SideBarStyled';
-
+import { routesPath } from '../../routes/routesConfig';
 import { getUserName } from '../../redux-store/AuthOperations/selectors';
 import { logOut } from '../../redux-store/AuthOperations/AuthOperations';
-// import Icons from '../Icons/Icons';
 import SideBarItem from '../SideBarItem/SideBarItem';
 
 const SideBar = ({ onClickDms, onClickRooms, isActive }) => {
@@ -18,17 +17,12 @@ const SideBar = ({ onClickDms, onClickRooms, isActive }) => {
   const currentPage = location.pathname;
 
   const handleProfileOpen = () => {
-    navigate('account');
+    navigate(routesPath.ACCOUNT);
   };
 
-  const handleLogOut = async (event, values) => {
-    try {
-      await dispatch(logOut(values));
-      navigate('/');
-      console.log('Logout successful', event);
-    } catch (error) {
-      console.error('Error during logout', error);
-    }
+  const handleLogOut = (event, values) => {
+    dispatch(logOut(values));
+    navigate(routesPath.MAIN);
   };
 
   return (
@@ -36,7 +30,7 @@ const SideBar = ({ onClickDms, onClickRooms, isActive }) => {
       <ProfileBox>
         <SideBarItem
           onClick={handleProfileOpen}
-          isActive={currentPage === '/app/account'}
+          isActive={currentPage === routesPath.ACCOUNT}
           alt="Photo icon"
           name="photo-icon"
           size="24"

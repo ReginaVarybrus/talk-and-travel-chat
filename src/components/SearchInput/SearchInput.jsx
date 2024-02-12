@@ -1,21 +1,20 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import {
-  AutocompleteInputWrapper,
+  AutocompleteInputStyled,
   AutocompleteInput,
   IconSearch,
   ListWrapper,
   ListItems,
   Item,
   Flag,
+  ScrollBar,
 } from './SearchInputStyled';
 import { sendDataCountryToBackend } from '../../redux-store/AuthOperations/AuthOperations.js';
 import {
   getUserId,
   getPersistedToken,
 } from '../../redux-store/AuthOperations/selectors';
-import SimpleBar from 'simplebar-react';
-import 'simplebar-react/dist/simplebar.min.css';
 
 import Icons from '../Icons/Icons';
 import mapData from '../../data/countries.json';
@@ -70,7 +69,7 @@ const SearchInput = () => {
   }, []);
 
   return (
-    <AutocompleteInputWrapper ref={autoCompleteRef}>
+    <AutocompleteInputStyled ref={autoCompleteRef}>
       <AutocompleteInput
         type="text"
         value={searchedValue}
@@ -85,7 +84,7 @@ const SearchInput = () => {
       {showItem && (
         <ListWrapper>
           <ListItems>
-            <SimpleBar style={{ maxHeight: 570 }} autoHide={false}>
+            <ScrollBar>
               {filterCountries === 0 ? (
                 <p>BlaBla</p>
               ) : (
@@ -107,11 +106,11 @@ const SearchInput = () => {
                   ))}
                 </>
               )}
-            </SimpleBar>
+            </ScrollBar>
           </ListItems>
         </ListWrapper>
       )}
-    </AutocompleteInputWrapper>
+    </AutocompleteInputStyled>
   );
 };
 

@@ -1,13 +1,13 @@
 import styled from 'styled-components';
+import SimpleBar from 'simplebar-react';
 
-export const Wrapper = styled.div`
+export const RoomsListStyled = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: start;
   align-items: center;
   width: 300px;
   height: 100vh;
-  /* background: var(--color-blue-1); */
 `;
 
 export const Text = styled.p`
@@ -38,4 +38,8 @@ export const Flag = styled.img`
   width: 32px;
   height: 24px;
   padding-right: 12px;
+`;
+
+export const ScrollBar = styled(SimpleBar)`
+  max-height: 570px;
 `;

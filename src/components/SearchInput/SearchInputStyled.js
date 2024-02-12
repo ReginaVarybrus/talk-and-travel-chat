@@ -1,6 +1,7 @@
 import styled from 'styled-components';
+import SimpleBar from 'simplebar-react';
 
-export const AutocompleteInputWrapper = styled.div`
+export const AutocompleteInputStyled = styled.div`
   position: relative;
   min-width: 100%;
 `;
@@ -74,4 +75,8 @@ export const Flag = styled.img`
   width: 32px;
   height: 24px;
   padding-right: 12px;
+`;
+
+export const ScrollBar = styled(SimpleBar)`
+  max-height: 570px;
 `;

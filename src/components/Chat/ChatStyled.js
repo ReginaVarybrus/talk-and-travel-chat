@@ -2,7 +2,7 @@ import styled from 'styled-components';
 import Button from '@mui/material/Button';
 import { TextareaAutosize as BaseTextareaAutosize } from '@mui/base/TextareaAutosize';
 
-export const Wrapper = styled.div`
+export const ChatStyled = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -61,7 +61,7 @@ export const MessageBar = styled.div`
 export const TextareaAutosize = styled(BaseTextareaAutosize)`
   box-sizing: border-box;
   width: 100%;
-  max-height: 200px; 
+  max-height: 200px;
   margin-left: 16px;
   margin-right: 16px;
   font-size: 0.875rem;
@@ -100,13 +100,13 @@ export const ButtonAttachFile = styled(Button)`
 
 export const VisuallyHiddenInput = styled.input`
   clip: rect(0 0 0 0);
-  clipPath: inset(50%);
+  clippath: inset(50%);
   height: 1;
   overflow: hidden;
   position: absolute;
   bottom: 0;
   left: 0;
-  whiteSpace: nowrap;
+  whitespace: nowrap;
   width: 1;
 `;
 
@@ -116,5 +116,8 @@ export const ButtonSendMessage = styled.button`
   background: var(--white-color);
   border-radius: 8px;
   cursor: pointer;
-  border: ${props => props.border ? '1px solid var(--color-brand-blue)' : '1px solid var(--color-grey-6)'};
+  border: ${props =>
+    props.isInputNotEmpty
+      ? '1px solid var(--color-brand-blue)'
+      : '1px solid var(--color-grey-6)'};
 `;

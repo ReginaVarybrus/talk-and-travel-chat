@@ -1,5 +1,5 @@
 import React from 'react';
-import sprite from '../../public/sprite.svg';
+import sprite from '../../svg/sprite.svg';
 import PropTypes from 'prop-types';
 
 const Icons = ({ name, fill, stroke, size }) => {
@@ -14,14 +14,13 @@ const Icons = ({ name, fill, stroke, size }) => {
       <use href={sprite + '#icon-' + name}></use>
     </svg>
   );
-}
+};
 
 Icons.propTypes = {
   name: PropTypes.string,
   fill: PropTypes.string,
   stroke: PropTypes.string,
-  size: PropTypes.string
+  size: PropTypes.string,
 };
 
 export default Icons;
-

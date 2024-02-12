@@ -10,7 +10,7 @@ const SideBarItem = ({
   name,
   stroke,
   size,
-  children
+  children,
 }) => {
   return (
     <SideBarButton
@@ -19,12 +19,17 @@ const SideBarItem = ({
       fontWeight={isActive}
     >
       <SideBarIcon alt={alt}>
-        <Icons name={name} stroke={stroke} size={size} fill={isActive ? 'var(--color-brand-blue)' : 'var(--color-grey-9)'} />
+        <Icons
+          name={name}
+          stroke={stroke}
+          size={size}
+          fill={isActive ? 'var(--color-brand-blue)' : 'var(--color-grey-9)'}
+        />
       </SideBarIcon>
       <Text>{children}</Text>
     </SideBarButton>
   );
-}
+};
 
 SideBarItem.propTypes = {
   onClick: PropTypes.func,

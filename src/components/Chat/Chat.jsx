@@ -1,7 +1,7 @@
 import React, { useState, useRef } from 'react';
 import { useSelector } from 'react-redux';
 import {
-  Wrapper,
+  ChatStyled,
   Header,
   HeaderContent,
   MessageBlock,
@@ -25,14 +25,14 @@ const Chat = () => {
 
   const textAreaRef = useRef(null);
 
-  const isInputNotEmpty = value.trim() !== '';
+  const isInputNotEmpty = Boolean(value?.trim().length);
 
   const handleChange = e => {
     setValue(e.target.value);
   };
 
   return (
-    <Wrapper>
+    <ChatStyled>
       <Header>
         <HeaderContent>
           {<h5>{countryName || 'Country Name'}</h5>}
@@ -54,12 +54,12 @@ const Chat = () => {
             ref={textAreaRef}
             maxLength="1000"
           />
-          <ButtonSendMessage border={isInputNotEmpty}>
+          <ButtonSendMessage isInputNotEmpty>
             <Icons name="send" fill="var(--color-grey-9)" size="24" />
           </ButtonSendMessage>
         </MessageBar>
       </MessageBarWrapper>
-    </Wrapper>
+    </ChatStyled>
   );
 };
 

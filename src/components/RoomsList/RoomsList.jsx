@@ -1,8 +1,12 @@
 import React from 'react';
 
-import { Wrapper, Text, Item, ListItems } from './RoomsListStyled';
-import SimpleBar from 'simplebar-react';
-import 'simplebar-react/dist/simplebar.min.css';
+import {
+  RoomsListStyled,
+  Text,
+  Item,
+  ListItems,
+  ScrollBar,
+} from './RoomsListStyled';
 
 const RoomsList = () => {
   const rooms = [];
@@ -10,23 +14,23 @@ const RoomsList = () => {
   const handleClick = () => {};
 
   return (
-    <Wrapper>
-      {rooms.length === 0 && (
+    <RoomsListStyled>
+      {rooms?.length && (
         <Text>
           There are no rooms in the list.
           <br /> Find chat of a country and it will be shown here
         </Text>
       )}
       <ListItems>
-        <SimpleBar style={{ maxHeight: 570 }}>
+        <ScrollBar>
           {rooms.map(room => (
             <Item key={room} onClick={handleClick}>
               <p>{room}</p>
             </Item>
           ))}
-        </SimpleBar>
+        </ScrollBar>
       </ListItems>
-    </Wrapper>
+    </RoomsListStyled>
   );
 };
 
