@@ -39,7 +39,7 @@ const Chat = () => {
           {<p>{participants || 0} members</p>}
         </HeaderContent>
       </Header>
-      <MessageBlock></MessageBlock>
+      <MessageBlock />
       <MessageBarWrapper>
         <MessageBar>
           <ButtonAttachFile component="label" variant="contained">
