@@ -1,5 +1,5 @@
 import React from 'react';
-import { Container } from './ChatRouteStyled.js';
+import { ChatRouteStyled } from './ChatRouteStyled.js';
 
 import SearchBar from '@/components/SearchBar/SearchBar';
 import Chat from '@/components/Chat/Chat';
