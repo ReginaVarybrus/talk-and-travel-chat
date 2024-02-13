@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { SideBarButton, SideBarIcon, Text } from './SideBarItemStyled';
 import Icons from '../Icons/Icons';
 
-const SideBarItem = ({
+function SideBarItem({
   onClick,
   isActive,
   alt,
@@ -11,7 +11,7 @@ const SideBarItem = ({
   stroke,
   size,
   children,
-}) => {
+}) {
   return (
     <SideBarButton onClick={() => onClick()} isActive={isActive}>
       <SideBarIcon alt={alt}>
@@ -25,7 +25,7 @@ const SideBarItem = ({
       <Text>{children}</Text>
     </SideBarButton>
   );
-};
+}
 
 SideBarItem.propTypes = {
   onClick: PropTypes.func,

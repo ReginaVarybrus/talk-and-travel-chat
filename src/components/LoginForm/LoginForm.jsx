@@ -1,5 +1,7 @@
 import { useFormik } from 'formik';
 import * as yup from 'yup';
+import { useNavigate } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
 import {
   ItemWrapp,
   StyledLabel,
@@ -9,12 +11,10 @@ import {
   Success,
   LogInBtn,
 } from './LoginFormStyled';
-import { useNavigate } from 'react-router-dom';
 import { logIn } from '../../redux-store/AuthOperations/AuthOperations';
-import { useDispatch } from 'react-redux';
 import { routesPath } from '@/routes/routesConfig';
 
-let schema = yup.object().shape({
+const schema = yup.object().shape({
   userEmail: yup
     .string()
     .transform(value => (value ? value.trim() : ''))
@@ -29,7 +29,7 @@ let schema = yup.object().shape({
   password: yup.string().min(8).max(30).required('The field is empty'),
 });
 
-const LoginForm = () => {
+function LoginForm() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
@@ -125,6 +125,6 @@ const LoginForm = () => {
       <LogInBtn type="submit">Log In</LogInBtn>
     </form>
   );
-};
+}
 
 export default LoginForm;

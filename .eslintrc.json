@@ -1,0 +1,48 @@
+{
+  "env": {
+    "browser": true,
+    "es2021": true
+  },
+  "extends": [
+    "airbnb",
+    "plugin:react/recommended",
+    "plugin:react/jsx-runtime",
+    "prettier"
+  ],
+  "parserOptions": {
+    "ecmaVersion": "latest",
+    "sourceType": "module"
+  },
+  "plugins": ["prettier"],
+  "rules": {
+    //below rule allows using react components without importing React in file;
+    "react/react-in-jsx-scope": "off",
+    //below rule allows not to check props types validation in  REact components.
+    "react/prop-types": "off",
+    //below rule ensures that files containing JSX code have .js or .jsx extensions;
+    "react/jsx-filename-extension": [
+      "error",
+      { "extensions": [".js", ".jsx"] }
+    ],
+    //below rule warns if a relative path use in import instead of absolute path or using import modules;
+    "import/no-relative-parent-imports": "warn",
+    //below rule turns off the preference of default export instead of named export usage;
+    "import/prefer-default-export": "off",
+    //below rule warns if import paths are resolvable;
+    "import/no-unresolved": "warn",
+    //below rule allows imports of all file types without extensions indicated in the path;
+    "import/extensions": "off",
+    //below rule warns if a cyclic dependencies are detected between modules;
+    "import/no-cycle": "warn"
+  },
+  "settings": {
+    "import/resolver": {
+      //this alias sets the alias description for eslint to resolve the improt path with aliases;
+      "alias": {
+        "map": [["@", "./src"]],
+        "extensions": [".js", ".jsx", ".json"]
+      }
+    },
+    "import/extensions": [".js", ".jsx"]
+  }
+}

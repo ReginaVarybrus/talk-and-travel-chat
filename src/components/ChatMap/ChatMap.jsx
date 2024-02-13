@@ -20,7 +20,7 @@ import {
 // TODO
 // import { useMap } from 'react-leaflet/hooks';
 
-const ChatMap = ({ closeMap }) => {
+function ChatMap({ closeMap }) {
   const dispatch = useDispatch();
   const userId = useSelector(getUserId);
   const token = useSelector(getPersistedToken);
@@ -33,7 +33,7 @@ const ChatMap = ({ closeMap }) => {
   //   setSelectedCountry(countryName);
   // };
 
-  let color = [
+  const color = [
     'var(--color-blue-1)',
     'var(--color-blue-2)',
     'var(--color-blue-3)',
@@ -100,7 +100,7 @@ const ChatMap = ({ closeMap }) => {
       </MapWrapper>
     </MainMapBlock>
   );
-};
+}
 
 ChatMap.propTypes = {
   closeMap: PropTypes.func,

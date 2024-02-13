@@ -18,7 +18,7 @@ import {
   getNumberOfParticipants,
 } from '../../redux-store/AuthOperations/selectors.js';
 
-const Chat = () => {
+function Chat() {
   const countryName = useSelector(getCountryName);
   const participants = useSelector(getNumberOfParticipants);
   const [value, setValue] = useState('');
@@ -35,8 +35,8 @@ const Chat = () => {
     <ChatStyled>
       <Header>
         <HeaderContent>
-          {<h5>{countryName || 'Country Name'}</h5>}
-          {<p>{participants || 0} members</p>}
+          <h5>{countryName || 'Country Name'}</h5>
+          <p>{participants || 0} members</p>
         </HeaderContent>
       </Header>
       <MessageBlock />
@@ -61,6 +61,6 @@ const Chat = () => {
       </MessageBarWrapper>
     </ChatStyled>
   );
-};
+}
 
 export default Chat;

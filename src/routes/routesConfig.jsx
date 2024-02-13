@@ -1,6 +1,6 @@
 import { lazy } from 'react';
-import PrivateRoute from '@/routes/PrivateRoute';
 import { createBrowserRouter } from 'react-router-dom';
+import PrivateRoute from '@/routes/PrivateRoute';
 
 export const routesPath = {
   MAIN: '/',

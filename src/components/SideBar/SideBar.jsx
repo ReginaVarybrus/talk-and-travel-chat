@@ -9,7 +9,7 @@ import { getUserName } from '../../redux-store/AuthOperations/selectors';
 import { logOut } from '../../redux-store/AuthOperations/AuthOperations';
 import SideBarItem from '../SideBarItem/SideBarItem';
 
-const SideBar = ({ onClickDms, onClickRooms, isActive }) => {
+function SideBar({ onClickDms, onClickRooms, isActive }) {
   const userName = useSelector(getUserName);
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -70,7 +70,7 @@ const SideBar = ({ onClickDms, onClickRooms, isActive }) => {
       </LogOutBox>
     </Wrapper>
   );
-};
+}
 
 SideBar.propTypes = {
   onClickDms: PropTypes.func,

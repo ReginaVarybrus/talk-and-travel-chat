@@ -1,17 +1,17 @@
 import React from 'react';
-import { 
-  Wrapper, 
-  Text, 
-  ListItems, 
-  Item, 
-  Avatar, 
-  ChatName, 
-  MessageDay 
-} from './DMsListStyled';
 import SimpleBar from 'simplebar-react';
+import {
+  Wrapper,
+  Text,
+  ListItems,
+  Item,
+  Avatar,
+  ChatName,
+  MessageDay,
+} from './DMsListStyled';
 import 'simplebar-react/dist/simplebar.min.css';
 
-const DMsList = () => {
+function DMsList() {
   const chats = [];
 
   return (
@@ -42,7 +42,6 @@ const DMsList = () => {
       </ListItems>
     </Wrapper>
   );
-};
+}
 
 export default DMsList;
-

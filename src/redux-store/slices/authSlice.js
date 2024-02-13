@@ -46,14 +46,12 @@ export const authSlice = createSlice({
     builder
       .addCase(register.pending, handlePending)
       .addCase(register.rejected, handleRejected)
-      .addCase(register.fulfilled, (state, action) => {
-        return {
+      .addCase(register.fulfilled, (state, action) => ({
           ...state,
           userDto: action.payload.userDto,
           token: action.payload.token,
           isLoggedIn: true,
-        };
-      })
+        }))
 
       .addCase(logIn.pending, handlePending)
       .addCase(logIn.rejected, handleRejected)
@@ -100,7 +98,7 @@ export const authSlice = createSlice({
         state.name = action.payload.name;
         state.flagCode = action.payload.flagCode;
         state.isLoggedIn = true;
-      })
+      }),
 });
 
 export default authSlice.reducer;

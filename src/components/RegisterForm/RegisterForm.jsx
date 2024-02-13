@@ -1,7 +1,7 @@
 import { useFormik } from 'formik';
 import * as yup from 'yup';
-import { register } from '../../redux-store/AuthOperations/AuthOperations';
 import { useDispatch } from 'react-redux';
+import { register } from '../../redux-store/AuthOperations/AuthOperations';
 import {
   ItemWrapp,
   StyledLabel,
@@ -12,7 +12,7 @@ import {
   SignUpBtn,
 } from './RegisterForm.styled';
 
-let schema = yup.object().shape({
+const schema = yup.object().shape({
   userName: yup
     .string()
     .transform(value => (value ? value.trim() : ''))
@@ -52,7 +52,7 @@ let schema = yup.object().shape({
     .required('The field is empty'),
 });
 
-const RegisterForm = () => {
+function RegisterForm() {
   const dispatch = useDispatch();
 
   const formik = useFormik({
@@ -171,6 +171,6 @@ const RegisterForm = () => {
       <SignUpBtn type="submit">Sign Up</SignUpBtn>
     </form>
   );
-};
+}
 
 export default RegisterForm;

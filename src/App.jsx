@@ -1,15 +1,15 @@
 import React, { Suspense } from 'react';
-import { GlobalStyles } from './GlobalStyles';
 
 import { Provider } from 'react-redux';
-import { persistor, store } from './redux-store/store';
 import { PersistGate } from 'redux-persist/integration/react';
 import { RouterProvider } from 'react-router-dom';
+import { persistor, store } from './redux-store/store';
+import { GlobalStyles } from './GlobalStyles';
 
 import Loader from '@/components/Loader/Loader';
 import { router } from '@/routes/routesConfig';
 
-const App = () => {
+function App() {
   return (
     <React.StrictMode>
       <Suspense fallback={<Loader />}>
@@ -22,6 +22,6 @@ const App = () => {
       </Suspense>
     </React.StrictMode>
   );
-};
+}
 
 export default App;

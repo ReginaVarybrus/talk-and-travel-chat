@@ -8,7 +8,7 @@ import {
   ScrollBar,
 } from './RoomsListStyled';
 
-const RoomsList = () => {
+function RoomsList() {
   const rooms = [];
 
   const handleClick = () => {};
@@ -32,6 +32,6 @@ const RoomsList = () => {
       </ListItems>
     </RoomsListStyled>
   );
-};
+}
 
 export default RoomsList;

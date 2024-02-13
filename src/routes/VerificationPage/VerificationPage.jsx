@@ -1,6 +1,7 @@
 import axios from 'axios';
 import { useEffect } from 'react';
 import { useParams } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
 import {
   Background,
   Container,
@@ -8,10 +9,9 @@ import {
   Text,
   AppLink,
 } from './VerificationPageStyled';
-import { useDispatch } from 'react-redux';
 import { logIn } from '../../redux-store/AuthOperations/AuthOperations';
 
-const VerificationPage = () => {
+function VerificationPage() {
   const params = useParams();
   const dispatch = useDispatch();
   const login = localStorage.getItem('verify');
@@ -40,5 +40,5 @@ const VerificationPage = () => {
       </Container>
     </Background>
   );
-};
+}
 export default VerificationPage;

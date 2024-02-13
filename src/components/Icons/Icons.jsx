@@ -1,8 +1,8 @@
 import React from 'react';
-import sprite from '../../images/icons/sprite.svg';
 import PropTypes from 'prop-types';
+import sprite from '../../images/icons/sprite.svg';
 
-const Icons = ({ name, fill, stroke, size }) => {
+function Icons({ name, fill, stroke, size }) {
   return (
     <svg
       className="icon"
@@ -11,10 +11,10 @@ const Icons = ({ name, fill, stroke, size }) => {
       width={size}
       height={size}
     >
-      <use href={sprite + '#icon-' + name}></use>
+      <use href={`${sprite  }#icon-${  name}`} />
     </svg>
   );
-};
+}
 
 Icons.propTypes = {
   name: PropTypes.string,

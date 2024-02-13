@@ -38,7 +38,7 @@ const validationFormikSchema = object({
   //   phone: string().matches(/^\+[\d-]+$/, 'number should start from +'),
 });
 
-const Profile = () => {
+function Profile() {
   const { user } = useSelector(getUser);
   // const [avatarURL, setAvatarURL] = useState(null);
   const [initialValues, setInitialValues] = useState({
@@ -83,7 +83,7 @@ const Profile = () => {
   return (
     <Wrapper>
       <Formik
-        enableReinitialize={true}
+        enableReinitialize
         initialValues={initialValues}
         onSubmit={handleSubmit}
         validationSchema={validationFormikSchema}
@@ -142,7 +142,7 @@ const Profile = () => {
                   onChange={handleChange}
                   onBlur={handleBlur}
                   placeholder="Name"
-                ></Input>
+                 />
                 <ErrorMessage name="name">
                   {msg => <Message>{msg}</Message>}
                 </ErrorMessage>
@@ -200,7 +200,7 @@ const Profile = () => {
                   value={values.email}
                   onChange={handleChange}
                   onBlur={handleBlur}
-                ></Input>
+                 />
                 <ErrorMessage name="email">
                   {msg => <Message>{msg}</Message>}
                 </ErrorMessage>
@@ -212,5 +212,5 @@ const Profile = () => {
       </Formik>
     </Wrapper>
   );
-};
+}
 export default Profile;

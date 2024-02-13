@@ -19,7 +19,7 @@ import {
 import Icons from '../Icons/Icons';
 import mapData from '../../data/countries.json';
 
-const SearchInput = () => {
+function SearchInput() {
   const [searchedValue, setSearchedValue] = useState('');
   const [showItem, setShowItem] = useState(false);
   const autoCompleteRef = useRef(null);
@@ -112,6 +112,6 @@ const SearchInput = () => {
       )}
     </AutocompleteInputStyled>
   );
-};
+}
 
 export default SearchInput;
