@@ -2,7 +2,7 @@ import React from 'react';
 
 import { useNavigate } from 'react-router-dom';
 
-export default function MainPage() {
+const MainRoute = () => {
   const navigate = useNavigate();
 
   const handleRegisterOpen = () => {
@@ -20,4 +20,6 @@ export default function MainPage() {
       <button onClick={handleLoginOpen}>Login</button>
     </div>
   );
-}
+};
+
+export default MainRoute;
