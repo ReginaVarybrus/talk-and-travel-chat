@@ -5,10 +5,11 @@ import {
   getIsLoggedIn,
   getUserRefresh,
 } from '@/redux-store/AuthOperations/selectors';
+import { routesPath } from '@/routes/routesConfig';
 
 export default function PrivateRoute({
   component: Component,
-  redirectTo = '/',
+  redirectTo = routesPath.MAIN,
 }) {
   const isLoggedIn = useSelector(getIsLoggedIn);
   const isRefresh = useSelector(getUserRefresh);

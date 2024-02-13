@@ -6,10 +6,10 @@ import Chat from '@/components/Chat/Chat';
 
 const ChatRoute = () => {
   return (
-    <Container>
+    <ChatRouteStyled>
       <SearchBar />
       <Chat />
-    </Container>
+    </ChatRouteStyled>
   );
 };
 
