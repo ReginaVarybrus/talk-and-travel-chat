@@ -4,9 +4,9 @@ import { useDispatch, useSelector } from 'react-redux';
 import PropTypes from 'prop-types';
 
 import { Wrapper, ProfileBox, LogOutBox, Frame } from './SideBarStyled';
-import { routesPath } from '../../routes/routesConfig';
-import { getUserName } from '../../redux-store/AuthOperations/selectors';
-import { logOut } from '../../redux-store/AuthOperations/AuthOperations';
+import { routesPath } from '@/routes/routesConfig';
+import { getUserName } from '@/redux-store/AuthOperations/selectors';
+import { logOut } from '@/redux-store/AuthOperations/AuthOperations';
 import SideBarItem from '../SideBarItem/SideBarItem';
 
 function SideBar({ onClickDms, onClickRooms, isActive }) {

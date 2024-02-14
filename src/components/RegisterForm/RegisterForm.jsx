@@ -1,7 +1,7 @@
 import { useFormik } from 'formik';
 import * as yup from 'yup';
 import { useDispatch } from 'react-redux';
-import { register } from '../../redux-store/AuthOperations/AuthOperations';
+import { register } from '@/redux-store/AuthOperations/AuthOperations';
 import {
   ItemWrapp,
   StyledLabel,

@@ -2,15 +2,15 @@ import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import PropTypes from 'prop-types';
 import { GeoJSON } from 'react-leaflet';
-import mapData from '../../data/countries.json';
+import mapData from '@/data/countries.json';
 import 'leaflet/dist/leaflet.css';
-import '../../css/ChatMap.css';
+import '@/css/ChatMap.css';
 
-import { sendDataCountryToBackend } from '../../redux-store/AuthOperations/AuthOperations.js';
+import { sendDataCountryToBackend } from '@/redux-store/AuthOperations/AuthOperations.js';
 import {
   getUserId,
   getPersistedToken,
-} from '../../redux-store/AuthOperations/selectors';
+} from '@/redux-store/AuthOperations/selectors';
 import {
   CountryName,
   ShowCountry,

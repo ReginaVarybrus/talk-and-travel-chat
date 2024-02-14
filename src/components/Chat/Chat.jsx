@@ -16,7 +16,7 @@ import Icons from '../Icons/Icons';
 import {
   getCountryName,
   getNumberOfParticipants,
-} from '../../redux-store/AuthOperations/selectors.js';
+} from '@/redux-store/AuthOperations/selectors.js';
 
 function Chat() {
   const countryName = useSelector(getCountryName);

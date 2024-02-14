@@ -6,10 +6,7 @@ import {
   fetchCurrentUser,
   updateUser,
   sendDataCountryToBackend,
-  // addCountryRoom
 } from '../AuthOperations/AuthOperations';
-
-// import { sendDataCountryToBackend } from '../AuthOperations/DataCountryOperation';
 
 const initialState = {
   token: null,
@@ -17,8 +14,6 @@ const initialState = {
     userName: '',
     userEmail: '',
     avatar: '',
-    // birthday: '',
-    // phone: '',
   },
   name: '',
   flagCode: '',

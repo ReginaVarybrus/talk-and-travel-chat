@@ -12,12 +12,12 @@ export const routesPath = {
 };
 
 const importComponent = {
-  MAIN: lazy(() => import('@/routes/MainPage/MainPage')),
-  LOGIN: lazy(() => import('@/routes/LoginPage/LoginPage')),
+  MAIN: lazy(() => import('@/routes/MainRoute/MainRoute')),
+  LOGIN: lazy(() => import('@/routes/LoginRoute/LoginRoute')),
   LAYOUT: lazy(() => import('@/components/Layout/Layout')),
-  REGISTER: lazy(() => import('@/routes/RegisterPage/RegisterPage')),
-  CHAT: lazy(() => import('@/routes/ChatPage/ChatPage')),
-  ACCOUNT: lazy(() => import('@/routes/AccountPage/AccountPage')),
+  REGISTER: lazy(() => import('@/routes/RegisterRoute/RegisterRoute')),
+  CHAT: lazy(() => import('@/routes/ChatRoute/ChatRoute')),
+  ACCOUNT: lazy(() => import('@/routes/AccountRoute/AccountRoute')),
   ERROR_COMPONENT: lazy(() => import('@/routes/Page404/Page404')),
 };
 

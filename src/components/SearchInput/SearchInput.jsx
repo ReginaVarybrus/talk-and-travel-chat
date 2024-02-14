@@ -10,14 +10,14 @@ import {
   Flag,
   ScrollBar,
 } from './SearchInputStyled';
-import { sendDataCountryToBackend } from '../../redux-store/AuthOperations/AuthOperations.js';
+import { sendDataCountryToBackend } from '@/redux-store/AuthOperations/AuthOperations.js';
 import {
   getUserId,
   getPersistedToken,
-} from '../../redux-store/AuthOperations/selectors';
+} from '@/redux-store/AuthOperations/selectors';
 
 import Icons from '../Icons/Icons';
-import mapData from '../../data/countries.json';
+import mapData from '@/data/countries.json';
 
 function SearchInput() {
   const [searchedValue, setSearchedValue] = useState('');

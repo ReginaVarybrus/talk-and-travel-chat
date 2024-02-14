@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import sprite from '../../images/icons/sprite.svg';
+import sprite from '@/images/icons/sprite.svg';
 
 function Icons({ name, fill, stroke, size }) {
   return (
@@ -11,7 +11,7 @@ function Icons({ name, fill, stroke, size }) {
       width={size}
       height={size}
     >
-      <use href={`${sprite  }#icon-${  name}`} />
+      <use href={`${sprite}#icon-${name}`} />
     </svg>
   );
 }
