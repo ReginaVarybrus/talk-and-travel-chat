@@ -10,7 +10,7 @@ export const token = {
   },
   unset() {
     axios.defaults.headers.common.Authorization = '';
-  }
+  },
 };
 
 export const register = createAsyncThunk('auth/register', async userData => {
@@ -115,12 +115,16 @@ export const sendDataCountryToBackend = createAsyncThunk(
   'auth/sendDataCountryToBackend',
   async ({ userId, countryDto, token }, { rejectWithValue }) => {
     try {
-      const response = await axios.post(`/api/countries/${userId}`, countryDto, {
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}`,
-        },
-      });
+      const response = await axios.post(
+        `/api/countries/${userId}`,
+        countryDto,
+        {
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
 
       if (!response.data) {
         throw rejectWithValue('Response data is missing');
