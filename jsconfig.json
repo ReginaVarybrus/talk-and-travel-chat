@@ -8,5 +8,8 @@
     "target": "ESNext",
     "types": ["vite/client"],
     "isolatedModules": true
-  }
+  },
+  "include": [
+    "vite.config.js"
+  ]
 }
