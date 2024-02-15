@@ -1,40 +1,40 @@
 .leaflet-container {
-    position: relative;
-    background: var(--white-color);
-    border-radius: 32px;
-    box-shadow: -1px 1px 3px 1px rgba(0, 0, 0, 0.15);
+  position: relative;
+  background: var(--white-color);
+  border-radius: 32px;
+  box-shadow: -1px 1px 3px 1px rgba(0, 0, 0, 0.15);
 }
 
 .leaflet-control-zoom {
-    /* position: absolute;
+  /* position: absolute;
     top: 655px;
     left: 50%; */
-    /* bottom: 50px; */
-    /* transform: translate(-50%, 0); */
-    visibility: hidden;
+  /* bottom: 50px; */
+  /* transform: translate(-50%, 0); */
+  visibility: hidden;
 }
 
 .leaflet-bar {
-    display: flex;
+  display: flex;
 }
 
 .leaflet-touch .leaflet-bar a {
-    width: 40px;
-    height: 40px;
-    line-height: 40px;
+  width: 40px;
+  height: 40px;
+  line-height: 40px;
 }
 
 .leaflet-bar a:first-child {
-    border-right: 1px solid var(--color-grey-5);
-    border-bottom: none;
+  border-right: 1px solid var(--color-grey-5);
+  border-bottom: none;
 }
 
 .leaflet-left .leaflet-control {
-    margin-left: 0;
+  margin-left: 0;
 }
 
 .leaflet-top .leaflet-control {
-    margin-top: 0;
+  margin-top: 0;
 }
 
 /* .leaflet-popup-content-wrapper {

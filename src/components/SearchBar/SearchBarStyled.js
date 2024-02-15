@@ -44,7 +44,6 @@ export const MapBox = styled(Box)`
   /* width: 400, */
   background: var(--white-color);
   border-radius: 32px;
-  boxShadow: 24;
+  boxshadow: 24;
   p: 4;
 `;
-
