@@ -1,5 +1,5 @@
-import { Loaders } from './Loader.styled';
 import { RotatingLines } from 'react-loader-spinner';
+import { Loaders } from './Loader.styled';
 
 export default function Loader() {
   return (
@@ -9,7 +9,7 @@ export default function Loader() {
         strokeWidth="5"
         animationDuration="1.5"
         width="96"
-        visible={true}
+        visible
       />
     </Loaders>
   );

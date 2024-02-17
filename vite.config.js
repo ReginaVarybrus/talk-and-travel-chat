@@ -1,3 +1,6 @@
+/// <reference types="vitest" />
+/// <reference types="vite/client" />
+
 import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
 import viteTsconfigPaths from 'vite-tsconfig-paths';
@@ -22,6 +25,11 @@ export default defineConfig({
     }),
     viteTsconfigPaths(),
   ],
+  test: {
+    global: true,
+    environment: 'jsdom',
+    setupFiles: './setupTest.js',
+  },
   server: {
     // this ensures that the browser opens upon server start
     open: true,

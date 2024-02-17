@@ -1,8 +1,5 @@
-import React from 'react';
 import Profile from '@/components/Profile/Profile';
 
-const AccountRoute = () => {
-  return <Profile />;
-};
+const AccountRoute = () => <Profile />;
 
 export default AccountRoute;

@@ -1,15 +1,14 @@
 import { configureStore } from '@reduxjs/toolkit';
-import
-  {
-    persistStore,
-    persistReducer,
-    FLUSH,
-    REHYDRATE,
-    PAUSE,
-    PERSIST,
-    PURGE,
-    REGISTER,
-  } from 'redux-persist';
+import {
+  persistStore,
+  persistReducer,
+  FLUSH,
+  REHYDRATE,
+  PAUSE,
+  PERSIST,
+  PURGE,
+  REGISTER,
+} from 'redux-persist';
 import storage from 'redux-persist/lib/storage';
 import axios from 'axios';
 import { authSlice } from './slices/authSlice';
@@ -20,14 +19,12 @@ const authPersistConfig = {
   whitelist: ['token', 'userDto', 'countryDto'],
 };
 
-axios.interceptors.request.use(request =>
-{
+axios.interceptors.request.use(request => {
   console.log('Starting Request', request);
   return request;
 });
 
-axios.interceptors.response.use(response =>
-{
+axios.interceptors.response.use(response => {
   console.log('Response:', response);
   return response;
 });

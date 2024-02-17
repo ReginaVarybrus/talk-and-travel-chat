@@ -1,4 +1,4 @@
-import React from 'react';
+import SimpleBar from 'simplebar-react';
 import {
   Wrapper,
   Text,
@@ -8,7 +8,6 @@ import {
   ChatName,
   MessageDay,
 } from './DMsListStyled';
-import SimpleBar from 'simplebar-react';
 import 'simplebar-react/dist/simplebar.min.css';
 
 const DMsList = () => {
