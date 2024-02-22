@@ -6,7 +6,6 @@
   "dependencies": {
     "@emotion/react": "^11.11.1",
     "@emotion/styled": "^11.11.0",
-    "@mui/base": "^5.0.0-beta.36",
     "@mui/material": "^5.14.15",
     "@reduxjs/toolkit": "^1.9.7",
     "@testing-library/jest-dom": "^5.17.0",
@@ -16,7 +15,6 @@
     "axios": "^1.5.1",
     "babel-plugin-styled-components": "^2.1.4",
     "formik": "^2.4.5",
-    "jsdom": "^24.0.0",
     "leaflet": "^1.9.4",
     "prop-types": "^15.8.1",
     "react": "^18.2.0",
@@ -35,13 +33,11 @@
     "sweetalert": "^2.1.2",
     "vite": "^5.0.12",
     "vite-tsconfig-paths": "^4.3.1",
-    "vitest": "^1.2.2",
     "web-vitals": "^2.1.4",
     "yup": "^1.3.2"
   },
   "scripts": {
     "start": "vite",
-    "test:unit": "vitest --root src/",
     "predeploy": "npm run build",
     "deploy": "gh-pages -d build",
     "build": "vite build",

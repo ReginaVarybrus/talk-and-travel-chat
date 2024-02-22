@@ -47,7 +47,9 @@
     //below rule warns if in function some path code return value explicitly and some path not;
     "consistent-return": "warn",
     //below rule warns if a variable name shadows variable in an upper scope;
-    "no-shadow": "warn"
+    "no-shadow": "warn",
+    //below rule warns if arrow function written differently;
+    "arrow-body-style": "warn"
   },
   "settings": {
     "import/resolver": {

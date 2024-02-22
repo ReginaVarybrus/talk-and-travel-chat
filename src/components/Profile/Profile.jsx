@@ -89,11 +89,11 @@ const Profile = () => {
         validationSchema={validationFormikSchema}
       >
         {({
-          /* TODO: Check what below props are sued for and which handleSubmit should be called
+          /* TODO: Check what below props are used for and which handleSubmit should be called
           in <Forms></Forms> //Kostas//
            */
           values,
-          // handleSubmit,
+          handleSubmit,
           handleChange,
           handleBlur,
           // setFieldValue,

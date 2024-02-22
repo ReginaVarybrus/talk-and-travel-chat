@@ -25,11 +25,6 @@ export default defineConfig({
     }),
     viteTsconfigPaths(),
   ],
-  test: {
-    global: true,
-    environment: 'jsdom',
-    setupFiles: './setupTest.js',
-  },
   server: {
     // this ensures that the browser opens upon server start
     open: true,

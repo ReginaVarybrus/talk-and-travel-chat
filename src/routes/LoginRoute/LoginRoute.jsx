@@ -1,7 +1,7 @@
 import LoginForm from '@/components/LoginForm/LoginForm';
 
-function LoginRoute() {
+const LoginRoute = () => {
   return <LoginForm />;
-}
+};
 
 export default LoginRoute;
