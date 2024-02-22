@@ -2,59 +2,45 @@ import axios from 'axios';
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import swal from 'sweetalert';
 
-axios.defaults.baseURL = 'https://talk-and-travel.pp.ua';
-
-export const token = {
-  set(token) {
-    axios.defaults.headers.common.Authorization = `Bearer ${token}`;
-  },
-  unset() {
-    axios.defaults.headers.common.Authorization = '';
-  },
-};
+import { sendRequest, token } from '@/services/api';
 
 export const register = createAsyncThunk('auth/register', async userData => {
   try {
-    const response = await axios.post(
-      '/api/authentication/register',
-      userData,
-      {
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      }
-    );
+    const response = await sendRequest({
+      method: 'post',
+      endpoint: 'register',
+      data: userData,
+    });
 
-    token.set(response.data.token);
-    console.log(response);
-    console.log('data', response.data);
+    token.set(response.token);
 
     swal('Success!', 'Letter with verification sent on your email', 'success');
 
-    return response.data;
+    return response;
   } catch (e) {
-    console.log(e.response.data);
+    console.log(e.response);
     if (
       e.response.status === 400 ||
       e.response.status === 401 ||
       e.response.status === 409
     ) {
-      throw new Error(swal('Error!', e.response.data.message, 'error'));
+      throw new Error(swal('Error!', e.response.message, 'error'));
     }
   }
 });
 
 export const logIn = createAsyncThunk('auth/login', async userData => {
   try {
-    const response = await axios.post('/api/authentication/login', userData, {
-      headers: {
-        'Content-Type': 'application/json',
-      },
+    const response = await sendRequest({
+      method: 'post',
+      endpoint: 'login',
+      data: userData,
     });
-    token.set(response.data.token);
-    console.log(response);
 
-    return response.data;
+    token.set(response.token);
+    console.log('login', response);
+
+    return response;
   } catch (e) {
     console.log(e.response.data);
     if (e.response.status === 400 || e.response.status === 401) {
@@ -68,12 +54,18 @@ export const logIn = createAsyncThunk('auth/login', async userData => {
 
 export const logOut = createAsyncThunk('auth/logout', async () => {
   try {
-    await axios.post('/api/authentication/logout');
+    await sendRequest({
+      method: 'post',
+      endpoint: 'logout',
+    });
+
     token.unset();
-  } catch (e) {
-    console.log(e.message);
+  } catch (error) {
+    throw new Error(error.message);
   }
 });
+
+// TODO fetchCurrentUser, updateUser and other requests shuold be update when we'll take the Profile component in dev
 
 export const fetchCurrentUser = createAsyncThunk(
   'auth/refresh',

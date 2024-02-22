@@ -1,0 +1,3 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`LoginForm component test > should render the LoginForm component 1`] = `"<div></div>"`;

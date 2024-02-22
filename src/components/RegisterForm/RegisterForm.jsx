@@ -2,6 +2,8 @@ import { useFormik } from 'formik';
 import * as yup from 'yup';
 import { register } from '@/redux-store/AuthOperations/AuthOperations';
 import { useDispatch } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
+import { routesPath } from '@/routes/routesConfig';
 import {
   ItemWrapp,
   StyledLabel,
@@ -54,6 +56,7 @@ let schema = yup.object().shape({
 
 const RegisterForm = () => {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const formik = useFormik({
     initialValues: {
@@ -65,7 +68,7 @@ const RegisterForm = () => {
     validateOnChange: false,
     onSubmit: (values, { resetForm }) => {
       dispatch(register(values));
-
+      navigate(routesPath.CHAT);
       localStorage.setItem(
         'verify',
         JSON.stringify({ userEmail: values.email, password: values.password })
