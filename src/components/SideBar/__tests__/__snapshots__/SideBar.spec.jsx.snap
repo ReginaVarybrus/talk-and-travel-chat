@@ -1,5 +1,0 @@
-// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
-
-exports[`SideBar component test > render SideBar component 1`] = `undefined`;
-
-exports[`SideBar component test > renders SideBar component 1`] = `undefined`;
