@@ -5,18 +5,15 @@ import swal from 'sweetalert';
 axios.defaults.baseURL = 'https://talk-and-travel.pp.ua';
 
 export const token = {
-  set(token)
-  {
+  set(token) {
     axios.defaults.headers.common.Authorization = `Bearer ${token}`;
   },
-  unset()
-  {
+  unset() {
     axios.defaults.headers.common.Authorization = '';
   },
 };
 
-export const register = createAsyncThunk('auth/register', async userData =>
-{
+export const register = createAsyncThunk('auth/register', async userData => {
   try {
     const response = await axios.post(
       '/api/authentication/register',
@@ -47,8 +44,7 @@ export const register = createAsyncThunk('auth/register', async userData =>
   }
 });
 
-export const logIn = createAsyncThunk('auth/login', async userData =>
-{
+export const logIn = createAsyncThunk('auth/login', async userData => {
   try {
     const response = await axios.post('/api/authentication/login', userData, {
       headers: {
@@ -70,8 +66,7 @@ export const logIn = createAsyncThunk('auth/login', async userData =>
   }
 });
 
-export const logOut = createAsyncThunk('auth/logout', async () =>
-{
+export const logOut = createAsyncThunk('auth/logout', async () => {
   try {
     await axios.post('/api/authentication/logout');
     token.unset();
@@ -82,8 +77,7 @@ export const logOut = createAsyncThunk('auth/logout', async () =>
 
 export const fetchCurrentUser = createAsyncThunk(
   'auth/refresh',
-  async (_, thunkAPI) =>
-  {
+  async (_, thunkAPI) => {
     const state = thunkAPI.getState();
     const persistedToken = state.auth.token;
 
@@ -104,8 +98,7 @@ export const fetchCurrentUser = createAsyncThunk(
 
 export const updateUser = createAsyncThunk(
   'user/update',
-  async (user, thunkAPI) =>
-  {
+  async (user, thunkAPI) => {
     try {
       const { data } = await axios.put('/api/users', user);
 
@@ -120,8 +113,7 @@ export const updateUser = createAsyncThunk(
 
 export const sendDataCountryToBackend = createAsyncThunk(
   'auth/sendDataCountryToBackend',
-  async ({ userId, countryDto, token }, { rejectWithValue }) =>
-  {
+  async ({ userId, countryDto, token }, { rejectWithValue }) => {
     try {
       const response = await axios.post(
         `/api/countries/${userId}`,
