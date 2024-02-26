@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 import Button from '@mui/material/Button';
-import { TextareaAutosize as BaseTextareaAutosize } from '@mui/base/TextareaAutosize';
+import { TextareaAutosize as BaseTextareaAutosize } from '@mui/material';
 
 export const ChatStyled = styled.div`
   display: flex;

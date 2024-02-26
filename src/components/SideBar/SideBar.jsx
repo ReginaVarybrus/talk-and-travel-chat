@@ -1,12 +1,11 @@
-import React from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import PropTypes from 'prop-types';
 
-import { Wrapper, ProfileBox, LogOutBox, Frame } from './SideBarStyled';
 import { routesPath } from '@/routes/routesConfig';
 import { getUserName } from '@/redux-store/AuthOperations/selectors';
 import { logOut } from '@/redux-store/AuthOperations/AuthOperations';
+import { Wrapper, ProfileBox, LogOutBox, Frame } from './SideBarStyled';
 import SideBarItem from '../SideBarItem/SideBarItem';
 
 const SideBar = ({ onClickDms, onClickRooms, isActive }) => {

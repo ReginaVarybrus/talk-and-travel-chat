@@ -1,14 +1,14 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import Backdrop from '@mui/material/Backdrop';
 import Modal from '@mui/material/Modal';
 import Fade from '@mui/material/Fade';
 
+import PropTypes from 'prop-types';
 import { Wrapper, ButtonMapOpen, MapBox } from './SearchBarStyled';
 import SearchInput from '../SearchInput/SearchInput';
 import DMsList from '../DMsList/DMsList';
 import RoomsList from '../RoomsList/RoomsList';
 import ChatMap from '../ChatMap/ChatMap';
-import PropTypes from 'prop-types';
 
 const SearchBar = ({ isOpen }) => {
   const [openMap, setOpenMap] = useState(false);

@@ -41,14 +41,12 @@ export const authSlice = createSlice({
     builder
       .addCase(register.pending, handlePending)
       .addCase(register.rejected, handleRejected)
-      .addCase(register.fulfilled, (state, action) => {
-        return {
-          ...state,
-          userDto: action.payload.userDto,
-          token: action.payload.token,
-          isLoggedIn: true,
-        };
-      })
+      .addCase(register.fulfilled, (state, action) => ({
+        ...state,
+        userDto: action.payload.userDto,
+        token: action.payload.token,
+        isLoggedIn: true,
+      }))
 
       .addCase(logIn.pending, handlePending)
       .addCase(logIn.rejected, handleRejected)
