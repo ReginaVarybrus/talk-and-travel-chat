@@ -83,19 +83,22 @@ const Profile = () => {
   return (
     <Wrapper>
       <Formik
-        enableReinitialize={true}
+        enableReinitialize
         initialValues={initialValues}
         onSubmit={handleSubmit}
         validationSchema={validationFormikSchema}
       >
         {({
+          /* TODO: Check what below props are used for and which handleSubmit should be called
+          in <Forms></Forms> //Kostas//
+           */
           values,
           handleSubmit,
           handleChange,
           handleBlur,
-          setFieldValue,
-          setTouched,
-          touched,
+          // setFieldValue,
+          // setTouched,
+          // touched,
         }) => (
           <Forms autoComplete="off" onSubmit={handleSubmit}>
             {/* <ContainerImg>
@@ -142,7 +145,7 @@ const Profile = () => {
                   onChange={handleChange}
                   onBlur={handleBlur}
                   placeholder="Name"
-                ></Input>
+                />
                 <ErrorMessage name="name">
                   {msg => <Message>{msg}</Message>}
                 </ErrorMessage>
@@ -200,7 +203,7 @@ const Profile = () => {
                   value={values.email}
                   onChange={handleChange}
                   onBlur={handleBlur}
-                ></Input>
+                />
                 <ErrorMessage name="email">
                   {msg => <Message>{msg}</Message>}
                 </ErrorMessage>

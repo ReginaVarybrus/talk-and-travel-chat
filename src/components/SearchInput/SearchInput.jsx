@@ -1,5 +1,13 @@
-import React, { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { sendDataCountryToBackend } from '@/redux-store/AuthOperations/AuthOperations.js';
+import {
+  getUserId,
+  getPersistedToken,
+} from '@/redux-store/AuthOperations/selectors';
+
+import mapData from '@/data/countries.json';
+import Icons from '../Icons/Icons';
 import {
   AutocompleteInputStyled,
   AutocompleteInput,
@@ -10,14 +18,6 @@ import {
   Flag,
   ScrollBar,
 } from './SearchInputStyled';
-import { sendDataCountryToBackend } from '@/redux-store/AuthOperations/AuthOperations.js';
-import {
-  getUserId,
-  getPersistedToken,
-} from '@/redux-store/AuthOperations/selectors';
-
-import Icons from '../Icons/Icons';
-import mapData from '@/data/countries.json';
 
 const SearchInput = () => {
   const [searchedValue, setSearchedValue] = useState('');

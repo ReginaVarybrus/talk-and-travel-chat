@@ -12,7 +12,7 @@ import {
   SignUpBtn,
 } from './RegisterForm.styled';
 
-let schema = yup.object().shape({
+const schema = yup.object().shape({
   userName: yup
     .string()
     .transform(value => (value ? value.trim() : ''))
@@ -23,6 +23,7 @@ let schema = yup.object().shape({
   userEmail: yup
     .string()
     .transform(value => (value ? value.trim() : ''))
+
     .email()
     .matches(
       /^([a-z0-9_.-]+)@([a-z09_.-]+).([a-z]{2,6})$/,

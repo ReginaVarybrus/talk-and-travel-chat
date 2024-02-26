@@ -42,7 +42,7 @@
     "deploy": "gh-pages -d build",
     "build": "vite build",
     "preview": "vite preview",
-    "lint:js": "eslint src/**/*.{js,jsx}",
+    "lint:js": "eslint 'src/**/*.{js,jsx}'",
     "format": "prettier --write ./src"
   },
   "browserslist": {

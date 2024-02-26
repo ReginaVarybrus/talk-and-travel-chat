@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import PropTypes from 'prop-types';
 import { GeoJSON } from 'react-leaflet';
@@ -33,7 +33,7 @@ const ChatMap = ({ closeMap }) => {
   //   setSelectedCountry(countryName);
   // };
 
-  let color = [
+  const color = [
     'var(--color-blue-1)',
     'var(--color-blue-2)',
     'var(--color-blue-3)',
@@ -95,7 +95,9 @@ const ChatMap = ({ closeMap }) => {
         />
         <ShowCountry>
           <CountryName>{selectedCountry}</CountryName>
-          <button onClick={handleClick}>Join</button>
+          <button type="button" onClick={handleClick}>
+            Join
+          </button>
         </ShowCountry>
       </MapWrapper>
     </MainMapBlock>

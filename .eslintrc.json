@@ -24,8 +24,7 @@
       "error",
       { "extensions": [".js", ".jsx"] }
     ],
-    //below rule warns if a relative path use in import instead of absolute path or using import modules;
-    "import/no-relative-parent-imports": "warn",
+
     //below rule turns off the preference of default export instead of named export usage;
     "import/prefer-default-export": "off",
     //below rule warns if import paths are resolvable;
@@ -33,7 +32,23 @@
     //below rule allows imports of all file types without extensions indicated in the path;
     "import/extensions": "off",
     //below rule warns if a cyclic dependencies are detected between modules;
-    "import/no-cycle": "warn"
+    "import/no-cycle": "off",
+    //below rule disables arrow function syntax check;
+    "react/function-component-definition": "off",
+    //below rule disables error for nested ternary operators usage;
+    "no-nested-ternary": "off",
+    //below rule allows reassign of a function property (mutation);
+    "no-param-reassign": "off",
+    //below rule disables mandatory default props indication;
+    "react/require-default-props": "off",
+    //below rule warns if an index of an array is used as a key for a react component;
+    "react/no-array-index-key": "warn",
+    //below rule warns if in function some path code return value explicitly and some path not;
+    "consistent-return": "warn",
+    //below rule warns if a variable name shadows variable in an upper scope;
+    "no-shadow": "warn",
+    //below rule warns if arrow function written differently;
+    "arrow-body-style": "warn"
   },
   "settings": {
     "import/resolver": {

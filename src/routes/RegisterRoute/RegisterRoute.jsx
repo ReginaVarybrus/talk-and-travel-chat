@@ -1,8 +1,5 @@
-import React from 'react';
 import RegisterForm from '@/components/RegisterForm/RegisterForm';
 
-const RegisterRoute = () => {
-  return <RegisterForm />;
-};
+const RegisterRoute = () => <RegisterForm />;
 
 export default RegisterRoute;

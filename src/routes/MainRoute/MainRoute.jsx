@@ -1,5 +1,3 @@
-import React from 'react';
-
 import { useNavigate } from 'react-router-dom';
 
 const MainRoute = () => {
@@ -16,8 +14,12 @@ const MainRoute = () => {
   return (
     <div>
       <h2>MainPage</h2>
-      <button onClick={handleRegisterOpen}>Sign up</button>
-      <button onClick={handleLoginOpen}>Login</button>
+      <button type="button" onClick={handleRegisterOpen}>
+        Sign up
+      </button>
+      <button type="button" onClick={handleLoginOpen}>
+        Login
+      </button>
     </div>
   );
 };
