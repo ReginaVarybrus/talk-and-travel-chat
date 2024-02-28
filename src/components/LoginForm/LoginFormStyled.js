@@ -1,28 +1,65 @@
+import React from 'react';
 import styled from 'styled-components';
+import backgroundImage from '@/images/bg-png.png'
+import FBLogo from '@/images/icons/FBLogo.svg'
+import GoogleLogo from '@/images/icons/GoogleLogo.svg'
+import ErrorIcon from '@/images/icons/IconStroke.svg'
 
-export const LoginFormBackground = styled('div')({
+export const Background = styled('section')({
   boxSizing: 'border-box',
   fontFamily: 'Roboto, sans-serif',
+  display: 'flex',
+  justifyContent: 'center',
+  alignItems: 'center',
+  minHeight: '100vh',
+  '@media (min-width: 767px)': {
+    background: `url(${backgroundImage})`,
+    backgroundSize: 'cover'
+  }
+})
+
+export const LoginFormContainer = styled('div')({
+  display: 'flex',
+  textAlign: 'center',
+  flexDirection: 'column',
+
   '@media (max-width: 767px)': {
-    display: 'flex',
-    flexDirection: 'column',
+    maxWidth: '500px',
     justifyContent: 'center',
-    textAlign: 'center',
+    alignItems: 'stretch',
     margin: '24px 36px',
   },
   '@media (min-width: 768px)': {
-    height: '100vh',
-    display: 'flex',
+    maxWidth: '600px',
+    background: '#F2F2F2',
+    width: '100%',
+    minHeight: '584px',
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundSize: 'cover',
+    overflow: 'auto',
+
+    borderRadius: '16px',
+    backgroundColor: 'white',
+    boxShadow: '0 0 10px rgba(0, 0, 0, 0.1)',
+  },
+});
+
+export const LoginFormStyles = styled('form')({
+  '@media (min-width: 768px)': {
+    display: 'flex',
+    justifyContent: 'center',
+    flexDirection: 'column',
+    alignItems: 'stretch',
+    padding: '56px 120px',
   },
 });
 
 export const LoginTitle = styled('h1')({
+  marginBottom: '8px',
+  fontWeight: '600',
+
   '@media (max-width: 767px)': {
     fontSize: '24px',
-    fontWeight: '600',
     lineHeight: '29px',
     letterSpacing: '0em',
     textAlign: 'center',
@@ -30,23 +67,22 @@ export const LoginTitle = styled('h1')({
   },
   '@media (min-width: 768px)': {
     fontSize: '48px',
-    fontWeight: '600',
-    lineHeight: '19.2px',
-    marginBottom: '8px',
+    lineHeight: '57,6px',
   },
 });
 
 export const LoginText = styled('p')({
+  fontSize: '16px',
+  fontWeight: '400',
+  lineHeight: '19px',
+  letterSpacing: '0em',
+
   '@media (max-width: 767px)': {
-    fontSize: '16px',
-    fontWeight: '400',
-    lineHeight: '19px',
-    letterSpacing: '0em',
     marginBottom: '32px',
   },
   '@media (min-width: 768px)': {
-    fontSize: '16px',
     fontWeight: '400',
+    marginBottom: '48px',
   },
 });
 
@@ -55,33 +91,6 @@ export const SignUpLink = styled('a')({
   fontWeight: '400',
   textDecoration: 'none',
   color: '#256AD2',
-});
-
-export const LoginFormStyles = styled('form')({
-  '@media (max-width: 767px)': {
-    maxWidth: '500px',
-    display: 'flex',
-    justifyContent: 'center',
-    flexDirection: 'column',
-    alignItems: 'stretch',
-  },
-
-  '@media (min-width: 768px)': {
-    maxWidth: '600px',
-    background: '#F2F2F2',
-    width: '100%',
-    minHeight: '584px',
-    overflow: 'auto',
-    backgroundColor: 'white',
-    padding: '56px 120px',
-    boxShadow: '0 0 10px rgba(0, 0, 0, 0.1)',
-    textAlign: 'center',
-    display: 'flex',
-    justifyContent: 'center',
-    flexDirection: 'column',
-    alignItems: 'stretch',
-    borderRadius: '16px',
-  },
 });
 
 export const ItemWrapp = styled('div')({
@@ -97,7 +106,7 @@ export const StyledLabel = styled('label')(
 
     color:
       color.error && color.touched
-        ? 'red'
+        ? 'DA1414'
         : !color.error && color.touched
           ? 'green'
           : '#111',
@@ -106,23 +115,24 @@ export const StyledLabel = styled('label')(
 
 export const StyledInput = styled('input')(
   ({ color = { error: '', touched: false } }) => ({
+    '@media (min-width: 768px)': {
+      width: '360px',
+    },
     width: '100%',
-
     color: '#111',
     fontSize: '14px',
     lineHeight: '18px',
     boxSizing: 'border-box',
-    height: 48,
-
+    height: '56px',
     borderRadius: '8px',
     border: '1px solid',
 
     borderColor:
       color.error && color.touched
-        ? 'red'
+        ? '#DA1414'
         : !color.error && color.touched
           ? 'green'
-          : 'rgba(220, 227, 229, 0.60)',
+          : '#111',
 
     marginBottom: 24,
     paddingLeft: 14,
@@ -139,9 +149,8 @@ export const StyledInput = styled('input')(
 
 export const Error = styled('p')({
   position: 'absolute',
-  top: 72,
+  top: 60,
   left: 10,
-
   color: '#DA1414',
   fontSize: '12px',
   lineHeight: '14px',
@@ -151,9 +160,8 @@ export const Error = styled('p')({
 
 export const Success = styled('p')({
   position: 'absolute',
-  top: 72,
+  top: 60,
   left: 10,
-
   color: 'green',
   fontSize: '12px',
   lineHeight: '14px',
@@ -161,11 +169,20 @@ export const Success = styled('p')({
   padding: 0,
 });
 
-export const ValidationIcon = styled('img')({
-  position: 'absolute',
-  top: 34,
-  right: 20,
-});
+export const ValidationIcon = styled('div')(
+  ({ alt }) => ({
+    display: alt === 'error' ? 'block' : 'none',
+    width: '20px',
+    height: '20px',
+    minWidth: '20px',
+    minHeight: '20px',
+    backgroundImage: `url(${ErrorIcon})`,
+    backgroundRepeat: 'no-repeat',
+    backgroundSize: 'contain',
+    position: 'absolute',
+    top: 19,
+    right: 20,
+  }));
 
 export const LogInBtn = styled('button')({
   display: 'flex',
@@ -191,10 +208,10 @@ export const LogInBtn = styled('button')({
 
   color: '#ffffff',
 
-  ':hover': {
+  '&:hover': {
     background: '#4C85DA',
   },
-  ':focus': {
+  '&:focus': {
     background: '#4C85DA',
   },
   '@media (min-width: 768px)': {
@@ -205,12 +222,137 @@ export const LogInBtn = styled('button')({
 });
 
 export const Separator = styled.hr`
-  box-sizing: border-box;
-  display: block;
-  margin-top: 24px;
-  margin-bottom: 24px;
-  margin-left: auto;
-  margin-right: auto;
-  border: 1px solid #dedede;
-  width: 100%;
+'@media (min-width: 768px)': {
+  margin: 32px 0;
+}
+    position: relative;
+    border: 0;
+    margin: 24px 0;
+    display: flex;
+    justify-content: center;
+    font-size: 14px;
+    font-weight: 700;
+    line-height: 20px;
+    letter-spacing: 0px;
+    text-align: center;
+
+
+    &::before {
+      content: '';
+      background: #9C9C9C;
+      position: absolute;
+      top: 50%;
+      width: 100%;
+      height: 1px;
+    }
+    &::after {
+      content: attr(data-content);
+      position: relative;
+      padding: 10px 24px;
+      color: #9C9C9C;
+      background-color: #ffffff;
+      line-height: 1;
+    }
 `;
+
+export const ButtonBlock = styled('div')({
+  display: 'flex',
+  justifyContent: 'space-between',
+  gap: '24px',
+  '@media(max-width: 250px)': {
+    flexDirection: 'column',
+    alignItems: 'center',
+  }
+})
+
+export const GoogleButton = styled('button')({
+  width: '100%',
+  minWidth: '90px',
+  height: '44px',
+  padding: '12px 24px 12px 24px',
+  borderRadius: '8px',
+  border: '1px solid #256AD2',
+  backgroundColor: '#ffffff',
+  display: 'flex',
+  justifyContent: 'center',
+  gap: '8px',
+
+  span: {
+    fontSize: '14px',
+    fontWeight: '700',
+    lineHeight: '20px',
+    letterSpacing: '0em',
+    textAlign: 'center',
+  },
+
+  '&:hover': {
+    backgroundColor: '#E9F0FB'
+  }
+});
+
+const GoogleLogoSVG = styled('svg')({
+  width: '20px',
+  height: '20px',
+  minWidth: '20px',
+  minHeight: '20px',
+  backgroundImage: `url(${GoogleLogo})`,
+  backgroundRepeat: 'no-repeat',
+  backgroundSize: 'contain',
+});
+
+export const ButtonGoogle = () =>
+// eslint-disable-next-line arrow-body-style
+{
+  return (
+    React.createElement(GoogleButton, null,
+      React.createElement(GoogleLogoSVG, null,
+      ),
+      React.createElement("span", null, "Google"))
+  )
+};
+
+export const FacebookButton = styled('button')({
+  width: '100%',
+  minWidth: '90px',
+  height: '44px',
+  padding: '12px 24px 12px 24px',
+  borderRadius: '8px',
+  border: '1px solid #256AD2',
+  backgroundColor: '#ffffff',
+  display: 'flex',
+  justifyContent: 'center',
+  gap: '8px',
+
+  span: {
+    fontSize: '14px',
+    fontWeight: '700',
+    lineHeight: '20px',
+    letterSpacing: '0em',
+    textAlign: 'center',
+  },
+
+  '&:hover': {
+    backgroundColor: '#E9F0FB'
+  }
+});
+
+const FacebookLogoSVG = styled('svg')({
+  width: '20px',
+  height: '20px',
+  minWidth: '20px',
+  minHeight: '20px',
+  backgroundImage: `url(${FBLogo})`,
+  backgroundRepeat: 'no-repeat',
+  backgroundSize: 'contain',
+});
+
+export const ButtonFacebook = () =>
+// eslint-disable-next-line arrow-body-style
+{
+  return (
+    React.createElement(FacebookButton, null,
+      React.createElement(FacebookLogoSVG, null,
+      ),
+      React.createElement("span", null, "Facebook"))
+  )
+};
