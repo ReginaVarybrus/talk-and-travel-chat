@@ -1,5 +1,9 @@
 import { useFormik } from 'formik';
 import * as yup from 'yup';
+import { useNavigate } from 'react-router-dom';
+import { logIn } from '@/redux-store/AuthOperations/AuthOperations';
+import { useDispatch } from 'react-redux';
+import { routesPath } from '@/routes/routesConfig';
 import {
   ItemWrapp,
   StyledLabel,
@@ -9,12 +13,8 @@ import {
   Success,
   LogInBtn,
 } from './LoginFormStyled';
-import { useNavigate } from 'react-router-dom';
-import { logIn } from '@/redux-store/AuthOperations/AuthOperations';
-import { useDispatch } from 'react-redux';
-import { routesPath } from '@/routes/routesConfig';
 
-let schema = yup.object().shape({
+const schema = yup.object().shape({
   userEmail: yup
     .string()
     .transform(value => (value ? value.trim() : ''))

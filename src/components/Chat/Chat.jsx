@@ -1,5 +1,9 @@
-import React, { useState, useRef } from 'react';
+import { useState, useRef } from 'react';
 import { useSelector } from 'react-redux';
+import {
+  getCountryName,
+  getNumberOfParticipants,
+} from '@/redux-store/AuthOperations/selectors.js';
 import {
   ChatStyled,
   Header,
@@ -13,10 +17,6 @@ import {
   ButtonSendMessage,
 } from './ChatStyled';
 import Icons from '../Icons/Icons';
-import {
-  getCountryName,
-  getNumberOfParticipants,
-} from '@/redux-store/AuthOperations/selectors.js';
 
 const Chat = () => {
   const countryName = useSelector(getCountryName);
@@ -35,8 +35,8 @@ const Chat = () => {
     <ChatStyled>
       <Header>
         <HeaderContent>
-          {<h5>{countryName || 'Country Name'}</h5>}
-          {<p>{participants || 0} members</p>}
+          <h5>{countryName || 'Country Name'}</h5>
+          <p>{participants || 0} members</p>
         </HeaderContent>
       </Header>
       <MessageBlock />
