@@ -8,7 +8,7 @@ export const register = createAsyncThunk('auth/register', async userData => {
   try {
     const response = await sendRequest({
       method: 'post',
-      endpoint: 'register',
+      endpoint: 'authentication/register',
       data: userData,
     });
 
@@ -33,7 +33,7 @@ export const logIn = createAsyncThunk('auth/login', async userData => {
   try {
     const response = await sendRequest({
       method: 'post',
-      endpoint: 'login',
+      endpoint: 'authentication/login',
       data: userData,
     });
 
@@ -56,7 +56,7 @@ export const logOut = createAsyncThunk('auth/logout', async () => {
   try {
     await sendRequest({
       method: 'post',
-      endpoint: 'logout',
+      endpoint: 'authentication/logout',
     });
 
     token.unset();
@@ -64,8 +64,6 @@ export const logOut = createAsyncThunk('auth/logout', async () => {
     throw new Error(error.message);
   }
 });
-
-// TODO fetchCurrentUser, updateUser and other requests shuold be update when we'll take the Profile component in dev
 
 export const fetchCurrentUser = createAsyncThunk(
   'auth/refresh',
@@ -79,7 +77,10 @@ export const fetchCurrentUser = createAsyncThunk(
 
     try {
       token.set(persistedToken);
-      const user = await axios.get(`auth/current`);
+      const user = await sendRequest({
+        method: 'get',
+        endpoint: 'current',
+      });
 
       return user.data;
     } catch (error) {
@@ -92,7 +93,11 @@ export const updateUser = createAsyncThunk(
   'user/update',
   async (user, thunkAPI) => {
     try {
-      const { data } = await axios.put('/api/users', user);
+      const { data } = await sendRequest({
+        method: 'put',
+        endpoint: 'users',
+        data: user,
+      });
 
       return data.user;
     } catch (error) {
@@ -101,7 +106,7 @@ export const updateUser = createAsyncThunk(
   }
 );
 
-// country data
+// TODO sendDataCountryToBackend request shuold be update when we understand do we need thas request or no
 
 export const sendDataCountryToBackend = createAsyncThunk(
   'auth/sendDataCountryToBackend',

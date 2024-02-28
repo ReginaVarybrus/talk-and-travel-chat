@@ -1,19 +1,9 @@
 import axios from 'axios';
 
-axios.defaults.baseURL = 'https://talk-and-travel.pp.ua/api/authentication';
-
-axios.interceptors.request.use(request => {
-  console.log('Starting Request', request);
-  return request;
-});
-
-axios.interceptors.response.use(response => {
-  console.log('Response:', response);
-  return response;
-});
+axios.defaults.baseURL = 'https://talk-and-travel.pp.ua/api';
 
 export const token = {
-  set(token) {
+  set() {
     axios.defaults.headers.common.Authorization = `Bearer ${token}`;
   },
   unset() {
