@@ -3,6 +3,12 @@ import * as yup from 'yup';
 import { register } from '@/redux-store/AuthOperations/AuthOperations';
 import { useDispatch } from 'react-redux';
 import {
+  Background,
+  RegisterFormContainer,
+  SignInFormStyles,
+  SignInTitle,
+  SignInText,
+  LoginLink,
   ItemWrapp,
   StyledLabel,
   Error,
@@ -10,6 +16,10 @@ import {
   // ValidationIcon,
   StyledInput,
   SignUpBtn,
+  Separator,
+  ButtonBlock,
+  ButtonGoogle,
+  ButtonFacebook,
 } from './RegisterForm.styled';
 
 const schema = yup.object().shape({
@@ -61,10 +71,16 @@ const RegisterForm = () => {
       userName: '',
       userEmail: '',
       password: '',
+      repeatPassword: '',
     },
     validationSchema: schema,
     validateOnChange: false,
     onSubmit: (values, { resetForm }) => {
+      if (values.password !== values.repeatPassword) {
+        // Set error for repeatPassword field
+        formik.setFieldError('repeatPassword', 'Passwords do not match');
+        return; // Stop submission if passwords don't match
+      }
       dispatch(register(values));
 
       localStorage.setItem(
@@ -77,100 +93,128 @@ const RegisterForm = () => {
   });
 
   return (
-    <form onSubmit={formik.handleSubmit} autoComplete="off">
-      <ItemWrapp>
-        <StyledLabel
-          color={{
-            error: formik.errors.userName,
-            touched: formik.touched.userName,
-          }}
-          htmlFor="Name"
-        >
-          Name
-        </StyledLabel>
-        <StyledInput
-          id="userName"
-          name="userName"
-          type="text"
-          onChange={formik.handleChange}
-          value={formik.values.userName}
-          placeholder="Enter your name"
-          color={{
-            error: formik.errors.userName,
-            touched: formik.touched.userName,
-          }}
-        />
+    <Background>
+      <RegisterFormContainer>
+        <SignInFormStyles onSubmit={formik.handleSubmit} autoComplete="off">
+          <SignInTitle>Create account</SignInTitle>
+          <SignInText>
+            Already have an account? <LoginLink>Log in</LoginLink>
+          </SignInText>
+          <ItemWrapp>
+            <StyledLabel
+              color={{
+                error: formik.errors.userEmail,
+                touched: formik.touched.userEmail,
+              }}
+              htmlFor="email"
+            />
+            <StyledInput
+              id="userEmail"
+              name="userEmail"
+              type="email"
+              onChange={formik.handleChange}
+              value={formik.values.userEmail}
+              placeholder="E-mail"
+              color={{
+                error: formik.errors.userEmail,
+                touched: formik.touched.userEmail,
+              }}
+            />
 
-        {formik.errors.userName ? (
-          <Error>{formik.errors.userName}</Error>
-        ) : !formik.errors.userName && formik.touched.userName ? (
-          <Success>Field is not empty</Success>
-        ) : null}
-      </ItemWrapp>
+            {formik.errors.userEmail ? (
+              <Error>{formik.errors.userEmail}</Error>
+            ) : !formik.errors.userEmail && formik.touched.userEmail ? (
+              <Success>Field is not empty</Success>
+            ) : null}
+          </ItemWrapp>
+          <ItemWrapp>
+            <StyledLabel
+              color={{
+                error: formik.errors.userName,
+                touched: formik.touched.userName,
+              }}
+              htmlFor="Name"
+            />
+            <StyledInput
+              id="userName"
+              name="userName"
+              type="text"
+              onChange={formik.handleChange}
+              value={formik.values.userName}
+              placeholder="Username"
+              color={{
+                error: formik.errors.userName,
+                touched: formik.touched.userName,
+              }}
+            />
+            {formik.errors.userName ? (
+              <Error>{formik.errors.userName}</Error>
+            ) : !formik.errors.userName && formik.touched.userName ? (
+              <Success>Field is not empty</Success>
+            ) : null}
+          </ItemWrapp>
+          <ItemWrapp>
+            <StyledLabel
+              color={{
+                error: formik.errors.password,
+                touched: formik.touched.password,
+              }}
+              htmlFor="password"
+            />
+            <StyledInput
+              id="password"
+              name="password"
+              type="password"
+              onChange={formik.handleChange}
+              value={formik.values.password}
+              placeholder="Password"
+              color={{
+                error: formik.errors.password,
+                touched: formik.touched.password,
+              }}
+              style={{ marginBottom: 32 }}
+            />
 
-      <ItemWrapp>
-        <StyledLabel
-          color={{
-            error: formik.errors.userEmail,
-            touched: formik.touched.userEmail,
-          }}
-          htmlFor="email"
-        >
-          Email
-        </StyledLabel>
-        <StyledInput
-          id="userEmail"
-          name="userEmail"
-          type="email"
-          onChange={formik.handleChange}
-          value={formik.values.userEmail}
-          placeholder="Enter email"
-          color={{
-            error: formik.errors.userEmail,
-            touched: formik.touched.userEmail,
-          }}
-        />
-
-        {formik.errors.userEmail ? (
-          <Error>{formik.errors.userEmail}</Error>
-        ) : !formik.errors.userEmail && formik.touched.userEmail ? (
-          <Success>Field is not empty</Success>
-        ) : null}
-      </ItemWrapp>
-
-      <ItemWrapp>
-        <StyledLabel
-          color={{
-            error: formik.errors.password,
-            touched: formik.touched.password,
-          }}
-          htmlFor="password"
-        >
-          Password
-        </StyledLabel>
-        <StyledInput
-          id="password"
-          name="password"
-          type="password"
-          onChange={formik.handleChange}
-          value={formik.values.password}
-          placeholder="Enter password"
-          color={{
-            error: formik.errors.password,
-            touched: formik.touched.password,
-          }}
-          style={{ marginBottom: 32 }}
-        />
-
-        {formik.errors.password && formik.touched.password ? (
-          <Error>{formik.errors.password}</Error>
-        ) : !formik.errors.password && formik.touched.password ? (
-          <Success>Field is not empty</Success>
-        ) : null}
-      </ItemWrapp>
-
-      <SignUpBtn type="submit">Sign Up</SignUpBtn>
-    </form>
+            {formik.errors.password && formik.touched.password ? (
+              <Error>{formik.errors.password}</Error>
+            ) : !formik.errors.password && formik.touched.password ? (
+              <Success>Field is not empty</Success>
+            ) : null}
+          </ItemWrapp>
+          <ItemWrapp>
+            <StyledLabel
+              color={{
+                error: formik.errors.repeatPassword,
+                touched: formik.touched.repeatPassword,
+              }}
+              htmlFor="repeatPassword"
+            />
+            <StyledInput
+              id="repeatPassword"
+              name="repeatPassword"
+              type="password"
+              onChange={formik.handleChange}
+              value={formik.values.repeatPassword}
+              placeholder="Password again"
+              color={{
+                error: formik.errors.repeatPassword,
+                touched: formik.touched.repeatPassword,
+              }}
+              style={{ marginBottom: 32 }}
+            />
+            {formik.errors.repeatPassword && formik.touched.repeatPassword && (
+              <Error>{formik.errors.repeatPassword}</Error>
+            )}
+          </ItemWrapp>
+          <SignUpBtn type="submit">Create</SignUpBtn>
+          <Separator data-content="or" />
+          <ButtonBlock>
+            <ButtonGoogle type="button" />
+            <ButtonFacebook type="button" />
+          </ButtonBlock>
+        </SignInFormStyles>
+      </RegisterFormContainer>
+    </Background>
   );
 };
 
