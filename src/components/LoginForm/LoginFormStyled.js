@@ -222,7 +222,7 @@ export const LogInBtn = styled('button')({
 });
 
 export const Separator = styled.hr`
-'@media (min-width: 768px)': {
+@media (min-width: 768px) {
   margin: 32px 0;
 }
     position: relative;
