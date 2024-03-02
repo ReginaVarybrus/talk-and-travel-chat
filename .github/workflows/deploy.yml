@@ -13,6 +13,7 @@ jobs:
 
       - name: Install, lint, build 🔧
         run: |
+          npm cache clean --force
           npm install
           npm run lint:js
           npm run build
