@@ -6,11 +6,11 @@ const ROOT = import.meta.env.BASE_URL;
 
 export const routesPath = {
   MAIN: ROOT,
-  LOGIN: `${ROOT}login`,
-  REGISTER: `${ROOT}register`,
-  APP: `${ROOT}app`,
-  CHAT: `${ROOT}app/chat/`,
-  ACCOUNT: `${ROOT}app/account/`,
+  LOGIN: `/login`,
+  REGISTER: `/register`,
+  APP: `/app`,
+  CHAT: `/app/chat/`,
+  ACCOUNT: `/app/account/`,
 };
 
 const importComponent = {
