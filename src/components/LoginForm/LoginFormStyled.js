@@ -16,8 +16,8 @@ export const StyledLabel = styled('label')(
       color.error && color.touched
         ? 'red'
         : !color.error && color.touched
-        ? 'green'
-        : '#111',
+          ? 'green'
+          : '#111',
   })
 );
 
@@ -38,8 +38,8 @@ export const StyledInput = styled('input')(
       color.error && color.touched
         ? 'red'
         : !color.error && color.touched
-        ? 'green'
-        : 'rgba(220, 227, 229, 0.60)',
+          ? 'green'
+          : 'rgba(220, 227, 229, 0.60)',
 
     marginBottom: 24,
     paddingLeft: 14,
