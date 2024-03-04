@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 import Box from '@mui/material/Box';
 
-export const Wrapper = styled.div`
+export const SearchBarStyled = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: start;
