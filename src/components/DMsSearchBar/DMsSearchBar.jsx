@@ -3,23 +3,25 @@ import Backdrop from '@mui/material/Backdrop';
 import Modal from '@mui/material/Modal';
 import Fade from '@mui/material/Fade';
 
-import PropTypes from 'prop-types';
-import { Wrapper, ButtonMapOpen, MapBox } from './SearchBarStyled';
+import {
+  SearchBarStyled,
+  ButtonMapOpen,
+  MapBox,
+} from '../RoomsSearchBar/SearchBarStyled.js';
 import SearchInput from '../SearchInput/SearchInput';
 import DMsList from '../DMsList/DMsList';
-import RoomsList from '../RoomsList/RoomsList';
 import ChatMap from '../ChatMap/ChatMap';
 
-const SearchBar = ({ isOpen }) => {
+const DMsSearchBar = () => {
   const [openMap, setOpenMap] = useState(false);
   const handleOpen = () => setOpenMap(true);
   const handleClose = () => setOpenMap(false);
 
   return (
-    <Wrapper>
+    <SearchBarStyled>
       <SearchInput />
       <ButtonMapOpen onClick={handleOpen}>Search by map</ButtonMapOpen>
-      {isOpen === 'component2' ? <RoomsList /> : <DMsList />}
+      <DMsList />
 
       <Modal
         aria-labelledby="transition-modal-title"
@@ -40,12 +42,8 @@ const SearchBar = ({ isOpen }) => {
           </MapBox>
         </Fade>
       </Modal>
-    </Wrapper>
+    </SearchBarStyled>
   );
 };
 
-SearchBar.propTypes = {
-  isOpen: PropTypes.string,
-};
-
-export default SearchBar;
+export default DMsSearchBar;

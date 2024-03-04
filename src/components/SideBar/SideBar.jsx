@@ -1,6 +1,5 @@
 import { useNavigate, useLocation } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import PropTypes from 'prop-types';
 
 import { routesPath } from '@/routes/routesConfig';
 import { getUserName } from '@/redux-store/AuthOperations/selectors';
@@ -8,7 +7,7 @@ import { logOut } from '@/redux-store/AuthOperations/AuthOperations';
 import { Wrapper, ProfileBox, LogOutBox, Frame } from './SideBarStyled';
 import SideBarItem from '../SideBarItem/SideBarItem';
 
-const SideBar = ({ onClickDms, onClickRooms, isActive }) => {
+const SideBar = () => {
   const userName = useSelector(getUserName);
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -17,6 +16,14 @@ const SideBar = ({ onClickDms, onClickRooms, isActive }) => {
 
   const handleProfileOpen = () => {
     navigate(routesPath.ACCOUNT);
+  };
+
+  const handleRoomsOpen = () => {
+    navigate(routesPath.ROOMS_CHAT);
+  };
+
+  const handleDMsOpen = () => {
+    navigate(routesPath.DMS_CHAT);
   };
 
   const handleLogOut = (event, values) => {
@@ -39,8 +46,8 @@ const SideBar = ({ onClickDms, onClickRooms, isActive }) => {
       </ProfileBox>
       <Frame>
         <SideBarItem
-          onClick={onClickRooms}
-          isActive={isActive === 'component2'}
+          onClick={handleRoomsOpen}
+          isActive={currentPage === routesPath.ROOMS_CHAT}
           alt="Rooms icon"
           name="rooms"
           size="24"
@@ -48,8 +55,8 @@ const SideBar = ({ onClickDms, onClickRooms, isActive }) => {
           Rooms
         </SideBarItem>
         <SideBarItem
-          onClick={onClickDms}
-          isActive={isActive === 'component1'}
+          onClick={handleDMsOpen}
+          isActive={currentPage === routesPath.DMS_CHAT}
           alt="DMs icon"
           name="dms"
           size="24"
@@ -69,12 +76,6 @@ const SideBar = ({ onClickDms, onClickRooms, isActive }) => {
       </LogOutBox>
     </Wrapper>
   );
-};
-
-SideBar.propTypes = {
-  onClickDms: PropTypes.func,
-  onClickRooms: PropTypes.func,
-  isActive: PropTypes.string,
 };
 
 export default SideBar;
