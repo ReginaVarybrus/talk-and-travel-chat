@@ -23,7 +23,6 @@ import {
 const ChatMap = ({ closeMap }) => {
   const dispatch = useDispatch();
   const userId = useSelector(getUserId);
-  const token = useSelector(getPersistedToken);
   const [selectedCountry, setSelectedCountry] = useState(null);
   const [countryData, setCountryData] = useState({});
 
@@ -79,9 +78,7 @@ const ChatMap = ({ closeMap }) => {
   };
 
   const handleClick = () => {
-    dispatch(
-      sendDataCountryToBackend({ userId, countryDto: countryData, token })
-    );
+    dispatch(sendDataCountryToBackend({ userId, countryDto: countryData }));
     closeMap();
   };
 

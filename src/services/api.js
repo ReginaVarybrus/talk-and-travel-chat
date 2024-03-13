@@ -1,28 +1,33 @@
 import axios from 'axios';
 
-axios.defaults.baseURL = 'https://talk-and-travel.pp.ua/api';
+const axiosClient = axios.create({
+  baseURL: `${import.meta.env.VITE_APP_API_URL}/api/`,
+  headers: {
+    'Content-Type': 'application/json',
+  },
+});
 
-export const token = {
+axiosClient.interceptors.request.use(
+  config => {
+    const { token } = JSON.parse(localStorage.getItem('persist:auth'));
+
+    if (token !== 'null') {
+      config.headers.Authorization = `Bearer ${token}`;
+    }
+    return config;
+  },
+  error => {
+    return Promise.reject(error);
+  }
+);
+
+const token = {
   set() {
-    axios.defaults.headers.common.Authorization = `Bearer ${token}`;
+    axiosClient.defaults.headers.common.Authorization = `Bearer ${token}`;
   },
   unset() {
-    axios.defaults.headers.common.Authorization = '';
+    delete axiosClient.defaults.headers.common.Authorization;
   },
 };
 
-export const sendRequest = async ({ method, endpoint, data }) => {
-  try {
-    const response = await axios.request({
-      method,
-      url: `/${endpoint}`,
-      data,
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    });
-    return response.data;
-  } catch (error) {
-    throw new Error(error.response.data.message);
-  }
-};
+export { axiosClient, token };
