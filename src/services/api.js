@@ -16,16 +16,17 @@ axiosClient.interceptors.request.use(
     }
     return config;
   },
-  error => {
-    return Promise.reject(error);
-  }
+  error => Promise.reject(error)
 );
 
 const token = {
   set() {
+    localStorage.setItem('authToken', token);
+
     axiosClient.defaults.headers.common.Authorization = `Bearer ${token}`;
   },
   unset() {
+    localStorage.removeItem('authToken');
     delete axiosClient.defaults.headers.common.Authorization;
   },
 };

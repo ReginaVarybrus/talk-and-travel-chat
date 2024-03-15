@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import PropTypes from 'prop-types';
 
 import { routesPath } from '@/routes/routesConfig';
-import { getUserName } from '@/redux-store/AuthOperations/selectors';
+import { getUserName } from '@/redux-store/selectors';
 import { logOut } from '@/redux-store/AuthOperations/AuthOperations';
 import { Wrapper, ProfileBox, LogOutBox, Frame } from './SideBarStyled';
 import SideBarItem from '../SideBarItem/SideBarItem';

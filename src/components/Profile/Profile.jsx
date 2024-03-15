@@ -6,8 +6,8 @@ import {
   string,
   //  date
 } from 'yup';
-import { getUser } from '@/redux-store/AuthOperations/selectors';
-import { updateUser } from '@/redux-store/AuthOperations/AuthOperations';
+import { getUser } from '@/redux-store/selectors';
+import { updateUser } from '@/redux-store/UserOperations/UserOperations';
 import {
   // ContainerImg,
   Wrapper,

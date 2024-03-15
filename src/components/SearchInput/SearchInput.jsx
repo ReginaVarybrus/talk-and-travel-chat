@@ -1,10 +1,7 @@
 import { useState, useEffect, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { sendDataCountryToBackend } from '@/redux-store/AuthOperations/AuthOperations.js';
-import {
-  getUserId,
-  getPersistedToken,
-} from '@/redux-store/AuthOperations/selectors';
+import { getUserId, getPersistedToken } from '@/redux-store/selectors';
 
 import mapData from '@/data/countries.json';
 import Icons from '../Icons/Icons';

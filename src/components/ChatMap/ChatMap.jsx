@@ -6,11 +6,8 @@ import mapData from '@/data/countries.json';
 import 'leaflet/dist/leaflet.css';
 import '@/css/ChatMap.css';
 
-import { sendDataCountryToBackend } from '@/redux-store/AuthOperations/AuthOperations.js';
-import {
-  getUserId,
-  getPersistedToken,
-} from '@/redux-store/AuthOperations/selectors';
+import { sendDataCountryToBackend } from '@/redux-store/AuthOperations/AuthOperations';
+import { getUserId } from '@/redux-store/selectors';
 import {
   CountryName,
   ShowCountry,

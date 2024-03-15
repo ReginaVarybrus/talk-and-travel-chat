@@ -3,7 +3,7 @@ import { useSelector } from 'react-redux';
 import {
   getCountryName,
   getNumberOfParticipants,
-} from '@/redux-store/AuthOperations/selectors.js';
+} from '@/redux-store/selectors.js';
 import {
   ChatStyled,
   Header,

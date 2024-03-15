@@ -2,15 +2,7 @@ import { createAsyncThunk } from '@reduxjs/toolkit';
 import swal from 'sweetalert';
 
 import { token, axiosClient } from '@/services/api';
-
-const ULRs = {
-  register: 'authentication/register',
-  login: 'authentication/login',
-  logout: 'authentication/logout',
-  currentUser: 'current',
-  updateUser: 'users',
-  country: 'countries',
-};
+import ULRs from '../constants';
 
 export const register = createAsyncThunk('auth/register', async userData => {
   try {
@@ -47,39 +39,6 @@ export const logOut = createAsyncThunk('auth/logout', async () => {
     throw new Error(error.message);
   }
 });
-
-export const fetchCurrentUser = createAsyncThunk(
-  'auth/refresh',
-  async (_, thunkAPI) => {
-    const state = thunkAPI.getState();
-    const persistedToken = state.auth.token;
-
-    if (persistedToken === null) {
-      return thunkAPI.rejectWithValue('No valid token');
-    }
-
-    try {
-      token.set(persistedToken);
-      const user = axiosClient.get(ULRs.currentUser);
-
-      return user.data;
-    } catch (error) {
-      return thunkAPI.rejectWithValue(error.message);
-    }
-  }
-);
-
-export const updateUser = createAsyncThunk(
-  'user/update',
-  async (user, thunkAPI) => {
-    try {
-      const { data } = await axiosClient.put(ULRs.updateUser, user);
-      return data.user;
-    } catch (error) {
-      return thunkAPI.rejectWithValue(error.message);
-    }
-  }
-);
 
 // TODO sendDataCountryToBackend request shuold be update when we understand do we need thas request or no
 

@@ -3,27 +3,9 @@ import {
   register,
   logIn,
   logOut,
-  fetchCurrentUser,
-  updateUser,
   sendDataCountryToBackend,
-} from './AuthOperations';
-
-const initialState = {
-  token: null,
-  userDto: {
-    userName: '',
-    userEmail: '',
-    avatar: '',
-  },
-  name: '',
-  flagCode: '',
-  userId: '',
-  countryRooms: [],
-
-  isLoggedIn: false,
-  isRefresh: true,
-  error: null,
-};
+} from '../AuthOperations/AuthOperations.js';
+import initialState from '../initialState';
 
 const handlePending = state => ({
   ...state,
@@ -70,19 +52,6 @@ export const authSlice = createSlice({
         isRefresh: false,
       }))
 
-      .addCase(fetchCurrentUser.pending, handlePending)
-      .addCase(fetchCurrentUser.rejected, handleRejected)
-      .addCase(fetchCurrentUser.fulfilled, (state, action) => ({
-        ...state,
-        userDto: action.payload.userDto,
-        isLoggedIn: true,
-        isRefresh: false,
-      }))
-
-      .addCase(updateUser.fulfilled, (state, action) => ({
-        ...state,
-        userDto: { ...state.userDto, ...action.payload },
-      }))
       .addCase(sendDataCountryToBackend.pending, handlePending)
       .addCase(sendDataCountryToBackend.rejected, (state, action) => {
         handleRejected(state, action);
