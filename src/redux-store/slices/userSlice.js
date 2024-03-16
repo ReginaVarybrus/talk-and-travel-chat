@@ -3,7 +3,14 @@ import {
   fetchCurrentUser,
   updateUser,
 } from '../UserOperations/UserOperations.js';
-import initialState from '../initialState';
+
+const initialState = {
+  id: null,
+  userName: '',
+  userEmail: '',
+  password: null,
+  avatar: null,
+};
 
 const handlePending = state => ({
   ...state,
@@ -19,6 +26,12 @@ const handleRejected = (state, action) => ({
 export const userSlice = createSlice({
   name: 'user',
   initialState,
+  reducers: {
+    setUsers: (state, action) => ({
+      ...state,
+      ...action.payload.userDto,
+    }),
+  },
   extraReducers: builder =>
     builder
       .addCase(fetchCurrentUser.pending, handlePending)
@@ -35,5 +48,7 @@ export const userSlice = createSlice({
         userDto: { ...state.userDto, ...action.payload },
       })),
 });
+
+export const { setUsers } = userSlice.actions;
 
 export default userSlice.reducer;

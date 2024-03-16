@@ -5,10 +5,16 @@ import {
   logOut,
   sendDataCountryToBackend,
 } from '../AuthOperations/AuthOperations.js';
-import initialState from '../initialState';
 
-const handlePending = state => ({
-  ...state,
+const initialState = {
+  token: null,
+  isLoggedIn: false,
+  isRefresh: true,
+  error: null,
+  flagCode: null,
+};
+
+const handlePending = () => ({
   isRefresh: true,
 });
 
@@ -27,7 +33,6 @@ export const authSlice = createSlice({
       .addCase(register.rejected, handleRejected)
       .addCase(register.fulfilled, (state, action) => ({
         ...state,
-        userDto: action.payload.userDto,
         token: action.payload.token,
         isLoggedIn: true,
       }))
@@ -36,7 +41,6 @@ export const authSlice = createSlice({
       .addCase(logIn.rejected, handleRejected)
       .addCase(logIn.fulfilled, (state, action) => ({
         ...state,
-        userDto: action.payload.userDto,
         token: action.payload.token,
         isLoggedIn: true,
         error: null,
@@ -44,13 +48,7 @@ export const authSlice = createSlice({
 
       .addCase(logOut.pending, handlePending)
       .addCase(logOut.rejected, handleRejected)
-      .addCase(logOut.fulfilled, state => ({
-        ...state,
-        userDto: { userName: null, userEmail: null },
-        token: null,
-        isLoggedIn: false,
-        isRefresh: false,
-      }))
+      .addCase(logOut.fulfilled, () => null)
 
       .addCase(sendDataCountryToBackend.pending, handlePending)
       .addCase(sendDataCountryToBackend.rejected, (state, action) => {
@@ -60,7 +58,6 @@ export const authSlice = createSlice({
         ...state,
         name: action.payload.name,
         flagCode: action.payload.flagCode,
-        isLoggedIn: true,
       })),
 });
 
