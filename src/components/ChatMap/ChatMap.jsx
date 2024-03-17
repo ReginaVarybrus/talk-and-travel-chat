@@ -7,7 +7,7 @@ import 'leaflet/dist/leaflet.css';
 import '@/css/ChatMap.css';
 
 import { sendDataCountryToBackend } from '@/redux-store/AuthOperations/AuthOperations';
-import { getUserId } from '@/redux-store/selectors';
+import { getUser } from '@/redux-store/selectors';
 import {
   CountryName,
   ShowCountry,
@@ -19,7 +19,7 @@ import {
 
 const ChatMap = ({ closeMap }) => {
   const dispatch = useDispatch();
-  const userId = useSelector(getUserId);
+  const userId = useSelector(getUser)?.id;
   const [selectedCountry, setSelectedCountry] = useState(null);
   const [countryData, setCountryData] = useState({});
 

@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { sendDataCountryToBackend } from '@/redux-store/AuthOperations/AuthOperations.js';
-import { getUserId, getPersistedToken } from '@/redux-store/selectors';
+import { getUser } from '@/redux-store/selectors';
 
 import mapData from '@/data/countries.json';
 import Icons from '../Icons/Icons';
@@ -21,8 +21,7 @@ const SearchInput = () => {
   const [showItem, setShowItem] = useState(false);
   const autoCompleteRef = useRef(null);
   const dispatch = useDispatch();
-  const userId = useSelector(getUserId);
-  const token = useSelector(getPersistedToken);
+  const userId = useSelector(getUser)?.id;
 
   const filterCountries = mapData.features.filter(name =>
     name.properties.ADMIN.toLowerCase().includes(searchedValue.toLowerCase())
@@ -45,9 +44,7 @@ const SearchInput = () => {
 
     setSearchedValue(country.properties.ADMIN);
     setShowItem(false);
-    dispatch(
-      sendDataCountryToBackend({ userId, countryDto: countryData, token })
-    );
+    dispatch(sendDataCountryToBackend({ userId, countryDto: countryData }));
   };
 
   useEffect(() => {
