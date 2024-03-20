@@ -1,12 +1,13 @@
 import { useState, useEffect, useRef } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { sendDataCountryToBackend } from '@/redux-store/AuthOperations/AuthOperations.js';
-import {
-  getUserId,
-  getPersistedToken,
-} from '@/redux-store/AuthOperations/selectors';
+// import { useDispatch, useSelector } from 'react-redux';
+// import { sendDataCountryToBackend } from '@/redux-store/AuthOperations/AuthOperations.js';
+// import {
+//   getUserId,
+//   getPersistedToken,
+// } from '@/redux-store/AuthOperations/selectors';
 
 import mapData from '@/data/countries.json';
+import { connect } from '../TestWebSocketChat/ws';
 import Icons from '../Icons/Icons';
 import {
   AutocompleteInputStyled,
@@ -19,13 +20,24 @@ import {
   ScrollBar,
 } from './SearchInputStyled';
 
-const SearchInput = () => {
+const SearchInput = ({ onSelect }) => {
   const [searchedValue, setSearchedValue] = useState('');
   const [showItem, setShowItem] = useState(false);
   const autoCompleteRef = useRef(null);
-  const dispatch = useDispatch();
-  const userId = useSelector(getUserId);
-  const token = useSelector(getPersistedToken);
+  // const [countryData, setCountryData] = useState({
+  //   name: '',
+  //   flagCode: '',
+  // });
+  // const [userData, setUserData] = useState({
+  // name: '',
+  // userId: '',
+  // connected: false,
+  // message: ''
+  // });
+
+  // const dispatch = useDispatch();
+  // const userId = useSelector(getUserId);
+  // const token = useSelector(getPersistedToken);
 
   const filterCountries = mapData.features.filter(name =>
     name.properties.ADMIN.toLowerCase().includes(searchedValue.toLowerCase())
@@ -48,9 +60,18 @@ const SearchInput = () => {
 
     setSearchedValue(country.properties.ADMIN);
     setShowItem(false);
-    dispatch(
-      sendDataCountryToBackend({ userId, countryDto: countryData, token })
-    );
+    // setCountryData({
+    //   name: country.properties.ADMIN,
+    //   flagCode: country.properties.code,
+    // });
+
+    connect(countryData.name, countryData);
+    onSelect(countryData.name);
+    // dispatch(
+    //   sendDataCountryToBackend({ userId, countryDto: countryData, token })
+    // );
+    console.log(countryData);
+    setSearchedValue('');
   };
 
   useEffect(() => {

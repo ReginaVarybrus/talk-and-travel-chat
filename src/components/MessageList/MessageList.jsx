@@ -13,10 +13,11 @@ export const MessageList = ({ messageList, username }) => {
 
   return (
     <div>
-      {messageList.map((message, idx) => (
-        // eslint-disable-next-line react/no-array-index-key
-        <MessageItem key={idx} message={message} username={username} />
-      ))}
+      {messageList &&
+        messageList.map((message, idx) => (
+          // eslint-disable-next-line react/no-array-index-key
+          <MessageItem key={idx} message={message} username={username} />
+        ))}
       <div ref={messagesEndRef} />
     </div>
   );
