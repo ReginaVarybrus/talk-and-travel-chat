@@ -16,9 +16,9 @@ export const SideBarButton = styled.button`
   background: none;
   border: none;
   cursor: pointer;
-  color: ${props =>
-    props.isActive ? 'var(--color-brand-blue)' : 'var(--color-grey-9)'};
-  font-weight: ${props => (props.isActive ? '700' : '400')};
+  color: ${({ $isActive }) =>
+    $isActive ? 'var(--color-brand-blue)' : 'var(--color-grey-9)'};
+  font-weight: ${({ $isActive }) => ($isActive ? '700' : '400')};
   &:hover {
     svg {
       fill: var(--color-blue-3);

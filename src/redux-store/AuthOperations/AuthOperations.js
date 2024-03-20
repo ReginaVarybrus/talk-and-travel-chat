@@ -1,138 +1,66 @@
-import axios from 'axios';
+/* eslint-disable consistent-return */
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import swal from 'sweetalert';
 
-axios.defaults.baseURL = 'https://talk-and-travel.pp.ua';
-
-export const token = {
-  set(token) {
-    axios.defaults.headers.common.Authorization = `Bearer ${token}`;
-  },
-  unset() {
-    axios.defaults.headers.common.Authorization = '';
-  },
-};
+import { token, axiosClient } from '@/services/api';
+import { setUsers } from '@/redux-store/slices/userSlice';
+import ULRs from '../constants';
 
 export const register = createAsyncThunk('auth/register', async userData => {
   try {
-    const response = await axios.post(
-      '/api/authentication/register',
-      userData,
-      {
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      }
-    );
+    const response = await axiosClient.post(ULRs.register, userData);
 
-    token.set(response.data.token);
-    console.log(response);
-    console.log('data', response.data);
-
+    token.set(response.token);
     swal('Success!', 'Letter with verification sent on your email', 'success');
-
     return response.data;
   } catch (e) {
-    console.log(e.response.data);
-    if (
-      e.response.status === 400 ||
-      e.response.status === 401 ||
-      e.response.status === 409
-    ) {
-      throw new Error(swal('Error!', e.response.data.message, 'error'));
-    }
+    swal('Error!', e.response.message, 'error');
   }
 });
 
-export const logIn = createAsyncThunk('auth/login', async userData => {
-  try {
-    const response = await axios.post('/api/authentication/login', userData, {
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    });
-    token.set(response.data.token);
-    console.log(response);
+export const logIn = createAsyncThunk(
+  'auth/login',
+  async (userData, { dispatch }) => {
+    try {
+      const response = await axiosClient.post(ULRs.login, userData);
+      token.set(response.token);
+      dispatch(setUsers(response.data));
 
-    return response.data;
-  } catch (e) {
-    console.log(e.response.data);
-    if (e.response.status === 400 || e.response.status === 401) {
-      throw new Error(swal('Error!', e.response.data.message, 'error'));
-    }
-    if (e.response.status === 404) {
-      throw new Error(swal('Error!', 'Email is wrong', 'error'));
+      return response.data;
+    } catch (e) {
+      if (e.response.status === 400 || e.response.status === 401) {
+        throw new Error(swal('Error!', e.response.data.message, 'error'));
+      }
+      if (e.response.status === 404) {
+        throw new Error(swal('Error!', 'Email is wrong', 'error'));
+      }
     }
   }
-});
+);
 
 export const logOut = createAsyncThunk('auth/logout', async () => {
   try {
-    await axios.post('/api/authentication/logout');
+    await axiosClient.post(ULRs.logout);
     token.unset();
-  } catch (e) {
-    console.log(e.message);
+  } catch (error) {
+    throw new Error(error.message);
   }
 });
 
-export const fetchCurrentUser = createAsyncThunk(
-  'auth/refresh',
-  async (_, thunkAPI) => {
-    const state = thunkAPI.getState();
-    const persistedToken = state.auth.token;
-
-    if (persistedToken === null) {
-      return thunkAPI.rejectWithValue('No valid token');
-    }
-
-    try {
-      token.set(persistedToken);
-      const user = await axios.get(`auth/current`);
-
-      return user.data;
-    } catch (error) {
-      return thunkAPI.rejectWithValue(error.message);
-    }
-  }
-);
-
-export const updateUser = createAsyncThunk(
-  'user/update',
-  async (user, thunkAPI) => {
-    try {
-      const { data } = await axios.put('/api/users', user);
-
-      return data.user;
-    } catch (error) {
-      return thunkAPI.rejectWithValue(error.message);
-    }
-  }
-);
-
-// country data
+// TODO sendDataCountryToBackend request shuold be update when we understand do we need thas request or no
 
 export const sendDataCountryToBackend = createAsyncThunk(
   'auth/sendDataCountryToBackend',
-  async ({ userId, countryDto, token }, { rejectWithValue }) => {
+  async ({ userId, countryDto }, { rejectWithValue }) => {
     try {
-      const response = await axios.post(
-        `/api/countries/${userId}`,
-        countryDto,
-        {
-          headers: {
-            'Content-Type': 'application/json',
-            Authorization: `Bearer ${token}`,
-          },
-        }
+      const response = await axiosClient.post(
+        `${ULRs.country}/${userId}`,
+        countryDto
       );
 
       if (!response.data) {
         throw rejectWithValue('Response data is missing');
       }
-
-      console.log('token', token);
-      console.log('data country', response);
-      return response.data;
     } catch (e) {
       if (e.response && e.response.data) {
         console.log('Error response data:', e.response.data);
