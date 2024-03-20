@@ -1,10 +1,7 @@
 import { useState, useEffect, useRef } from 'react';
-// import { useDispatch, useSelector } from 'react-redux';
-// import { sendDataCountryToBackend } from '@/redux-store/AuthOperations/AuthOperations.js';
-// import {
-//   getUserId,
-//   getPersistedToken,
-// } from '@/redux-store/AuthOperations/selectors';
+import { useDispatch, useSelector } from 'react-redux';
+import { sendDataCountryToBackend } from '@/redux-store/AuthOperations/AuthOperations.js';
+import { getUser } from '@/redux-store/selectors';
 
 import mapData from '@/data/countries.json';
 import { connect } from '../TestWebSocketChat/ws';
@@ -24,20 +21,8 @@ const SearchInput = ({ onSelect }) => {
   const [searchedValue, setSearchedValue] = useState('');
   const [showItem, setShowItem] = useState(false);
   const autoCompleteRef = useRef(null);
-  // const [countryData, setCountryData] = useState({
-  //   name: '',
-  //   flagCode: '',
-  // });
-  // const [userData, setUserData] = useState({
-  // name: '',
-  // userId: '',
-  // connected: false,
-  // message: ''
-  // });
-
-  // const dispatch = useDispatch();
-  // const userId = useSelector(getUserId);
-  // const token = useSelector(getPersistedToken);
+  const dispatch = useDispatch();
+  const userId = useSelector(getUser)?.id;
 
   const filterCountries = mapData.features.filter(name =>
     name.properties.ADMIN.toLowerCase().includes(searchedValue.toLowerCase())

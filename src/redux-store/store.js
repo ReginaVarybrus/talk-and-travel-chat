@@ -1,4 +1,4 @@
-import { configureStore } from '@reduxjs/toolkit';
+import { configureStore, combineSlices } from '@reduxjs/toolkit';
 import {
   persistStore,
   persistReducer,
@@ -10,29 +10,30 @@ import {
   REGISTER,
 } from 'redux-persist';
 import storage from 'redux-persist/lib/storage';
-import axios from 'axios';
 import { authSlice } from './slices/authSlice';
+import { userSlice } from './slices/userSlice';
 
 const authPersistConfig = {
   key: 'auth',
   storage,
-  whitelist: ['token', 'userDto', 'countryDto'],
+  whitelist: ['token'],
 };
 
-axios.interceptors.request.use(request => {
-  console.log('Starting Request', request);
-  return request;
+const rootPersistConfig = {
+  key: 'root',
+  storage,
+  blacklist: ['auth'],
+};
+
+const rootReducer = combineSlices({
+  auth: persistReducer(authPersistConfig, authSlice.reducer),
+  user: userSlice.reducer,
 });
 
-axios.interceptors.response.use(response => {
-  console.log('Response:', response);
-  return response;
-});
+const persistedReducer = persistReducer(rootPersistConfig, rootReducer);
 
 export const store = configureStore({
-  reducer: {
-    auth: persistReducer(authPersistConfig, authSlice.reducer),
-  },
+  reducer: persistedReducer,
   middleware: getDefaultMiddleware =>
     getDefaultMiddleware({
       serializableCheck: {

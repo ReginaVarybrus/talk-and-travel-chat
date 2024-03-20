@@ -6,7 +6,7 @@ import { RouterProvider } from 'react-router-dom';
 
 import Loader from '@/components/Loader/Loader';
 import { router } from '@/routes/routesConfig';
-import { persistor, store } from './redux-store/store';
+import { persistor, store } from '@/redux-store/store';
 import { GlobalStyles } from './GlobalStyles';
 
 const App = () => (
