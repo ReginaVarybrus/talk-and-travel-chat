@@ -4,7 +4,7 @@ import { useState } from 'react';
 import { useSelector } from 'react-redux';
 import {
   // getUserName,
-  getCountryName,
+  // getCountryName,
   getNumberOfParticipants,
   getUserId,
 } from '@/redux-store/AuthOperations/selectors.js';
@@ -29,13 +29,13 @@ import {
 import MessageList from '../MessageList/MessageList';
 import { connect, sendMessage } from './ws';
 
-const Chat = () => {
+const Chat = ({ countryName }) => {
   // const { search } = useLocation();
   // const [params, setParams] = useState({ countryId: '', senderId: '' });
 
   const [messageList, setMessageList] = useState([]);
   const [message, setMessage] = useState('');
-  const countryName = useSelector(getCountryName);
+  // const countryName = useSelector(getCountryName);
   const participants = useSelector(getNumberOfParticipants);
   const userId = useSelector(getUserId);
 
@@ -59,7 +59,7 @@ const Chat = () => {
     e.preventDefault();
     sendMessage({
       senderId: userId,
-      countryId: countryName,
+      // countryId: countryName,
       content: message,
     });
     setMessageList(message);
