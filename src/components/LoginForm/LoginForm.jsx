@@ -5,13 +5,23 @@ import { logIn } from '@/redux-store/AuthOperations/AuthOperations';
 import { useDispatch } from 'react-redux';
 import { routesPath } from '@/routes/routesConfig';
 import {
+  Background,
   ItemWrapp,
   StyledLabel,
   StyledInput,
   ValidationIcon,
+  LoginFormContainer,
+  LoginTitle,
+  LoginText,
+  SignUpLink,
+  LoginFormStyles,
   Error,
   Success,
   LogInBtn,
+  Separator,
+  ButtonBlock,
+  ButtonGoogle,
+  ButtonFacebook,
 } from './LoginFormStyled';
 
 const schema = yup.object().shape({
@@ -19,7 +29,7 @@ const schema = yup.object().shape({
     .string()
     .transform(value => (value ? value.trim() : ''))
     .min(6)
-    .max(25)
+    .max(256)
     .email()
     .matches(
       /^([a-z0-9_.-]+)@([a-z09_.-]+).([a-z]{2,6})$/,
@@ -48,82 +58,91 @@ const LoginForm = () => {
   });
 
   return (
-    <form onSubmit={formik.handleSubmit} autoComplete="off">
-      <ItemWrapp>
-        <StyledLabel
-          color={{
-            error: formik.errors.userEmail,
-            touched: formik.touched.userEmail,
-          }}
-          htmlFor="email"
-        >
-          Email
-        </StyledLabel>
-        <StyledInput
-          id="userEmail"
-          name="userEmail"
-          type="email"
-          onChange={formik.handleChange}
-          value={formik.values.userEmail}
-          placeholder="Enter email"
-          color={{
-            error: formik.errors.userEmail,
-            touched: formik.touched.userEmail,
-          }}
-        />
+    <Background>
+      <LoginFormContainer>
+        <LoginFormStyles onSubmit={formik.handleSubmit} autoComplete="off">
+          <LoginTitle>Welcome back</LoginTitle>
+          <LoginText>
+            Don`t have an account yet? <SignUpLink>Sign up</SignUpLink>
+          </LoginText>
+          <ItemWrapp>
+            <StyledLabel
+              color={{
+                error: formik.errors.userEmail,
+                touched: formik.touched.userEmail,
+              }}
+              htmlFor="email"
+            />
+            <StyledInput
+              id="userEmail"
+              name="userEmail"
+              type="email"
+              onChange={formik.handleChange}
+              value={formik.values.userEmail}
+              placeholder="E-mail"
+              color={{
+                error: formik.errors.userEmail,
+                touched: formik.touched.userEmail,
+              }}
+            />
 
-        {formik.errors.userEmail ? (
-          <Error>{formik.errors.userEmail}</Error>
-        ) : !formik.errors.userEmail && formik.touched.userEmail ? (
-          <Success>Field is not empty</Success>
-        ) : null}
+            {formik.errors.userEmail ? (
+              <Error>{formik.errors.userEmail}</Error>
+            ) : !formik.errors.userEmail && formik.touched.userEmail ? (
+              <Success>Field is not empty</Success>
+            ) : null}
 
-        {formik.errors.userEmail ? (
-          <ValidationIcon alt="error" />
-        ) : !formik.errors.userEmail && formik.touched.userEmail ? (
-          <ValidationIcon alt="Success" />
-        ) : null}
-      </ItemWrapp>
+            {formik.errors.userEmail ? (
+              <ValidationIcon alt="error" />
+            ) : !formik.errors.userEmail && formik.touched.userEmail ? (
+              <ValidationIcon alt="Success" />
+            ) : null}
+          </ItemWrapp>
 
-      <ItemWrapp>
-        <StyledLabel
-          color={{
-            error: formik.errors.password,
-            touched: formik.touched.password,
-          }}
-          htmlFor="password"
-        >
-          Password
-        </StyledLabel>
-        <StyledInput
-          id="password"
-          name="password"
-          type="password"
-          onChange={formik.handleChange}
-          value={formik.values.password}
-          placeholder="Enter password"
-          color={{
-            error: formik.errors.password,
-            touched: formik.touched.password,
-          }}
-          style={{ marginBottom: 32 }}
-        />
+          <ItemWrapp>
+            <StyledLabel
+              color={{
+                error: formik.errors.password,
+                touched: formik.touched.password,
+              }}
+              htmlFor="password"
+            />
+            <StyledInput
+              id="password"
+              name="password"
+              type="password"
+              onChange={formik.handleChange}
+              value={formik.values.password}
+              placeholder="Password"
+              color={{
+                error: formik.errors.password,
+                touched: formik.touched.password,
+              }}
+              style={{ marginBottom: 32 }}
+            />
 
-        {formik.errors.password && formik.touched.password ? (
-          <Error>{formik.errors.password}</Error>
-        ) : !formik.errors.password && formik.touched.password ? (
-          <Success>Field is not empty</Success>
-        ) : null}
+            {formik.errors.password && formik.touched.password ? (
+              <Error>{formik.errors.password}</Error>
+            ) : !formik.errors.password && formik.touched.password ? (
+              <Success>Field is not empty</Success>
+            ) : null}
 
-        {formik.errors.password ? (
-          <ValidationIcon alt="error" />
-        ) : !formik.errors.password && formik.touched.password ? (
-          <ValidationIcon alt="Success" />
-        ) : null}
-      </ItemWrapp>
+            {formik.errors.password ? (
+              <ValidationIcon alt="error" />
+            ) : !formik.errors.password && formik.touched.password ? (
+              <ValidationIcon alt="Success" />
+            ) : null}
+          </ItemWrapp>
 
-      <LogInBtn type="submit">Log In</LogInBtn>
-    </form>
+          <LogInBtn type="submit">Log In</LogInBtn>
+          <Separator data-content="or" />
+          <ButtonBlock>
+            <ButtonGoogle type="button" />
+            <ButtonFacebook type="button" />
+          </ButtonBlock>
+        </LoginFormStyles>
+      </LoginFormContainer>
+    </Background>
   );
 };
 
