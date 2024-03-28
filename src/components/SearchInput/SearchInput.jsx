@@ -1,6 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { sendDataCountryToBackend } from '@/redux-store/AuthOperations/AuthOperations.js';
+import { useSelector } from 'react-redux';
 import { getUser } from '@/redux-store/selectors';
 
 import mapData from '@/data/countries.json';
@@ -21,7 +20,6 @@ const SearchInput = ({ onSelect }) => {
   const [searchedValue, setSearchedValue] = useState('');
   const [showItem, setShowItem] = useState(false);
   const autoCompleteRef = useRef(null);
-  const dispatch = useDispatch();
   const userId = useSelector(getUser)?.id;
 
   const filterCountries = mapData.features.filter(name =>
@@ -38,24 +36,17 @@ const SearchInput = ({ onSelect }) => {
   };
 
   const handleCountryClick = country => {
-    const countryData = {
+    const dataToSend = {
+      userId,
       name: country.properties.ADMIN,
       flagCode: country.properties.code,
     };
 
     setSearchedValue(country.properties.ADMIN);
     setShowItem(false);
-    // setCountryData({
-    //   name: country.properties.ADMIN,
-    //   flagCode: country.properties.code,
-    // });
-
-    connect(countryData.name, countryData);
-    onSelect(countryData.name);
-    // dispatch(
-    //   sendDataCountryToBackend({ userId, countryDto: countryData, token })
-    // );
-    console.log(countryData);
+    connect(dataToSend.name, dataToSend);
+    onSelect(dataToSend.name);
+    console.log('data to send:', dataToSend);
     setSearchedValue('');
   };
 
