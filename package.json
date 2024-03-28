@@ -34,6 +34,7 @@
     "socket.io-client": "^4.7.2",
     "sockjs": "^0.3.24",
     "sockjs-client": "^1.6.1",
+    "spec": "^1.0.1",
     "styled-components": "^6.1.0",
     "sweetalert": "^2.1.2",
     "vite": "^5.0.12",

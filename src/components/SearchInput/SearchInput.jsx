@@ -1,10 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
-// import { useDispatch, useSelector } from 'react-redux';
-// import { sendDataCountryToBackend } from '@/redux-store/AuthOperations/AuthOperations.js';
-// import {
-//   getUserId,
-//   getPersistedToken,
-// } from '@/redux-store/AuthOperations/selectors';
+import { useSelector } from 'react-redux';
+import { getUser } from '@/redux-store/selectors';
 
 import mapData from '@/data/countries.json';
 import { connect } from '../TestWebSocketChat/ws';
@@ -25,20 +21,7 @@ const SearchInput = ({ onSelect }) => {
   const [searchedValue, setSearchedValue] = useState('');
   const [showItem, setShowItem] = useState(false);
   const autoCompleteRef = useRef(null);
-  // const [countryData, setCountryData] = useState({
-  //   name: '',
-  //   flagCode: '',
-  // });
-  // const [userData, setUserData] = useState({
-  // name: '',
-  // userId: '',
-  // connected: false,
-  // message: ''
-  // });
-
-  // const dispatch = useDispatch();
-  // const userId = useSelector(getUserId);
-  // const token = useSelector(getPersistedToken);
+  const userId = useSelector(getUser)?.id;
 
   const filterCountries = mapData.features.filter(name =>
     name.properties.ADMIN.toLowerCase().includes(searchedValue.toLowerCase())
@@ -57,24 +40,17 @@ const SearchInput = ({ onSelect }) => {
   const handleClick = () => setShowItem(!showItem);
 
   const handleCountryClick = country => {
-    const countryData = {
+    const dataToSend = {
+      userId,
       name: country.properties.ADMIN,
       flagCode: country.properties.code,
     };
 
     setSearchedValue(country.properties.ADMIN);
     setShowItem(false);
-    // setCountryData({
-    //   name: country.properties.ADMIN,
-    //   flagCode: country.properties.code,
-    // });
-
-    connect(countryData.name, countryData);
-    onSelect(countryData.name);
-    // dispatch(
-    //   sendDataCountryToBackend({ userId, countryDto: countryData, token })
-    // );
-    console.log(countryData);
+    connect(dataToSend.name, dataToSend);
+    onSelect(dataToSend.name);
+    console.log('data to send:', dataToSend);
     setSearchedValue('');
   };
 
