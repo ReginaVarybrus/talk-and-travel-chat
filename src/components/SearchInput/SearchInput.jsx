@@ -1,9 +1,9 @@
 import { useState, useEffect, useRef } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { sendDataCountryToBackend } from '@/redux-store/AuthOperations/AuthOperations.js';
+import { useSelector } from 'react-redux';
 import { getUser } from '@/redux-store/selectors';
 
 import mapData from '@/data/countries.json';
+import { connect } from '../TestWebSocketChat/ws';
 import Icons from '../Icons/Icons';
 import {
   AutocompleteInputStyled,
@@ -16,11 +16,10 @@ import {
   ScrollBar,
 } from './SearchInputStyled';
 
-const SearchInput = () => {
+const SearchInput = ({ onSelect }) => {
   const [searchedValue, setSearchedValue] = useState('');
   const [showItem, setShowItem] = useState(false);
   const autoCompleteRef = useRef(null);
-  const dispatch = useDispatch();
   const userId = useSelector(getUser)?.id;
 
   const filterCountries = mapData.features.filter(name =>
@@ -37,14 +36,18 @@ const SearchInput = () => {
   };
 
   const handleCountryClick = country => {
-    const countryData = {
+    const dataToSend = {
+      userId,
       name: country.properties.ADMIN,
       flagCode: country.properties.code,
     };
 
     setSearchedValue(country.properties.ADMIN);
     setShowItem(false);
-    dispatch(sendDataCountryToBackend({ userId, countryDto: countryData }));
+    connect(dataToSend.name, dataToSend);
+    onSelect(dataToSend.name);
+    console.log('data to send:', dataToSend);
+    setSearchedValue('');
   };
 
   useEffect(() => {

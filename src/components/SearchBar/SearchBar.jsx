@@ -10,14 +10,14 @@ import DMsList from '../DMsList/DMsList';
 import RoomsList from '../RoomsList/RoomsList';
 import ChatMap from '../ChatMap/ChatMap';
 
-const SearchBar = ({ isOpen }) => {
+const SearchBar = ({ isOpen, onSelect }) => {
   const [openMap, setOpenMap] = useState(false);
   const handleOpen = () => setOpenMap(true);
   const handleClose = () => setOpenMap(false);
 
   return (
     <Wrapper>
-      <SearchInput />
+      <SearchInput onSelect={onSelect} />
       <ButtonMapOpen onClick={handleOpen}>Search by map</ButtonMapOpen>
       {isOpen === 'component2' ? <RoomsList /> : <DMsList />}
 
