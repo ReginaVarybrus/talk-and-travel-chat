@@ -34,6 +34,7 @@ const RegisterForm = () => {
     validateOnChange: false,
     onSubmit: (values, { resetForm }) => {
       dispatch(register(values));
+      navigate(routesPath.CHAT);
       resetForm();
     },
   });
