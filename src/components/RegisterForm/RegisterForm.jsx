@@ -1,6 +1,8 @@
 import { useFormik } from 'formik';
 import { register } from '@/redux-store/AuthOperations/AuthOperations';
 import { useDispatch } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
+import { routesPath } from '@/routes/routesConfig';
 import {
   Background,
   RegisterFormContainer,
@@ -24,6 +26,7 @@ Object.keys(formFields).forEach(key => {
 
 const RegisterForm = () => {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const formik = useFormik({
     initialValues,

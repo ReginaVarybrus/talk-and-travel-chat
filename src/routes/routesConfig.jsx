@@ -2,13 +2,15 @@ import { lazy } from 'react';
 import PrivateRoute from '@/routes/PrivateRoute';
 import { createBrowserRouter } from 'react-router-dom';
 
+const ROOT = import.meta.env.BASE_URL;
+
 export const routesPath = {
-  MAIN: '/',
-  LOGIN: '/login',
-  REGISTER: '/register',
-  APP: '/app',
-  CHAT: '/app/chat/',
-  ACCOUNT: '/app/account/',
+  MAIN: ROOT,
+  LOGIN: `/login`,
+  REGISTER: `/register`,
+  APP: `/app`,
+  CHAT: `/app/chat/`,
+  ACCOUNT: `/app/account/`,
 };
 
 const importComponent = {

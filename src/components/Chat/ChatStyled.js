@@ -117,7 +117,7 @@ export const ButtonSendMessage = styled.button`
   border-radius: 8px;
   cursor: pointer;
   border: ${props =>
-    props.isInputNotEmpty
+    props.$isInputNotEmpty
       ? '1px solid var(--color-brand-blue)'
       : '1px solid var(--color-grey-6)'};
 `;

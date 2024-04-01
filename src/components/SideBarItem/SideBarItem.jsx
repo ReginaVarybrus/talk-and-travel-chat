@@ -4,14 +4,14 @@ import Icons from '../Icons/Icons';
 
 const SideBarItem = ({
   onClick,
-  isActive,
+  isActive = false,
   alt,
   name,
   stroke,
   size,
   children,
 }) => (
-  <SideBarButton onClick={() => onClick()} isActive={isActive}>
+  <SideBarButton onClick={() => onClick()} $isActive={isActive}>
     <SideBarIcon alt={alt}>
       <Icons
         name={name}
