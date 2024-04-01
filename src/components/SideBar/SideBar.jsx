@@ -3,13 +3,13 @@ import { useDispatch, useSelector } from 'react-redux';
 import PropTypes from 'prop-types';
 
 import { routesPath } from '@/routes/routesConfig';
-import { getUserName } from '@/redux-store/AuthOperations/selectors';
+import { getUser } from '@/redux-store/selectors';
 import { logOut } from '@/redux-store/AuthOperations/AuthOperations';
 import { Wrapper, ProfileBox, LogOutBox, Frame } from './SideBarStyled';
 import SideBarItem from '../SideBarItem/SideBarItem';
 
 const SideBar = ({ onClickDms, onClickRooms, isActive }) => {
-  const userName = useSelector(getUserName);
+  const { userName } = useSelector(getUser) || {};
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const location = useLocation();

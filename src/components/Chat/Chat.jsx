@@ -1,9 +1,6 @@
 import { useState, useRef } from 'react';
 import { useSelector } from 'react-redux';
-import {
-  getCountryName,
-  getNumberOfParticipants,
-} from '@/redux-store/AuthOperations/selectors.js';
+import { getCountryName } from '@/redux-store/selectors.js';
 import {
   ChatStyled,
   Header,
@@ -20,11 +17,8 @@ import Icons from '../Icons/Icons';
 
 const Chat = () => {
   const countryName = useSelector(getCountryName);
-  const participants = useSelector(getNumberOfParticipants);
   const [value, setValue] = useState('');
-
   const textAreaRef = useRef(null);
-
   const isInputNotEmpty = Boolean(value?.trim().length);
 
   const handleChange = e => {
@@ -36,7 +30,6 @@ const Chat = () => {
       <Header>
         <HeaderContent>
           <h5>{countryName || 'Country Name'}</h5>
-          <p>{participants || 0} members</p>
         </HeaderContent>
       </Header>
       <MessageBlock />
@@ -54,7 +47,7 @@ const Chat = () => {
             ref={textAreaRef}
             maxLength="1000"
           />
-          <ButtonSendMessage isInputNotEmpty={isInputNotEmpty}>
+          <ButtonSendMessage $isInputNotEmpty={isInputNotEmpty}>
             <Icons name="send" fill="var(--color-grey-9)" size="24" />
           </ButtonSendMessage>
         </MessageBar>

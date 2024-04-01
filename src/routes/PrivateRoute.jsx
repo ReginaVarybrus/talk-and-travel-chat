@@ -1,9 +1,6 @@
 import { Navigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
-import {
-  getIsLoggedIn,
-  getUserRefresh,
-} from '@/redux-store/AuthOperations/selectors';
+import { getIsLoggedIn, getUserRefresh } from '@/redux-store/selectors';
 import { routesPath } from '@/routes/routesConfig';
 
 export default function PrivateRoute({
