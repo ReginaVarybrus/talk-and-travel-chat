@@ -90,6 +90,7 @@ export const LoginLink = styled.a`
   font-weight: 400;
   text-decoration: none;
   color: var(--color-brand-blue);
+  cursor: pointer;
 `;
 
 export const ValidationIcon = styled.div`
