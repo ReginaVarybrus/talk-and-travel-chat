@@ -39,10 +39,8 @@ const InputField = ({ props, formik }) => {
         onChange={formik.handleChange}
         value={formik.values[props.general]}
         placeholder={props.placeholder}
-        color={{
-          error: formik.errors[props.general],
-          touched: formik.touched[props.general],
-        }}
+        $isErrorColor={formik.errors[props.general]}
+        $isSuccessColor={formik.touched[props.general]}
       />
 
       {renderValidationMessage(props)}
