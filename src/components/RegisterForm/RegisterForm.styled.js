@@ -1,8 +1,5 @@
-import React from 'react';
 import styled from 'styled-components';
 import backgroundImage from '@/images/bg-png.png'
-import FBLogo from '@/images/icons/FBLogo.svg'
-import GoogleLogo from '@/images/icons/GoogleLogo.svg'
 import ErrorIcon from '@/images/icons/IconStroke.svg'
 
 export const Background = styled.section`
@@ -192,102 +189,9 @@ export const ButtonBlock = styled.div`
   }
 `;
 
-export const GoogleButton = styled.button`
-  width: 100%;
-  min-width: 90px;
-  height: 44px;
-  padding: 12px 24px;
-  border-radius: 8px;
-  border: 1px solid var(--color-brand-blue);
-  background-color: var(--white-color);
-  display: flex;
-  justify-content: center;
-  gap: 8px;
-  
-  span {
-    font-size: 14px;
-    font-weight: 700;
-    line-height: 20px;
-    letter-spacing: 0em;
-    text-align: center;
-  }
-  
-  &:hover {
-    background-color: var(--color-blue-1);
-  }
 
-  @media (min-width: 768px) {
-      background-color: var(--color-grey-4);
-    }
-`;
 
-const GoogleLogoSVG = styled.svg`
-  width: 20px;
-  height: 20px;
-  min-width: 20px;
-  min-height: 20px;
-  background-image: url(${GoogleLogo});
-  background-repeat: no-repeat;
-  background-size: contain;
-`;
 
-export const ButtonGoogle = () =>
-// eslint-disable-next-line arrow-body-style
-{
-  return (
-    React.createElement(GoogleButton, null,
-      React.createElement(GoogleLogoSVG, null,
-      ),
-      React.createElement("span", null, "Google"))
-  )
-};
 
-export const FacebookButton = styled.button`
-  width: 100%;
-  min-width: 90px;
-  height: 44px;
-  padding: 12px 24px;
-  border-radius: 8px;
-  border: 1px solid var(--color-brand-blue);
-  background-color: var(--white-color);
-  display: flex;
-  justify-content: center;
-  gap: 8px;
-  
-  span {
-    font-size: 14px;
-    font-weight: 700;
-    line-height: 20px;
-    letter-spacing: 0em;
-    text-align: center;
-  }
-  
-  &:hover {
-    background-color: var(--color-blue-1);
-  }
 
-  @media (min-width: 768px) {
-      background-color: var(--color-grey-4);
-    }
-`;
 
-const FacebookLogoSVG = styled.svg`
-  width: 20px;
-  height: 20px;
-  min-width: 20px;
-  min-height: 20px;
-  background-image: url(${FBLogo});
-  background-repeat: no-repeat;
-  background-size: contain;
-`;
-
-export const ButtonFacebook = () =>
-// eslint-disable-next-line arrow-body-style
-{
-  return (
-    React.createElement(FacebookButton, null,
-      React.createElement(FacebookLogoSVG, null,
-      ),
-      React.createElement("span", null, "Facebook"))
-  )
-};
