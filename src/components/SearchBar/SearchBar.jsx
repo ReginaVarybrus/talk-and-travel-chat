@@ -3,16 +3,13 @@ import Backdrop from '@mui/material/Backdrop';
 import Modal from '@mui/material/Modal';
 import Fade from '@mui/material/Fade';
 
-import {
-  SearchBarStyled,
-  ButtonMapOpen,
-  MapBox,
-} from '../RoomsSearchBar/SearchBarStyled.js';
+import { Outlet } from 'react-router-dom';
+import { SearchBarStyled, ButtonMapOpen, MapBox } from './SearchBarStyled';
 import SearchInput from '../SearchInput/SearchInput';
-import DMsList from '../DMsList/DMsList';
+// import RoomsList from '../RoomsList/RoomsList';
 import ChatMap from '../ChatMap/ChatMap';
 
-const DMsSearchBar = () => {
+const SearchBar = () => {
   const [openMap, setOpenMap] = useState(false);
   const handleOpen = () => setOpenMap(true);
   const handleClose = () => setOpenMap(false);
@@ -21,7 +18,7 @@ const DMsSearchBar = () => {
     <SearchBarStyled>
       <SearchInput />
       <ButtonMapOpen onClick={handleOpen}>Search by map</ButtonMapOpen>
-      <DMsList />
+      <Outlet />
 
       <Modal
         aria-labelledby="transition-modal-title"
@@ -46,4 +43,4 @@ const DMsSearchBar = () => {
   );
 };
 
-export default DMsSearchBar;
+export default SearchBar;

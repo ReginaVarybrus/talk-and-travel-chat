@@ -1,5 +1,6 @@
 import styled from 'styled-components';
 import SimpleBar from 'simplebar-react';
+import { device } from '@/constants/mediaQueries';
 
 export const AutocompleteInputStyled = styled.div`
   position: relative;
@@ -44,20 +45,26 @@ export const IconSearch = styled.div`
 export const ListWrapper = styled.div`
   position: absolute;
   top: 130px;
-  left: -17px;
-  width: 299.4px;
+  left: -16px;
+  min-width: 248px;
   height: 600px;
   margin-bottom: 48px;
   background: var(--white-color);
-  border-left: 1px solid var(--color-grey-6);
-  border-right: 1px solid var(--color-grey-6);
+  /*border-left: 1px solid var(--color-grey-6);*/
+  /*border-right: 1px solid var(--color-grey-6);*/
   z-index: 10;
+  @media ${device.tablet} {
+    min-width: 298px;
+  }
 `;
 
 export const ListItems = styled.ul`
   position: absolute;
-  width: 299.4px;
+  width: 248px;
   height: 562px;
+  @media ${device.tablet} {
+    min-width: 298px;
+  }
 `;
 
 export const Item = styled.li`

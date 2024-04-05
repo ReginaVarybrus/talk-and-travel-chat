@@ -1,17 +1,22 @@
 import styled from 'styled-components';
 import Box from '@mui/material/Box';
+import { device } from '@/constants/mediaQueries';
 
 export const SearchBarStyled = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: start;
   align-items: center;
-  width: 300px;
+  min-width: 250px;
   height: 100vh;
   padding: 48px 16px;
   box-sizing: border-box;
   border-right: 1px solid var(--color-grey-6);
+  border-left: 1px solid var(--color-grey-6);
   background: var(--white-color);
+  @media ${device.tablet} {
+    min-width: 300px;
+  }
 `;
 
 export const Text = styled.p`

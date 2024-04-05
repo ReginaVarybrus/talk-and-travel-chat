@@ -1,12 +1,12 @@
-import RoomsSearchBar from '@/components/RoomsSearchBar/RoomsSearchBar';
+import SearchBar from '@/components/SearchBar/SearchBar';
 import Chat from '@/components/Chat/Chat';
 import { ChatRouteStyled } from './ChatRouteStyled.js';
 
-const RoomsChatRoute = () => (
+const ChatRoute = () => (
   <ChatRouteStyled>
-    <RoomsSearchBar />
+    <SearchBar />
     <Chat />
   </ChatRouteStyled>
 );
 
-export default RoomsChatRoute;
+export default ChatRoute;

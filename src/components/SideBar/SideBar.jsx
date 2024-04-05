@@ -19,11 +19,11 @@ const SideBar = () => {
   };
 
   const handleRoomsOpen = () => {
-    navigate(routesPath.ROOMS_CHAT);
+    navigate(routesPath.ROOMS);
   };
 
   const handleDMsOpen = () => {
-    navigate(routesPath.DMS_CHAT);
+    navigate(routesPath.DMS);
   };
 
   const handleLogOut = (event, values) => {
@@ -47,7 +47,7 @@ const SideBar = () => {
       <Frame>
         <SideBarItem
           onClick={handleRoomsOpen}
-          isActive={currentPage === routesPath.ROOMS_CHAT}
+          isActive={currentPage === routesPath.ROOMS}
           alt="Rooms icon"
           name="rooms"
           size="24"
@@ -56,7 +56,7 @@ const SideBar = () => {
         </SideBarItem>
         <SideBarItem
           onClick={handleDMsOpen}
-          isActive={currentPage === routesPath.DMS_CHAT}
+          isActive={currentPage === routesPath.DMS}
           alt="DMs icon"
           name="dms"
           size="24"
