@@ -1,6 +1,7 @@
 import styled from 'styled-components';
 import SimpleBar from 'simplebar-react';
 import { device } from '@/constants/mediaQueries';
+import { FiSearch } from 'react-icons/fi';
 
 export const AutocompleteInputStyled = styled.div`
   position: relative;
@@ -31,30 +32,29 @@ export const AutocompleteInput = styled.input`
   }
 `;
 
-export const IconSearch = styled.div`
+export const IconSearch = styled(FiSearch)`
   position: absolute;
   top: 8.5px;
   left: 16px;
   width: 16px;
   height: 16px;
-  padding: 0;
-  border: none;
-  z-index: 1;
+  stroke: var(--color-grey-9);
 `;
 
 export const ListWrapper = styled.div`
   position: absolute;
   top: 130px;
   left: -16px;
-  min-width: 248px;
+  width: 248px;
   height: 600px;
   margin-bottom: 48px;
   background: var(--white-color);
-  /*border-left: 1px solid var(--color-grey-6);*/
-  /*border-right: 1px solid var(--color-grey-6);*/
   z-index: 10;
   @media ${device.tablet} {
-    min-width: 298px;
+    width: 248px;
+  }
+  @media ${device.laptop} {
+    width: 298px;
   }
 `;
 
@@ -63,7 +63,10 @@ export const ListItems = styled.ul`
   width: 248px;
   height: 562px;
   @media ${device.tablet} {
-    min-width: 298px;
+    width: 248px;
+  }
+  @media ${device.laptop} {
+    width: 298px;
   }
 `;
 
@@ -86,4 +89,11 @@ export const Flag = styled.img`
 
 export const ScrollBar = styled(SimpleBar)`
   max-height: 570px;
+`;
+
+export const Text = styled.p`
+  text-align: center;
+  font-size: 14px;
+  color: var(--color-grey-9);
+  margin: 0 20px;
 `;

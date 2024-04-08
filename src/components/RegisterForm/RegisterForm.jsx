@@ -69,7 +69,7 @@ const RegisterForm = () => {
     validateOnChange: false,
     onSubmit: (values, { resetForm }) => {
       dispatch(register(values));
-      navigate(routesPath.CHAT);
+      navigate(routesPath.ROOMS);
 
       localStorage.setItem(
         'verify',

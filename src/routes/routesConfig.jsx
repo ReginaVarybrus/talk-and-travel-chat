@@ -9,7 +9,7 @@ export const routesPath = {
   LOGIN: `/login`,
   REGISTER: `/register`,
   APP: `/app`,
-  CHAT: `/app/chat`,
+  CHAT: `/app/chat/`,
   ROOMS: `/app/chat/rooms-chat/`,
   DMS: `/app/chat/dms-chat/`,
   ACCOUNT: `/app/account/`,

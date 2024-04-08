@@ -34,54 +34,9 @@ export const GlobalStyles = createGlobalStyle`
   --color-blue-10: #11305e;
 }
 
-@font-face {
-  font-family: "Inter";
-  font-style: normal;
-  font-weight: 500;
-  src: local("Inter Medium"),
-        local("Inter-Medium"),
-        url("fonts/Inter-Medium.ttf") format("ttf");
-  font-display: swap;
-}
-@font-face {
-  font-family: "Inter";
-  font-style: normal;
-  font-weight: 600;
-  src: local("Inter SemiBold"),
-        local("Inter-SemiBold"),
-        url("fonts/Inter-SemiBold.ttf") format("ttf");
-  font-display: swap;
-}
-@font-face {
-  font-family: "Inter";
-  font-style: normal;
-  font-weight: 700;
-  src: local("Inter Bold"),
-        local("Inter-Bold"),
-        url("fonts/Inter-Bold.ttf") format("ttf");
-  font-display: swap;
-}
-
-@font-face {
-  font-family: "Coolvetica";
-    font-style: italic;
-  font-weight: 400;
-  src: local("Coolvetica Regular"),
-        local("Coolvetica-Regular"),
-        url("fonts/Coolvetica-Regular.ttf") format("ttf");
-  font-display: swap;
-} 
-
 body {
+  font-family: "Roboto", sans-serif;
   margin: 0;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  background-color: var(--outlet-background-color);
-}
-
-code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-    monospace;
 }
 
 ul {
@@ -115,16 +70,12 @@ h6 {
   color: var(--color-dark);
 }
 
+p {
+  font-size: 16px;
+  font-weight: 400;
+}
+
 svg{
-  margin: 0;
-  padding: 0;
-}
-ul{
-  list-style: none;
-  margin: 0;
-  padding: 0;
-}
-p{
   margin: 0;
   padding: 0;
 }

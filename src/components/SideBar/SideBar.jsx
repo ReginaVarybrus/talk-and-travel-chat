@@ -4,8 +4,17 @@ import { useDispatch, useSelector } from 'react-redux';
 import { routesPath } from '@/routes/routesConfig';
 import { getUserName } from '@/redux-store/AuthOperations/selectors';
 import { logOut } from '@/redux-store/AuthOperations/AuthOperations';
-import { Wrapper, ProfileBox, LogOutBox, Frame } from './SideBarStyled';
-import SideBarItem from '../SideBarItem/SideBarItem';
+import {
+  SideBarStyled,
+  ButtonsFrame,
+  SideBarButton,
+  ChatsButtonsFrame,
+  Text,
+  UserIcon,
+  RoomsIcon,
+  DMsIcon,
+  LogoutIcon,
+} from './SideBarStyled';
 
 const SideBar = () => {
   const userName = useSelector(getUserName);
@@ -32,49 +41,37 @@ const SideBar = () => {
   };
 
   return (
-    <Wrapper>
-      <ProfileBox>
-        <SideBarItem
+    <SideBarStyled>
+      <ButtonsFrame>
+        <SideBarButton
           onClick={handleProfileOpen}
-          isActive={currentPage === routesPath.ACCOUNT}
-          alt="Photo icon"
-          name="photo-icon"
-          size="24"
+          $isActive={currentPage === routesPath.ACCOUNT}
         >
-          {userName}
-        </SideBarItem>
-      </ProfileBox>
-      <Frame>
-        <SideBarItem
-          onClick={handleRoomsOpen}
-          isActive={currentPage === routesPath.ROOMS}
-          alt="Rooms icon"
-          name="rooms"
-          size="24"
-        >
-          Rooms
-        </SideBarItem>
-        <SideBarItem
-          onClick={handleDMsOpen}
-          isActive={currentPage === routesPath.DMS}
-          alt="DMs icon"
-          name="dms"
-          size="24"
-        >
-          DMs
-        </SideBarItem>
-      </Frame>
-      <LogOutBox>
-        <SideBarItem
-          onClick={handleLogOut}
-          alt="Logout icon"
-          name="logout"
-          size="24"
-        >
-          LogOut
-        </SideBarItem>
-      </LogOutBox>
-    </Wrapper>
+          <UserIcon />
+          <Text>{userName}</Text>
+        </SideBarButton>
+        <ChatsButtonsFrame>
+          <SideBarButton
+            onClick={handleRoomsOpen}
+            $isActive={currentPage === routesPath.ROOMS}
+          >
+            <RoomsIcon />
+            <Text>Rooms</Text>
+          </SideBarButton>
+          <SideBarButton
+            onClick={handleDMsOpen}
+            $isActive={currentPage === routesPath.DMS}
+          >
+            <DMsIcon />
+            <Text>DMs</Text>
+          </SideBarButton>
+        </ChatsButtonsFrame>
+        <SideBarButton onClick={handleLogOut}>
+          <LogoutIcon />
+          <Text>LogOut</Text>
+        </SideBarButton>
+      </ButtonsFrame>
+    </SideBarStyled>
   );
 };
 

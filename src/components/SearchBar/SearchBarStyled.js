@@ -7,7 +7,7 @@ export const SearchBarStyled = styled.div`
   flex-direction: column;
   justify-content: start;
   align-items: center;
-  min-width: 250px;
+  width: 250px;
   height: 100vh;
   padding: 48px 16px;
   box-sizing: border-box;
@@ -15,6 +15,9 @@ export const SearchBarStyled = styled.div`
   border-left: 1px solid var(--color-grey-6);
   background: var(--white-color);
   @media ${device.tablet} {
+    min-width: 250px;
+  }
+  @media ${device.laptop} {
     min-width: 300px;
   }
 `;

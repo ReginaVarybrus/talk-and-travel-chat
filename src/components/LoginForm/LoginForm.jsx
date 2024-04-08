@@ -42,7 +42,7 @@ const LoginForm = () => {
     validateOnChange: false,
     onSubmit: (values, { resetForm }) => {
       dispatch(logIn(values));
-      navigate(routesPath.CHAT);
+      navigate(routesPath.ROOMS);
       resetForm();
     },
   });

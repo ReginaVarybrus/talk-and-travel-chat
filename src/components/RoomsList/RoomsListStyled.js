@@ -1,12 +1,13 @@
 import styled from 'styled-components';
 import SimpleBar from 'simplebar-react';
+import { device } from '@/constants/mediaQueries';
 
-export const RoomsListStyled = styled.div`
+export const ListStyled = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: start;
   align-items: center;
-  width: 300px;
+  width: 100%;
   height: 100vh;
 `;
 
@@ -14,13 +15,18 @@ export const Text = styled.p`
   text-align: center;
   font-size: 14px;
   color: var(--color-grey-9);
-  margin: 0 16px;
 `;
 
 export const ListItems = styled.ul`
   position: absolute;
-  width: 299.4px;
+  width: 248px;
   height: 562px;
+  @media ${device.tablet} {
+    min-width: 248px;
+  }
+  @media ${device.laptop} {
+    min-width: 298px;
+  }
 `;
 
 export const Item = styled.li`

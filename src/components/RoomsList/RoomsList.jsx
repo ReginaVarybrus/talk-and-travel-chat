@@ -1,5 +1,5 @@
 import {
-  RoomsListStyled,
+  ListStyled,
   Text,
   Item,
   ListItems,
@@ -12,7 +12,7 @@ const RoomsList = () => {
   const handleClick = () => {};
 
   return (
-    <RoomsListStyled>
+    <ListStyled>
       {rooms?.length ? (
         <ListItems>
           <ScrollBar>
@@ -29,7 +29,7 @@ const RoomsList = () => {
           <br /> Find chat of a country and it will be shown here
         </Text>
       )}
-    </RoomsListStyled>
+    </ListStyled>
   );
 };
 

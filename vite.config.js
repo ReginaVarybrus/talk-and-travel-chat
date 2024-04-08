@@ -24,6 +24,14 @@ export default defineConfig({
     }),
     viteTsconfigPaths(),
   ],
+  optimizeDeps: {
+    include: ['linked-dep'],
+  },
+  build: {
+    commonjsOptions: {
+      include: [/linked-dep/, /node_modules/],
+    },
+  },
   server: {
     // this ensures that the browser opens upon server start
     open: true,

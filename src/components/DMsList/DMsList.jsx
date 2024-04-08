@@ -1,27 +1,20 @@
 import SimpleBar from 'simplebar-react';
-import {
-  Wrapper,
-  Text,
-  ListItems,
-  Item,
-  Avatar,
-  ChatName,
-  MessageDay,
-} from './DMsListStyled';
+import { Item, Avatar, ChatName, MessageDay } from './DMsListStyled';
+import { ListStyled, Text, ListItems } from '../RoomsList/RoomsListStyled.js';
 import 'simplebar-react/dist/simplebar.min.css';
 
 const DMsList = () => {
-  const chats = [];
+  const chats = ['Anya', 'Vasya'];
 
   return (
-    <Wrapper>
+    <ListStyled>
       {chats?.length ? (
         <ListItems>
           <SimpleBar style={{ maxHeight: 570 }}>
             {chats.map(name => (
               <Item key={name}>
                 <Avatar>
-                  <img src="/images/Rectangle 2.jpg" alt="avatar" />
+                  <img src="../../../public/img/Avatar.png" alt="avatar" />
                 </Avatar>
                 <ChatName>
                   <h6>{name}</h6>
@@ -40,7 +33,7 @@ const DMsList = () => {
           <br /> Start a conversation and it will be shown here
         </Text>
       )}
-    </Wrapper>
+    </ListStyled>
   );
 };
 
