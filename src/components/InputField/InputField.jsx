@@ -1,5 +1,5 @@
 import {
-  ItemWrapp,
+  InputFieldStyled,
   StyledLabel,
   StyledInput,
   Error,
@@ -8,29 +8,23 @@ import {
 } from '@/components/InputField/InputField.styled';
 
 const InputField = ({ props, formik }) => {
-  const renderValidationMessage = elem => {
+  const renderValidationMessage = () => {
     const label =
-      elem.general === 'password'
-        ? 'Your password must be 8+ characters, with at least 1 number and 1 special symbol'
+      props.general === 'password'
+        ? 'your password must be 8+ characters, with at least 1 number and 1 special symbol'
         : '';
     if (formik.errors[props.general]) {
       return <Error id={props.general}>{formik.errors[props.general]}</Error>;
     }
     if (!formik.errors[props.general] && formik.touched[props.general]) {
-      return <Success id={props.general}>Field is not empty</Success>;
+      return <Success id={props.general}>field is not empty</Success>;
     }
     return <PasswordReapetLable>{label}</PasswordReapetLable>;
   };
 
   return (
-    <ItemWrapp>
-      <StyledLabel
-        color={{
-          error: formik.errors[props.general],
-          touched: formik.touched[props.general],
-        }}
-        htmlFor="email"
-      />
+    <InputFieldStyled>
+      <StyledLabel htmlFor={props.general} />
       <StyledInput
         autoComplete="off"
         id={props.general}
@@ -43,8 +37,8 @@ const InputField = ({ props, formik }) => {
         $isSuccessColor={formik.touched[props.general]}
       />
 
-      {renderValidationMessage(props)}
-    </ItemWrapp>
+      {renderValidationMessage()}
+    </InputFieldStyled>
   );
 };
 
