@@ -1,6 +1,13 @@
 import styled from 'styled-components';
+import { device } from '@/constants/mediaQueries';
 import { LuLogOut, LuMessagesSquare } from 'react-icons/lu';
 import { TbUser, TbUsers } from 'react-icons/tb';
+
+const iconProperties = (width = '24px', height = '48px') => `
+  width: ${width};
+  height: ${height};
+  stroke: var(--color-grey-9);
+  `;
 
 export const SideBarStyled = styled.div`
   display: flex;
@@ -16,7 +23,6 @@ export const ButtonsFrame = styled.div`
   justify-content: space-between;
   height: 100%;
   margin: 48px 0;
-  margin: 48px 0;
 `;
 
 export const Text = styled.p`
@@ -26,27 +32,25 @@ export const Text = styled.p`
 `;
 
 export const UserIcon = styled(TbUser)`
-  width: 24px;
-  height: 48px;
-  stroke: var(--color-grey-9);
+  ${iconProperties()};
 `;
 
 export const RoomsIcon = styled(TbUsers)`
-  width: 24px;
-  height: 48px;
-  stroke: var(--color-grey-9);
+  ${iconProperties('36px', '24px')};
+  @media ${device.tablet} {
+    ${iconProperties()};
+  }
 `;
 
 export const DMsIcon = styled(LuMessagesSquare)`
-  width: 24px;
-  height: 48px;
-  stroke: var(--color-grey-9);
+  ${iconProperties('36px', '24px')};
+  @media ${device.tablet} {
+    ${iconProperties()};
+  }
 `;
 
 export const LogoutIcon = styled(LuLogOut)`
-  width: 24px;
-  height: 48px;
-  stroke: var(--color-grey-9);
+  ${iconProperties()};
 `;
 
 export const SideBarButton = styled.div`
@@ -57,13 +61,14 @@ export const SideBarButton = styled.div`
   width: 56px;
   height: 76px;
   cursor: pointer;
+  color: var(--color-blue-3);
 
   &:hover {
     ${Text} {
-      color: var(--color-blue-3);
+      color: currentColor;
     }
     ${DMsIcon}, ${RoomsIcon}, ${UserIcon}, ${LogoutIcon} {
-      stroke: var(--color-blue-3);
+      stroke: currentColor;
     }
   }
 

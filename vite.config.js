@@ -24,12 +24,9 @@ export default defineConfig({
     }),
     viteTsconfigPaths(),
   ],
-  optimizeDeps: {
-    include: ['linked-dep'],
-  },
   build: {
     commonjsOptions: {
-      include: [/linked-dep/, /node_modules/],
+      include: [/node_modules/],
     },
   },
   server: {

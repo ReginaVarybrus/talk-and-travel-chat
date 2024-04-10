@@ -1,4 +1,5 @@
 import { createGlobalStyle } from 'styled-components';
+import { device } from '@/constants/mediaQueries';
 
 export const GlobalStyles = createGlobalStyle`
 /* !!!Add styles after layout approval!!! */
@@ -71,8 +72,12 @@ h6 {
 }
 
 p {
-  font-size: 16px;
+  font-size: 14px;
   font-weight: 400;
+  @media ${device.tablet} {
+    font-size: 16px;
+  }
+  
 }
 
 svg{
