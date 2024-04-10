@@ -2,8 +2,8 @@ import {
   InputFieldStyled,
   StyledLabel,
   StyledInput,
-  Error,
-  Success,
+  ErrorStyled,
+  SuccessStyled,
   PasswordReapetLable,
 } from '@/components/InputField/InputField.styled';
 
@@ -14,10 +14,16 @@ const InputField = ({ props, formik }) => {
         ? 'your password must be 8+ characters, with at least 1 number and 1 special symbol'
         : '';
     if (formik.errors[props.general]) {
-      return <Error id={props.general}>{formik.errors[props.general]}</Error>;
+      return (
+        <ErrorStyled id={props.general}>
+          {formik.errors[props.general]}
+        </ErrorStyled>
+      );
     }
     if (!formik.errors[props.general] && formik.touched[props.general]) {
-      return <Success id={props.general}>field is not empty</Success>;
+      return (
+        <SuccessStyled id={props.general}>field is not empty</SuccessStyled>
+      );
     }
     return <PasswordReapetLable>{label}</PasswordReapetLable>;
   };

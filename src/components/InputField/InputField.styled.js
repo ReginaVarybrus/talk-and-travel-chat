@@ -35,10 +35,6 @@ export const StyledInput = styled.input`
 
   &::placeholder {
     color: #49454f;
-    position: absolute;
-    left: 16px;
-    top: 50%;
-    transform: translateY(-50%)
   }
   padding-left: 16px;
 
@@ -47,12 +43,12 @@ export const StyledInput = styled.input`
   }
 `;
 
-export const Error = styled.p`
+export const ErrorStyled = styled.p`
   ${generalNotificationStyles}
   color: var(--color-error);
 `;
 
-export const Success = styled.p`
+export const SuccessStyled = styled.p`
   ${generalNotificationStyles}
   color: var(--color-success);
 `;
