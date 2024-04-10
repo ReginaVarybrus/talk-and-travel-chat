@@ -7,7 +7,7 @@ const iconProperties = (width = '24px', height = '48px') => `
   width: ${width};
   height: ${height};
   stroke: var(--color-grey-9);
-  `;
+`;
 
 export const SideBarStyled = styled.div`
   display: flex;
@@ -61,25 +61,25 @@ export const SideBarButton = styled.div`
   width: 56px;
   height: 76px;
   cursor: pointer;
-  color: var(--color-blue-3);
-
-  &:hover {
-    ${Text} {
-      color: currentColor;
-    }
-    ${DMsIcon}, ${RoomsIcon}, ${UserIcon}, ${LogoutIcon} {
-      stroke: currentColor;
-    }
-  }
+  color: ${({ $isActive }) =>
+    $isActive ? 'var(--color-brand-blue)' : 'var(--color-grey-9)'};
+  transition: color 0.3s;
 
   ${Text} {
-    color: ${({ $isActive }) =>
-      $isActive ? 'var(--color-brand-blue)' : 'var(--color-grey-9)'};
-    font-weight: ${({ $isActive }) => ($isActive ? '700' : '400')};
+    color: currentColor;
+    font-weight: ${({ $isActive }) => $isActive && 'bolder'};
   }
-  ${DMsIcon}, ${RoomsIcon}, ${UserIcon} {
-    stroke: ${({ $isActive }) =>
-      $isActive ? 'var(--color-brand-blue)' : 'var(--color-grey-9)'};
+
+  svg {
+    stroke: currentColor;
+  }
+
+  &:hover {
+    color: var(--color-blue-3);
+
+    svg {
+      stroke: currentColor;
+    }
   }
 `;
 
