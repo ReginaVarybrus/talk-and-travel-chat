@@ -9,22 +9,21 @@ import {
   schema,
 } from '@/components/LoginForm/LoginValidationSchema';
 import InputField from '@/components/InputField/InputField';
-import {
-  Background,
-  LoginFormContainer,
-  LoginTitle,
-  LoginText,
-  SignUpLink,
-  LoginFormStyles,
-  LogInBtn,
-  Separator,
-} from '@/components/LoginForm/LoginFormStyled';
 
 import {
   ButtonBlock,
-  ButtonGoogle,
-  ButtonFacebook,
+  RegisterFormBackground as LoginFormBackground,
+  RegisterFormContainer as LoginFormContainer,
+  SignInFormStyles as LoginFormStyles,
+  SignInTitle as LoginTitle,
+  SignInText as LoginText,
+  LoginLink as SignUpLink,
+  SignUpBtn as LogInBtn,
+  Separator,
 } from '@/components/RegisterForm/RegisterForm.styled';
+
+import ButtonFacebook from '@/components/Buttons/FaceBook/FaceBookButton';
+import ButtonGoogle from '@/components/Buttons/GoogleButton/GoogleButton';
 
 const initialValues = {};
 Object.keys(formFields).forEach(key => {
@@ -51,7 +50,7 @@ const LoginForm = () => {
   });
 
   return (
-    <Background>
+    <LoginFormBackground>
       <LoginFormContainer>
         <LoginFormStyles onSubmit={formik.handleSubmit} autoComplete="off">
           <LoginTitle>Welcome back</LoginTitle>
@@ -75,7 +74,7 @@ const LoginForm = () => {
           </ButtonBlock>
         </LoginFormStyles>
       </LoginFormContainer>
-    </Background>
+    </LoginFormBackground>
   );
 };
 

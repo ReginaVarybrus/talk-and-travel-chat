@@ -4,7 +4,7 @@ import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { routesPath } from '@/routes/routesConfig';
 import {
-  Background,
+  RegisterFormBackground,
   RegisterFormContainer,
   SignInFormStyles,
   SignInTitle,
@@ -44,7 +44,7 @@ const RegisterForm = () => {
   });
 
   return (
-    <Background>
+    <RegisterFormBackground>
       <RegisterFormContainer>
         <SignInFormStyles onSubmit={formik.handleSubmit} autoComplete="off">
           <SignInTitle>Create account</SignInTitle>
@@ -68,7 +68,7 @@ const RegisterForm = () => {
           </ButtonBlock>
         </SignInFormStyles>
       </RegisterFormContainer>
-    </Background>
+    </RegisterFormBackground>
   );
 };
 

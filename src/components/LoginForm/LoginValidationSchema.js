@@ -12,7 +12,7 @@ export const schema = yup.object().shape({
             'Invalid email address'
         )
         .required('The field is empty'),
-    enter_password: yup.string().min(8).max(30).required('The field is empty'),
+    password: yup.string().min(8).max(30).required('The field is empty'),
 });
 
 export const formFields = {
@@ -22,7 +22,7 @@ export const formFields = {
         placeholder: 'E-mail',
     },
     password: {
-        general: 'enter_password',
+        general: 'password',
         type: 'password',
         placeholder: 'Password',
     },
