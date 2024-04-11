@@ -13,9 +13,9 @@ import {
   SignUpBtn,
   Separator,
   ButtonBlock,
-  ButtonGoogle,
-  ButtonFacebook,
 } from '@/components/RegisterForm/RegisterForm.styled';
+import ButtonFacebook from '@/components/Buttons/FaceBook/FaceBookButton';
+import ButtonGoogle from '@/components/Buttons/GoogleButton/GoogleButton';
 import InputField from '@/components/InputField/InputField';
 import { formFields, schema } from '@/components/RegisterForm/ValidationSchema';
 

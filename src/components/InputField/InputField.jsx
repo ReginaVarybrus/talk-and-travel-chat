@@ -1,36 +1,36 @@
 import {
-  ItemWrapp,
+  InputFieldStyled,
   StyledLabel,
   StyledInput,
-  Error,
-  Success,
+  ErrorStyled,
+  SuccessStyled,
   PasswordReapetLable,
 } from '@/components/InputField/InputField.styled';
 
 const InputField = ({ props, formik }) => {
-  const renderValidationMessage = elem => {
+  const renderValidationMessage = () => {
     const label =
-      elem.general === 'password'
-        ? 'Your password must be 8+ characters, with at least 1 number and 1 special symbol'
+      props.general === 'password'
+        ? 'your password must be 8+ characters, with at least 1 number and 1 special symbol'
         : '';
     if (formik.errors[props.general]) {
-      return <Error id={props.general}>{formik.errors[props.general]}</Error>;
+      return (
+        <ErrorStyled id={props.general}>
+          {formik.errors[props.general]}
+        </ErrorStyled>
+      );
     }
     if (!formik.errors[props.general] && formik.touched[props.general]) {
-      return <Success id={props.general}>Field is not empty</Success>;
+      return (
+        <SuccessStyled id={props.general}>field is not empty</SuccessStyled>
+      );
     }
     return <PasswordReapetLable>{label}</PasswordReapetLable>;
   };
 
   return (
-    <ItemWrapp>
-      <StyledLabel
-        color={{
-          error: formik.errors[props.general],
-          touched: formik.touched[props.general],
-        }}
-        htmlFor="email"
-      />
+    <InputFieldStyled>
+      <StyledLabel htmlFor={props.general} />
       <StyledInput
         autoComplete="off"
         id={props.general}
@@ -39,14 +39,12 @@ const InputField = ({ props, formik }) => {
         onChange={formik.handleChange}
         value={formik.values[props.general]}
         placeholder={props.placeholder}
-        color={{
-          error: formik.errors[props.general],
-          touched: formik.touched[props.general],
-        }}
+        $isErrorColor={formik.errors[props.general]}
+        $isSuccessColor={formik.touched[props.general]}
       />
 
-      {renderValidationMessage(props)}
-    </ItemWrapp>
+      {renderValidationMessage()}
+    </InputFieldStyled>
   );
 };
 
