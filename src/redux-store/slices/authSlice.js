@@ -3,36 +3,26 @@ import {
   register,
   logIn,
   logOut,
-  fetchCurrentUser,
-  updateUser,
   sendDataCountryToBackend,
-} from '../AuthOperations/AuthOperations';
+} from '../AuthOperations/AuthOperations.js';
 
 const initialState = {
   token: null,
-  userDto: {
-    userName: '',
-    userEmail: '',
-    avatar: '',
-  },
-  name: '',
-  flagCode: '',
-  userId: '',
-  countryRooms: [],
-
   isLoggedIn: false,
   isRefresh: true,
   error: null,
+  flagCode: null,
 };
 
-const handlePending = state => {
-  state.isRefresh = true;
-};
+const handlePending = () => ({
+  isRefresh: true,
+});
 
-const handleRejected = (state, action) => {
-  state.isRefresh = false;
-  state.error = action.payload;
-};
+const handleRejected = (state, action) => ({
+  ...state,
+  isRefresh: false,
+  error: action.payload,
+});
 
 export const authSlice = createSlice({
   name: 'auth',
@@ -43,57 +33,32 @@ export const authSlice = createSlice({
       .addCase(register.rejected, handleRejected)
       .addCase(register.fulfilled, (state, action) => ({
         ...state,
-        userDto: action.payload.userDto,
         token: action.payload.token,
         isLoggedIn: true,
       }))
 
       .addCase(logIn.pending, handlePending)
       .addCase(logIn.rejected, handleRejected)
-      .addCase(logIn.fulfilled, (state, action) => {
-        console.log('login action', action);
-        state.userDto = action.payload.userDto;
-        state.token = action.payload.token;
-
-        state.isLoggedIn = true;
-        state.error = null;
-      })
+      .addCase(logIn.fulfilled, (state, action) => ({
+        ...state,
+        token: action.payload.token,
+        isLoggedIn: true,
+        error: null,
+      }))
 
       .addCase(logOut.pending, handlePending)
       .addCase(logOut.rejected, handleRejected)
-      .addCase(logOut.fulfilled, state => {
-        state.userDto = { userName: null, userEmail: null };
-        state.token = null;
-        state.isLoggedIn = false;
-        state.isRefresh = false;
-      })
-
-      .addCase(fetchCurrentUser.pending, handlePending)
-      .addCase(fetchCurrentUser.rejected, handleRejected)
-      .addCase(fetchCurrentUser.fulfilled, (state, action) => {
-        state.userDto = action.payload.userDto;
-        state.isLoggedIn = true;
-        state.isRefresh = false;
-      })
-
-      .addCase(updateUser.fulfilled, (state, action) => {
-        state.userDto = { ...state.userDto, ...action.payload };
-      })
+      .addCase(logOut.fulfilled, () => null)
 
       .addCase(sendDataCountryToBackend.pending, handlePending)
       .addCase(sendDataCountryToBackend.rejected, (state, action) => {
-        console.error('failed with error:', action.error.message);
-        console.log('action:', action);
-        console.log('action.payload:', action.payload);
-        console.log('action.meta.arg:', action.meta.arg);
         handleRejected(state, action);
       })
-      .addCase(sendDataCountryToBackend.fulfilled, (state, action) => {
-        console.log('Fulfilled Action:', action);
-        state.name = action.payload.name;
-        state.flagCode = action.payload.flagCode;
-        state.isLoggedIn = true;
-      }),
+      .addCase(sendDataCountryToBackend.fulfilled, (state, action) => ({
+        ...state,
+        name: action.payload.name,
+        flagCode: action.payload.flagCode,
+      })),
 });
 
 export default authSlice.reducer;

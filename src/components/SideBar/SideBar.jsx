@@ -2,7 +2,7 @@ import { useNavigate, useLocation } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { routesPath } from '@/routes/routesConfig';
-import { getUserName } from '@/redux-store/AuthOperations/selectors';
+import { getUser } from '@/redux-store/selectors';
 import { logOut } from '@/redux-store/AuthOperations/AuthOperations';
 import {
   SideBarStyled,
@@ -17,7 +17,7 @@ import {
 } from './SideBarStyled';
 
 const SideBar = () => {
-  const userName = useSelector(getUserName);
+  const { userName } = useSelector(getUser) || {};
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const location = useLocation();
