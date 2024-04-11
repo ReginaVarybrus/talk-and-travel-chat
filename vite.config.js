@@ -24,11 +24,6 @@ export default defineConfig({
     }),
     viteTsconfigPaths(),
   ],
-  build: {
-    commonjsOptions: {
-      include: [/node_modules/],
-    },
-  },
   server: {
     // this ensures that the browser opens upon server start
     open: true,

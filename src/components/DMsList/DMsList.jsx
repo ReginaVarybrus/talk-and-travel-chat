@@ -2,6 +2,7 @@ import SimpleBar from 'simplebar-react';
 import { Item, Avatar, ChatName, MessageDay } from './DMsListStyled';
 import { ListStyled, Text, ListItems } from '../RoomsList/RoomsListStyled.js';
 import 'simplebar-react/dist/simplebar.min.css';
+import avatarImage from '../../../public/img/Avatar.png';
 
 const DMsList = () => {
   const chats = ['Anya', 'Vasya'];
@@ -14,7 +15,7 @@ const DMsList = () => {
             {chats.map(name => (
               <Item key={name}>
                 <Avatar>
-                  <img src="../../../public/img/Avatar.png" alt="avatar" />
+                  <img src={avatarImage} alt="avatar" />
                 </Avatar>
                 <ChatName>
                   <h6>{name}</h6>

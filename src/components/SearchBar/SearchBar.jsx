@@ -6,7 +6,6 @@ import Fade from '@mui/material/Fade';
 import { Outlet } from 'react-router-dom';
 import { SearchBarStyled, ButtonMapOpen, MapBox } from './SearchBarStyled';
 import SearchInput from '../SearchInput/SearchInput';
-// import RoomsList from '../RoomsList/RoomsList';
 import ChatMap from '../ChatMap/ChatMap';
 
 const SearchBar = () => {

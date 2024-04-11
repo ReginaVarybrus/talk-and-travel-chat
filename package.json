@@ -14,7 +14,6 @@
     "@vitejs/plugin-react": "^4.2.1",
     "axios": "^1.5.1",
     "babel-plugin-styled-components": "^2.1.4",
-    "esbuild": "^0.20.1",
     "formik": "^2.4.5",
     "leaflet": "^1.9.4",
     "prop-types": "^15.8.1",
