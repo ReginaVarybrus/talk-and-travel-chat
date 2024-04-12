@@ -10,15 +10,19 @@ export const routesPath = {
   REGISTER: `/register`,
   APP: `/app`,
   CHAT: `/app/chat/`,
+  ROOMS: `/app/chat/rooms-chat/`,
+  DMS: `/app/chat/dms-chat/`,
   ACCOUNT: `/app/account/`,
 };
 
 const importComponent = {
   MAIN: lazy(() => import('@/routes/MainRoute/MainRoute')),
   LOGIN: lazy(() => import('@/routes/LoginRoute/LoginRoute')),
-  LAYOUT: lazy(() => import('@/components/Layout/Layout')),
   REGISTER: lazy(() => import('@/routes/RegisterRoute/RegisterRoute')),
+  LAYOUT: lazy(() => import('@/components/Layout/Layout')),
   CHAT: lazy(() => import('@/routes/ChatRoute/ChatRoute')),
+  ROOMS: lazy(() => import('@/components/RoomsList/RoomsList')),
+  DMS: lazy(() => import('@/components/DMsList/DMsList')),
   ACCOUNT: lazy(() => import('@/routes/AccountRoute/AccountRoute')),
   ERROR_COMPONENT: lazy(() => import('@/routes/Page404/Page404')),
 };
@@ -54,6 +58,26 @@ export const router = createBrowserRouter([
             redirectTo={routesPath.LOGIN}
           />
         ),
+        children: [
+          {
+            path: routesPath.ROOMS,
+            element: (
+              <PrivateRoute
+                component={importComponent.ROOMS}
+                redirectTo={routesPath.LOGIN}
+              />
+            ),
+          },
+          {
+            path: routesPath.DMS,
+            element: (
+              <PrivateRoute
+                component={importComponent.DMS}
+                redirectTo={routesPath.LOGIN}
+              />
+            ),
+          },
+        ],
       },
       {
         path: routesPath.ACCOUNT,
