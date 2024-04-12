@@ -22,7 +22,8 @@ export const StyledLabel = styled.label`
 `;
 
 export const StyledInput = styled.input`
-  width: calc(100% - 16px);
+  box-sizing: border-box;
+  width: 100%;
   font-size: 14px;
   height: 56px;
   border-radius: 8px;

@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 import backgroundImage from '@/images/bg-png.png'
 
-export const Background = styled.section`
+export const RegisterFormBackground = styled.section`
   box-sizing: border-box;
   font-family: Roboto, sans-serif;
   display: flex;
