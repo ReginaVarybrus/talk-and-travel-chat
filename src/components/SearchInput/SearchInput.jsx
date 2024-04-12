@@ -4,7 +4,6 @@ import { sendDataCountryToBackend } from '@/redux-store/AuthOperations/AuthOpera
 import { getUser } from '@/redux-store/selectors';
 
 import mapData from '@/data/countries.json';
-import Icons from '../Icons/Icons';
 import {
   AutocompleteInputStyled,
   AutocompleteInput,
@@ -14,6 +13,7 @@ import {
   Item,
   Flag,
   ScrollBar,
+  Text,
 } from './SearchInputStyled';
 
 const SearchInput = () => {
@@ -28,13 +28,16 @@ const SearchInput = () => {
   );
 
   const handleChange = event => {
-    setSearchedValue(event.target.value);
+    const { value } = event.target;
+    setSearchedValue(value);
     if (event.target.value !== '') {
       event.target.style.border = '1px solid var(--color-blue-4)';
     } else {
       event.target.style.border = '1px solid var(--color-grey-7)';
     }
   };
+
+  const handleClick = () => setShowItem(!showItem);
 
   const handleCountryClick = country => {
     const countryData = {
@@ -67,20 +70,20 @@ const SearchInput = () => {
       <AutocompleteInput
         type="text"
         value={searchedValue}
-        onClick={() => setShowItem(!showItem)}
+        onClick={handleClick}
         onChange={handleChange}
         placeholder="Search..."
       />
-      <IconSearch>
-        <Icons name="search" fill="var(--color-grey-7)" size="16" />
-      </IconSearch>
-
+      <IconSearch />
       {showItem && (
         <ListWrapper>
           <ListItems>
             <ScrollBar>
-              {filterCountries === 0 ? (
-                <p>BlaBla</p>
+              {!filterCountries.length ? (
+                <Text>
+                  Sorry, the room for this country does not exist, try creating
+                  one yourself
+                </Text>
               ) : (
                 <>
                   {filterCountries.map((country, index) => (
