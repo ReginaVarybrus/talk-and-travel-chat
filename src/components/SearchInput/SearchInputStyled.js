@@ -50,9 +50,6 @@ export const ListWrapper = styled.div`
   margin-bottom: 48px;
   background: var(--white-color);
   z-index: 10;
-  @media ${device.tablet} {
-    width: 248px;
-  }
   @media ${device.laptop} {
     width: 298px;
   }
@@ -62,9 +59,6 @@ export const ListItems = styled.ul`
   position: absolute;
   width: 248px;
   height: 562px;
-  @media ${device.tablet} {
-    width: 248px;
-  }
   @media ${device.laptop} {
     width: 298px;
   }

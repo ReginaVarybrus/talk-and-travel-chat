@@ -14,9 +14,6 @@ export const SearchBarStyled = styled.div`
   border-right: 1px solid var(--color-grey-6);
   border-left: 1px solid var(--color-grey-6);
   background: var(--white-color);
-  @media ${device.tablet} {
-    min-width: 250px;
-  }
   @media ${device.laptop} {
     min-width: 300px;
   }

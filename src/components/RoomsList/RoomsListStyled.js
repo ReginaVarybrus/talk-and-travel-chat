@@ -18,12 +18,8 @@ export const Text = styled.p`
 `;
 
 export const ListItems = styled.ul`
-  position: absolute;
   width: 248px;
   height: 562px;
-  @media ${device.tablet} {
-    min-width: 248px;
-  }
   @media ${device.laptop} {
     min-width: 298px;
   }

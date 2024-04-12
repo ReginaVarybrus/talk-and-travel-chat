@@ -3,7 +3,6 @@ import * as yup from 'yup';
 import { register } from '@/redux-store/AuthOperations/AuthOperations';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
-import { useNavigate } from 'react-router-dom';
 import { routesPath } from '@/routes/routesConfig';
 import {
   ItemWrapp,

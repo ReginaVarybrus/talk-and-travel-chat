@@ -35,7 +35,7 @@ const MessageBar = () => {
           ref={textAreaRef}
           maxLength="1000"
         />
-        <ButtonSendMessage isInputNotEmpty={isInputNotEmpty}>
+        <ButtonSendMessage $isInputNotEmpty={isInputNotEmpty}>
           <SendIcon />
         </ButtonSendMessage>
       </MessageInputs>

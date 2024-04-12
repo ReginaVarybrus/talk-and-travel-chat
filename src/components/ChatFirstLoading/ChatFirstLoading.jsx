@@ -1,5 +1,5 @@
+import logo from '@/images/logo.svg';
 import { ChatStyled, LogoBox, Logo } from './ChatFirstLoadingStyled.js';
-import logo from '../../../public/logo.svg';
 
 const ChatFistLoading = () => (
   <ChatStyled>

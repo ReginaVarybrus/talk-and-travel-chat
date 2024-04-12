@@ -1,8 +1,8 @@
 import SimpleBar from 'simplebar-react';
+import avatarImage from '@/images/img/Avatar.png';
 import { Item, Avatar, ChatName, MessageDay } from './DMsListStyled';
 import { ListStyled, Text, ListItems } from '../RoomsList/RoomsListStyled.js';
 import 'simplebar-react/dist/simplebar.min.css';
-import avatarImage from '../../../public/img/Avatar.png';
 
 const DMsList = () => {
   const chats = ['Anya', 'Vasya'];

@@ -79,7 +79,7 @@ const SearchInput = () => {
         <ListWrapper>
           <ListItems>
             <ScrollBar>
-              {filterCountries.length === 0 ? (
+              {!filterCountries.length ? (
                 <Text>
                   Sorry, the room for this country does not exist, try creating
                   one yourself
