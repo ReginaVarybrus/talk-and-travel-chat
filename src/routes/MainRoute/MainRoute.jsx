@@ -1,4 +1,14 @@
 import { useNavigate } from 'react-router-dom';
+import {
+  MainPageLayout,
+  StyledSmallLogo,
+  MainPageNav,
+  MainPageNavRight,
+  MainPageNavLeft,
+  MainPageTitle,
+  MainPageSectionTwo,
+} from '@/routes/MainRoute/MainRouteStyled';
+import BasicButton from '@/components/Buttons/BasicButton/BasicButton';
 
 const MainRoute = () => {
   const navigate = useNavigate();
@@ -12,15 +22,37 @@ const MainRoute = () => {
   };
 
   return (
-    <div>
-      <h2>MainPage</h2>
-      <button type="button" onClick={handleRegisterOpen}>
-        Sign up
-      </button>
-      <button type="button" onClick={handleLoginOpen}>
-        Login
-      </button>
-    </div>
+    <MainPageLayout>
+      <MainPageNav>
+        <MainPageNavLeft>
+          <StyledSmallLogo />
+          <p>About chat</p>
+          <p>Benefits</p>
+        </MainPageNavLeft>
+        <MainPageNavRight>
+          <BasicButton
+            color="white"
+            text="Log In"
+            handleClick={handleLoginOpen}
+          />
+          <BasicButton
+            color="blue"
+            text="Get started — it’s free"
+            handleClick={handleRegisterOpen}
+          />
+        </MainPageNavRight>
+      </MainPageNav>
+      <MainPageSectionTwo>
+        <MainPageTitle>
+          <b>Talk</b> Without Borders
+        </MainPageTitle>
+        <MainPageTitle>
+          <b>Travel</b> Without Limits
+        </MainPageTitle>
+        <p>Start chatting now and be a part of the global conversation!</p>
+        <BasicButton text="Start chatting" />
+      </MainPageSectionTwo>
+    </MainPageLayout>
   );
 };
 
