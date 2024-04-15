@@ -31,12 +31,13 @@ const MainRoute = () => {
         </MainPageNavLeft>
         <MainPageNavRight>
           <BasicButton
-            color="white"
+            variant="outlined"
             text="Log In"
             handleClick={handleLoginOpen}
           />
           <BasicButton
-            color="blue"
+            variant="contained"
+            color="primary"
             text="Get started — it’s free"
             handleClick={handleRegisterOpen}
           />
@@ -50,7 +51,12 @@ const MainRoute = () => {
           <b>Travel</b> Without Limits
         </MainPageTitle>
         <p>Start chatting now and be a part of the global conversation!</p>
-        <BasicButton text="Start chatting" />
+        <BasicButton
+          variant="contained"
+          color="primary"
+          text="Start chatting"
+          handleClick={handleRegisterOpen}
+        />
       </MainPageSectionTwo>
     </MainPageLayout>
   );
