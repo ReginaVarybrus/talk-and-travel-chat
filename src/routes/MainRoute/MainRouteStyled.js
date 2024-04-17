@@ -115,4 +115,9 @@ export const SectionThreeContainer = styled(Box)`
 
 export const MainPageSectionFour = styled(Box)`
 margin: 100px 120px;
+display: flex;
+flex-direction: column;
+align-items: center;
+position: relative;
+min-height: 700px;
 `

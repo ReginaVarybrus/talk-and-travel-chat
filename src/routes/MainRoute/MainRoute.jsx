@@ -77,7 +77,7 @@ const MainRoute = () => {
         <SVGImage3 src={SVG3} alt="SVG3" />
       </MainPageSectionOne>
       <MainPageSectionTwo />
-      <MainPageSectionThree>
+      <MainPageSectionThree id="about">
         <SectionThreeContainer display="flex">
           <Typography
             variant="h4"
@@ -99,17 +99,56 @@ const MainRoute = () => {
             Sign up now and start enjoying the journey!
           </Typography>
           <BasicButton
-            sx={{
-              marginTop: '40px',
-            }}
+            sx={{ marginTop: '40px' }}
             variant="outlined"
             text="Get started"
             handleClick={handleRegisterOpen}
           />
         </SectionThreeContainer>
       </MainPageSectionThree>
-      <MainPageSectionFour>
-        <Bubble text="Meet friends and expand your network." />
+      <MainPageSectionFour id="benefits">
+        <Bubble
+          position={{
+            marginBottom: '20px',
+            top: '-10%',
+            left: '-30%',
+          }}
+          text="Meet friends and expand your network."
+        />
+        <Bubble
+          position={{
+            marginBottom: '40px',
+            top: '-10%',
+            left: '-30%',
+          }}
+          text="Save time by avoiding endless web searches."
+        />
+        <Bubble marginBottom="60px" text="Engage in lively discussions." />
+        <Bubble
+          position={{
+            marginBottom: '60px',
+            top: '-20%',
+            left: '-40%',
+          }}
+          text="Access exclusive deals, insider tips."
+        />
+        <Bubble
+          position={{
+            marginBottom: '30px',
+            top: '-30%',
+            left: '-50%',
+          }}
+          text="Uncover hidden details and gain local insights."
+        />
+        <Bubble
+          position={{
+            marginBottom: '40px',
+            top: '-40%',
+            left: '-60%',
+          }}
+          text="Share your own experiences and insights."
+        />
+        <Bubble text="Connect anytime, from your laptop or phone" />
       </MainPageSectionFour>
     </MainPageLayout>
   );
