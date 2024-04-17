@@ -43,7 +43,7 @@ gap: 24px;
 padding: 16px 0 16px 120px;
 align-items: center
 `
-export const MainPageSectionOne = styled.div`
+export const MainPageSectionOne = styled(Box)`
 margin-top: 180px;
 margin-bottom: 138px;
 display: flex;
@@ -76,7 +76,7 @@ export const SVGImage1 = styled.img`
 
 export const SVGImage2 = styled.img`
   position: absolute;
-  bottom:15%;
+  bottom:18%;
   left: 50%;
   z-index: -1;
 `;
@@ -87,6 +87,14 @@ export const SVGImage3 = styled.img`
   right: 5%;
   z-index: -1;
 `;
+
+export const SVGImage4 = styled.img`
+  position: absolute;
+  bottom: 24%;
+  right: 7%;
+  z-index: -1;
+`;
+
 
 export const MainPageSectionTwo = styled(Box)`
   background-image: url(${Miniature});
@@ -121,5 +129,13 @@ display: flex;
 flex-direction: column;
 align-items: flex-start;
 min-height: 700px;
+`
+
+export const MainPageSectionFive = styled(Box)`
+display: flex;
+flex-direction: column;
+align-items: center;
+padding-top: 100px;
+padding-bottom: 180px;
 `
 

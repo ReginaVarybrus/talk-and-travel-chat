@@ -1,21 +1,27 @@
 import { useNavigate } from 'react-router-dom';
-import MainPageNavBar from '@/components/NavigationBar/MainPageNavBar';
+import Header from '@/components/NavigationBar/Header';
+import Footer from '@/components/NavigationBar/Footer';
+
 import {
   MainPageLayout,
   MainPageSectionOne,
   SVGImage1,
   SVGImage2,
   SVGImage3,
+  SVGImage4,
   MainPageSectionTwo,
   MainPageSectionThree,
   SectionThreeContainer,
   MainPageSectionFour,
   SectionFourContainer,
+  MainPageSectionFive,
 } from '@/routes/MainRoute/MainRouteStyled';
 import { Typography } from '@mui/material';
 import SVG1 from '@/images/icons/Vector Globe Icon.svg';
 import SVG2 from '@/images/icons/Vector Star Icon.svg';
 import SVG3 from '@/images/icons/Vector Telegram Icon.svg';
+import SVG4 from '@/images/icons/Vector tail telegram.svg';
+
 import BasicButton from '@/components/Buttons/BasicButton/BasicButton';
 import Bubble from '@/components/Buttons/Bubble/Bubble';
 
@@ -25,15 +31,10 @@ const MainRoute = () => {
   const handleRegisterOpen = () => {
     navigate('/register');
   };
-  /*
-  const handleLoginOpen = () => {
-    navigate('/login');
-  };
-  */
 
   return (
     <MainPageLayout>
-      <MainPageNavBar />
+      <Header />
       <MainPageSectionOne>
         <Typography
           variant="h1"
@@ -76,6 +77,7 @@ const MainRoute = () => {
         <SVGImage1 src={SVG1} alt="SVG1" />
         <SVGImage2 src={SVG2} alt="SVG2" />
         <SVGImage3 src={SVG3} alt="SVG3" />
+        <SVGImage4 src={SVG4} alt="SVG4" />
       </MainPageSectionOne>
       <MainPageSectionTwo />
       <MainPageSectionThree id="about">
@@ -88,14 +90,25 @@ const MainRoute = () => {
               lineHeight: '48px',
             }}
           >
-            What is Talk & Travel?
+            What is <b>Talk & Travel?</b>
           </Typography>
-          <Typography>
+          <Typography
+            sx={{
+              fontSize: '20px',
+              lineHeight: '24px',
+            }}
+          >
             Talk & Travel is the chat where everyone joins a vibrant community,
             connecting with fellow travelers to share tips, stories, and
             experiences from around the world.
           </Typography>
-          <Typography>
+          <Typography
+            sx={{
+              fontSize: '20px',
+              lineHeight: '24px',
+            }}
+          >
+            <br />
             Join specific countries or chat directly with your fellow explorers.
             Sign up now and start enjoying the journey!
           </Typography>
@@ -146,6 +159,29 @@ const MainRoute = () => {
           />
         </SectionFourContainer>
       </MainPageSectionFour>
+      <MainPageSectionFive>
+        <Typography
+          variant="h4"
+          sx={{
+            fontWeight: '600',
+            marginBottom: '20px',
+            fontSize: '40px',
+            lineHeight: '48px',
+          }}
+        >
+          Let’s get it started!
+        </Typography>
+        <BasicButton
+          variant="contained"
+          color="primary"
+          sx={{
+            marginTop: '32px',
+          }}
+          text="Register now"
+          handleClick={handleRegisterOpen}
+        />
+      </MainPageSectionFive>
+      <Footer />
     </MainPageLayout>
   );
 };

@@ -1,11 +1,19 @@
 import styled from 'styled-components';
 import SmallLogo from '@/images/small_logo.svg';
 
-export const MainPageNav = styled.nav`
-position: fixed;
-z-index: 1;
-top: ${(({ isvisible }) => (isvisible ? '0' : '-80px'))};
-left: 0;
+export const NavBarLayout = styled.nav`
+${(props) =>
+    props.type === 'header'
+      ? `
+      position: fixed;
+      z-index: 1;
+      top: ${props.isvisible ? '0' : '-80px'};
+      left: 0;
+        `
+      : `
+          position: abolute;
+        `
+  };
 width: 100%;
 transition: top 0.4s;
 background-color: var(--white-color);
@@ -25,6 +33,8 @@ export const StyledSmallLogo = styled.div`
 `;
 
 export const AnchorLink = styled.a`
+font-size: 18px;
+line-height: 21.6px;
 text-decoration: none;
 color: var(--color-dark);
 `
