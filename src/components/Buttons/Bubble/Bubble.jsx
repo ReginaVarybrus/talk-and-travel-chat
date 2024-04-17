@@ -2,7 +2,11 @@ import { BubbleStyled } from '@/components/Buttons/Bubble/BubbleStyled';
 
 const Bubble = props => {
   const { text, ...position } = props;
-  return <BubbleStyled position={position}>{text}</BubbleStyled>;
+  return (
+    <BubbleStyled left={position.left} marginbottom={position.marginbottom}>
+      {text}
+    </BubbleStyled>
+  );
 };
 
 export default Bubble;

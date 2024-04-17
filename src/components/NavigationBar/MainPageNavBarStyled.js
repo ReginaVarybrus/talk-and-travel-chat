@@ -4,7 +4,7 @@ import SmallLogo from '@/images/small_logo.svg';
 export const MainPageNav = styled.nav`
 position: fixed;
 z-index: 1;
-top: ${({ isVisible }) => (isVisible ? '0' : '-80px')};
+top: ${(({ isvisible }) => (isvisible ? '0' : '-80px'))};
 left: 0;
 width: 100%;
 transition: top 0.4s;

@@ -34,7 +34,7 @@ const MainPageNavBar = () => {
   };
 
   return (
-    <MainPageNav isVisible={isVisible}>
+    <MainPageNav isvisible={isVisible}>
       <MainPageNavLeft>
         <StyledSmallLogo />
         <AnchorLink href="#about">About chat</AnchorLink>

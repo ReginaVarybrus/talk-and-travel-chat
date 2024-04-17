@@ -10,6 +10,7 @@ import {
   MainPageSectionThree,
   SectionThreeContainer,
   MainPageSectionFour,
+  SectionFourContainer,
 } from '@/routes/MainRoute/MainRouteStyled';
 import { Typography } from '@mui/material';
 import SVG1 from '@/images/icons/Vector Globe Icon.svg';
@@ -107,48 +108,43 @@ const MainRoute = () => {
         </SectionThreeContainer>
       </MainPageSectionThree>
       <MainPageSectionFour id="benefits">
-        <Bubble
-          position={{
-            marginBottom: '20px',
-            top: '-10%',
-            left: '-30%',
-          }}
-          text="Meet friends and expand your network."
-        />
-        <Bubble
-          position={{
-            marginBottom: '40px',
-            top: '-10%',
-            left: '-30%',
-          }}
-          text="Save time by avoiding endless web searches."
-        />
-        <Bubble marginBottom="60px" text="Engage in lively discussions." />
-        <Bubble
-          position={{
-            marginBottom: '60px',
-            top: '-20%',
-            left: '-40%',
-          }}
-          text="Access exclusive deals, insider tips."
-        />
-        <Bubble
-          position={{
-            marginBottom: '30px',
-            top: '-30%',
-            left: '-50%',
-          }}
-          text="Uncover hidden details and gain local insights."
-        />
-        <Bubble
-          position={{
-            marginBottom: '40px',
-            top: '-40%',
-            left: '-60%',
-          }}
-          text="Share your own experiences and insights."
-        />
-        <Bubble text="Connect anytime, from your laptop or phone" />
+        <SectionFourContainer>
+          <Bubble
+            marginbottom="20px"
+            left="0%"
+            text="Meet friends and expand your network."
+          />
+          <Bubble
+            marginbottom="40px"
+            left="53%"
+            text="Save time by avoiding endless web searches."
+          />
+          <Bubble
+            marginbottom="60px"
+            left="17%"
+            text="Engage in lively discussions."
+          />
+          <Bubble
+            marginbottom="60px"
+            left="47%"
+            text="Access exclusive deals, insider tips."
+          />
+          <Bubble
+            marginbottom="30px"
+            left="12%"
+            text="Uncover hidden details and gain local insights."
+          />
+          <Bubble
+            marginbottom="40px"
+            left="55%"
+            text="Share your own experiences and insights."
+          />
+          <Bubble
+            marginbottom="0"
+            left="0"
+            text="Connect anytime, from your laptop or phone"
+          />
+        </SectionFourContainer>
       </MainPageSectionFour>
     </MainPageLayout>
   );

@@ -114,10 +114,12 @@ export const SectionThreeContainer = styled(Box)`
 `
 
 export const MainPageSectionFour = styled(Box)`
-margin: 100px 120px;
+padding: 100px 120px;
+`
+export const SectionFourContainer = styled(Box)`
 display: flex;
 flex-direction: column;
-align-items: center;
-position: relative;
+align-items: flex-start;
 min-height: 700px;
 `
+
