@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef } from 'react';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { getUser } from '@/redux-store/selectors';
+import { addCountryRoom } from '@/redux-store/slices/countrySlice';
 
 import mapData from '@/data/countries.json';
 import {
@@ -14,10 +15,12 @@ import {
   ScrollBar,
   Text,
 } from './SearchInputStyled';
+import { connectToCountryRoom } from '../TestWebSocketChat/ws';
 
-const SearchInput = ({ onSelect }) => {
+const SearchInput = () => {
   const [searchedValue, setSearchedValue] = useState('');
   const [showItem, setShowItem] = useState(false);
+  const dispatch = useDispatch();
   const autoCompleteRef = useRef(null);
   const userId = useSelector(getUser)?.id;
 
@@ -46,8 +49,14 @@ const SearchInput = ({ onSelect }) => {
 
     setSearchedValue(country.properties.ADMIN);
     setShowItem(false);
-    connect(dataToSend.name, dataToSend);
-    onSelect(dataToSend.name);
+
+    const onDataReceived = data => {
+      console.log('recieved data:', data);
+      dispatch(addCountryRoom(data));
+    };
+
+    connectToCountryRoom(dataToSend.name, dataToSend, onDataReceived);
+
     console.log('data to send:', dataToSend);
     setSearchedValue('');
   };

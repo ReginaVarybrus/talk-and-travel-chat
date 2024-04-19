@@ -1,14 +1,16 @@
+/* eslint-disable import/no-extraneous-dependencies */
 import SockJS from 'sockjs-client';
 import { Stomp } from '@stomp/stompjs';
 
 let stompClient = null;
 
-export const connect = (countryName, countryData, onDataReceived) => {
+export const connectToCountryRoom = (
+  countryName,
+  countryData,
+  onDataReceived
+) => {
   const socket = new SockJS(`${import.meta.env.VITE_APP_API_URL}/ws/`);
   stompClient = Stomp.over(socket);
-  // stompClient.heartbeat.outgoing = 20000;
-  // stompClient.heartbeat.incoming = 0;
-  // stompClient.reconnect_delay = 3000;
 
   stompClient.connect({}, frame => {
     // setConnected(true);
