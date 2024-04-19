@@ -1,17 +1,11 @@
 import { createSlice } from '@reduxjs/toolkit';
-import {
-  register,
-  logIn,
-  logOut,
-  sendDataCountryToBackend,
-} from '../AuthOperations/AuthOperations.js';
+import { register, logIn, logOut } from '../AuthOperations/AuthOperations.js';
 
 const initialState = {
   token: null,
   isLoggedIn: false,
   isRefresh: true,
   error: null,
-  flagCode: null,
 };
 
 const handlePending = () => ({
@@ -48,16 +42,9 @@ export const authSlice = createSlice({
 
       .addCase(logOut.pending, handlePending)
       .addCase(logOut.rejected, handleRejected)
-      .addCase(logOut.fulfilled, () => null)
-
-      .addCase(sendDataCountryToBackend.pending, handlePending)
-      .addCase(sendDataCountryToBackend.rejected, (state, action) => {
-        handleRejected(state, action);
-      })
-      .addCase(sendDataCountryToBackend.fulfilled, (state, action) => ({
+      .addCase(logOut.fulfilled, state => ({
         ...state,
-        name: action.payload.name,
-        flagCode: action.payload.flagCode,
+        ...initialState,
       })),
 });
 

@@ -46,32 +46,3 @@ export const logOut = createAsyncThunk('auth/logout', async () => {
     throw new Error(error.message);
   }
 });
-
-// TODO sendDataCountryToBackend request shuold be update when we understand do we need thas request or no
-
-export const sendDataCountryToBackend = createAsyncThunk(
-  'auth/sendDataCountryToBackend',
-  async ({ userId, countryDto }, { rejectWithValue }) => {
-    try {
-      const response = await axiosClient.post(
-        `${ULRs.country}/${userId}`,
-        countryDto
-      );
-
-      if (!response.data) {
-        throw rejectWithValue('Response data is missing');
-      }
-    } catch (e) {
-      if (e.response && e.response.data) {
-        console.log('Error response data:', e.response.data);
-        throw rejectWithValue(e.response.data.message);
-      } else {
-        console.error(
-          'Error response is missing or does not have data property:',
-          e.response
-        );
-        throw rejectWithValue('Unknown error occurred');
-      }
-    }
-  }
-);
