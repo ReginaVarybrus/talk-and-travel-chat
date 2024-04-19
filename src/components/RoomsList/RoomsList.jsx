@@ -4,14 +4,14 @@ import { ListStyled, Text, Item, ListItems } from './RoomsListStyled';
 import { Flag, ScrollBar } from '../SearchInput/SearchInputStyled.js';
 
 const RoomsList = () => {
-  const countryRooms = useSelector(getCountryData);
+  const countryRooms = useSelector(getCountryData)?.countryRooms;
 
   const handleClick = () => {};
 
   return (
     <ListStyled>
       <ScrollBar>
-        {countryRooms?.length ? (
+        {countryRooms.length ? (
           <ListItems>
             <ScrollBar>
               {countryRooms.map(room => (

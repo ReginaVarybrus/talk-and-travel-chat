@@ -1,8 +1,8 @@
 /* eslint-disable react/button-has-type */
 import { useState } from 'react';
 import { useSelector } from 'react-redux';
-import { getCountryData } from '@/redux-store/selectors.js';
-// import { connectToCountryRoom, sendMessage } from './ws';
+import { getUser, getCountryData } from '@/redux-store/selectors.js';
+import { sendMessage } from './ws';
 import {
   ChatStyled,
   Header,
@@ -21,41 +21,27 @@ import Icons from '../Icons/Icons';
 import { MessageList } from '../MessageList/MessageList';
 
 const Chat = () => {
-  // const [params, setParams] = useState({});
   const [messageList, setMessageList] = useState([]);
   const [message, setMessage] = useState('');
 
   const countryName = useSelector(getCountryData)?.name;
-
-  // const handleData = data => {
-  //   console.log('Received data:', data);
-  //   setParams(data);
-  // };
-
-  // connectToCountryRoom('countryName', params, handleData);
+  const countryId = useSelector(getCountryData)?.id;
+  const user = useSelector(getUser);
 
   const isInputNotEmpty = Boolean(message?.trim().length);
-
-  // useEffect(() => {
-  //   connectToCountryRoom('countryName', params, handleData);
-  // }, []);
 
   const handleChange = ({ target: { value } }) => setMessage(value);
 
   const handleSubmit = e => {
     e.preventDefault();
-    // if (!params.userId || !params.id || !params.name) {
-    //   console.error('Missing parameters for sending message.');
-    //   return;
-    // }
 
-    // const dataToSend = {
-    //   content: message,
-    //   senderId: params.userId,
-    //   countryId: params.id,
-    // };
+    const dataToSend = {
+      content: message,
+      senderId: user.id,
+      countryId,
+    };
 
-    // sendMessage(params.name, dataToSend);
+    sendMessage(countryName, dataToSend);
     setMessageList(prevMessageList => [...prevMessageList, message]);
     setMessage('');
 
@@ -67,12 +53,11 @@ const Chat = () => {
       <Header>
         <HeaderContent>
           <h5>{countryName || 'Country Name'}</h5>
-          {/* <p>{params.participants || 0} members</p> */}
         </HeaderContent>
       </Header>
 
       <MessageBlock>
-        <MessageList messages={messageList} />
+        <MessageList messages={messageList} username={user.name} />
       </MessageBlock>
 
       <MessageBarWrapper>
