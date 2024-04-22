@@ -1,10 +1,11 @@
 import { createSlice } from '@reduxjs/toolkit';
-import {
-  register,
-  logIn,
-  logOut,
-  sendDataCountryToBackend,
-} from '../AuthOperations/AuthOperations.js';
+import
+  {
+    register,
+    logIn,
+    logOut,
+    sendDataCountryToBackend,
+  } from '../AuthOperations/AuthOperations.js';
 
 const initialState = {
   token: null,
@@ -48,10 +49,13 @@ export const authSlice = createSlice({
 
       .addCase(logOut.pending, handlePending)
       .addCase(logOut.rejected, handleRejected)
-      .addCase(logOut.fulfilled, () => null)
+      .addCase(logOut.fulfilled, () => (state) => ({
+        ...state, ...initialState
+      }))
 
       .addCase(sendDataCountryToBackend.pending, handlePending)
-      .addCase(sendDataCountryToBackend.rejected, (state, action) => {
+      .addCase(sendDataCountryToBackend.rejected, (state, action) =>
+      {
         handleRejected(state, action);
       })
       .addCase(sendDataCountryToBackend.fulfilled, (state, action) => ({
