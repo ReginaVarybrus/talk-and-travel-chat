@@ -41,7 +41,7 @@ export const IconSearch = styled(FiSearch)`
   stroke: var(--color-grey-9);
 `;
 
-export const ListWrapper = styled.div`
+export const ListItemsStyled = styled.div`
   position: absolute;
   top: 130px;
   left: -16px;
@@ -50,15 +50,6 @@ export const ListWrapper = styled.div`
   margin-bottom: 48px;
   background: var(--white-color);
   z-index: 10;
-  @media ${device.laptop} {
-    width: 298px;
-  }
-`;
-
-export const ListItems = styled.ul`
-  position: absolute;
-  width: 248px;
-  height: 562px;
   @media ${device.laptop} {
     width: 298px;
   }

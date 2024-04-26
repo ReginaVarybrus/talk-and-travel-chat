@@ -43,8 +43,4 @@ export const sendMessage = (countryName, message) => {
     `/api/group-messages/${countryName}`,
     JSON.stringify(message)
   );
-  stompClient.subscribe(`/group-message/${countryName}`, response => {
-    const data = JSON.parse(response.body);
-    console.log('websocket message data', data);
-  });
 };

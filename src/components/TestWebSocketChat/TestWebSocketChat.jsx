@@ -1,8 +1,9 @@
 /* eslint-disable react/button-has-type */
 import { useState } from 'react';
 import { useSelector } from 'react-redux';
-import { getUser, getCountryData } from '@/redux-store/selectors.js';
-import { sendMessage } from './ws';
+import { getUser } from '@/redux-store/selectors.js';
+import { useWebSocket } from '@/hooks/useWebSocket.js';
+
 import {
   ChatStyled,
   Header,
@@ -23,10 +24,9 @@ import { MessageList } from '../MessageList/MessageList';
 const Chat = () => {
   const [messageList, setMessageList] = useState([]);
   const [message, setMessage] = useState('');
+  const userName = useSelector(getUser)?.name;
 
-  const countryName = useSelector(getCountryData)?.name;
-  const countryId = useSelector(getCountryData)?.id;
-  const user = useSelector(getUser);
+  const { sendMessage, connectedCountryRoom } = useWebSocket();
 
   const isInputNotEmpty = Boolean(message?.trim().length);
 
@@ -34,30 +34,23 @@ const Chat = () => {
 
   const handleSubmit = e => {
     e.preventDefault();
-
-    const dataToSend = {
-      content: message,
-      senderId: user.id,
-      countryId,
-    };
-
-    sendMessage(countryName, dataToSend);
+    sendMessage(message);
     setMessageList(prevMessageList => [...prevMessageList, message]);
     setMessage('');
 
-    console.log(message);
+    console.log('Message:', message);
   };
 
   return (
     <ChatStyled>
       <Header>
         <HeaderContent>
-          <h5>{countryName || 'Country Name'}</h5>
+          <h5>{connectedCountryRoom || 'Country Name'}</h5>
         </HeaderContent>
       </Header>
 
       <MessageBlock>
-        <MessageList messages={messageList} username={user.name} />
+        <MessageList messages={messageList} username={userName} />
       </MessageBlock>
 
       <MessageBarWrapper>
