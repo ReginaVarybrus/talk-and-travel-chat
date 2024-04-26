@@ -1,8 +1,9 @@
 /* eslint-disable react/button-has-type */
 import { useState } from 'react';
 import { useSelector } from 'react-redux';
-import { getCountryData } from '@/redux-store/selectors.js';
-// import { connectToCountryRoom, sendMessage } from './ws';
+import { getUser } from '@/redux-store/selectors.js';
+import { useWebSocket } from '@/hooks/useWebSocket.js';
+
 import {
   ChatStyled,
   Header,
@@ -24,15 +25,9 @@ const Chat = () => {
   // const [params, setParams] = useState({});
   const [messageList, setMessageList] = useState([]);
   const [message, setMessage] = useState('');
+  const userName = useSelector(getUser)?.name;
 
-  const countryName = useSelector(getCountryData)?.name;
-
-  // const handleData = data => {
-  //   console.log('Received data:', data);
-  //   setParams(data);
-  // };
-
-  // connectToCountryRoom('countryName', params, handleData);
+  const { sendMessage, connectedCountryRoom } = useWebSocket();
 
   const isInputNotEmpty = Boolean(message?.trim().length);
 
@@ -44,35 +39,23 @@ const Chat = () => {
 
   const handleSubmit = e => {
     e.preventDefault();
-    // if (!params.userId || !params.id || !params.name) {
-    //   console.error('Missing parameters for sending message.');
-    //   return;
-    // }
-
-    // const dataToSend = {
-    //   content: message,
-    //   senderId: params.userId,
-    //   countryId: params.id,
-    // };
-
-    // sendMessage(params.name, dataToSend);
+    sendMessage(message);
     setMessageList(prevMessageList => [...prevMessageList, message]);
     setMessage('');
 
-    console.log(message);
+    console.log('Message:', message);
   };
 
   return (
     <ChatStyled>
       <Header>
         <HeaderContent>
-          <h5>{countryName || 'Country Name'}</h5>
-          {/* <p>{params.participants || 0} members</p> */}
+          <h5>{connectedCountryRoom || 'Country Name'}</h5>
         </HeaderContent>
       </Header>
 
       <MessageBlock>
-        <MessageList messages={messageList} />
+        <MessageList messages={messageList} username={userName} />
       </MessageBlock>
 
       <MessageBarWrapper>
