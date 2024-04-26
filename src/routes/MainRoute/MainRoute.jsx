@@ -1,6 +1,6 @@
 import { useNavigate } from 'react-router-dom';
-import Header from '@/components/NavigationBar/Header';
-import Footer from '@/components/NavigationBar/Footer';
+import Header from '@/components/Header/Header';
+import Footer from '@/components/Footer/Footer';
 
 import {
   MainPageLayout,
@@ -123,8 +123,8 @@ const MainRoute = () => {
       <MainPageSectionFour id="benefits">
         <SectionFourContainer>
           <Bubble
-            marginbottom="20px"
-            left="0%"
+            $marginbottom="20px"
+            $left="0%"
             text="Meet friends and expand your network."
           />
           <Bubble

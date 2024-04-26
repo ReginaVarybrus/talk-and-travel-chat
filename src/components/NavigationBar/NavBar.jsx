@@ -10,7 +10,7 @@ import {
 import BasicButton from '@/components/Buttons/BasicButton/BasicButton';
 
 const NavBar = props => {
-  const { type, isvisible } = props;
+  const { navBarType, isvisible } = props;
 
   const navigate = useNavigate();
 
@@ -23,7 +23,7 @@ const NavBar = props => {
   };
 
   return (
-    <NavBarLayout type={type} isvisible={isvisible}>
+    <NavBarLayout navBarType={navBarType} $isvisible={isvisible}>
       <MainPageNavLeft>
         <StyledSmallLogo />
         <AnchorLink href="#about">About chat</AnchorLink>

@@ -3,14 +3,14 @@ import star from '@/images/icons/small_star.svg'
 
 export const BubbleStyled = styled.div`
 position: relative;
-left: ${props => props.left};
+left: ${props => props.$left};
 border: 1px solid var(--color-brand-blue);
 border-radius: 107px;
 padding: 17.5px 16px;
 padding-left: 58px;
 font-size: 24px;
 line-height: 28.8px;
-margin-bottom: ${props => props.marginbottom};
+margin-bottom: ${props => props.$marginbottom};
 
 &:before {
     content: '';

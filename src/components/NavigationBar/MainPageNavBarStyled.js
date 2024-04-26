@@ -3,17 +3,13 @@ import SmallLogo from '@/images/small_logo.svg';
 
 export const NavBarLayout = styled.nav`
 ${(props) =>
-    props.type === 'header'
-      ? `
-      position: fixed;
-      z-index: 1;
-      top: ${props.isvisible ? '0' : '-80px'};
-      left: 0;
-        `
-      : `
-          position: abolute;
-        `
-  };
+    props.navBarType === 'header'
+    && `
+  position: fixed;
+  z-index: 1;
+  top: ${props.$isvisible ? '0' : '-80px'};
+  left: 0;
+`};
 width: 100%;
 transition: top 0.4s;
 background-color: var(--white-color);

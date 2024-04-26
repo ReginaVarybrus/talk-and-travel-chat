@@ -79,6 +79,7 @@ export const SVGImage2 = styled.img`
   bottom:18%;
   left: 50%;
   z-index: -1;
+  background-color: var(--color-blue-1);
 `;
 
 export const SVGImage3 = styled.img`

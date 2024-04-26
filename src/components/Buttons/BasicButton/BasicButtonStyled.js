@@ -3,7 +3,7 @@ import Button from '@mui/material/Button';
 
 
 export const BasicButtonLayout = styled(Button)`
-&&& {
+&& {
     text-transform: none;
     font-family: Roboto, sans-serif;
     font-size: 14px;

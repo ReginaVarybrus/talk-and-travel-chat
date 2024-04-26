@@ -1,8 +1,6 @@
 import { BasicButtonLayout } from '@/components/Buttons/BasicButton/BasicButtonStyled';
 
-const BasicButton = props => {
-  const { text, handleClick, variant, sx } = props;
-
+const BasicButton = ({ text, handleClick, variant, sx }) => {
   return (
     <BasicButtonLayout sx={sx} onClick={handleClick} variant={variant}>
       {text}
