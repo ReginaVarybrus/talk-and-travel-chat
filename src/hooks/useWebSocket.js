@@ -4,6 +4,19 @@ import SockJS from 'sockjs-client';
 import { Stomp } from '@stomp/stompjs';
 import { getUser } from '@/redux-store/selectors.js';
 
+// create
+// {
+//   userId,
+//   name,
+//   flagCode,
+// };
+
+// update
+// {
+//   "id": 1,
+//   "userId": 3
+// }
+
 export const useWebSocket = () => {
   const [stompClient, setStompClient] = useState(null);
   const [connectedCountryRoom, setConnectedCountryRoom] = useState(null);
