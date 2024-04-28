@@ -4,8 +4,6 @@ import { addCountryRoom } from '@/redux-store/slices/countrySlice';
 import { getUser } from '@/redux-store/selectors';
 import { useWebSocket } from '@/hooks/useWebSocket.js';
 import mapData from '@/data/countries.json';
-import { connect } from '../TestWebSocketChat/ws';
-import Icons from '../Icons/Icons';
 import {
   AutocompleteInputStyled,
   AutocompleteInput,

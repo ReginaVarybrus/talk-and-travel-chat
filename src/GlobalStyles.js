@@ -60,17 +60,17 @@ h1,h2,h3,h4,h5,h6,p{
 }
 
 h5 {
+  font-size: 18px;
+  font-weight: 600;
+  line-height: 21.6px;
+  color: var(--color-dark);
+}
+
+h6 {
   font-size: 16px;
   font-weight: 700;
   line-height: 19px;
 } 
-
-h6 {
-  font-size: 18px;
-  font-weight: 400;
-  line-height: 21.6px;
-  color: var(--color-dark);
-}
 
 p {
   font-size: 14px;

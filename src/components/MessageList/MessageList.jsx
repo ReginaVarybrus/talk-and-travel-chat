@@ -1,7 +1,7 @@
 import { useEffect, useRef } from 'react';
 // import { getUser } from '@/redux-store/selectors';
 // import { useSelector } from 'react-redux';
-
+import { MessageListStyled } from './MessageListStyled.js';
 import { MessageItem } from '../MessageItem/MessageItem';
 
 export const MessageList = ({ messageList, username }) => {
@@ -13,13 +13,14 @@ export const MessageList = ({ messageList, username }) => {
   useEffect(scrollToBottom, [messageList]);
 
   return (
-    <div>
+    <MessageListStyled>
+      <MessageItem />
       {messageList &&
         messageList.map((message, idx) => (
           <MessageItem key={idx} message={message} username={username} />
         ))}
       <div ref={messagesEndRef} />
-    </div>
+    </MessageListStyled>
   );
 };
 
