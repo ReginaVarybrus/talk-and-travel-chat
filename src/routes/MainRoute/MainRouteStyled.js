@@ -2,6 +2,8 @@ import styled from 'styled-components';
 import SmallLogo from '@/images/small_logo.svg';
 import Miniature from '@/images/main_page_miniature.svg'
 import { Typography, Box } from '@mui/material';
+import GlobeIcon from '@/images/iconsComponents/GlobeIcon'
+
 
 export const MainPageLayout = styled(Box)`
 box-sizing: border-box;
@@ -51,51 +53,46 @@ flex-direction: column;
 align-items: center;
 text-align: center;
 `
-/*
-export const MainPageTitle = styled(Typography)`
-font-size: 64px;
-font-weight: 400;
-line-height: 76.8px;
-margin-bottom: 24px;
-`
-*/
-
 export const MainPageText = styled(Typography)`
 font-size: 20px;
 line-height: 24px;
 text-align: center;
 margin-bottom: 32px;
 `
-
-export const SVGImage1 = styled.img`
+export const SVGImage1 = styled(GlobeIcon)`
   position: absolute;
-  bottom: 33%;
+  bottom: 25%;
   left: 5%;
   z-index: -1;
+  svg path {
+    fill: ${({ $fillColor }) => $fillColor};
+  }
 `;
 
-export const SVGImage2 = styled.img`
+export const SVGImage2 = styled(GlobeIcon)`
   position: absolute;
-  bottom:18%;
+  bottom: 8%;
   left: 50%;
   z-index: -1;
-  background-color: var(--color-blue-1);
+  & svg path {
+    fill: ${({ $fillColor }) => $fillColor};
+  }
 `;
 
 export const SVGImage3 = styled.img`
   position: absolute;
-  bottom: 40%;
+  bottom: 29%;
   right: 5%;
   z-index: -1;
+  color: var(--color-blue-1);
 `;
 
 export const SVGImage4 = styled.img`
   position: absolute;
-  bottom: 24%;
+  bottom: 13%;
   right: 7%;
   z-index: -1;
 `;
-
 
 export const MainPageSectionTwo = styled(Box)`
   background-image: url(${Miniature});
@@ -107,7 +104,6 @@ export const MainPageSectionTwo = styled(Box)`
 `
 
 export const MainPageSectionThree = styled(Box)`
-
 `
 
 export const SectionThreeContainer = styled(Box)`
@@ -139,4 +135,3 @@ align-items: center;
 padding-top: 100px;
 padding-bottom: 180px;
 `
-

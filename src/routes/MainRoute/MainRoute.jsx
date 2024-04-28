@@ -17,11 +17,12 @@ import {
   MainPageSectionFive,
 } from '@/routes/MainRoute/MainRouteStyled';
 import { Typography } from '@mui/material';
-import SVG1 from '@/images/icons/Vector Globe Icon.svg';
-import SVG2 from '@/images/icons/Vector Star Icon.svg';
-import SVG3 from '@/images/icons/Vector Telegram Icon.svg';
-import SVG4 from '@/images/icons/Vector tail telegram.svg';
-
+/*
+import GlobeIcon from '@/images/icons/Vector Globe Icon.svg';
+import StarIcon from '@/images/icons/Vector Star Icon.svg';
+import TelegramIcon from '@/images/icons/Vector Telegram Icon.svg';
+import TailTelegramIcon from '@/images/icons/Vector tail telegram.svg';
+*/
 import BasicButton from '@/components/Buttons/BasicButton/BasicButton';
 import Bubble from '@/components/Buttons/Bubble/Bubble';
 
@@ -74,10 +75,10 @@ const MainRoute = () => {
           text="Start chatting"
           handleClick={handleRegisterOpen}
         />
-        <SVGImage1 src={SVG1} alt="SVG1" />
-        <SVGImage2 src={SVG2} alt="SVG2" />
-        <SVGImage3 src={SVG3} alt="SVG3" />
-        <SVGImage4 src={SVG4} alt="SVG4" />
+        <SVGImage1 $fillColor="var(--color-blue-1)" />
+        <SVGImage2 />
+        <SVGImage3 />
+        <SVGImage4 />
       </MainPageSectionOne>
       <MainPageSectionTwo />
       <MainPageSectionThree id="about">
