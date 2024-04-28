@@ -16,7 +16,7 @@ const Header = () => {
     return () => window.removeEventListener('scroll', handleScroll);
   }, [prevScrollPos]);
 
-  return <NavBar isvisible={isvisible} type="header" />;
+  return <NavBar isvisible={isvisible} $navBarType="header" />;
 };
 
 export default Header;

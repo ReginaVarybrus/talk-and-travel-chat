@@ -2,21 +2,20 @@ import styled from 'styled-components';
 import SmallLogo from '@/images/small_logo.svg';
 import Miniature from '@/images/main_page_miniature.svg'
 import { Typography, Box } from '@mui/material';
-import GlobeIcon from '@/images/iconsComponents/GlobeIcon'
 
 
 export const MainPageLayout = styled(Box)`
-box-sizing: border-box;
-padding-top: 80px;
-font-family: Roboto, sans-serif;
-`
+  box-sizing: border-box;
+  padding-top: 80px;
+  font-family: Roboto, sans-serif;
+`;
 
 export const MainPageNav = styled.nav`
-height: 80px;
-display: flex;
-justify-content: space-between;
-border-bottom: 1px solid var(--color-blue-1);
-`
+  height: 80px;
+  display: flex;
+  justify-content: space-between;
+  border-bottom: 1px solid var(--color-blue-1);
+`;
 
 export const StyledSmallLogo = styled.div`
   width: 48px;
@@ -28,68 +27,64 @@ export const StyledSmallLogo = styled.div`
 `;
 
 export const AnchorLink = styled.a`
-text-decoration: none;
-color: var(--color-dark);
-`
+  text-decoration: none;
+  color: var(--color-dark);
+`;
 
 export const MainPageNavRight = styled.div`
-display: flex;
-gap: 24px;
-padding: 18.5px 120px 18.5px 0;
-align-items: center
-`
+  display: flex;
+  gap: 24px;
+  padding: 18.5px 120px 18.5px 0;
+  align-items: center
+`;
 
 export const MainPageNavLeft = styled.div`
-display: flex;
-gap: 24px;
-padding: 16px 0 16px 120px;
-align-items: center
-`
-export const MainPageSectionOne = styled(Box)`
-margin-top: 180px;
-margin-bottom: 138px;
-display: flex;
-flex-direction: column;
-align-items: center;
-text-align: center;
-`
-export const MainPageText = styled(Typography)`
-font-size: 20px;
-line-height: 24px;
-text-align: center;
-margin-bottom: 32px;
-`
-export const SVGImage1 = styled(GlobeIcon)`
-  position: absolute;
-  bottom: 25%;
-  left: 5%;
-  z-index: -1;
-  svg path {
-    fill: ${({ $fillColor }) => $fillColor};
-  }
+  display: flex;
+  gap: 24px;
+  padding: 16px 0 16px 120px;
+  align-items: center
 `;
 
-export const SVGImage2 = styled(GlobeIcon)`
+export const MainPageSectionOne = styled(Box)`
+  margin-top: 180px;
+  margin-bottom: 138px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+`;
+
+export const MainPageText = styled(Typography)`
+  font-size: 20px;
+  line-height: 24px;
+  text-align: center;
+  margin-bottom: 32px;
+`;
+
+export const Globe = styled.div`
   position: absolute;
-  bottom: 8%;
+  bottom: 31%;
+  left: 10%;
+  z-index: -1;
+`;
+
+export const Star = styled.div`
+  position: absolute;
+  bottom: 21%;
   left: 50%;
   z-index: -1;
-  & svg path {
-    fill: ${({ $fillColor }) => $fillColor};
-  }
 `;
 
-export const SVGImage3 = styled.img`
+export const Telegram = styled.div`
   position: absolute;
-  bottom: 29%;
+  bottom: 42%;
   right: 5%;
   z-index: -1;
-  color: var(--color-blue-1);
 `;
 
-export const SVGImage4 = styled.img`
+export const TailTelegram = styled.div`
   position: absolute;
-  bottom: 13%;
+  bottom: 26%;
   right: 7%;
   z-index: -1;
 `;
@@ -101,10 +96,10 @@ export const MainPageSectionTwo = styled(Box)`
   background-size: contain;
   background-position: center;
   margin-bottom: 100px;
-`
+`;
 
 export const MainPageSectionThree = styled(Box)`
-`
+`;
 
 export const SectionThreeContainer = styled(Box)`
   display: flex;
@@ -116,22 +111,23 @@ export const SectionThreeContainer = styled(Box)`
   border-radius: 32px;
   color: var(--white-color);
   text-align: center;
-`
+`;
 
 export const MainPageSectionFour = styled(Box)`
-padding: 100px 120px;
-`
+  padding: 100px 120px;
+`;
+
 export const SectionFourContainer = styled(Box)`
-display: flex;
-flex-direction: column;
-align-items: flex-start;
-min-height: 700px;
-`
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  min-height: 700px;
+`;
 
 export const MainPageSectionFive = styled(Box)`
-display: flex;
-flex-direction: column;
-align-items: center;
-padding-top: 100px;
-padding-bottom: 180px;
-`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding-top: 100px;
+  padding-bottom: 180px;
+`;

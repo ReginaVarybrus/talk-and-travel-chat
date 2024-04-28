@@ -6,24 +6,25 @@ import {
   AnchorLink,
   MainPageNavRight,
   MainPageNavLeft,
-} from '@/components/NavigationBar/MainPageNavBarStyled';
+} from '@/components/NavigationBar/NavBarStyled';
+import { routesPath } from '@/routes/routesConfig';
 import BasicButton from '@/components/Buttons/BasicButton/BasicButton';
 
 const NavBar = props => {
-  const { navBarType, isvisible } = props;
+  const { $navBarType, isvisible } = props;
 
   const navigate = useNavigate();
 
   const handleRegisterOpen = () => {
-    navigate('/register');
+    navigate(routesPath.REGISTER);
   };
 
   const handleLoginOpen = () => {
-    navigate('/login');
+    navigate(routesPath.LOGIN);
   };
 
   return (
-    <NavBarLayout navBarType={navBarType} $isvisible={isvisible}>
+    <NavBarLayout $navBarType={$navBarType} $isvisible={isvisible}>
       <MainPageNavLeft>
         <StyledSmallLogo />
         <AnchorLink href="#about">About chat</AnchorLink>

@@ -5,10 +5,10 @@ import Footer from '@/components/Footer/Footer';
 import {
   MainPageLayout,
   MainPageSectionOne,
-  SVGImage1,
-  SVGImage2,
-  SVGImage3,
-  SVGImage4,
+  Globe,
+  Star,
+  Telegram,
+  TailTelegram,
   MainPageSectionTwo,
   MainPageSectionThree,
   SectionThreeContainer,
@@ -17,21 +17,58 @@ import {
   MainPageSectionFive,
 } from '@/routes/MainRoute/MainRouteStyled';
 import { Typography } from '@mui/material';
-/*
-import GlobeIcon from '@/images/icons/Vector Globe Icon.svg';
-import StarIcon from '@/images/icons/Vector Star Icon.svg';
-import TelegramIcon from '@/images/icons/Vector Telegram Icon.svg';
-import TailTelegramIcon from '@/images/icons/Vector tail telegram.svg';
-*/
+import { generateUniqueKey } from '@/services/uniqKeyGen';
+import GlobeIcon from '@/images/iconComponents/GlobeIcon';
+import StarIcon from '@/images/iconComponents/StarIcon';
+import TelegramIcon from '@/images/iconComponents/TelegramIcon';
+import TailTelegramIcon from '@/images/iconComponents/TailTelegramIcon';
+
 import BasicButton from '@/components/Buttons/BasicButton/BasicButton';
 import Bubble from '@/components/Buttons/Bubble/Bubble';
 
 const MainRoute = () => {
   const navigate = useNavigate();
-
   const handleRegisterOpen = () => {
     navigate('/register');
   };
+
+  const bubbleData = [
+    {
+      marginbottom: '20px',
+      left: '0%',
+      text: 'Meet friends and expand your network.',
+    },
+    {
+      marginbottom: '40px',
+      left: '53%',
+      text: 'Save time by avoiding endless web searches.',
+    },
+    {
+      marginbottom: '60px',
+      left: '17%',
+      text: 'Engage in lively discussions.',
+    },
+    {
+      marginbottom: '60px',
+      left: '47%',
+      text: 'Access exclusive deals, insider tips.',
+    },
+    {
+      marginbottom: '30px',
+      left: '12%',
+      text: 'Uncover hidden details and gain local insights.',
+    },
+    {
+      marginbottom: '40px',
+      left: '55%',
+      text: 'Share your own experiences and insights.',
+    },
+    {
+      marginbottom: '0',
+      left: '0',
+      text: 'Connect anytime, from your laptop or phone',
+    },
+  ];
 
   return (
     <MainPageLayout>
@@ -70,15 +107,23 @@ const MainRoute = () => {
           variant="contained"
           color="primary"
           sx={{
-            margin: '32px',
+            marginTop: '32px',
           }}
           text="Start chatting"
           handleClick={handleRegisterOpen}
         />
-        <SVGImage1 $fillColor="var(--color-blue-1)" />
-        <SVGImage2 />
-        <SVGImage3 />
-        <SVGImage4 />
+        <Globe>
+          <GlobeIcon $fillColor="var(--color-blue-1)" />
+        </Globe>
+        <Star>
+          <StarIcon $fillColor="var(--color-blue-1)" />
+        </Star>
+        <Telegram>
+          <TelegramIcon $fillColor="var(--color-blue-1)" />
+        </Telegram>
+        <TailTelegram>
+          <TailTelegramIcon $fillColor="var(--color-blue-1)" />
+        </TailTelegram>
       </MainPageSectionOne>
       <MainPageSectionTwo />
       <MainPageSectionThree id="about">
@@ -123,41 +168,14 @@ const MainRoute = () => {
       </MainPageSectionThree>
       <MainPageSectionFour id="benefits">
         <SectionFourContainer>
-          <Bubble
-            $marginbottom="20px"
-            $left="0%"
-            text="Meet friends and expand your network."
-          />
-          <Bubble
-            marginbottom="40px"
-            left="53%"
-            text="Save time by avoiding endless web searches."
-          />
-          <Bubble
-            marginbottom="60px"
-            left="17%"
-            text="Engage in lively discussions."
-          />
-          <Bubble
-            marginbottom="60px"
-            left="47%"
-            text="Access exclusive deals, insider tips."
-          />
-          <Bubble
-            marginbottom="30px"
-            left="12%"
-            text="Uncover hidden details and gain local insights."
-          />
-          <Bubble
-            marginbottom="40px"
-            left="55%"
-            text="Share your own experiences and insights."
-          />
-          <Bubble
-            marginbottom="0"
-            left="0"
-            text="Connect anytime, from your laptop or phone"
-          />
+          {bubbleData.map(bubble => (
+            <Bubble
+              key={`${generateUniqueKey()}`}
+              marginbottom={bubble.marginbottom}
+              left={bubble.left}
+              text={bubble.text}
+            />
+          ))}
         </SectionFourContainer>
       </MainPageSectionFour>
       <MainPageSectionFive>
