@@ -7,12 +7,12 @@ import { clearUser, setUsers } from '@/redux-store/slices/userSlice';
 import ULRs from '../constants';
 
 
-export const register = createAsyncThunk('auth/register', async userData =>
+export const register = createAsyncThunk('auth/register', async (userData, { dispatch }) =>
 {
   try {
     const response = await axiosClient.post(ULRs.register, userData);
-
-    token.set(response.token);
+    dispatch(setUsers(response.data));
+    token.set(response.data.token);
     swal('Success!', 'Letter with verification sent on your email', 'success');
     return response.data;
   } catch (e) {

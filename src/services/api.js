@@ -14,7 +14,7 @@ axiosClient.interceptors.request.use(
   config =>
   {
     const { token } = JSON.parse(localStorage.getItem('persist:auth'));
-    const isAuthUrl = urlToOmit.includes[config.url];
+    const isAuthUrl = urlToOmit.includes(config.url);
 
     if (!isAuthUrl && token && token !== 'null') {
       config.headers.Authorization = `Bearer ${token}`;
