@@ -26,9 +26,9 @@ export const logIn = createAsyncThunk(
   {
     try {
       const response = await axiosClient.post(ULRs.login, userData);
-      token.set(response.data);
+      console.log(response.data.token);
+      token.set(response.data.token);
       dispatch(setUsers(response.data));
-      console.log(response.token);
       return response.data;
     } catch (e) {
       if (e.response.status === 400 || e.response.status === 401) {
@@ -37,7 +37,7 @@ export const logIn = createAsyncThunk(
       if (e.response.status === 404) {
         throw new Error(swal('Error!', 'Email is wrong', 'error'));
       }
-      console.log(e);
+      throw new Error(swal('Error!', 'login failed', 'error'));
     }
   }
 );
