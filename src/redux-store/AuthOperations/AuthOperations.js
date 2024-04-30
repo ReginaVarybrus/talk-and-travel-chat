@@ -26,7 +26,6 @@ export const logIn = createAsyncThunk(
   {
     try {
       const response = await axiosClient.post(ULRs.login, userData);
-      console.log(response.data.token);
       token.set(response.data.token);
       dispatch(setUsers(response.data));
       return response.data;
@@ -46,13 +45,10 @@ export const logOut = createAsyncThunk(
   'auth/logOut',
   async (arg, { dispatch }) =>
   {
-    console.log('inside logOut');
     try {
-      const response = await axiosClient.post(ULRs.logout);
-      console.log(response);
+      await axiosClient.post(ULRs.logout);
       token.unset();
       dispatch(clearUser());
-      console.log('redux and localstorage should be empty now');
     } catch (error) {
       throw new Error(error.message);
     }
@@ -75,13 +71,13 @@ export const sendDataCountryToBackend = createAsyncThunk(
       }
     } catch (e) {
       if (e.response && e.response.data) {
-        console.log('Error response data:', e.response.data);
+        // console.log('Error response data:', e.response.data);
         throw rejectWithValue(e.response.data.message);
       } else {
-        console.error(
+        /* console.error(
           'Error response is missing or does not have data property:',
           e.response
-        );
+        ); */
         throw rejectWithValue('Unknown error occurred');
       }
     }
