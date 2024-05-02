@@ -3,14 +3,16 @@ import { createAsyncThunk } from '@reduxjs/toolkit';
 import swal from 'sweetalert';
 
 import { token, axiosClient } from '@/services/api';
-import { setUsers } from '@/redux-store/slices/userSlice';
-import ULRs from '../constants';
+import { clearUser, setUsers } from '@/redux-store/slices/userSlice';
+import ULRs from '@/redux-store/constants';
 
-export const register = createAsyncThunk('auth/register', async userData => {
+
+export const register = createAsyncThunk('auth/register', async (userData, { dispatch }) =>
+{
   try {
     const response = await axiosClient.post(ULRs.register, userData);
-
-    token.set(response.token);
+    dispatch(setUsers(response.data));
+    token.set(response.data.token);
     swal('Success!', 'Letter with verification sent on your email', 'success');
     return response.data;
   } catch (e) {
@@ -20,12 +22,12 @@ export const register = createAsyncThunk('auth/register', async userData => {
 
 export const logIn = createAsyncThunk(
   'auth/login',
-  async (userData, { dispatch }) => {
+  async (userData, { dispatch }) =>
+  {
     try {
       const response = await axiosClient.post(ULRs.login, userData);
-      token.set(response.token);
+      token.set(response.data.token);
       dispatch(setUsers(response.data));
-
       return response.data;
     } catch (e) {
       if (e.response.status === 400 || e.response.status === 401) {
@@ -34,24 +36,30 @@ export const logIn = createAsyncThunk(
       if (e.response.status === 404) {
         throw new Error(swal('Error!', 'Email is wrong', 'error'));
       }
+      throw new Error(swal('Error!', 'login failed', 'error'));
     }
   }
 );
 
-export const logOut = createAsyncThunk('auth/logout', async () => {
-  try {
-    await axiosClient.post(ULRs.logout);
-    token.unset();
-  } catch (error) {
-    throw new Error(error.message);
-  }
-});
+export const logOut = createAsyncThunk(
+  'auth/logOut',
+  async (arg, { dispatch }) =>
+  {
+    try {
+      await axiosClient.post(ULRs.logout);
+      token.unset();
+      dispatch(clearUser());
+    } catch (error) {
+      throw new Error(error.message);
+    }
+  });
 
 // TODO sendDataCountryToBackend request shuold be update when we understand do we need thas request or no
 
 export const sendDataCountryToBackend = createAsyncThunk(
   'auth/sendDataCountryToBackend',
-  async ({ userId, countryDto }, { rejectWithValue }) => {
+  async ({ userId, countryDto }, { rejectWithValue }) =>
+  {
     try {
       const response = await axiosClient.post(
         `${ULRs.country}/${userId}`,
@@ -63,13 +71,13 @@ export const sendDataCountryToBackend = createAsyncThunk(
       }
     } catch (e) {
       if (e.response && e.response.data) {
-        console.log('Error response data:', e.response.data);
+        // console.log('Error response data:', e.response.data);
         throw rejectWithValue(e.response.data.message);
       } else {
-        console.error(
+        /* console.error(
           'Error response is missing or does not have data property:',
           e.response
-        );
+        ); */
         throw rejectWithValue('Unknown error occurred');
       }
     }
