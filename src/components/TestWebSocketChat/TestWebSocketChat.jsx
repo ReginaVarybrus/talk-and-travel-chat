@@ -21,31 +21,40 @@ import {
 import Icons from '../Icons/Icons';
 import { MessageList } from '../MessageList/MessageList';
 
-const Chat = () => {
+const Chat = ({ countryData }) => {
   const [messageList, setMessageList] = useState([]);
   const [message, setMessage] = useState('');
+  const userId = useSelector(getUser)?.id;
   const userName = useSelector(getUser)?.name;
 
-  const { sendMessage, connectedCountryRoom } = useWebSocket();
+  const { sendMessage } = useWebSocket();
 
   const isInputNotEmpty = Boolean(message?.trim().length);
 
   const handleChange = ({ target: { value } }) => setMessage(value);
 
+  const onMessageReceived = data => {
+    console.log('recieved message:', data);
+  };
+
   const handleSubmit = e => {
+    const dataToSend = {
+      content: message,
+      senderId: userId,
+      countryId: countryData.body.id,
+    };
     e.preventDefault();
-    sendMessage(message);
+    sendMessage(dataToSend, countryData.body.name, onMessageReceived);
     setMessageList(prevMessageList => [...prevMessageList, message]);
     setMessage('');
-
-    console.log('Message:', message);
   };
 
   return (
     <ChatStyled>
       <Header>
         <HeaderContent>
-          <h5>{connectedCountryRoom || 'Country Name'}</h5>
+          <h5>{countryData.body.name || 'Country Name'}</h5>
+          <p>{countryData.body.participants || '0'} participants</p>
         </HeaderContent>
       </Header>
 
