@@ -4,7 +4,7 @@ import { register, logIn, logOut } from '../AuthOperations/AuthOperations.js';
 const initialState = {
   token: null,
   isLoggedIn: false,
-  isRefresh: true,
+  isRefresh: false,
   error: null,
 };
 
@@ -29,6 +29,7 @@ export const authSlice = createSlice({
         ...state,
         token: action.payload.token,
         isLoggedIn: true,
+        isRefresh: false,
       }))
 
       .addCase(logIn.pending, handlePending)
@@ -38,6 +39,7 @@ export const authSlice = createSlice({
         token: action.payload.token,
         isLoggedIn: true,
         error: null,
+        isRefresh: false,
       }))
 
       .addCase(logOut.pending, handlePending)

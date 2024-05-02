@@ -35,9 +35,16 @@ const SideBar = () => {
     navigate(routesPath.DMS);
   };
 
-  const handleLogOut = (event, values) => {
-    dispatch(logOut(values));
-    navigate(routesPath.MAIN);
+  const handleLogOut = () => {
+    console.log('Logging out...');
+    dispatch(logOut())
+      .then(() => {
+        console.log('Logout successful.');
+        navigate(routesPath.MAIN);
+      })
+      .catch(error => {
+        console.error('Logout failed:', error.message);
+      });
   };
 
   return (

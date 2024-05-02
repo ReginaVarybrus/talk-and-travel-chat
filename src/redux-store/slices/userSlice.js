@@ -1,5 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit';
-import {
+import
+{
   fetchCurrentUser,
   updateUser,
 } from '../UserOperations/UserOperations.js';
@@ -31,6 +32,8 @@ export const userSlice = createSlice({
       ...state,
       ...action.payload.userDto,
     }),
+    clearUser: (state) =>
+      ({ ...state, ...initialState }),
   },
   extraReducers: builder =>
     builder
@@ -49,6 +52,6 @@ export const userSlice = createSlice({
       })),
 });
 
-export const { setUsers } = userSlice.actions;
+export const { setUsers, clearUser } = userSlice.actions;
 
 export default userSlice.reducer;
