@@ -41,10 +41,10 @@ const Chat = ({ countryData }) => {
     const dataToSend = {
       content: message,
       senderId: userId,
-      countryId: countryData.body.id,
+      countryId: countryData.id,
     };
     e.preventDefault();
-    sendMessage(dataToSend, countryData.body.name, onMessageReceived);
+    sendMessage(dataToSend, countryData.name, onMessageReceived);
     setMessageList(prevMessageList => [...prevMessageList, message]);
     setMessage('');
   };
@@ -53,8 +53,8 @@ const Chat = ({ countryData }) => {
     <ChatStyled>
       <Header>
         <HeaderContent>
-          <h5>{countryData.body.name || 'Country Name'}</h5>
-          <p>{countryData.body.participants || '0'} participants</p>
+          <h5>{countryData.name || 'Country Name'}</h5>
+          <p>{countryData.participants || '0'} participants</p>
         </HeaderContent>
       </Header>
 

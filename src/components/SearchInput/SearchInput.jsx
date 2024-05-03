@@ -40,7 +40,7 @@ const SearchInput = ({ setCountryData }) => {
 
   const onDataReceived = data => {
     console.log('recieved data:', data);
-    setCountryData(data);
+    setCountryData(data.body);
   };
 
   const handleCountryClick = country => {
