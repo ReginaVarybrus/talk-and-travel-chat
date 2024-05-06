@@ -12,7 +12,8 @@ const axiosClient = axios.create({
 
 axiosClient.interceptors.request.use(
   config => {
-    const { token } = JSON.parse(localStorage.getItem('persist:auth'));
+    const authData = JSON.parse(localStorage.getItem('persist:auth'));
+    const token = authData ? authData.token.replace(/"/g, '') : null;
     const isAuthUrl = urlToOmit.includes(config.url);
 
     if (!isAuthUrl && token) {

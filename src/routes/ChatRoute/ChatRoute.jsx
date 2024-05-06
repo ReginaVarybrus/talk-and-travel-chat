@@ -1,8 +1,6 @@
 import { useState, useEffect } from 'react';
 import SearchBar from '@/components/SearchBar/SearchBar';
-// import Chat from '@/components/Chat/Chat';
-import TestWebSocketChat from '@/components/TestWebSocketChat/TestWebSocketChat';
-
+import Chat from '@/components/Chat/Chat';
 import { ChatRouteStyled } from './ChatRouteStyled.js';
 
 const ChatRoute = () => {
@@ -15,8 +13,7 @@ const ChatRoute = () => {
   return (
     <ChatRouteStyled>
       <SearchBar setCountryData={setCountryData} />
-      <TestWebSocketChat countryData={countryData} />
-      {/* <Chat /> */}
+      <Chat countryData={countryData} />
     </ChatRouteStyled>
   );
 };

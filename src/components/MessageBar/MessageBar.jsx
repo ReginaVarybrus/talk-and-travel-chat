@@ -1,4 +1,7 @@
 import { useState, useRef } from 'react';
+import { useSelector } from 'react-redux';
+import { getUser } from '@/redux-store/selectors.js';
+import { useWebSocket } from '@/hooks/useWebSocket.js';
 import {
   MessageBarStyled,
   MessageInputs,
@@ -10,19 +13,38 @@ import {
   SendIcon,
 } from './MessageBarStyled';
 
-const MessageBar = () => {
-  const [value, setValue] = useState('');
+const MessageBar = ({ countryData, setMessageList }) => {
+  const [message, setMessage] = useState('');
+  const userId = useSelector(getUser)?.id;
   const textAreaRef = useRef(null);
 
-  const isInputNotEmpty = Boolean(value?.trim().length);
+  const { sendMessage } = useWebSocket();
 
-  const handleChange = e => {
-    setValue(e.target.value);
+  const isInputNotEmpty = Boolean(message?.trim().length);
+
+  const handleChange = ({ target: { value } }) => setMessage(value);
+
+  const onMessageReceived = data => {
+    console.log('recieved message:', data);
+  };
+
+  const handleSubmit = e => {
+    e.preventDefault();
+
+    const dataToSend = {
+      content: message,
+      senderId: userId,
+      countryId: countryData.id,
+    };
+
+    setMessageList(prevMessageList => [...prevMessageList, message]);
+    sendMessage(dataToSend, countryData.name, onMessageReceived);
+    setMessage('');
   };
 
   return (
     <MessageBarStyled>
-      <MessageInputs>
+      <MessageInputs onSubmit={handleSubmit}>
         <ButtonAttachFile component="label" variant="contained">
           <AttachmentIcon />
           <VisuallyHiddenInput type="file" />
@@ -30,12 +52,16 @@ const MessageBar = () => {
         <TextareaAutosize
           aria-label="empty textarea"
           placeholder="Type here"
-          value={value}
+          value={message}
           onChange={handleChange}
           ref={textAreaRef}
           maxLength="1000"
         />
-        <ButtonSendMessage $isInputNotEmpty={isInputNotEmpty}>
+        <ButtonSendMessage
+          type="submit"
+          value="Send"
+          $isInputNotEmpty={isInputNotEmpty}
+        >
           <SendIcon />
         </ButtonSendMessage>
       </MessageInputs>

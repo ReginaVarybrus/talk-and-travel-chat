@@ -17,7 +17,7 @@ const SearchBar = ({ setCountryData }) => {
     <SearchBarStyled>
       <SearchInput setCountryData={setCountryData} />
       <ButtonMapOpen onClick={handleOpen}>Search by map</ButtonMapOpen>
-      <Outlet />
+      <Outlet setCountryData={setCountryData} />
 
       <Modal
         aria-labelledby="transition-modal-title"

@@ -30,6 +30,49 @@ export const useWebSocket = () => {
     });
   };
 
+  const updateCountryRoom = (countryName, countryData, onDataReceived) => {
+    const socket = new SockJS(`${import.meta.env.VITE_APP_API_URL}/ws/`);
+    const client = Stomp.over(socket);
+
+    client.connect({}, frame => {
+      setStompClient(client);
+      setConnected(true);
+
+      console.log(`Connected successfull: ${frame}`);
+
+      client.send(
+        `/api/country/update/${countryName}`,
+        {},
+        JSON.stringify(countryData)
+      );
+
+      client.subscribe(`/group-message/${countryName}`, response => {
+        const data = JSON.parse(response.body);
+        onDataReceived(data);
+      });
+    });
+  };
+
+  const openCountryRoom = (countryName, onDataReceived) => {
+    const socket = new SockJS(`${import.meta.env.VITE_APP_API_URL}/ws/`);
+    const client = Stomp.over(socket);
+
+    client.connect({}, frame => {
+      setStompClient(client);
+      setConnected(true);
+
+      console.log(`Connected successfull: ${frame}`);
+
+      client.send(`/api/country/find-by-name/${countryName}`, {});
+
+      client.subscribe(`/group-message/${countryName}`, response => {
+        const data = JSON.parse(response.body);
+        onDataReceived(data);
+        console.log('open country data', data);
+      });
+    });
+  };
+
   const sendMessage = (dataToSend, country, onMessageReceived) => {
     if (stompClient) {
       stompClient.send(
@@ -64,63 +107,10 @@ export const useWebSocket = () => {
 
   return {
     createCountryRoom,
+    updateCountryRoom,
+    openCountryRoom,
     sendMessage,
     disconnect,
     isConnected,
   };
 };
-
-// TODO
-
-// create
-// {
-//   userId,
-//   name,
-//   flagCode,
-// };
-
-// update
-// {
-//   "id": 1,
-//   "userId": 3
-// }
-
-// const updateCountryRoom = (countryName, countryData, onDataReceived) => {
-//   const socket = new SockJS(`${import.meta.env.VITE_APP_API_URL}/ws/`);
-//   const client = Stomp.over(socket);
-
-//   client.connect({}, frame => {
-//     setStompClient(client);
-//     setConnected(true);
-
-//     console.log(`Connected successfull: ${frame}`);
-
-//     client.send(
-//       `/api/country/update/${countryName}`,
-//       {},
-//       JSON.stringify(countryData)
-//     );
-
-//     client.subscribe(`/group-message/${countryName}`, response => {
-//       const data = JSON.parse(response.body);
-//       onDataReceived(data);
-//     });
-//   });
-// };
-
-// const openCountryRoom = (countryName, countryData, onDataReceived) => {
-//   const socket = new SockJS(`${import.meta.env.VITE_APP_API_URL}/ws/`);
-//   const client = Stomp.over(socket);
-
-//   client.connect({}, frame => {
-//     setStompClient(client);
-//     setConnected(true);
-
-//     console.log(`Connected successfull: ${frame}`);
-
-//     client.subscribe(`/group-message/${countryName}`, response => {
-//       const data = JSON.parse(response.body);
-//       onDataReceived(data);
-//     });
-//   });
-// };
