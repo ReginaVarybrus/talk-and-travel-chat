@@ -8,7 +8,8 @@ const initialState = {
   error: null,
 };
 
-const handlePending = () => ({
+const handlePending = state => ({
+  ...state,
   isRefresh: true,
 });
 
