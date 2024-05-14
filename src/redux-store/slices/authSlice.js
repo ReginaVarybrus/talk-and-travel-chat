@@ -5,7 +5,7 @@ import
   logIn,
   logOut,
   sendDataCountryToBackend,
-} from '../AuthOperations/AuthOperations.js';
+} from '@/redux-store/AuthOperations/AuthOperations';
 
 const initialState = {
   token: null,
@@ -15,7 +15,8 @@ const initialState = {
   flagCode: null,
 };
 
-const handlePending = () => ({
+const handlePending = (state) => ({
+  ...state,
   isRefresh: true,
 });
 
@@ -56,13 +57,10 @@ export const authSlice = createSlice({
       }))
 
       .addCase(sendDataCountryToBackend.pending, handlePending)
-      .addCase(sendDataCountryToBackend.rejected, (state, action) =>
-      {
-        handleRejected(state, action);
-      })
+      .addCase(sendDataCountryToBackend.rejected, handleRejected)
       .addCase(sendDataCountryToBackend.fulfilled, (state, action) => ({
-        ...state,
-        name: action.payload.name,
+        // ...state,
+        // name: action.payload.name,
         flagCode: action.payload.flagCode,
       })),
 });
