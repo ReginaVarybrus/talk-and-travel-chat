@@ -27,6 +27,7 @@ export const logIn = createAsyncThunk(
     try {
       const response = await axiosClient.post(ULRs.login, userData);
       token.set(response.data.token);
+      console.log(response.data);
       dispatch(setUsers(response.data));
       return response.data;
     } catch (e) {

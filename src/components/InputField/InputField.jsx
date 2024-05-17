@@ -7,7 +7,7 @@ import {
   PasswordReapetLable,
 } from '@/components/InputField/InputField.styled';
 
-const InputField = ({ props, formik }) => {
+const InputField = ({ props, formik, disabled }) => {
   const renderValidationMessage = () => {
     const label =
       props.general === 'password'
@@ -36,6 +36,7 @@ const InputField = ({ props, formik }) => {
         id={props.general}
         name={props.general}
         type={props.type}
+        disabled={disabled}
         onChange={formik.handleChange}
         value={formik.values[props.general]}
         placeholder={props.placeholder}

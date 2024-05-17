@@ -3,7 +3,7 @@ import
 {
   fetchCurrentUser,
   updateUser,
-} from '../UserOperations/UserOperations.js';
+} from '@/redux-store/UserOperations/UserOperations';
 
 const initialState = {
   id: null,
@@ -11,6 +11,7 @@ const initialState = {
   userEmail: '',
   password: null,
   avatar: null,
+
 };
 
 const handlePending = state => ({

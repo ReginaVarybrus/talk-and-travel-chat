@@ -1,219 +1,78 @@
 import { useState, useEffect } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
-import { Formik, ErrorMessage } from 'formik';
-import {
-  object,
-  string,
-  //  date
-} from 'yup';
+import { useFormik } from 'formik';
+import { useNavigate } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
+
+import { routesPath } from '@/routes/routesConfig';
 import { getUser } from '@/redux-store/selectors';
 import { updateUser } from '@/redux-store/UserOperations/UserOperations';
-import {
-  // ContainerImg,
-  Wrapper,
-  Input,
-  // DatePick,
-  Btn,
-  BlockInput,
-  Forms,
-  // InputFile,
-  //   ImgBtn,
-  // ImgAvatar,
-  LabelBtn,
-  // LabelImg,
-  User,
-  // SvgAvatar,
-  // VectorPng,
-  Message,
-} from './ProfileStyled';
-// import plus from '../../images/icons/plus.png';
-// import Icon from '../../images/sprite.svg';
 
-const validationFormikSchema = object({
-  name: string().max(40, 'too long!').required(),
-  //   birthday: date(),
-  email: string()
-    .matches(/^([a-z0-9_.-]+)@([a-z09_.-]+).([a-z]{2,6})$/, 'enter valid email')
-    .required(),
-  //   phone: string().matches(/^\+[\d-]+$/, 'number should start from +'),
+import {
+  ProfileStyled,
+  Header,
+  Title,
+  ProfileContainer,
+} from '@/components/Profile/ProfileStyled';
+import InputField from '@/components/InputField/InputField';
+import {
+  formFields,
+  schema,
+} from '@/components/Profile/ProfileValidationSchema';
+
+const initialValues = {};
+Object.keys(formFields).forEach(key => {
+  initialValues[key] = '';
 });
 
 const Profile = () => {
-  const { user } = useSelector(getUser);
-  // const [avatarURL, setAvatarURL] = useState(null);
-  const [initialValues, setInitialValues] = useState({
-    name: '',
-    // phone: '',
-    // birthday: new Date(),
-    email: '',
-  });
-
+  const user = useSelector(getUser);
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
-  useEffect(() => {
-    const data = {
-      name: user ? user.name : '',
-      email: user ? user.email : '',
-      //   phone: user ? user.phone : '',
-      //   birthday: user.birthday ? new Date(user.birthday) : new Date(),
-    };
-    // setAvatarURL(user.avatarURL);
-    setInitialValues({ ...data });
-  }, [user]);
+  const [editMode, seteditMode] = useState(true);
 
-  const handleSubmit = async (values, { resetForm }) => {
-    const formData = new FormData();
-    formData.append('name', values.name);
-    formData.append('email', values.email);
-    // if (values.phone) {
-    //   formData.append('phone', values.phone);
-    // }
-
-    // formData.append('birthday', values.birthday);
-
-    // if (avatarURL !== avatarURL.toString()) {
-    //   formData.append('avatar', avatarURL);
-    // }
-
-    await dispatch(updateUser(formData));
-
-    resetForm();
+  const toggleEditMode = () => {
+    seteditMode(!editMode);
   };
 
+  const formik = useFormik({
+    initialValues,
+    validationSchema: schema,
+    validateOnChange: false,
+    onSubmit: (values, { resetForm }) => {
+      dispatch(updateUser(values));
+      navigate(routesPath.ACCOUNT);
+      resetForm();
+    },
+  });
+
+  useEffect(() => {
+    if (user) {
+      formik.setValues(user);
+    }
+  }, [user]);
+
   return (
-    <Wrapper>
-      <Formik
-        enableReinitialize
-        initialValues={initialValues}
-        onSubmit={handleSubmit}
-        validationSchema={validationFormikSchema}
-      >
-        {({
-          /* TODO: Check what below props are used for and which handleSubmit should be called
-          in <Forms></Forms> //Kostas//
-           */
-          values,
-          handleSubmit,
-          handleChange,
-          handleBlur,
-          // setFieldValue,
-          // setTouched,
-          // touched,
-        }) => (
-          <Forms autoComplete="off" onSubmit={handleSubmit}>
-            {/* <ContainerImg>
-              {avatarURL && avatarURL === avatarURL.toString() ? (
-                <ImgAvatar src={avatarURL} alt="avatar" />
-              ) : avatarURL ? (
-                <ImgAvatar src={URL.createObjectURL(avatarURL)} alt="avatar" />
-              ) : user?.avatarURL ? (
-                <ImgAvatar src={avatarURL} alt="avatar" />
-              ) : (
-                <SvgAvatar>
-                  <use href={Icon + '#icon-ph-user'}></use>
-                </SvgAvatar>
-              )}
-
-              <LabelImg htmlFor="avatar">
-
-                <InputFile
-                  id="avatar"
-                  type="file"
-                  onChange={event => setAvatarURL(event.target.files[0])}
-                  accept="image/png, image/gif, image/jpeg"
-                  name="avatar"
-                ></InputFile>
-
-                <ErrorMessage name="avatar">
-                  {msg => {
-                    <Message>{msg}</Message>;
-                  }}
-                </ErrorMessage>
-              </LabelImg>
-            </ContainerImg> */}
-
-            <h2>{user?.name} </h2>
-            <User>User</User>
-            <BlockInput>
-              <LabelBtn htmlFor="name">
-                <p>User Name</p>
-                <Input
-                  type="text"
-                  name="name"
-                  id="name"
-                  value={values.name}
-                  onChange={handleChange}
-                  onBlur={handleBlur}
-                  placeholder="Name"
-                />
-                <ErrorMessage name="name">
-                  {msg => <Message>{msg}</Message>}
-                </ErrorMessage>
-              </LabelBtn>
-
-              {/* <LabelBtn htmlFor="phone">
-                <p>Phone</p>
-                <Input
-                  type="tel"
-                  name="phone"
-                  id="phone"
-                  value={values.phone ? values.phone : ''}
-                  onChange={handleChange}
-                  onBlur={handleBlur}
-                  placeholder="+380"
-                ></Input>
-                <ErrorMessage name="phone">
-                  {msg => <Message>{msg}</Message>}
-                </ErrorMessage>
-              </LabelBtn> */}
-
-              {/* <LabelBtn htmlFor="birthday">
-                <p>Birthday</p>
-                <DatePick
-                  type="date"
-                  name="birthday"
-                  id="birthday"
-                  input={true}
-                  maxDate={new Date()}
-                  selected={values.birthday}
-                  onChange={e => {
-                    setFieldValue('birthday', e);
-                    setTouched({ ...touched, birthday: true });
-                  }}
-                  placeholder="Birthday"
-                  dateFormat="dd/MM/yyyy"
-                /> */}
-
-              {/* <VectorPng>
-                  <use href={Icon + '#icon-chevron-right'}></use>
-                </VectorPng>
-
-                <ErrorMessage name="birthday">
-                  {msg => <Message>{msg}</Message>}
-                </ErrorMessage> */}
-              {/* </LabelBtn> */}
-
-              <LabelBtn htmlFor="email">
-                <p>Email</p>
-                <Input
-                  type="email"
-                  name="email"
-                  id="email"
-                  placeholder="Email"
-                  value={values.email}
-                  onChange={handleChange}
-                  onBlur={handleBlur}
-                />
-                <ErrorMessage name="email">
-                  {msg => <Message>{msg}</Message>}
-                </ErrorMessage>
-              </LabelBtn>
-            </BlockInput>
-            <Btn type="submit">Save changes</Btn>
-          </Forms>
-        )}
-      </Formik>
-    </Wrapper>
+    <ProfileStyled>
+      <Header>
+        <Title>Profile</Title>
+      </Header>
+      <ProfileContainer>
+        <button type="button" onClick={toggleEditMode}>
+          {editMode ? 'Save' : 'Edit'}
+        </button>
+        {Object.entries(formFields).map(([key, value]) => (
+          <InputField
+            key={key}
+            props={value}
+            formik={formik}
+            name={value.general}
+            disabled={editMode}
+          />
+        ))}
+      </ProfileContainer>
+    </ProfileStyled>
   );
 };
+
 export default Profile;
