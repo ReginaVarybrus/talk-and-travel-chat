@@ -10,11 +10,14 @@ const iconProperties = (width = '24px', height = '48px') => `
 `;
 
 export const SideBarStyled = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  height: 100vh;
-  background: var(--color-blue-1);
+  display: none;
+  @media ${device.tablet} {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    height: 100vh;
+    background: var(--color-blue-1);
+  }
 `;
 
 export const ButtonsFrame = styled.div`

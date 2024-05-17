@@ -7,6 +7,7 @@ import { Outlet } from 'react-router-dom';
 import { SearchBarStyled, ButtonMapOpen, MapBox } from './SearchBarStyled';
 import SearchInput from '../SearchInput/SearchInput';
 import ChatMap from '../ChatMap/ChatMap';
+import TapBar from '../TapBar/TapBar';
 
 const SearchBar = () => {
   const [openMap, setOpenMap] = useState(false);
@@ -18,6 +19,7 @@ const SearchBar = () => {
       <SearchInput />
       <ButtonMapOpen onClick={handleOpen}>Search by map</ButtonMapOpen>
       <Outlet />
+      <TapBar />
 
       <Modal
         aria-labelledby="transition-modal-title"
