@@ -12,6 +12,9 @@ import {
   Header,
   Title,
   ProfileContainer,
+  Avatar,
+  InputBlock,
+  EditButton,
 } from '@/components/Profile/ProfileStyled';
 import InputField from '@/components/InputField/InputField';
 import {
@@ -29,10 +32,10 @@ const Profile = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const [editMode, seteditMode] = useState(true);
+  const [editMode, setEditMode] = useState(false);
 
   const toggleEditMode = () => {
-    seteditMode(!editMode);
+    setEditMode(!editMode);
   };
 
   const formik = useFormik({
@@ -43,6 +46,7 @@ const Profile = () => {
       dispatch(updateUser(values));
       navigate(routesPath.ACCOUNT);
       resetForm();
+      setEditMode(false);
     },
   });
 
@@ -58,18 +62,23 @@ const Profile = () => {
         <Title>Profile</Title>
       </Header>
       <ProfileContainer>
-        <button type="button" onClick={toggleEditMode}>
-          {editMode ? 'Save' : 'Edit'}
-        </button>
-        {Object.entries(formFields).map(([key, value]) => (
-          <InputField
-            key={key}
-            props={value}
-            formik={formik}
-            name={value.general}
-            disabled={editMode}
-          />
-        ))}
+        <Avatar />
+        <InputBlock>
+          {Object.entries(formFields).map(([key, value]) => (
+            <InputField
+              key={key}
+              props={value}
+              formik={formik}
+              name={value.general}
+              disabled={!editMode}
+            />
+          ))}
+        </InputBlock>
+        <EditButton
+          type="button"
+          onClick={toggleEditMode}
+          $icon={editMode ? 'close' : 'edit'}
+        />
       </ProfileContainer>
     </ProfileStyled>
   );
