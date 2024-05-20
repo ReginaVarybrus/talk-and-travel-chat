@@ -1,48 +1,12 @@
 import styled from 'styled-components';
-import SmallLogo from '@/images/small_logo.svg';
 import Miniature from '@/images/main_page_miniature.svg'
-import { Typography, Box } from '@mui/material';
+import { Box } from '@mui/material';
 
 
 export const MainPageLayout = styled(Box)`
   box-sizing: border-box;
   padding-top: 80px;
   font-family: Roboto, sans-serif;
-`;
-
-export const MainPageNav = styled.nav`
-  height: 80px;
-  display: flex;
-  justify-content: space-between;
-  border-bottom: 1px solid var(--color-blue-1);
-`;
-
-export const StyledSmallLogo = styled.div`
-  width: 48px;
-  height: 48px;
-  background-image: url(${SmallLogo});
-  background-repeat: no-repeat;
-  background-size: contain;
-  padding-right: 32px;
-`;
-
-export const AnchorLink = styled.a`
-  text-decoration: none;
-  color: var(--color-dark);
-`;
-
-export const MainPageNavRight = styled.div`
-  display: flex;
-  gap: 24px;
-  padding: 18.5px 120px 18.5px 0;
-  align-items: center
-`;
-
-export const MainPageNavLeft = styled.div`
-  display: flex;
-  gap: 24px;
-  padding: 16px 0 16px 120px;
-  align-items: center
 `;
 
 export const MainPageSectionOne = styled(Box)`
@@ -52,13 +16,6 @@ export const MainPageSectionOne = styled(Box)`
   flex-direction: column;
   align-items: center;
   text-align: center;
-`;
-
-export const MainPageText = styled(Typography)`
-  font-size: 20px;
-  line-height: 24px;
-  text-align: center;
-  margin-bottom: 32px;
 `;
 
 export const Globe = styled.div`

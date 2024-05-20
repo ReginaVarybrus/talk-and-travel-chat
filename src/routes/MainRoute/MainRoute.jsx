@@ -26,49 +26,51 @@ import TailTelegramIcon from '@/images/iconComponents/TailTelegramIcon';
 import BasicButton from '@/components/Buttons/BasicButton/BasicButton';
 import Bubble from '@/components/Buttons/Bubble/Bubble';
 
+import { routesPath } from '@/routes/routesConfig';
+
+const bubbleData = [
+  {
+    marginbottom: '20px',
+    left: '0%',
+    text: 'Meet friends and expand your network.',
+  },
+  {
+    marginbottom: '40px',
+    left: '53%',
+    text: 'Save time by avoiding endless web searches.',
+  },
+  {
+    marginbottom: '60px',
+    left: '17%',
+    text: 'Engage in lively discussions.',
+  },
+  {
+    marginbottom: '60px',
+    left: '47%',
+    text: 'Access exclusive deals, insider tips.',
+  },
+  {
+    marginbottom: '30px',
+    left: '12%',
+    text: 'Uncover hidden details and gain local insights.',
+  },
+  {
+    marginbottom: '40px',
+    left: '55%',
+    text: 'Share your own experiences and insights.',
+  },
+  {
+    marginbottom: '0',
+    left: '0',
+    text: 'Connect anytime, from your laptop or phone',
+  },
+];
+
 const MainRoute = () => {
   const navigate = useNavigate();
   const handleRegisterOpen = () => {
-    navigate('/register');
+    navigate(routesPath.REGISTER);
   };
-
-  const bubbleData = [
-    {
-      marginbottom: '20px',
-      left: '0%',
-      text: 'Meet friends and expand your network.',
-    },
-    {
-      marginbottom: '40px',
-      left: '53%',
-      text: 'Save time by avoiding endless web searches.',
-    },
-    {
-      marginbottom: '60px',
-      left: '17%',
-      text: 'Engage in lively discussions.',
-    },
-    {
-      marginbottom: '60px',
-      left: '47%',
-      text: 'Access exclusive deals, insider tips.',
-    },
-    {
-      marginbottom: '30px',
-      left: '12%',
-      text: 'Uncover hidden details and gain local insights.',
-    },
-    {
-      marginbottom: '40px',
-      left: '55%',
-      text: 'Share your own experiences and insights.',
-    },
-    {
-      marginbottom: '0',
-      left: '0',
-      text: 'Connect anytime, from your laptop or phone',
-    },
-  ];
 
   return (
     <MainPageLayout>

@@ -1,22 +1,10 @@
-import { useState, useEffect } from 'react';
 import NavBar from '@/components/NavigationBar/NavBar';
+import useNavBarVisibility from '@/components/NavigationBar/useNavBarVisibility';
 
 const Header = () => {
-  const [isvisible, setIsVisible] = useState(true);
-  const [prevScrollPos, setPrevScrollPos] = useState(0);
+  const isVisible = useNavBarVisibility();
 
-  useEffect(() => {
-    const handleScroll = () => {
-      const currentScrollPos = window.scrollY;
-      setIsVisible(prevScrollPos > currentScrollPos);
-      setPrevScrollPos(currentScrollPos);
-    };
-
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, [prevScrollPos]);
-
-  return <NavBar isvisible={isvisible} $navBarType="header" />;
+  return <NavBar isvisible={isVisible} $navBarType="header" />;
 };
 
 export default Header;
