@@ -4,18 +4,16 @@ import { register, logIn, logOut } from '../AuthOperations/AuthOperations.js';
 const initialState = {
   token: null,
   isLoggedIn: false,
-  isRefresh: true,
   error: null,
 };
 
-const handlePending = state => ({
-  ...state,
-  isRefresh: true,
+const handlePending = () => ({
+  isLoggedIn: false,
 });
 
 const handleRejected = (state, action) => ({
   ...state,
-  isRefresh: false,
+  isLoggedIn: false,
   error: action.payload,
 });
 
@@ -30,7 +28,6 @@ export const authSlice = createSlice({
         ...state,
         token: action.payload.token,
         isLoggedIn: true,
-        isRefresh: false,
       }))
 
       .addCase(logIn.pending, handlePending)
@@ -40,7 +37,6 @@ export const authSlice = createSlice({
         token: action.payload.token,
         isLoggedIn: true,
         error: null,
-        isRefresh: false,
       }))
 
       .addCase(logOut.pending, handlePending)
