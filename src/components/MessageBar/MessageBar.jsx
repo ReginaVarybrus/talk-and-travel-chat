@@ -24,10 +24,6 @@ const MessageBar = ({ countryData, setMessageList }) => {
 
   const handleChange = ({ target: { value } }) => setMessage(value);
 
-  const onMessageReceived = data => {
-    console.log('recieved message:', data);
-  };
-
   const handleSubmit = e => {
     e.preventDefault();
 
@@ -38,7 +34,7 @@ const MessageBar = ({ countryData, setMessageList }) => {
     };
 
     setMessageList(prevMessageList => [...prevMessageList, message]);
-    sendMessage(dataToSend, countryData.name, onMessageReceived);
+    sendMessage(countryData.name, dataToSend);
     setMessage('');
   };
 

@@ -23,11 +23,25 @@ const SearchInput = ({ setCountryData }) => {
   const [createdCountries, setCreatedCountries] = useState([]);
   const [dataToCreate, setDataToCreate] = useState({});
   const [showItem, setShowItem] = useState(false);
+  const [selectedCountry, setSelectedCountry] = useState(null);
   const autoCompleteRef = useRef(null);
   const userId = useSelector(getUser)?.id;
 
   const { responseData } = useFetch(ULRs.countries);
-  const { createCountryRoom, updateCountryRoom } = useWebSocket();
+
+  const onDataReceived = data => {
+    setCountryData(data.body);
+  };
+
+  const { subscribeToCountryRoom, createCountryRoom, updateCountryRoom } =
+    useWebSocket();
+
+  useEffect(() => {
+    if (selectedCountry) {
+      subscribeToCountryRoom(selectedCountry, onDataReceived);
+      console.log('Subscribe succesfull');
+    }
+  }, [selectedCountry]);
 
   useEffect(() => {
     if (responseData) {
@@ -51,12 +65,9 @@ const SearchInput = ({ setCountryData }) => {
 
   const handleClick = () => setShowItem(!showItem);
 
-  const onDataReceived = data => {
-    setCountryData(data.body);
-  };
-
   const handleCountryClick = country => {
     const countryName = country.properties.ADMIN;
+    setSelectedCountry(countryName);
     const selectedItem = createdCountries.find(
       item => item.name === countryName
     );
@@ -70,7 +81,7 @@ const SearchInput = ({ setCountryData }) => {
     setShowItem(false);
 
     if (selectedItem) {
-      updateCountryRoom(countryName, dataToUpdate, onDataReceived);
+      updateCountryRoom(countryName, dataToUpdate);
     } else {
       setOpen(true);
       setDataToCreate({
@@ -84,7 +95,8 @@ const SearchInput = ({ setCountryData }) => {
   };
 
   const handleCreateCountryRoom = () => {
-    createCountryRoom(dataToCreate.name, dataToCreate, onDataReceived);
+    createCountryRoom(dataToCreate.name, dataToCreate);
+    setSelectedCountry(dataToCreate.name);
     setOpen(false);
   };
 
