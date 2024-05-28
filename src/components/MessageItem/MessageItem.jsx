@@ -1,13 +1,15 @@
-// import { timeStampConverter } from '../utils/timeUtil.js';
+import { timeStampConverter } from '../utils/timeUtil.js';
 
-export const MessageItem = ({ message }) => (
-  // const time = timeStampConverter(message.createdDateTime);
+export const MessageItem = ({ message, date }) => {
+  const time = timeStampConverter(date);
 
-  <div>
-    <div>Avatar</div>
+  return (
     <div>
-      <span>{message}</span>
-      <span>9.10</span>
+      <div>Avatar</div>
+      <div>
+        <span>{message.content}</span>
+        <span>{time}</span>
+      </div>
     </div>
-  </div>
-);
+  );
+};

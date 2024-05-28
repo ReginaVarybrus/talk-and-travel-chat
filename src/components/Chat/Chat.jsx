@@ -8,14 +8,20 @@ import MessageList from '../MessageList/MessageList';
 import MessageBar from '../MessageBar/MessageBar';
 
 const Chat = ({ countryData }) => {
-  const [messageList, setMessageList] = useState([]);
+  const [messageList, setMessageList] = useState(
+    countryData.groupMessages || []
+  );
   const userName = useSelector(getUser)?.name;
 
   return (
     <ChatStyled>
       <ChatHeader countryData={countryData} />
       <MessageBlock>
-        <MessageList messageList={messageList} username={userName} />
+        <MessageList
+          countryData={countryData}
+          messageList={messageList}
+          username={userName}
+        />
       </MessageBlock>
       <MessageBar countryData={countryData} setMessageList={setMessageList} />
     </ChatStyled>

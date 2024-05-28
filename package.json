@@ -29,8 +29,6 @@
     "react-router-dom": "^6.16.0",
     "redux-persist": "^6.0.0",
     "simplebar-react": "^3.2.4",
-    "socket.io": "^4.7.2",
-    "socket.io-client": "^4.7.2",
     "sockjs": "^0.3.24",
     "sockjs-client": "^1.6.1",
     "styled-components": "^6.1.0",

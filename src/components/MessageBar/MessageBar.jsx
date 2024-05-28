@@ -33,7 +33,9 @@ const MessageBar = ({ countryData, setMessageList }) => {
       countryId: countryData.id,
     };
 
-    setMessageList(prevMessageList => [...prevMessageList, message]);
+    // setMessageList(prevMessageList => [...prevMessageList, message]);
+    setMessageList(countryData.groupMessages);
+
     sendMessage(countryData.name, dataToSend);
     setMessage('');
   };

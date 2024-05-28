@@ -135,8 +135,11 @@ const SearchInput = ({ setCountryData }) => {
               </Text>
             ) : (
               <>
-                {filterCountries.map((country, index) => (
-                  <Item key={index} onClick={() => handleCountryClick(country)}>
+                {filterCountries.map(country => (
+                  <Item
+                    key={country.properties.code}
+                    onClick={() => handleCountryClick(country)}
+                  >
                     <Flag
                       loading="lazy"
                       width="32"

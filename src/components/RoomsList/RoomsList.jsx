@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
+import { useOutletContext } from 'react-router-dom';
 import { useFetch } from '@/hooks/useFetch.js';
 import { useWebSocket } from '@/hooks/useWebSocket.js';
 import ULRs from '@/redux-store/constants';
@@ -13,6 +14,9 @@ const RoomsList = () => {
   const userId = useSelector(getUser)?.id;
   const { subscribeToCountryRoom, openCountryRoom } = useWebSocket();
   const { responseData } = useFetch(ULRs.userCountries(userId));
+  const context = useOutletContext();
+
+  const { setCountryData } = context;
 
   useEffect(() => {
     if (responseData && userId) {
@@ -21,9 +25,13 @@ const RoomsList = () => {
     console.log('response country', responseData);
   }, [responseData]);
 
+  const onDataReceived = data => {
+    setCountryData(data.body);
+  };
+
   useEffect(() => {
     if (selectedCountry) {
-      subscribeToCountryRoom(selectedCountry);
+      subscribeToCountryRoom(selectedCountry, onDataReceived);
       console.log('Subscribe succesfull');
     }
   }, [selectedCountry]);
@@ -31,7 +39,7 @@ const RoomsList = () => {
   const handleOpenCountryRoom = countryName => {
     setSelectedCountry(countryName);
     console.log('selectedItem name', countryName);
-    openCountryRoom(selectedCountry);
+    openCountryRoom(countryName);
   };
 
   return (
@@ -39,11 +47,8 @@ const RoomsList = () => {
       {countryRooms.length ? (
         <ListItems>
           <ScrollBar>
-            {countryRooms.map(room => (
-              <Item
-                key={room.id}
-                onClick={() => handleOpenCountryRoom(room.name)}
-              >
+            {countryRooms.map((room, id) => (
+              <Item key={id} onClick={() => handleOpenCountryRoom(room.name)}>
                 <Flag
                   loading="lazy"
                   width="32"
