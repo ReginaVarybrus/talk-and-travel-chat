@@ -8,6 +8,7 @@ export const ListStyled = styled.div`
   justify-content: start;
   align-items: center;
   width: 100%;
+  max-height: 63vh;
 `;
 
 export const Text = styled.p`

@@ -1,14 +1,14 @@
 import { timeStampConverter } from '../utils/timeUtil.js';
 
-export const MessageItem = ({ message, date }) => {
+export const MessageItem = ({ avatar, message, date }) => {
   const time = timeStampConverter(date);
 
   return (
     <div>
-      <div>Avatar</div>
+      <div>{avatar || 'avatar'}</div>
       <div>
-        <span>{message.content}</span>
-        <span>{time}</span>
+        <span>{message.content || `message`}</span>
+        <span>{time || 'time'}</span>
       </div>
     </div>
   );

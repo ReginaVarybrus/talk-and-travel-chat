@@ -4,7 +4,11 @@ const ChatHeader = ({ countryData }) => (
   <ChatHeaderStyled>
     <HeaderContent>
       <h5>{countryData.name || 'Country Name'}</h5>
-      <p>{countryData.participants || '0'} participants</p>
+      <p>
+        {`${
+          countryData.participants ? countryData.participants.length : '0'
+        } participants`}
+      </p>
     </HeaderContent>
   </ChatHeaderStyled>
 );

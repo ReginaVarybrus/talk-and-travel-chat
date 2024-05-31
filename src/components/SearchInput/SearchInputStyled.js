@@ -73,7 +73,7 @@ export const Flag = styled.img`
 `;
 
 export const ScrollBar = styled(SimpleBar)`
-  max-height: 570px;
+  max-height: calc(100vh - 227px);
 `;
 
 export const Text = styled.p`

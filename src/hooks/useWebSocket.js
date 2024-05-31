@@ -83,7 +83,6 @@ export const useWebSocket = () => {
     } else {
       console.error('MESSAGE. Stomp client is not connected.');
     }
-    console.log('Message data:', dataToSend);
   };
 
   const disconnect = () => {
