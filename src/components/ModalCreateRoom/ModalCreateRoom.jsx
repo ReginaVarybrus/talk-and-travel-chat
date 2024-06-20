@@ -3,7 +3,12 @@ import Modal from '@mui/material/Modal';
 import Fade from '@mui/material/Fade';
 import { ModalBoxStyled, Buttons, Button } from './ModalCreateRoomStyled.js';
 
-const ModalCreateRoom = ({ open, setOpen, handleCreateCountryRoom }) => {
+const ModalCreateRoom = ({
+  open,
+  setOpen,
+  handleCreateCountryRoom,
+  selectedCountry,
+}) => {
   const handleClose = () => setOpen(false);
   const handleCreateChat = () => {
     handleCreateCountryRoom();
@@ -26,7 +31,10 @@ const ModalCreateRoom = ({ open, setOpen, handleCreateCountryRoom }) => {
       >
         <Fade in={open}>
           <ModalBoxStyled>
-            <h5>Do you want to create a new chat room?</h5>
+            <h5>
+              {selectedCountry} room does not exist yet. Want to create a new
+              one?
+            </h5>
             <Buttons>
               <Button onClick={handleCreateChat}>Create</Button>
               <Button onClick={handleClose}>No, thanks</Button>

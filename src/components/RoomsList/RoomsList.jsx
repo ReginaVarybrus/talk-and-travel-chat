@@ -15,7 +15,6 @@ const RoomsList = () => {
   const { subscribeToCountryRoom, openCountryRoom } = useWebSocket();
   const { responseData } = useFetch(ULRs.userCountries(userId));
   const context = useOutletContext();
-
   const { setCountryData } = context;
 
   useEffect(() => {

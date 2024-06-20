@@ -1,27 +1,26 @@
-import { useEffect, useRef } from 'react';
-import { MessageItem } from '../MessageItem/MessageItem';
+import { useState, useEffect, useRef } from 'react';
+import MessageItem from '../MessageItem/MessageItem';
 
-const MessageList = ({ messageList }) => {
+const MessageList = ({ countryData }) => {
+  const [messageList, setMessageList] = useState([]);
   const messagesEndRef = useRef(null);
   const scrollToBottom = () => {
     messagesEndRef.current.scrollIntoView({ behavior: 'smooth' });
   };
-  useEffect(scrollToBottom, [messageList]);
 
-  if (messageList) {
-    console.log('MessageList:', messageList);
-  }
+  useEffect(() => {
+    if (countryData) {
+      setMessageList(countryData.groupMessages);
+    }
+  }, [countryData]);
+
+  useEffect(scrollToBottom, [messageList]);
 
   return (
     <div>
       {messageList &&
-        messageList.map(message => (
-          <MessageItem
-            key={message.id}
-            avatar={message.user.avatar}
-            message={message.content}
-            date={message.creationDate}
-          />
+        messageList.map((message, id) => (
+          <MessageItem key={id} message={message} />
         ))}
       <div ref={messagesEndRef} />
     </div>

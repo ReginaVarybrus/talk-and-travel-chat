@@ -8,12 +8,12 @@ const ChatRoute = () => {
 
   useEffect(() => {
     console.log('COUNTRY DATA:', countryData);
-  }, [countryData]);
+  }, [countryData, countryData.groupMessages]);
 
   return (
     <ChatRouteStyled>
       <SearchBar setCountryData={setCountryData} />
-      <Chat countryData={countryData} />
+      <Chat countryData={countryData} setCountryData={setCountryData} />
     </ChatRouteStyled>
   );
 };

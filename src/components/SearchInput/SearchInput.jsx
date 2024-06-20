@@ -159,6 +159,7 @@ const SearchInput = ({ setCountryData }) => {
         open={open}
         setOpen={setOpen}
         handleCreateCountryRoom={handleCreateCountryRoom}
+        selectedCountry={selectedCountry}
       />
     </AutocompleteInputStyled>
   );

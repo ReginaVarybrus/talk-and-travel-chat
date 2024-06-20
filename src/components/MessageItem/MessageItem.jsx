@@ -1,11 +1,13 @@
+/* eslint-disable react/forbid-prop-types */
+import PropTypes from 'prop-types';
 import { timeStampConverter } from '../utils/timeUtil.js';
 
-export const MessageItem = ({ avatar, message, date }) => {
-  const time = timeStampConverter(date);
+const MessageItem = ({ message }) => {
+  const time = timeStampConverter(message.creationDate);
 
   return (
     <div>
-      <div>{avatar || 'avatar'}</div>
+      <div>avatar</div>
       <div>
         <span>{message.content || `message`}</span>
         <span>{time || 'time'}</span>
@@ -13,3 +15,9 @@ export const MessageItem = ({ avatar, message, date }) => {
     </div>
   );
 };
+
+MessageItem.propTypes = {
+  message: PropTypes.object,
+};
+
+export default MessageItem;

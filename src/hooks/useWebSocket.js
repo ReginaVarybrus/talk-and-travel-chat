@@ -6,6 +6,8 @@ export const useWebSocket = () => {
   const [stompClient, setStompClient] = useState(null);
   const [isConnected, setConnected] = useState(false);
   const subscriptionRoom = useRef(null);
+  // const subscriptionMessages = useRef(null);
+  const onDataReceivedRef = useRef(null);
 
   const onError = err => {
     console.log('connect error', err);
@@ -30,21 +32,34 @@ export const useWebSocket = () => {
       if (subscriptionRoom.current) {
         subscriptionRoom.current.unsubscribe();
       }
+
       subscriptionRoom.current = stompClient.subscribe(
-        `/group-message/${countryName}`,
+        `/countries/${countryName}`,
         response => {
           const data = JSON.parse(response.body);
           console.log('recieved websocket data:', data);
           onDataReceived(data);
         }
       );
+
+      // stompClient.subscribe(`/group-messages/${countryName}`, response => {
+      //   const message = JSON.parse(response.body);
+      //   console.log('recieved message data:', message);
+      //   // onMessageRecieved(message);
+      //   onDataReceived(prevData => ({
+      //     ...prevData,
+      //     groupMessages: [...(prevData.groupMessages || []), message],
+      //   }));
+      // });
+
+      onDataReceivedRef.current = onDataReceived;
     }
   };
 
   const createCountryRoom = (countryName, countryData) => {
     if (stompClient && isConnected) {
       stompClient.send(
-        `/api/country/create/${countryName}`,
+        `/chat/countries/create/${countryName}`,
         {},
         JSON.stringify(countryData)
       );
@@ -56,7 +71,7 @@ export const useWebSocket = () => {
   const updateCountryRoom = (countryName, countryData) => {
     if (stompClient && isConnected) {
       stompClient.send(
-        `/api/country/update/${countryName}`,
+        `/chat/countries/update/${countryName}`,
         {},
         JSON.stringify(countryData)
       );
@@ -67,18 +82,18 @@ export const useWebSocket = () => {
 
   const openCountryRoom = countryName => {
     if (stompClient && isConnected) {
-      stompClient.send(`/api/country/find-by-name/${countryName}`, {});
+      stompClient.send(`/chat/countries/find-by-name/${countryName}`, {});
     } else {
       console.error('OPEN. Stomp client is not connected.');
     }
   };
 
-  const sendMessage = (countryName, dataToSend) => {
+  const sendMessage = (countryName, message) => {
     if (stompClient && isConnected) {
       stompClient.send(
-        `/api/group-messages/${countryName}`,
+        `/chat/group-messages/${countryName}`,
         {},
-        JSON.stringify(dataToSend)
+        JSON.stringify(message)
       );
     } else {
       console.error('MESSAGE. Stomp client is not connected.');

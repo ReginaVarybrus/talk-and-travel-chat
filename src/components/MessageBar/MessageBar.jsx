@@ -13,9 +13,11 @@ import {
   SendIcon,
 } from './MessageBarStyled';
 
-const MessageBar = ({ countryData, setMessageList }) => {
+const MessageBar = ({ countryData }) => {
   const [message, setMessage] = useState('');
   const userId = useSelector(getUser)?.id;
+  const userName = useSelector(getUser)?.userName;
+  const userEmail = useSelector(getUser)?.userEmail;
   const textAreaRef = useRef(null);
 
   const { sendMessage } = useWebSocket();
@@ -29,14 +31,25 @@ const MessageBar = ({ countryData, setMessageList }) => {
 
     const dataToSend = {
       content: message,
-      senderId: userId,
-      countryId: countryData.id,
+      creationDate: new Date(),
+      countryId: countryData?.id,
+      user: {
+        about: null,
+        avatar: null,
+        senderId: userId,
+        role: 'USER',
+        userEmail,
+        userName,
+      },
     };
 
-    // setMessageList(prevMessageList => [...prevMessageList, message]);
-    setMessageList(countryData.groupMessages);
+    // setCountryData(prevData => ({
+    //   ...prevData,
+    //   groupMessages: [...(prevData.groupMessages || []), dataToSend],
+    // }));
 
-    sendMessage(countryData.name, dataToSend);
+    sendMessage(countryData?.name, dataToSend);
+
     setMessage('');
   };
 
