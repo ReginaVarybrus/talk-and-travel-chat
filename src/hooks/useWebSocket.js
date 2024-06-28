@@ -6,7 +6,6 @@ export const useWebSocket = () => {
   const [stompClient, setStompClient] = useState(null);
   const [isConnected, setConnected] = useState(false);
   const subscriptionRoom = useRef(null);
-  // const subscriptionMessages = useRef(null);
   const onDataReceivedRef = useRef(null);
 
   const onError = err => {
@@ -41,16 +40,6 @@ export const useWebSocket = () => {
           onDataReceived(data);
         }
       );
-
-      // stompClient.subscribe(`/group-messages/${countryName}`, response => {
-      //   const message = JSON.parse(response.body);
-      //   console.log('recieved message data:', message);
-      //   // onMessageRecieved(message);
-      //   onDataReceived(prevData => ({
-      //     ...prevData,
-      //     groupMessages: [...(prevData.groupMessages || []), message],
-      //   }));
-      // });
 
       onDataReceivedRef.current = onDataReceived;
     }

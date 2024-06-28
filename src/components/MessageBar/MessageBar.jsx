@@ -1,4 +1,4 @@
-import { useState, useRef } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { getUser } from '@/redux-store/selectors.js';
 import { useWebSocket } from '@/hooks/useWebSocket.js';
@@ -13,18 +13,33 @@ import {
   SendIcon,
 } from './MessageBarStyled';
 
-const MessageBar = ({ countryData }) => {
+const MessageBar = ({ countryData, setCountryData }) => {
   const [message, setMessage] = useState('');
   const userId = useSelector(getUser)?.id;
-  const userName = useSelector(getUser)?.userName;
-  const userEmail = useSelector(getUser)?.userEmail;
   const textAreaRef = useRef(null);
 
-  const { sendMessage } = useWebSocket();
+  const { subscribeToCountryRoom, sendMessage, isConnected } = useWebSocket();
 
   const isInputNotEmpty = Boolean(message?.trim().length);
 
   const handleChange = ({ target: { value } }) => setMessage(value);
+
+  useEffect(() => {
+    const onDataReceived = data => {
+      console.log('Received new MESSAGE data:', data);
+      setCountryData(data.body);
+    };
+
+    if (isConnected) {
+      console.log(
+        'Connected to WebSocket. Subscribing to country room:',
+        countryData?.name
+      );
+      subscribeToCountryRoom(countryData?.name, onDataReceived);
+    } else {
+      console.log('WebSocket not connected yet.');
+    }
+  }, [countryData.groupMessages]);
 
   const handleSubmit = e => {
     e.preventDefault();
@@ -33,22 +48,15 @@ const MessageBar = ({ countryData }) => {
       content: message,
       creationDate: new Date(),
       countryId: countryData?.id,
-      user: {
-        about: null,
-        avatar: null,
-        senderId: userId,
-        role: 'USER',
-        userEmail,
-        userName,
-      },
+      senderId: userId,
     };
 
-    // setCountryData(prevData => ({
-    //   ...prevData,
-    //   groupMessages: [...(prevData.groupMessages || []), dataToSend],
-    // }));
-
     sendMessage(countryData?.name, dataToSend);
+
+    setCountryData(prevData => ({
+      ...prevData,
+      groupMessages: [...(prevData.groupMessages || []), dataToSend],
+    }));
 
     setMessage('');
   };
