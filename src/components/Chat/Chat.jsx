@@ -1,23 +1,18 @@
-import { useSelector } from 'react-redux';
-import { getCountryName } from '@/redux-store/selectors.js';
-import { ChatStyled, Header, HeaderContent, MessageBlock } from './ChatStyled';
+// import { useState, useEffect } from 'react';
+import { ChatStyled, MessageBlock } from './ChatStyled';
 
+import ChatHeader from '../ChatHeader/ChatHeader';
+import MessageList from '../MessageList/MessageList';
 import MessageBar from '../MessageBar/MessageBar';
 
-const Chat = () => {
-  const countryName = useSelector(getCountryName);
-
-  return (
-    <ChatStyled>
-      <Header>
-        <HeaderContent>
-          <h5>{countryName || 'Country Name'}</h5>
-        </HeaderContent>
-      </Header>
-      <MessageBlock />
-      <MessageBar />
-    </ChatStyled>
-  );
-};
+const Chat = ({ countryData, setCountryData }) => (
+  <ChatStyled>
+    <ChatHeader countryData={countryData} />
+    <MessageBlock>
+      <MessageList countryData={countryData} />
+    </MessageBlock>
+    <MessageBar countryData={countryData} setCountryData={setCountryData} />
+  </ChatStyled>
+);
 
 export default Chat;

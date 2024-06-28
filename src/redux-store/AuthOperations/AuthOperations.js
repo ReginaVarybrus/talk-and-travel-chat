@@ -6,24 +6,28 @@ import { token, axiosClient } from '@/services/api';
 import { clearUser, setUsers } from '@/redux-store/slices/userSlice';
 import ULRs from '@/redux-store/constants';
 
-
-export const register = createAsyncThunk('auth/register', async (userData, { dispatch }) =>
-{
-  try {
-    const response = await axiosClient.post(ULRs.register, userData);
-    dispatch(setUsers(response.data));
-    token.set(response.data.token);
-    swal('Success!', 'Letter with verification sent on your email', 'success');
-    return response.data;
-  } catch (e) {
-    swal('Error!', e.response.message, 'error');
+export const register = createAsyncThunk(
+  'auth/register',
+  async (userData, { dispatch }) => {
+    try {
+      const response = await axiosClient.post(ULRs.register, userData);
+      dispatch(setUsers(response.data));
+      token.set(response.data.token);
+      swal(
+        'Success!',
+        'Letter with verification sent on your email',
+        'success'
+      );
+      return response.data;
+    } catch (e) {
+      swal('Error!', e.response.message, 'error');
+    }
   }
-});
+);
 
 export const logIn = createAsyncThunk(
   'auth/login',
-  async (userData, { dispatch }) =>
-  {
+  async (userData, { dispatch }) => {
     try {
       const response = await axiosClient.post(ULRs.login, userData);
       token.set(response.data.token);
@@ -43,8 +47,7 @@ export const logIn = createAsyncThunk(
 
 export const logOut = createAsyncThunk(
   'auth/logOut',
-  async (arg, { dispatch }) =>
-  {
+  async (arg, { dispatch }) => {
     try {
       await axiosClient.post(ULRs.logout);
       token.unset();
@@ -52,14 +55,14 @@ export const logOut = createAsyncThunk(
     } catch (error) {
       throw new Error(error.message);
     }
-  });
+  }
+);
 
 // TODO sendDataCountryToBackend request shuold be update when we understand do we need thas request or no
 
 export const sendDataCountryToBackend = createAsyncThunk(
   'auth/sendDataCountryToBackend',
-  async ({ userId, countryDto }, { rejectWithValue }) =>
-  {
+  async ({ userId, countryDto }, { rejectWithValue }) => {
     try {
       const response = await axiosClient.post(
         `${ULRs.country}/${userId}`,

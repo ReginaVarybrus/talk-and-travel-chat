@@ -11,12 +11,12 @@ const axiosClient = axios.create({
 });
 
 axiosClient.interceptors.request.use(
-  config =>
-  {
-    const { token } = JSON.parse(localStorage.getItem('persist:auth'));
+  config => {
+    const authData = JSON.parse(localStorage.getItem('persist:auth'));
+    const token = authData ? authData?.token?.replace(/"/g, '') : null;
     const isAuthUrl = urlToOmit.includes(config.url);
 
-    if (!isAuthUrl && token && token !== 'null') {
+    if (!isAuthUrl && token) {
       config.headers.Authorization = `Bearer ${token}`;
     }
 
@@ -26,12 +26,10 @@ axiosClient.interceptors.request.use(
 );
 
 const token = {
-  set(tokenValue)
-  {
+  set(tokenValue) {
     axiosClient.defaults.headers.common.Authorization = `Bearer ${tokenValue}`;
   },
-  unset()
-  {
+  unset() {
     delete axiosClient.defaults.headers.common.Authorization;
   },
 };

@@ -4,7 +4,8 @@ const ULRs = {
   logout: 'authentication/logout',
   currentUser: 'current',
   updateUser: 'users',
-  country: 'countries',
+  countries: 'countries',
+  userCountries: userId => `countries/all-by-user/${userId}/participating`,
 };
 
 export default ULRs;

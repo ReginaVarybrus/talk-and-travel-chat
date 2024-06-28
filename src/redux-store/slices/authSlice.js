@@ -1,28 +1,19 @@
 import { createSlice } from '@reduxjs/toolkit';
-import
-{
-  register,
-  logIn,
-  logOut,
-  sendDataCountryToBackend,
-} from '@/redux-store/AuthOperations/AuthOperations';
+import { register, logIn, logOut } from '../AuthOperations/AuthOperations.js';
 
 const initialState = {
   token: null,
   isLoggedIn: false,
-  isRefresh: false,
   error: null,
-  flagCode: null,
 };
 
-const handlePending = (state) => ({
-  ...state,
-  isRefresh: true,
+const handlePending = () => ({
+  isLoggedIn: false,
 });
 
 const handleRejected = (state, action) => ({
   ...state,
-  isRefresh: false,
+  isLoggedIn: false,
   error: action.payload,
 });
 
@@ -37,7 +28,6 @@ export const authSlice = createSlice({
         ...state,
         token: action.payload.token,
         isLoggedIn: true,
-        isRefresh: false,
       }))
 
       .addCase(logIn.pending, handlePending)
@@ -47,21 +37,13 @@ export const authSlice = createSlice({
         token: action.payload.token,
         isLoggedIn: true,
         error: null,
-        isRefresh: false,
       }))
 
       .addCase(logOut.pending, handlePending)
       .addCase(logOut.rejected, handleRejected)
-      .addCase(logOut.fulfilled, () => (state) => ({
-        ...state, ...initialState
-      }))
-
-      .addCase(sendDataCountryToBackend.pending, handlePending)
-      .addCase(sendDataCountryToBackend.rejected, handleRejected)
-      .addCase(sendDataCountryToBackend.fulfilled, (state, action) => ({
-        // ...state,
-        // name: action.payload.name,
-        flagCode: action.payload.flagCode,
+      .addCase(logOut.fulfilled, state => ({
+        ...state,
+        ...initialState,
       })),
 });
 

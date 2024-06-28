@@ -42,8 +42,8 @@ const LoginForm = () => {
     initialValues,
     validationSchema: schema,
     validateOnChange: false,
-    onSubmit: (values, { resetForm }) => {
-      dispatch(logIn(values));
+    onSubmit: async (values, { resetForm }) => {
+      await dispatch(logIn(values));
       navigate(routesPath.ROOMS);
       resetForm();
     },
