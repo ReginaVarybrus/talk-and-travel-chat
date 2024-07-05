@@ -93,6 +93,7 @@ export const useWebSocket = () => {
     if (stompClient !== null) {
       if (subscriptionRoom.current) {
         subscriptionRoom.current.unsubscribe();
+        subscriptionRoom.current = null;
       }
       stompClient.disconnect();
       setStompClient(null);
@@ -110,6 +111,7 @@ export const useWebSocket = () => {
 
   return {
     subscribeToCountryRoom,
+    // currentCountryRoom,
     createCountryRoom,
     updateCountryRoom,
     openCountryRoom,

@@ -1,19 +1,24 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import SearchBar from '@/components/SearchBar/SearchBar';
 import Chat from '@/components/Chat/Chat';
 import { ChatRouteStyled } from './ChatRouteStyled.js';
 
 const ChatRoute = () => {
   const [countryData, setCountryData] = useState({});
+  const [currentCountryRoom, setCurrentCountryRoom] = useState(null);
 
-  useEffect(() => {
-    console.log('COUNTRY DATA:', countryData);
-  }, [countryData, countryData.groupMessages]);
+  const onDataReceived = data => {
+    console.log('Recieved COUNTRY DATA:', data.body);
+    setCountryData(data.body);
+  };
 
   return (
     <ChatRouteStyled>
-      <SearchBar setCountryData={setCountryData} />
-      <Chat countryData={countryData} setCountryData={setCountryData} />
+      <SearchBar
+        setCurrentCountryRoom={setCurrentCountryRoom}
+        onDataReceived={onDataReceived}
+      />
+      <Chat countryData={countryData} currentCountryRoom={currentCountryRoom} />
     </ChatRouteStyled>
   );
 };

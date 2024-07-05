@@ -17,7 +17,7 @@ import {
 } from './SearchInputStyled';
 import ModalCreateRoom from '../ModalCreateRoom/ModalCreateRoom';
 
-const SearchInput = ({ setCountryData }) => {
+const SearchInput = ({ setCurrentCountryRoom, onDataReceived }) => {
   const [open, setOpen] = useState(false);
   const [searchedValue, setSearchedValue] = useState('');
   const [createdCountries, setCreatedCountries] = useState([]);
@@ -29,19 +29,20 @@ const SearchInput = ({ setCountryData }) => {
 
   const { responseData } = useFetch(ULRs.countries);
 
-  const onDataReceived = data => {
-    setCountryData(data.body);
-  };
-
-  const { subscribeToCountryRoom, createCountryRoom, updateCountryRoom } =
-    useWebSocket();
+  const {
+    subscribeToCountryRoom,
+    createCountryRoom,
+    updateCountryRoom,
+    isConnected,
+  } = useWebSocket();
 
   useEffect(() => {
-    if (selectedCountry) {
+    if (isConnected && selectedCountry) {
       subscribeToCountryRoom(selectedCountry, onDataReceived);
+      setCurrentCountryRoom(selectedCountry);
       console.log('Subscribe succesfull');
     }
-  }, [selectedCountry]);
+  }, [isConnected, selectedCountry]);
 
   useEffect(() => {
     if (responseData) {

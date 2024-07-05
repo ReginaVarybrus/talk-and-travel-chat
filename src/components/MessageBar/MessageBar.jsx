@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect } from 'react';
+import { useState, useRef } from 'react';
 import { useSelector } from 'react-redux';
 import { getUser } from '@/redux-store/selectors.js';
 import { useWebSocket } from '@/hooks/useWebSocket.js';
@@ -13,50 +13,32 @@ import {
   SendIcon,
 } from './MessageBarStyled';
 
-const MessageBar = ({ countryData, setCountryData }) => {
+const MessageBar = ({ countryData, currentCountryRoom }) => {
   const [message, setMessage] = useState('');
   const userId = useSelector(getUser)?.id;
   const textAreaRef = useRef(null);
 
-  const { subscribeToCountryRoom, sendMessage, isConnected } = useWebSocket();
+  const { sendMessage, isConnected } = useWebSocket();
 
   const isInputNotEmpty = Boolean(message?.trim().length);
 
   const handleChange = ({ target: { value } }) => setMessage(value);
 
-  useEffect(() => {
-    const onDataReceived = data => {
-      console.log('Received new MESSAGE data:', data);
-      setCountryData(data.body);
-    };
-
-    if (isConnected) {
-      console.log(
-        'Connected to WebSocket. Subscribing to country room:',
-        countryData?.name
-      );
-      subscribeToCountryRoom(countryData?.name, onDataReceived);
-    } else {
-      console.log('WebSocket not connected yet.');
-    }
-  }, [countryData.groupMessages]);
-
   const handleSubmit = e => {
     e.preventDefault();
 
+    if (!isConnected) {
+      console.error('Cannot send message: WebSocket not connected');
+      return;
+    }
+
     const dataToSend = {
       content: message,
-      creationDate: new Date(),
       countryId: countryData?.id,
       senderId: userId,
     };
 
-    sendMessage(countryData?.name, dataToSend);
-
-    setCountryData(prevData => ({
-      ...prevData,
-      groupMessages: [...(prevData.groupMessages || []), dataToSend],
-    }));
+    sendMessage(currentCountryRoom, dataToSend);
 
     setMessage('');
   };

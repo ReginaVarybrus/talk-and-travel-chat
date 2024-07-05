@@ -5,16 +5,18 @@ import { TextareaAutosize as BaseTextareaAutosize } from '@mui/material';
 export const ChatStyled = styled.div`
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
   align-items: center;
   width: 100%;
-  min-height: 100vh;
+  height: 100vh;
+  max-height: 100vh;
   background: var(--white-color);
   position: relative;
+  overflow: hidden;
 `;
 
 export const MessageBlock = styled.div`
-  flex-grow: 1;
+  flex: 1;
+  overflow-y: auto;
   width: 100%;
   background: var(--color-grey-3);
   transition: height 0.3s ease;
