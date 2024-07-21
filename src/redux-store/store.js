@@ -1,19 +1,17 @@
 import { configureStore, combineSlices } from '@reduxjs/toolkit';
-import
-  {
-    persistStore,
-    persistReducer,
-    FLUSH,
-    REHYDRATE,
-    PAUSE,
-    PERSIST,
-    PURGE,
-    REGISTER,
-  } from 'redux-persist';
+import {
+  persistStore,
+  persistReducer,
+  FLUSH,
+  REHYDRATE,
+  PAUSE,
+  PERSIST,
+  PURGE,
+  REGISTER,
+} from 'redux-persist';
 import storage from 'redux-persist/lib/storage';
 import { authSlice } from './slices/authSlice';
 import { userSlice } from './slices/userSlice';
-import { countrySlice } from './slices/countrySlice';
 
 const authPersistConfig = {
   key: 'auth',
@@ -30,7 +28,6 @@ const rootPersistConfig = {
 const rootReducer = combineSlices({
   auth: persistReducer(authPersistConfig, authSlice.reducer),
   user: userSlice.reducer,
-  country: countrySlice.reducer,
 });
 
 const persistedReducer = persistReducer(rootPersistConfig, rootReducer);

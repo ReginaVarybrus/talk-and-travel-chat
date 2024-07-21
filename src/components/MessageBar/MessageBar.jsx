@@ -18,7 +18,7 @@ const MessageBar = ({ countryData, currentCountryRoom }) => {
   const userId = useSelector(getUser)?.id;
   const textAreaRef = useRef(null);
 
-  const { sendMessage, isConnected } = useWebSocket();
+  const { stopmClient, sendMessage } = useWebSocket();
 
   const isInputNotEmpty = Boolean(message?.trim().length);
 
@@ -27,7 +27,7 @@ const MessageBar = ({ countryData, currentCountryRoom }) => {
   const handleSubmit = e => {
     e.preventDefault();
 
-    if (!isConnected) {
+    if (!stopmClient) {
       console.error('Cannot send message: WebSocket not connected');
       return;
     }
@@ -39,6 +39,7 @@ const MessageBar = ({ countryData, currentCountryRoom }) => {
     };
 
     sendMessage(currentCountryRoom, dataToSend);
+    // sendMessage(dataToSend);
 
     setMessage('');
   };
@@ -54,6 +55,7 @@ const MessageBar = ({ countryData, currentCountryRoom }) => {
           aria-label="empty textarea"
           placeholder="Type here"
           value={message}
+          onKeyUp={e => e.key === 'Enter' && handleSubmit(e)}
           onChange={handleChange}
           ref={textAreaRef}
           maxLength="1000"

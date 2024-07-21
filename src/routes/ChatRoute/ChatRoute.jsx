@@ -1,4 +1,5 @@
 import { useState } from 'react';
+// import WebSocketProvider from '@/providers/WebSocketProvider';
 import SearchBar from '@/components/SearchBar/SearchBar';
 import Chat from '@/components/Chat/Chat';
 import { ChatRouteStyled } from './ChatRouteStyled.js';

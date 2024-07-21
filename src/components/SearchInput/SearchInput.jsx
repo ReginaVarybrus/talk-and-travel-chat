@@ -30,19 +30,19 @@ const SearchInput = ({ setCurrentCountryRoom, onDataReceived }) => {
   const { responseData } = useFetch(ULRs.countries);
 
   const {
+    stompClient,
     subscribeToCountryRoom,
     createCountryRoom,
     updateCountryRoom,
-    isConnected,
   } = useWebSocket();
 
   useEffect(() => {
-    if (isConnected && selectedCountry) {
+    if (stompClient && selectedCountry) {
       subscribeToCountryRoom(selectedCountry, onDataReceived);
       setCurrentCountryRoom(selectedCountry);
       console.log('Subscribe succesfull');
     }
-  }, [isConnected, selectedCountry]);
+  }, [stompClient, selectedCountry]);
 
   useEffect(() => {
     if (responseData) {

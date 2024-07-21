@@ -1,5 +1,4 @@
 import { ChatStyled, MessageBlock } from './ChatStyled';
-
 import ChatHeader from '../ChatHeader/ChatHeader';
 import MessageList from '../MessageList/MessageList';
 import MessageBar from '../MessageBar/MessageBar';

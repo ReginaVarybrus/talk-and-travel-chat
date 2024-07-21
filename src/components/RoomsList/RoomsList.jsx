@@ -12,7 +12,7 @@ const RoomsList = () => {
   const [countryRooms, setCountryRooms] = useState([]);
   const [selectedCountry, setSelectedCountry] = useState(null);
   const userId = useSelector(getUser)?.id;
-  const { subscribeToCountryRoom, openCountryRoom, isConnected } =
+  const { stompClient, subscribeToCountryRoom, openCountryRoom } =
     useWebSocket();
   const { responseData } = useFetch(ULRs.userCountries(userId));
   const context = useOutletContext();
@@ -26,16 +26,16 @@ const RoomsList = () => {
   }, [responseData, userId]);
 
   useEffect(() => {
-    if (isConnected && selectedCountry) {
+    if (stompClient && selectedCountry) {
       subscribeToCountryRoom(selectedCountry, onDataReceived);
       setCurrentCountryRoom(selectedCountry);
-      console.log('Subscribe succesfull');
+      openCountryRoom(selectedCountry);
+      console.log('Subscribe succesfull', selectedCountry);
     }
-  }, [isConnected, selectedCountry]);
+  }, [stompClient, selectedCountry]);
 
   const handleOpenCountryRoom = countryName => {
     setSelectedCountry(countryName);
-    openCountryRoom(countryName);
   };
 
   return (
