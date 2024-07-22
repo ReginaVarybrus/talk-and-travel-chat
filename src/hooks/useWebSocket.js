@@ -55,7 +55,7 @@ export const useWebSocket = () => {
       //   JSON.stringify(countryData)
       // );
       stompClient.publish({
-        destination: `/chat/countries/create/${countryName}`,
+        destination: `/chat/countries/create`,
         body: JSON.stringify(countryData),
       });
     } else {
