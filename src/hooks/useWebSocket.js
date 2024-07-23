@@ -47,7 +47,9 @@ export const useWebSocket = () => {
     }
   };
 
-  const createCountryRoom = (countryName, countryData) => {
+  // useSubscription(`/countries/${countryName}`, (response) => setLastMessage(response.body));
+
+  const createCountryRoom = countryData => {
     if (stompClient && stompClient.connected) {
       // stompClient.send(
       //   `/chat/countries/create/${countryName}`,
@@ -91,10 +93,10 @@ export const useWebSocket = () => {
     }
   };
 
-  const sendMessage = (countryName, message) => {
+  const sendMessage = message => {
     if (stompClient && stompClient.connected) {
       stompClient.publish({
-        destination: `/chat/group-messages/${countryName}`,
+        destination: `/chat/group-messages`,
         body: JSON.stringify(message),
       });
     } else {

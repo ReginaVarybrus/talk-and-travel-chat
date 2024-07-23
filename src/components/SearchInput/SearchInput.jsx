@@ -96,7 +96,7 @@ const SearchInput = ({ setCurrentCountryRoom, onDataReceived }) => {
   };
 
   const handleCreateCountryRoom = () => {
-    createCountryRoom(dataToCreate.name, dataToCreate);
+    createCountryRoom(dataToCreate);
     setSelectedCountry(dataToCreate.name);
     setOpen(false);
   };

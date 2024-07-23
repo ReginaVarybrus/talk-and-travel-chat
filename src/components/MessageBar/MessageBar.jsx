@@ -2,6 +2,7 @@ import { useState, useRef } from 'react';
 import { useSelector } from 'react-redux';
 import { getUser } from '@/redux-store/selectors.js';
 import { useWebSocket } from '@/hooks/useWebSocket.js';
+import { useStompClient, useSubscription } from 'react-stomp-hooks';
 import {
   MessageBarStyled,
   MessageInputs,
@@ -13,21 +14,33 @@ import {
   SendIcon,
 } from './MessageBarStyled';
 
-const MessageBar = ({ countryData, currentCountryRoom }) => {
+const MessageBar = ({ countryData, setMessagesList }) => {
   const [message, setMessage] = useState('');
+  // const [client, setClient] = useState(null);
+
   const userId = useSelector(getUser)?.id;
   const textAreaRef = useRef(null);
+  const stompClient = useStompClient();
 
-  const { stopmClient, sendMessage } = useWebSocket();
+  const { sendMessage } = useWebSocket();
 
   const isInputNotEmpty = Boolean(message?.trim().length);
 
   const handleChange = ({ target: { value } }) => setMessage(value);
 
+  useSubscription(`/countries/${countryData?.id}/messages`, response => {
+    const message = JSON.parse(response.body);
+    // setMessagesList(message);
+    setMessagesList(prevMessages => [...prevMessages, message]);
+    console.log('response message', message);
+  });
+
   const handleSubmit = e => {
     e.preventDefault();
 
-    if (!stopmClient) {
+    // console.log('stomp client', stopmClient);
+
+    if (!stompClient) {
       console.error('Cannot send message: WebSocket not connected');
       return;
     }
@@ -38,8 +51,8 @@ const MessageBar = ({ countryData, currentCountryRoom }) => {
       senderId: userId,
     };
 
-    sendMessage(currentCountryRoom, dataToSend);
-    // sendMessage(dataToSend);
+    // sendMessage(currentCountryRoom, dataToSend);
+    sendMessage(dataToSend);
 
     setMessage('');
   };
