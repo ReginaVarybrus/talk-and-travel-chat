@@ -51,11 +51,6 @@ export const useWebSocket = () => {
 
   const createCountryRoom = countryData => {
     if (stompClient && stompClient.connected) {
-      // stompClient.send(
-      //   `/chat/countries/create/${countryName}`,
-      //   {},
-      //   JSON.stringify(countryData)
-      // );
       stompClient.publish({
         destination: `/chat/countries/create`,
         body: JSON.stringify(countryData),
@@ -67,11 +62,6 @@ export const useWebSocket = () => {
 
   const updateCountryRoom = (countryName, countryData) => {
     if (stompClient && stompClient.connected) {
-      // stompClient.send(
-      //   `/chat/countries/update/${countryName}`,
-      //   {},
-      //   JSON.stringify(countryData)
-      // );
       stompClient.publish({
         destination: `/chat/countries/update/${countryName}`,
         body: JSON.stringify(countryData),
@@ -82,7 +72,6 @@ export const useWebSocket = () => {
   };
 
   const openCountryRoom = countryName => {
-    console.log('opencountry room');
     if (stompClient && stompClient.connected) {
       stompClient.publish({
         destination: `/chat/countries/find-by-name/${countryName}`,

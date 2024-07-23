@@ -16,7 +16,6 @@ import {
 
 const MessageBar = ({ countryData, setMessagesList }) => {
   const [message, setMessage] = useState('');
-  // const [client, setClient] = useState(null);
 
   const userId = useSelector(getUser)?.id;
   const textAreaRef = useRef(null);
@@ -30,15 +29,12 @@ const MessageBar = ({ countryData, setMessagesList }) => {
 
   useSubscription(`/countries/${countryData?.id}/messages`, response => {
     const message = JSON.parse(response.body);
-    // setMessagesList(message);
     setMessagesList(prevMessages => [...prevMessages, message]);
     console.log('response message', message);
   });
 
   const handleSubmit = e => {
     e.preventDefault();
-
-    // console.log('stomp client', stopmClient);
 
     if (!stompClient) {
       console.error('Cannot send message: WebSocket not connected');
@@ -51,7 +47,6 @@ const MessageBar = ({ countryData, setMessagesList }) => {
       senderId: userId,
     };
 
-    // sendMessage(currentCountryRoom, dataToSend);
     sendMessage(dataToSend);
 
     setMessage('');
