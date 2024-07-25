@@ -14,7 +14,7 @@ import {
   SendIcon,
 } from './MessageBarStyled';
 
-const MessageBar = ({ countryData, setMessagesList }) => {
+const MessageBar = ({ countryData, setCountryData }) => {
   const [message, setMessage] = useState('');
 
   const userId = useSelector(getUser)?.id;
@@ -29,7 +29,17 @@ const MessageBar = ({ countryData, setMessagesList }) => {
 
   useSubscription(`/countries/${countryData?.id}/messages`, response => {
     const message = JSON.parse(response.body);
-    setMessagesList(prevMessages => [...prevMessages, message]);
+
+    setCountryData(prevCountryData => {
+      const updatedGroupMessages = [
+        ...(prevCountryData.groupMessages || []),
+        message,
+      ];
+      return {
+        ...prevCountryData,
+        groupMessages: updatedGroupMessages,
+      };
+    });
     console.log('response message', message);
   });
 

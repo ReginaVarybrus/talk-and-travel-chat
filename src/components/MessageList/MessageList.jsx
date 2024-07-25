@@ -4,13 +4,13 @@ import MessageItem from '../MessageItem/MessageItem';
 
 import { MessageListStyled } from './MessageListStyles.js';
 
-const MessageList = ({ messagesList }) => {
+const MessageList = ({ countryData }) => {
   const messagesEndRef = useRef(null);
   const scrollToBottom = () => {
     messagesEndRef.current.scrollIntoView({ behavior: 'smooth' });
   };
 
-  // const messageList = countryData?.groupMessages;
+  const messagesList = countryData?.groupMessages;
   useEffect(scrollToBottom, [messagesList]);
 
   return (

@@ -136,9 +136,11 @@ const SearchInput = ({ setCurrentCountryRoom, onDataReceived }) => {
               </Text>
             ) : (
               <>
-                {filterCountries.map(country => (
+                {filterCountries.map((country, id) => (
                   <Item
-                    key={country.properties.code}
+                    key={id}
+                    // key={country.properties.code}
+                    // onClick={() => handleCountryClick(country.properties.ADMIN)}
                     onClick={() => handleCountryClick(country)}
                   >
                     <Flag

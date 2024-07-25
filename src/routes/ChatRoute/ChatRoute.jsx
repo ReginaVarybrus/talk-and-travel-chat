@@ -19,7 +19,11 @@ const ChatRoute = () => {
         setCurrentCountryRoom={setCurrentCountryRoom}
         onDataReceived={onDataReceived}
       />
-      <Chat countryData={countryData} currentCountryRoom={currentCountryRoom} />
+      <Chat
+        countryData={countryData}
+        currentCountryRoom={currentCountryRoom}
+        setCountryData={setCountryData}
+      />
     </ChatRouteStyled>
   );
 };
