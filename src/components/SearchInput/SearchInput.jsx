@@ -1,27 +1,54 @@
 import { useState, useEffect, useRef } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { sendDataCountryToBackend } from '@/redux-store/AuthOperations/AuthOperations.js';
+import { useSelector } from 'react-redux';
+import ULRs from '@/redux-store/constants';
 import { getUser } from '@/redux-store/selectors';
-
+import { useFetch } from '@/hooks/useFetch.js';
+import { useWebSocket } from '@/hooks/useWebSocket.js';
 import mapData from '@/data/countries.json';
 import {
   AutocompleteInputStyled,
   AutocompleteInput,
   IconSearch,
-  ListWrapper,
-  ListItems,
+  ListItemsStyled,
   Item,
   Flag,
   ScrollBar,
   Text,
 } from './SearchInputStyled';
+import ModalCreateRoom from '../ModalCreateRoom/ModalCreateRoom';
 
-const SearchInput = () => {
+const SearchInput = ({ setCurrentCountryRoom, onDataReceived }) => {
+  const [open, setOpen] = useState(false);
   const [searchedValue, setSearchedValue] = useState('');
+  const [createdCountries, setCreatedCountries] = useState([]);
+  const [dataToCreate, setDataToCreate] = useState({});
   const [showItem, setShowItem] = useState(false);
+  const [selectedCountry, setSelectedCountry] = useState(null);
   const autoCompleteRef = useRef(null);
-  const dispatch = useDispatch();
   const userId = useSelector(getUser)?.id;
+
+  const { responseData } = useFetch(ULRs.countries);
+
+  const {
+    stompClient,
+    subscribeToCountryRoom,
+    createCountryRoom,
+    updateCountryRoom,
+  } = useWebSocket();
+
+  useEffect(() => {
+    if (stompClient && selectedCountry) {
+      subscribeToCountryRoom(selectedCountry, onDataReceived);
+      setCurrentCountryRoom(selectedCountry);
+      console.log('Subscribe succesfull');
+    }
+  }, [stompClient, selectedCountry]);
+
+  useEffect(() => {
+    if (responseData) {
+      setCreatedCountries(responseData);
+    }
+  }, [responseData]);
 
   const filterCountries = mapData.features.filter(name =>
     name.properties.ADMIN.toLowerCase().includes(searchedValue.toLowerCase())
@@ -40,14 +67,38 @@ const SearchInput = () => {
   const handleClick = () => setShowItem(!showItem);
 
   const handleCountryClick = country => {
-    const countryData = {
-      name: country.properties.ADMIN,
-      flagCode: country.properties.code,
+    const countryName = country.properties.ADMIN;
+    setSelectedCountry(countryName);
+    const selectedItem = createdCountries.find(
+      item => item.name === countryName
+    );
+
+    const dataToUpdate = {
+      id: selectedItem ? selectedItem.id : null,
+      userId,
     };
 
-    setSearchedValue(country.properties.ADMIN);
+    setSearchedValue(countryName);
     setShowItem(false);
-    dispatch(sendDataCountryToBackend({ userId, countryDto: countryData }));
+
+    if (selectedItem) {
+      updateCountryRoom(countryName, dataToUpdate);
+    } else {
+      setOpen(true);
+      setDataToCreate({
+        userId,
+        name: countryName,
+        flagCode: country.properties.code,
+      });
+    }
+
+    setSearchedValue('');
+  };
+
+  const handleCreateCountryRoom = () => {
+    createCountryRoom(dataToCreate);
+    setSelectedCountry(dataToCreate.name);
+    setOpen(false);
   };
 
   useEffect(() => {
@@ -76,37 +127,43 @@ const SearchInput = () => {
       />
       <IconSearch />
       {showItem && (
-        <ListWrapper>
-          <ListItems>
-            <ScrollBar>
-              {!filterCountries.length ? (
-                <Text>
-                  Sorry, the room for this country does not exist, try creating
-                  one yourself
-                </Text>
-              ) : (
-                <>
-                  {filterCountries.map((country, index) => (
-                    <Item
-                      key={index}
-                      onClick={() => handleCountryClick(country)}
-                    >
-                      <Flag
-                        loading="lazy"
-                        width="32"
-                        srcSet={`https://flagcdn.com/w40/${country.properties.code}.png 2x`}
-                        src={`https://flagcdn.com/w20/${country.properties.code}.png`}
-                        alt={`${country.properties.ADMIN} flag`}
-                      />
-                      <p>{country.properties.ADMIN}</p>
-                    </Item>
-                  ))}
-                </>
-              )}
-            </ScrollBar>
-          </ListItems>
-        </ListWrapper>
+        <ListItemsStyled>
+          <ScrollBar>
+            {!filterCountries.length ? (
+              <Text>
+                Sorry, the room for this country does not exist, try creating
+                one yourself
+              </Text>
+            ) : (
+              <>
+                {filterCountries.map((country, id) => (
+                  <Item
+                    key={id}
+                    // key={country.properties.code}
+                    // onClick={() => handleCountryClick(country.properties.ADMIN)}
+                    onClick={() => handleCountryClick(country)}
+                  >
+                    <Flag
+                      loading="lazy"
+                      width="32"
+                      srcSet={`https://flagcdn.com/w40/${country.properties.code}.png 2x`}
+                      src={`https://flagcdn.com/w20/${country.properties.code}.png`}
+                      alt={`${country.properties.ADMIN} flag`}
+                    />
+                    <p>{country.properties.ADMIN}</p>
+                  </Item>
+                ))}
+              </>
+            )}
+          </ScrollBar>
+        </ListItemsStyled>
       )}
+      <ModalCreateRoom
+        open={open}
+        setOpen={setOpen}
+        handleCreateCountryRoom={handleCreateCountryRoom}
+        selectedCountry={selectedCountry}
+      />
     </AutocompleteInputStyled>
   );
 };

@@ -1,4 +1,8 @@
 import { useState, useRef } from 'react';
+import { useSelector } from 'react-redux';
+import { getUser } from '@/redux-store/selectors.js';
+import { useWebSocket } from '@/hooks/useWebSocket.js';
+import { useStompClient, useSubscription } from 'react-stomp-hooks';
 import {
   MessageBarStyled,
   MessageInputs,
@@ -10,19 +14,57 @@ import {
   SendIcon,
 } from './MessageBarStyled';
 
-const MessageBar = () => {
-  const [value, setValue] = useState('');
+const MessageBar = ({ countryData, setCountryData }) => {
+  const [message, setMessage] = useState('');
+
+  const userId = useSelector(getUser)?.id;
   const textAreaRef = useRef(null);
+  const stompClient = useStompClient();
 
-  const isInputNotEmpty = Boolean(value?.trim().length);
+  const { sendMessage } = useWebSocket();
 
-  const handleChange = e => {
-    setValue(e.target.value);
+  const isInputNotEmpty = Boolean(message?.trim().length);
+
+  const handleChange = ({ target: { value } }) => setMessage(value);
+
+  useSubscription(`/countries/${countryData?.id}/messages`, response => {
+    const message = JSON.parse(response.body);
+
+    setCountryData(prevCountryData => {
+      const updatedGroupMessages = [
+        ...(prevCountryData.groupMessages || []),
+        message,
+      ];
+      return {
+        ...prevCountryData,
+        groupMessages: updatedGroupMessages,
+      };
+    });
+    console.log('response message', message);
+  });
+
+  const handleSubmit = e => {
+    e.preventDefault();
+
+    if (!stompClient) {
+      console.error('Cannot send message: WebSocket not connected');
+      return;
+    }
+
+    const dataToSend = {
+      content: message,
+      countryId: countryData?.id,
+      senderId: userId,
+    };
+
+    sendMessage(dataToSend);
+
+    setMessage('');
   };
 
   return (
     <MessageBarStyled>
-      <MessageInputs>
+      <MessageInputs onSubmit={handleSubmit}>
         <ButtonAttachFile component="label" variant="contained">
           <AttachmentIcon />
           <VisuallyHiddenInput type="file" />
@@ -30,12 +72,17 @@ const MessageBar = () => {
         <TextareaAutosize
           aria-label="empty textarea"
           placeholder="Type here"
-          value={value}
+          value={message}
+          onKeyUp={e => e.key === 'Enter' && handleSubmit(e)}
           onChange={handleChange}
           ref={textAreaRef}
           maxLength="1000"
         />
-        <ButtonSendMessage $isInputNotEmpty={isInputNotEmpty}>
+        <ButtonSendMessage
+          type="submit"
+          value="Send"
+          $isInputNotEmpty={isInputNotEmpty}
+        >
           <SendIcon />
         </ButtonSendMessage>
       </MessageInputs>

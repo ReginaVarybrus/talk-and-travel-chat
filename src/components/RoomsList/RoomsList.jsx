@@ -1,24 +1,58 @@
-import {
-  ListStyled,
-  Text,
-  Item,
-  ListItems,
-  ScrollBar,
-} from './RoomsListStyled';
+import { useState, useEffect } from 'react';
+import { useSelector } from 'react-redux';
+import { useOutletContext } from 'react-router-dom';
+import { useFetch } from '@/hooks/useFetch.js';
+import { useWebSocket } from '@/hooks/useWebSocket.js';
+import ULRs from '@/redux-store/constants';
+import { getUser } from '@/redux-store/selectors.js';
+import { ListStyled, Text, Item, ListItems } from './RoomsListStyled';
+import { Flag, ScrollBar } from '../SearchInput/SearchInputStyled.js';
 
 const RoomsList = () => {
-  const rooms = [];
+  const [countryRooms, setCountryRooms] = useState([]);
+  const [selectedCountry, setSelectedCountry] = useState(null);
+  const userId = useSelector(getUser)?.id;
+  const { stompClient, subscribeToCountryRoom, openCountryRoom } =
+    useWebSocket();
+  const { responseData } = useFetch(ULRs.userCountries(userId));
+  const context = useOutletContext();
+  const { setCurrentCountryRoom, onDataReceived } = context;
 
-  const handleClick = () => {};
+  useEffect(() => {
+    if (responseData && userId) {
+      setCountryRooms(responseData);
+    }
+    console.log('response country', responseData);
+  }, [responseData, userId]);
+
+  useEffect(() => {
+    if (stompClient && selectedCountry) {
+      subscribeToCountryRoom(selectedCountry, onDataReceived);
+      setCurrentCountryRoom(selectedCountry);
+      openCountryRoom(selectedCountry);
+      console.log('Subscribe succesfull', selectedCountry);
+    }
+  }, [stompClient, selectedCountry]);
+
+  const handleOpenCountryRoom = countryName => {
+    setSelectedCountry(countryName);
+  };
 
   return (
     <ListStyled>
-      {rooms?.length ? (
+      {countryRooms.length ? (
         <ListItems>
           <ScrollBar>
-            {rooms.map(room => (
-              <Item key={room} onClick={handleClick}>
-                <p>{room}</p>
+            {countryRooms.map((room, id) => (
+              <Item key={id} onClick={() => handleOpenCountryRoom(room.name)}>
+                <Flag
+                  loading="lazy"
+                  width="32"
+                  srcSet={`https://flagcdn.com/w40/${room.flagCode}.png 2x`}
+                  src={`https://flagcdn.com/w20/${room.flagCode}.png`}
+                  alt={`${room.flagCode} flag`}
+                />
+                <p>{room.name}</p>
               </Item>
             ))}
           </ScrollBar>
