@@ -9,8 +9,8 @@ const ChatRoute = () => {
   const [currentCountryRoom, setCurrentCountryRoom] = useState(null);
 
   const onDataReceived = data => {
-    console.log('Recieved COUNTRY DATA:', data.body);
-    setCountryData(data.body);
+    console.log('Recieved COUNTRY DATA:', data);
+    setCountryData(data);
   };
 
   return (

@@ -29,21 +29,24 @@ const MessageBar = ({ countryData, setCountryData }) => {
 
   const handleChange = ({ target: { value } }) => setMessage(value);
 
-  useSubscription(`/countries/${countryData?.name}/messages`, response => {
-    const message = JSON.parse(response.body);
+  useSubscription(
+    `/countries/${countryData?.country?.name}/messages`,
+    response => {
+      const message = JSON.parse(response.body);
 
-    setCountryData(prevCountryData => {
-      const updatedGroupMessages = [
-        ...(prevCountryData.groupMessages || []),
-        message,
-      ];
-      return {
-        ...prevCountryData,
-        groupMessages: updatedGroupMessages,
-      };
-    });
-    console.log('response message', message);
-  });
+      setCountryData(prevCountryData => {
+        const updatedGroupMessages = [
+          ...(prevCountryData.country.groupMessages || []),
+          message,
+        ];
+        return {
+          ...prevCountryData,
+          groupMessages: updatedGroupMessages,
+        };
+      });
+      console.log('response message', message);
+    }
+  );
 
   const handleSubmit = e => {
     e.preventDefault();
@@ -55,7 +58,7 @@ const MessageBar = ({ countryData, setCountryData }) => {
 
     const dataToSend = {
       content: message,
-      countryId: countryData?.id,
+      countryId: countryData?.country.id,
       senderId: userId,
     };
 
@@ -66,20 +69,25 @@ const MessageBar = ({ countryData, setCountryData }) => {
 
   const handleJoinClick = () => {
     console.log('Joined to current country');
-    const fetchData = async () => {
+    const fetchData = async id => {
       try {
         console.log('send fetch request');
         const response = await axiosClient.post(
-          `/countries/${countryData?.country.countryName}/join`
+          `/countries/${countryData?.country.name}/join`,
+          id
         );
-        // setResponseData(response.data);
-        console.log(response.data);
+        console.log('Join data:', response.data);
       } catch (error) {
         console.error('Error fetching country rooms:', error);
       }
     };
 
-    fetchData();
+    fetchData(userId);
+
+    setCountryData(prevCountryData => ({
+      ...prevCountryData,
+      isSubscribe: true,
+    }));
   };
 
   return (

@@ -10,7 +10,7 @@ const MessageList = ({ countryData }) => {
     messagesEndRef.current.scrollIntoView({ behavior: 'smooth' });
   };
 
-  const messagesList = countryData?.groupMessages;
+  const messagesList = countryData?.country?.groupMessages;
   useEffect(scrollToBottom, [messagesList]);
 
   return (

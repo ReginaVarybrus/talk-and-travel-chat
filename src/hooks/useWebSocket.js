@@ -3,7 +3,6 @@ import { useRef, useEffect } from 'react';
 import { useStompClient } from 'react-stomp-hooks';
 
 export const useWebSocket = () => {
-  // const [isConnected, setConnected] = useState(false);
   const subscriptionRoom = useRef(null);
   const onDataReceivedRef = useRef(null);
   const stompClient = useStompClient();
@@ -26,28 +25,6 @@ export const useWebSocket = () => {
       onDataReceivedRef.current = onDataReceived;
     }
   };
-
-  // const createCountryRoom = countryData => {
-  //   if (stompClient && stompClient.connected) {
-  //     stompClient.publish({
-  //       destination: `/chat/countries/create`,
-  //       body: JSON.stringify(countryData),
-  //     });
-  //   } else {
-  //     console.error('CREATED. Stomp client is not connected.');
-  //   }
-  // };
-
-  // const updateCountryRoom = (countryName, countryData) => {
-  //   if (stompClient && stompClient.connected) {
-  //     stompClient.publish({
-  //       destination: `/chat/countries/update/${countryName}`,
-  //       body: JSON.stringify(countryData),
-  //     });
-  //   } else {
-  //     console.error('UPDATE. Stomp client is not connected.');
-  //   }
-  // };
 
   const openCountryRoom = countryData => {
     if (stompClient && stompClient.connected) {
@@ -87,8 +64,6 @@ export const useWebSocket = () => {
   return {
     stompClient,
     subscribeToCountryRoom,
-    // createCountryRoom,
-    // updateCountryRoom,
     openCountryRoom,
     sendMessage,
   };

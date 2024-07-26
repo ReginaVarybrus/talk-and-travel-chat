@@ -16,11 +16,11 @@ const RoomsList = () => {
     useWebSocket();
   const { responseData } = useFetch(ULRs.userCountries(userId));
   const context = useOutletContext();
-  const { countryData, setCurrentCountryRoom, onDataReceived } = context;
+  const { setCurrentCountryRoom, onDataReceived } = context;
 
   const dataToSend = {
-    countryName: countryData?.country?.countryName,
-    flagCode: countryData?.country?.flagCode,
+    countryName: countryRooms.countryName,
+    flagCode: countryRooms.flagCode,
     userId,
   };
 
