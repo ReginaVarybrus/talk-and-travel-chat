@@ -81,7 +81,7 @@ const SearchInput = ({ setCurrentCountryRoom, onDataReceived }) => {
     setSearchedValue(countryName);
     setShowItem(false);
 
-    openCountryRoom(countryName, dataToSend);
+    openCountryRoom(dataToSend);
 
     setSearchedValue('');
   };

@@ -19,7 +19,8 @@ const RoomsList = () => {
   const { countryData, setCurrentCountryRoom, onDataReceived } = context;
 
   const dataToSend = {
-    flagCode: countryData.flagCode,
+    countryName: countryData?.country?.countryName,
+    flagCode: countryData?.country?.flagCode,
     userId,
   };
 
@@ -34,7 +35,7 @@ const RoomsList = () => {
     if (stompClient && selectedCountry) {
       subscribeToCountryRoom(selectedCountry, onDataReceived);
       setCurrentCountryRoom(selectedCountry);
-      openCountryRoom(selectedCountry, dataToSend);
+      openCountryRoom(dataToSend);
       console.log('Subscribe succesfull', selectedCountry);
     }
   }, [stompClient, selectedCountry]);
