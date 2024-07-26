@@ -8,7 +8,7 @@ import { SearchBarStyled, ButtonMapOpen, MapBox } from './SearchBarStyled';
 import SearchInput from '../SearchInput/SearchInput';
 import ChatMap from '../ChatMap/ChatMap';
 
-const SearchBar = ({ setCurrentCountryRoom, onDataReceived }) => {
+const SearchBar = ({ countryData, setCurrentCountryRoom, onDataReceived }) => {
   const [openMap, setOpenMap] = useState(false);
   const handleOpen = () => setOpenMap(true);
   const handleClose = () => setOpenMap(false);
@@ -21,7 +21,9 @@ const SearchBar = ({ setCurrentCountryRoom, onDataReceived }) => {
       />
       <ButtonMapOpen onClick={handleOpen}>Search by map</ButtonMapOpen>
       <div>
-        <Outlet context={{ setCurrentCountryRoom, onDataReceived }} />
+        <Outlet
+          context={{ countryData, setCurrentCountryRoom, onDataReceived }}
+        />
       </div>
 
       <Modal

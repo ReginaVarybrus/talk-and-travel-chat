@@ -16,6 +16,7 @@ const ChatRoute = () => {
   return (
     <ChatRouteStyled>
       <SearchBar
+        countryData={countryData}
         setCurrentCountryRoom={setCurrentCountryRoom}
         onDataReceived={onDataReceived}
       />

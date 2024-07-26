@@ -7,7 +7,11 @@ const Chat = ({ countryData, currentCountryRoom, setCountryData }) => (
   <ChatStyled>
     <ChatHeader countryData={countryData} />
     <MessageBlock>
-      <MessageList countryData={countryData} />
+      {countryData.country ? (
+        <MessageList countryData={countryData} />
+      ) : (
+        <div>There are no discussions yet. Be the first to start.</div>
+      )}
     </MessageBlock>
     <MessageBar
       countryData={countryData}

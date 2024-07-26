@@ -16,7 +16,12 @@ const RoomsList = () => {
     useWebSocket();
   const { responseData } = useFetch(ULRs.userCountries(userId));
   const context = useOutletContext();
-  const { setCurrentCountryRoom, onDataReceived } = context;
+  const { countryData, setCurrentCountryRoom, onDataReceived } = context;
+
+  const dataToSend = {
+    flagCode: countryData.flagCode,
+    userId,
+  };
 
   useEffect(() => {
     if (responseData && userId) {
@@ -29,7 +34,7 @@ const RoomsList = () => {
     if (stompClient && selectedCountry) {
       subscribeToCountryRoom(selectedCountry, onDataReceived);
       setCurrentCountryRoom(selectedCountry);
-      openCountryRoom(selectedCountry);
+      openCountryRoom(selectedCountry, dataToSend);
       console.log('Subscribe succesfull', selectedCountry);
     }
   }, [stompClient, selectedCountry]);
