@@ -73,6 +73,7 @@ const SearchInput = ({ setCurrentCountryRoom, onDataReceived }) => {
     setSelectedCountry(countryName);
 
     const dataToSend = {
+      countryName,
       flagCode,
       userId,
     };

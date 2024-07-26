@@ -3,6 +3,7 @@ import { useSelector } from 'react-redux';
 import { getUser } from '@/redux-store/selectors.js';
 import { useWebSocket } from '@/hooks/useWebSocket.js';
 import { axiosClient } from '@/services/api';
+// eslint-disable-next-line import/no-extraneous-dependencies
 import { useStompClient, useSubscription } from 'react-stomp-hooks';
 import {
   MessageBarStyled,

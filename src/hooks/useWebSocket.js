@@ -49,10 +49,10 @@ export const useWebSocket = () => {
   //   }
   // };
 
-  const openCountryRoom = (countryName, countryData) => {
+  const openCountryRoom = countryData => {
     if (stompClient && stompClient.connected) {
       stompClient.publish({
-        destination: `/countries/${countryName}/open`,
+        destination: `/chat/countries/open`,
         body: JSON.stringify(countryData),
       });
     } else {
