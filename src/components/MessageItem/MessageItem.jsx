@@ -7,10 +7,9 @@ const MessageItem = ({ message }) => {
 
   return (
     <div>
-      {/* <div>{message?.user.id || `id`}</div> */}
-      <div>Avatar</div>
+      <div>{message?.user?.userName || `user name`}</div>
       <div>
-        <span>{message.content || `message`}</span>
+        <span>{message?.content || `message`}</span>
         <span>{time || 'time'}</span>
       </div>
     </div>

@@ -18,11 +18,11 @@ const RoomsList = () => {
   const context = useOutletContext();
   const { setCurrentCountryRoom, onDataReceived } = context;
 
-  const dataToSend = {
-    countryName: countryRooms.countryName,
-    flagCode: countryRooms.flagCode,
-    userId,
-  };
+  // const dataToSend = {
+  //   countryName: countryRooms.name,
+  //   flagCode: countryRooms.flagCode,
+  //   userId,
+  // };
 
   useEffect(() => {
     if (responseData && userId) {
@@ -33,12 +33,30 @@ const RoomsList = () => {
 
   useEffect(() => {
     if (stompClient && selectedCountry) {
+      const countryRoom = countryRooms.find(
+        room => room.name === selectedCountry
+      );
+      const dataToSend = {
+        countryName: countryRoom?.name,
+        flagCode: countryRoom?.flagCode,
+        userId,
+      };
+
       subscribeToCountryRoom(selectedCountry, onDataReceived);
       setCurrentCountryRoom(selectedCountry);
       openCountryRoom(dataToSend);
-      console.log('Subscribe succesfull', selectedCountry);
+      console.log('Subscribe successful', selectedCountry);
     }
   }, [stompClient, selectedCountry]);
+
+  // useEffect(() => {
+  //   if (stompClient && selectedCountry) {
+  //     subscribeToCountryRoom(selectedCountry, onDataReceived);
+  //     setCurrentCountryRoom(selectedCountry);
+  //     openCountryRoom(dataToSend);
+  //     console.log('Subscribe succesfull', selectedCountry);
+  //   }
+  // }, [stompClient, selectedCountry]);
 
   const handleOpenCountryRoom = countryName => {
     setSelectedCountry(countryName);

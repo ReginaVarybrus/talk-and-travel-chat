@@ -32,16 +32,19 @@ const MessageBar = ({ countryData, setCountryData }) => {
   useSubscription(
     `/countries/${countryData?.country?.name}/messages`,
     response => {
-      const message = JSON.parse(response.body);
+      const receivedMessage = JSON.parse(response.body);
 
       setCountryData(prevCountryData => {
         const updatedGroupMessages = [
           ...(prevCountryData.country.groupMessages || []),
-          message,
+          receivedMessage,
         ];
         return {
           ...prevCountryData,
-          groupMessages: updatedGroupMessages,
+          country: {
+            ...prevCountryData.country,
+            groupMessages: updatedGroupMessages,
+          },
         };
       });
       console.log('response message', message);
@@ -76,18 +79,18 @@ const MessageBar = ({ countryData, setCountryData }) => {
           `/countries/${countryData?.country.name}/join`,
           id
         );
-        console.log('Join data:', response.data);
+        console.log('Join data:', response);
+
+        setCountryData(prevCountryData => ({
+          ...prevCountryData,
+          isSubscribe: true,
+        }));
       } catch (error) {
         console.error('Error fetching country rooms:', error);
       }
     };
 
     fetchData(userId);
-
-    setCountryData(prevCountryData => ({
-      ...prevCountryData,
-      isSubscribe: true,
-    }));
   };
 
   return (
