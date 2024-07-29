@@ -1,4 +1,4 @@
-import { useState, useRef } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { getUser } from '@/redux-store/selectors.js';
 import { useWebSocket } from '@/hooks/useWebSocket.js';
@@ -22,7 +22,7 @@ const MessageBar = ({
   setSubscriptionCountryRooms,
 }) => {
   const [message, setMessage] = useState('');
-  const [joinStatus, setJoinStatus] = useState(null);
+  const [isShowJoinBtn, setIsShowJoinBtn] = useState(true);
   const userId = useSelector(getUser)?.id;
   const textAreaRef = useRef(null);
   const stompClient = useStompClient();
@@ -31,6 +31,17 @@ const MessageBar = ({
   const isInputNotEmpty = Boolean(message?.trim().length);
 
   const handleChange = ({ target: { value } }) => setMessage(value);
+
+  useEffect(() => {
+    console.log('useEffect triggered');
+    console.log('countryData:', countryData);
+
+    if (countryData?.isSubscribed) {
+      setIsShowJoinBtn(false);
+    } else {
+      setIsShowJoinBtn(true);
+    }
+  }, [countryData?.isSubscribed]);
 
   useSubscription(
     `/countries/${countryData?.country?.name}/messages`,
@@ -73,7 +84,7 @@ const MessageBar = ({
     setMessage('');
   };
 
-  const handleJoinClick = () => {
+  const handleJoinClick = async () => {
     console.log('Joined to current country');
     const fetchData = async id => {
       try {
@@ -81,25 +92,30 @@ const MessageBar = ({
           `/countries/${countryData?.country.name}/join`,
           id
         );
-        setJoinStatus(response.status);
 
         console.log('Join data:', response);
+
+        if (response.status === 200) {
+          setIsShowJoinBtn(false);
+        }
+
+        setSubscriptionCountryRooms(prevRooms => [
+          ...prevRooms,
+          countryData?.country,
+        ]);
       } catch (error) {
         console.error('Error fetching country rooms:', error);
       }
     };
 
     fetchData(userId);
-
-    setSubscriptionCountryRooms(prevRooms => [
-      ...prevRooms,
-      countryData?.country,
-    ]);
   };
 
   return (
     <MessageBarStyled>
-      {countryData.isSubscribed || joinStatus === 200 ? (
+      {isShowJoinBtn ? (
+        <ButtonSendMessage onClick={handleJoinClick}>Join</ButtonSendMessage>
+      ) : (
         <MessageInputs onSubmit={handleSubmit}>
           <ButtonAttachFile component="label" variant="contained">
             <AttachmentIcon />
@@ -122,8 +138,6 @@ const MessageBar = ({
             <SendIcon />
           </ButtonSendMessage>
         </MessageInputs>
-      ) : (
-        <ButtonSendMessage onClick={handleJoinClick}>Join</ButtonSendMessage>
       )}
     </MessageBarStyled>
   );

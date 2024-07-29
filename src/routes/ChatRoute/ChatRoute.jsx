@@ -10,6 +10,7 @@ const ChatRoute = () => {
 
   const onCountryRoomDataReceived = data => {
     setCountryData(data);
+    console.log('COUNTRY DATA', data);
   };
 
   return (

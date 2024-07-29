@@ -12,7 +12,7 @@ const Chat = ({
   <ChatStyled>
     <ChatHeader countryData={countryData} />
     <MessageBlock>
-      {countryData?.country?.groupMessages ? (
+      {countryData?.country?.groupMessages.length ? (
         <MessageList countryData={countryData} />
       ) : (
         <div>There are no discussions yet. Be the first to start.</div>
