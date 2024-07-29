@@ -3,7 +3,13 @@ import ChatHeader from '../ChatHeader/ChatHeader';
 import MessageList from '../MessageList/MessageList';
 import MessageBar from '../MessageBar/MessageBar';
 
-const Chat = ({ countryData, currentCountryRoom, setCountryData }) => (
+const Chat = ({
+  countryData,
+  currentCountryRoom,
+  setCountryData,
+  subscriptionCountryRooms,
+  setSubscriptionCountryRooms,
+}) => (
   <ChatStyled>
     <ChatHeader countryData={countryData} />
     <MessageBlock>
@@ -17,6 +23,8 @@ const Chat = ({ countryData, currentCountryRoom, setCountryData }) => (
       countryData={countryData}
       currentCountryRoom={currentCountryRoom}
       setCountryData={setCountryData}
+      subscriptionCountryRooms={subscriptionCountryRooms}
+      setSubscriptionCountryRooms={setSubscriptionCountryRooms}
     />
   </ChatStyled>
 );

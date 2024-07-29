@@ -16,13 +16,17 @@ import {
   SendIcon,
 } from './MessageBarStyled';
 
-const MessageBar = ({ countryData, setCountryData }) => {
+const MessageBar = ({
+  countryData,
+  setCountryData,
+  subscriptionCountryRooms,
+  setSubscriptionCountryRooms,
+}) => {
   const [message, setMessage] = useState('');
 
   const userId = useSelector(getUser)?.id;
   const textAreaRef = useRef(null);
   const stompClient = useStompClient();
-
   const { sendMessage } = useWebSocket();
 
   const isInputNotEmpty = Boolean(message?.trim().length);
@@ -47,7 +51,7 @@ const MessageBar = ({ countryData, setCountryData }) => {
           },
         };
       });
-      console.log('response message', message);
+      console.log('response message', receivedMessage);
     }
   );
 
@@ -81,10 +85,11 @@ const MessageBar = ({ countryData, setCountryData }) => {
         );
         console.log('Join data:', response);
 
-        setCountryData(prevCountryData => ({
+        setSubscriptionCountryRooms(prevCountryData => ({
           ...prevCountryData,
           isSubscribe: true,
         }));
+        console.log('subscriptionCountryRooms', subscriptionCountryRooms);
       } catch (error) {
         console.error('Error fetching country rooms:', error);
       }
@@ -95,7 +100,7 @@ const MessageBar = ({ countryData, setCountryData }) => {
 
   return (
     <MessageBarStyled>
-      {countryData.isSubscribe ? (
+      {countryData.isSubscribed ? (
         <MessageInputs onSubmit={handleSubmit}>
           <ButtonAttachFile component="label" variant="contained">
             <AttachmentIcon />

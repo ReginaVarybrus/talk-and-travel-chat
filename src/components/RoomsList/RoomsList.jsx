@@ -9,31 +9,32 @@ import { ListStyled, Text, Item, ListItems } from './RoomsListStyled';
 import { Flag, ScrollBar } from '../SearchInput/SearchInputStyled.js';
 
 const RoomsList = () => {
-  const [countryRooms, setCountryRooms] = useState([]);
+  // const [countryRooms, setCountryRooms] = useState([]);
   const [selectedCountry, setSelectedCountry] = useState(null);
   const userId = useSelector(getUser)?.id;
   const { stompClient, subscribeToCountryRoom, openCountryRoom } =
     useWebSocket();
   const { responseData } = useFetch(ULRs.userCountries(userId));
   const context = useOutletContext();
-  const { setCurrentCountryRoom, onDataReceived } = context;
-
-  // const dataToSend = {
-  //   countryName: countryRooms.name,
-  //   flagCode: countryRooms.flagCode,
-  //   userId,
-  // };
+  const {
+    setCurrentCountryRoom,
+    onDataReceived,
+    subscriptionCountryRooms,
+    setSubscriptionCountryRooms,
+  } = context;
 
   useEffect(() => {
     if (responseData && userId) {
-      setCountryRooms(responseData);
+      setSubscriptionCountryRooms(responseData);
+    } else {
+      console.log('responseData & userID', responseData, userId);
     }
     console.log('response country', responseData);
   }, [responseData, userId]);
 
   useEffect(() => {
     if (stompClient && selectedCountry) {
-      const countryRoom = countryRooms.find(
+      const countryRoom = subscriptionCountryRooms.find(
         room => room.name === selectedCountry
       );
       const dataToSend = {
@@ -51,6 +52,24 @@ const RoomsList = () => {
 
   // useEffect(() => {
   //   if (stompClient && selectedCountry) {
+  //     const countryRoom = countryRooms.find(
+  //       room => room.name === selectedCountry
+  //     );
+  //     const dataToSend = {
+  //       countryName: countryRoom?.name,
+  //       flagCode: countryRoom?.flagCode,
+  //       userId,
+  //     };
+
+  //     subscribeToCountryRoom(selectedCountry, onDataReceived);
+  //     setCurrentCountryRoom(selectedCountry);
+  //     openCountryRoom(dataToSend);
+  //     console.log('Subscribe successful', selectedCountry);
+  //   }
+  // }, [stompClient, selectedCountry]);
+
+  // useEffect(() => {
+  //   if (stompClient && selectedCountry) {
   //     subscribeToCountryRoom(selectedCountry, onDataReceived);
   //     setCurrentCountryRoom(selectedCountry);
   //     openCountryRoom(dataToSend);
@@ -64,10 +83,10 @@ const RoomsList = () => {
 
   return (
     <ListStyled>
-      {countryRooms.length ? (
+      {subscriptionCountryRooms.length ? (
         <ListItems>
           <ScrollBar>
-            {countryRooms.map((room, id) => (
+            {subscriptionCountryRooms.map((room, id) => (
               <Item key={id} onClick={() => handleOpenCountryRoom(room.name)}>
                 <Flag
                   loading="lazy"

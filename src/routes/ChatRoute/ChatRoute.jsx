@@ -6,10 +6,10 @@ import { ChatRouteStyled } from './ChatRouteStyled.js';
 
 const ChatRoute = () => {
   const [countryData, setCountryData] = useState({});
+  const [subscriptionCountryRooms, setSubscriptionCountryRooms] = useState([]);
   const [currentCountryRoom, setCurrentCountryRoom] = useState(null);
 
   const onDataReceived = data => {
-    console.log('Recieved COUNTRY DATA:', data);
     setCountryData(data);
   };
 
@@ -19,11 +19,15 @@ const ChatRoute = () => {
         countryData={countryData}
         setCurrentCountryRoom={setCurrentCountryRoom}
         onDataReceived={onDataReceived}
+        subscriptionCountryRooms={subscriptionCountryRooms}
+        setSubscriptionCountryRooms={setSubscriptionCountryRooms}
       />
       <Chat
         countryData={countryData}
         currentCountryRoom={currentCountryRoom}
         setCountryData={setCountryData}
+        subscriptionCountryRooms={subscriptionCountryRooms}
+        setSubscriptionCountryRooms={setSubscriptionCountryRooms}
       />
     </ChatRouteStyled>
   );

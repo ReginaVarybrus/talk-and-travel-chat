@@ -8,7 +8,13 @@ import { SearchBarStyled, ButtonMapOpen, MapBox } from './SearchBarStyled';
 import SearchInput from '../SearchInput/SearchInput';
 import ChatMap from '../ChatMap/ChatMap';
 
-const SearchBar = ({ countryData, setCurrentCountryRoom, onDataReceived }) => {
+const SearchBar = ({
+  countryData,
+  setCurrentCountryRoom,
+  onDataReceived,
+  subscriptionCountryRooms,
+  setSubscriptionCountryRooms,
+}) => {
   const [openMap, setOpenMap] = useState(false);
   const handleOpen = () => setOpenMap(true);
   const handleClose = () => setOpenMap(false);
@@ -22,7 +28,13 @@ const SearchBar = ({ countryData, setCurrentCountryRoom, onDataReceived }) => {
       <ButtonMapOpen onClick={handleOpen}>Search by map</ButtonMapOpen>
       <div>
         <Outlet
-          context={{ countryData, setCurrentCountryRoom, onDataReceived }}
+          context={{
+            countryData,
+            setCurrentCountryRoom,
+            onDataReceived,
+            subscriptionCountryRooms,
+            setSubscriptionCountryRooms,
+          }}
         />
       </div>
 
