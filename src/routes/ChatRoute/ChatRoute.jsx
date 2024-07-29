@@ -1,5 +1,4 @@
 import { useState } from 'react';
-// import WebSocketProvider from '@/providers/WebSocketProvider';
 import SearchBar from '@/components/SearchBar/SearchBar';
 import Chat from '@/components/Chat/Chat';
 import { ChatRouteStyled } from './ChatRouteStyled.js';
@@ -9,7 +8,7 @@ const ChatRoute = () => {
   const [subscriptionCountryRooms, setSubscriptionCountryRooms] = useState([]);
   const [currentCountryRoom, setCurrentCountryRoom] = useState(null);
 
-  const onDataReceived = data => {
+  const onCountryRoomDataReceived = data => {
     setCountryData(data);
   };
 
@@ -18,7 +17,7 @@ const ChatRoute = () => {
       <SearchBar
         countryData={countryData}
         setCurrentCountryRoom={setCurrentCountryRoom}
-        onDataReceived={onDataReceived}
+        onCountryRoomDataReceived={onCountryRoomDataReceived}
         subscriptionCountryRooms={subscriptionCountryRooms}
         setSubscriptionCountryRooms={setSubscriptionCountryRooms}
       />
@@ -26,7 +25,6 @@ const ChatRoute = () => {
         countryData={countryData}
         currentCountryRoom={currentCountryRoom}
         setCountryData={setCountryData}
-        subscriptionCountryRooms={subscriptionCountryRooms}
         setSubscriptionCountryRooms={setSubscriptionCountryRooms}
       />
     </ChatRouteStyled>

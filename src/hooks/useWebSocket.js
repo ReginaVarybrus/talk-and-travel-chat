@@ -7,22 +7,26 @@ export const useWebSocket = () => {
   const onDataReceivedRef = useRef(null);
   const stompClient = useStompClient();
 
-  const subscribeToCountryRoom = (countryName, onDataReceived) => {
+  const subscribeToCountryRoom = (
+    userId,
+    countryName,
+    onCountryRoomDataReceived
+  ) => {
     if (stompClient && stompClient.connected) {
       if (subscriptionRoom.current) {
         subscriptionRoom.current.unsubscribe();
       }
 
       subscriptionRoom.current = stompClient.subscribe(
-        `/countries/${countryName}`,
+        `/countries/${countryName}/user/${userId}`,
         response => {
           const data = JSON.parse(response.body);
           console.log('recieved websocket data:', data);
-          onDataReceived(data);
+          onCountryRoomDataReceived(data);
         }
       );
 
-      onDataReceivedRef.current = onDataReceived;
+      onDataReceivedRef.current = onCountryRoomDataReceived;
     }
   };
 

@@ -1,8 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
 import { useSelector } from 'react-redux';
-// import ULRs from '@/redux-store/constants';
 import { getUser } from '@/redux-store/selectors';
-// import { useFetch } from '@/hooks/useFetch.js';
 import { useWebSocket } from '@/hooks/useWebSocket.js';
 import mapData from '@/data/countries.json';
 import {
@@ -15,41 +13,28 @@ import {
   ScrollBar,
   Text,
 } from './SearchInputStyled';
-// import ModalCreateRoom from '../ModalCreateRoom/ModalCreateRoom';
 
-const SearchInput = ({ setCurrentCountryRoom, onDataReceived }) => {
-  // const [open, setOpen] = useState(false);
+const SearchInput = ({ setCurrentCountryRoom, onCountryRoomDataReceived }) => {
   const [searchedValue, setSearchedValue] = useState('');
-  // const [createdCountries, setCreatedCountries] = useState([]);
-  // const [dataToCreate, setDataToCreate] = useState({});
   const [showItem, setShowItem] = useState(false);
   const [selectedCountry, setSelectedCountry] = useState(null);
   const autoCompleteRef = useRef(null);
   const userId = useSelector(getUser)?.id;
 
-  // const { responseData } = useFetch(ULRs.countries);
-
-  const {
-    stompClient,
-    subscribeToCountryRoom,
-    // createCountryRoom,
-    // updateCountryRoom,
-    openCountryRoom,
-  } = useWebSocket();
+  const { stompClient, subscribeToCountryRoom, openCountryRoom } =
+    useWebSocket();
 
   useEffect(() => {
     if (stompClient && selectedCountry) {
-      subscribeToCountryRoom(selectedCountry, onDataReceived);
+      subscribeToCountryRoom(
+        userId,
+        selectedCountry,
+        onCountryRoomDataReceived
+      );
       setCurrentCountryRoom(selectedCountry);
       console.log('Subscribe succesfull');
     }
   }, [stompClient, selectedCountry]);
-
-  // useEffect(() => {
-  //   if (responseData) {
-  //     setCreatedCountries(responseData);
-  //   }
-  // }, [responseData]);
 
   const filterCountries = mapData.features.filter(name =>
     name.properties.ADMIN.toLowerCase().includes(searchedValue.toLowerCase())
@@ -85,41 +70,6 @@ const SearchInput = ({ setCurrentCountryRoom, onDataReceived }) => {
 
     setSearchedValue('');
   };
-
-  // const handleCountryClick = country => {
-  //   const countryName = country.properties.ADMIN;
-  //   setSelectedCountry(countryName);
-  //   const selectedItem = createdCountries.find(
-  //     item => item.name === countryName
-  //   );
-
-  //   const dataToUpdate = {
-  //     id: selectedItem ? selectedItem.id : null,
-  //     userId,
-  //   };
-
-  //   setSearchedValue(countryName);
-  //   setShowItem(false);
-
-  //   if (selectedItem) {
-  //     updateCountryRoom(countryName, dataToUpdate);
-  //   } else {
-  //     setOpen(true);
-  //     setDataToCreate({
-  //       userId,
-  //       name: countryName,
-  //       flagCode: country.properties.code,
-  //     });
-  //   }
-
-  //   setSearchedValue('');
-  // };
-
-  // const handleCreateCountryRoom = () => {
-  //   createCountryRoom(dataToCreate);
-  //   setSelectedCountry(dataToCreate.name);
-  //   setOpen(false);
-  // };
 
   useEffect(() => {
     const handleOutsideClick = event => {
@@ -177,12 +127,6 @@ const SearchInput = ({ setCurrentCountryRoom, onDataReceived }) => {
           </ScrollBar>
         </ListItemsStyled>
       )}
-      {/* <ModalCreateRoom
-        open={open}
-        setOpen={setOpen}
-        handleCreateCountryRoom={handleCreateCountryRoom}
-        selectedCountry={selectedCountry}
-      /> */}
     </AutocompleteInputStyled>
   );
 };

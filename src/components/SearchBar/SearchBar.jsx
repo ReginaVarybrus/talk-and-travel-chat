@@ -11,7 +11,7 @@ import ChatMap from '../ChatMap/ChatMap';
 const SearchBar = ({
   countryData,
   setCurrentCountryRoom,
-  onDataReceived,
+  onCountryRoomDataReceived,
   subscriptionCountryRooms,
   setSubscriptionCountryRooms,
 }) => {
@@ -23,7 +23,7 @@ const SearchBar = ({
     <SearchBarStyled>
       <SearchInput
         setCurrentCountryRoom={setCurrentCountryRoom}
-        onDataReceived={onDataReceived}
+        onCountryRoomDataReceived={onCountryRoomDataReceived}
       />
       <ButtonMapOpen onClick={handleOpen}>Search by map</ButtonMapOpen>
       <div>
@@ -31,7 +31,7 @@ const SearchBar = ({
           context={{
             countryData,
             setCurrentCountryRoom,
-            onDataReceived,
+            onCountryRoomDataReceived,
             subscriptionCountryRooms,
             setSubscriptionCountryRooms,
           }}

@@ -19,11 +19,10 @@ import {
 const MessageBar = ({
   countryData,
   setCountryData,
-  subscriptionCountryRooms,
   setSubscriptionCountryRooms,
 }) => {
   const [message, setMessage] = useState('');
-
+  const [joinStatus, setJoinStatus] = useState(null);
   const userId = useSelector(getUser)?.id;
   const textAreaRef = useRef(null);
   const stompClient = useStompClient();
@@ -78,29 +77,29 @@ const MessageBar = ({
     console.log('Joined to current country');
     const fetchData = async id => {
       try {
-        console.log('send fetch request');
         const response = await axiosClient.post(
           `/countries/${countryData?.country.name}/join`,
           id
         );
-        console.log('Join data:', response);
+        setJoinStatus(response.status);
 
-        setSubscriptionCountryRooms(prevCountryData => ({
-          ...prevCountryData,
-          isSubscribe: true,
-        }));
-        console.log('subscriptionCountryRooms', subscriptionCountryRooms);
+        console.log('Join data:', response);
       } catch (error) {
         console.error('Error fetching country rooms:', error);
       }
     };
 
     fetchData(userId);
+
+    setSubscriptionCountryRooms(prevRooms => [
+      ...prevRooms,
+      countryData?.country,
+    ]);
   };
 
   return (
     <MessageBarStyled>
-      {countryData.isSubscribed ? (
+      {countryData.isSubscribed || joinStatus === 200 ? (
         <MessageInputs onSubmit={handleSubmit}>
           <ButtonAttachFile component="label" variant="contained">
             <AttachmentIcon />

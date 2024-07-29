@@ -7,7 +7,6 @@ const Chat = ({
   countryData,
   currentCountryRoom,
   setCountryData,
-  subscriptionCountryRooms,
   setSubscriptionCountryRooms,
 }) => (
   <ChatStyled>
@@ -23,7 +22,6 @@ const Chat = ({
       countryData={countryData}
       currentCountryRoom={currentCountryRoom}
       setCountryData={setCountryData}
-      subscriptionCountryRooms={subscriptionCountryRooms}
       setSubscriptionCountryRooms={setSubscriptionCountryRooms}
     />
   </ChatStyled>

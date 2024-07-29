@@ -9,7 +9,6 @@ import { ListStyled, Text, Item, ListItems } from './RoomsListStyled';
 import { Flag, ScrollBar } from '../SearchInput/SearchInputStyled.js';
 
 const RoomsList = () => {
-  // const [countryRooms, setCountryRooms] = useState([]);
   const [selectedCountry, setSelectedCountry] = useState(null);
   const userId = useSelector(getUser)?.id;
   const { stompClient, subscribeToCountryRoom, openCountryRoom } =
@@ -18,7 +17,7 @@ const RoomsList = () => {
   const context = useOutletContext();
   const {
     setCurrentCountryRoom,
-    onDataReceived,
+    onCountryRoomDataReceived,
     subscriptionCountryRooms,
     setSubscriptionCountryRooms,
   } = context;
@@ -43,39 +42,16 @@ const RoomsList = () => {
         userId,
       };
 
-      subscribeToCountryRoom(selectedCountry, onDataReceived);
+      subscribeToCountryRoom(
+        userId,
+        selectedCountry,
+        onCountryRoomDataReceived
+      );
       setCurrentCountryRoom(selectedCountry);
       openCountryRoom(dataToSend);
       console.log('Subscribe successful', selectedCountry);
     }
   }, [stompClient, selectedCountry]);
-
-  // useEffect(() => {
-  //   if (stompClient && selectedCountry) {
-  //     const countryRoom = countryRooms.find(
-  //       room => room.name === selectedCountry
-  //     );
-  //     const dataToSend = {
-  //       countryName: countryRoom?.name,
-  //       flagCode: countryRoom?.flagCode,
-  //       userId,
-  //     };
-
-  //     subscribeToCountryRoom(selectedCountry, onDataReceived);
-  //     setCurrentCountryRoom(selectedCountry);
-  //     openCountryRoom(dataToSend);
-  //     console.log('Subscribe successful', selectedCountry);
-  //   }
-  // }, [stompClient, selectedCountry]);
-
-  // useEffect(() => {
-  //   if (stompClient && selectedCountry) {
-  //     subscribeToCountryRoom(selectedCountry, onDataReceived);
-  //     setCurrentCountryRoom(selectedCountry);
-  //     openCountryRoom(dataToSend);
-  //     console.log('Subscribe succesfull', selectedCountry);
-  //   }
-  // }, [stompClient, selectedCountry]);
 
   const handleOpenCountryRoom = countryName => {
     setSelectedCountry(countryName);
