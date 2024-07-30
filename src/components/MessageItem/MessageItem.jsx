@@ -1,20 +1,44 @@
 /* eslint-disable react/forbid-prop-types */
+import { useState, useEffect } from 'react';
+import { useSelector } from 'react-redux';
+import { getUser } from '@/redux-store/selectors.js';
+import { useFetch } from '@/hooks/useFetch.js';
+import ULRs from '@/redux-store/constants';
 import PropTypes from 'prop-types';
 import { timeStampConverter } from '../utils/timeUtil.js';
 import {
   MessageItemStyled,
   MessageContent,
-  Name,
+  Avatar,
   Text,
   Time,
 } from './MessageItemStyles.js';
 
 const MessageItem = ({ message }) => {
+  const [avatarSrc, setAvatarSrc] = useState('');
+  const userId = useSelector(getUser)?.id;
+  const { responseData } = useFetch(ULRs.userAvatart(userId), {
+    responseType: 'arraybuffer',
+  });
   const time = timeStampConverter(message.creationDate);
+
+  useEffect(() => {
+    if (responseData && userId) {
+      const base64String = btoa(
+        new Uint8Array(responseData).reduce(
+          (data, byte) => data + String.fromCharCode(byte),
+          ''
+        )
+      );
+      setAvatarSrc(`data:image/png;base64,${base64String}`);
+    } else {
+      console.log('responseData & userID', responseData, userId);
+    }
+  }, [responseData, userId]);
 
   return (
     <MessageItemStyled>
-      <Name>{message?.user?.userName || `user name`}</Name>
+      <Avatar src={avatarSrc} alt="avatar" />
       <MessageContent>
         <Text>{message?.content || `message`}</Text>
         <Time>{time || 'time'}</Time>

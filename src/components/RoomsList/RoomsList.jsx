@@ -13,7 +13,7 @@ const RoomsList = () => {
   const userId = useSelector(getUser)?.id;
   const { stompClient, subscribeToCountryRoom, openCountryRoom } =
     useWebSocket();
-  const { responseData } = useFetch(ULRs.userCountries(userId));
+  const { responseData } = useFetch(ULRs.userCountries(userId, ''));
   const context = useOutletContext();
   const {
     onCountryRoomDataReceived,

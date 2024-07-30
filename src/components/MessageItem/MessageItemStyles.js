@@ -2,8 +2,7 @@ import styled from 'styled-components';
 
 export const MessageItemStyled = styled.div`
   display: flex;
-  flex-direction: column;
-  align-items: start;
+  align-items: end;
   margin: 24px 32px;
 `;
 
@@ -16,12 +15,12 @@ export const MessageContent = styled.ul`
   background: var(--color-blue-1);
 `;
 
-export const Name = styled.p`
-  text-align: start;
-  font-size: 20px;
-  font-weight: 700;
-  margin: 0 0 5px 5px;
-  color: var(--color-brand-blue);
+export const Avatar = styled.img`
+  width: 48px;
+  height: 48px;
+  border-radius: 4px;
+  background: var(--color-blue-1);
+  margin-right: 12px;
 `;
 
 export const Text = styled.p`

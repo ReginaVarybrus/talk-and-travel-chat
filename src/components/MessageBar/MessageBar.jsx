@@ -3,6 +3,7 @@ import { useSelector } from 'react-redux';
 import { getUser } from '@/redux-store/selectors.js';
 import { useWebSocket } from '@/hooks/useWebSocket.js';
 import { axiosClient } from '@/services/api';
+import ULRs from '@/redux-store/constants';
 import BasicButton from '@/components/Buttons/BasicButton/BasicButton';
 // eslint-disable-next-line import/no-extraneous-dependencies
 import { useStompClient, useSubscription } from 'react-stomp-hooks';
@@ -88,7 +89,7 @@ const MessageBar = ({
     const fetchData = async id => {
       try {
         const response = await axiosClient.post(
-          `/countries/${countryData?.country.name}/join`,
+          ULRs.joinToCountryRoom(countryData?.country.name),
           id
         );
 

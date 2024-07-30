@@ -9,5 +9,4 @@ export const ScrollBar = styled(SimpleBar)`
 export const MessageListStyled = styled.ul`
   flex-direction: column;
   align-items: start;
-  padding-left: 10px;
 `;
