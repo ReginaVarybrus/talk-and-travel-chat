@@ -1,5 +1,4 @@
 import styled from 'styled-components';
-// import ListItem from '@mui/material/ListItem';
 import SimpleBar from 'simplebar-react';
 
 export const ScrollBar = styled(SimpleBar)`
