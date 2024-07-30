@@ -3,10 +3,12 @@ import { useSelector } from 'react-redux';
 import { getUser } from '@/redux-store/selectors.js';
 import { useWebSocket } from '@/hooks/useWebSocket.js';
 import { axiosClient } from '@/services/api';
+import BasicButton from '@/components/Buttons/BasicButton/BasicButton';
 // eslint-disable-next-line import/no-extraneous-dependencies
 import { useStompClient, useSubscription } from 'react-stomp-hooks';
 import {
   MessageBarStyled,
+  ButtonJoinWrapper,
   MessageInputs,
   ButtonAttachFile,
   VisuallyHiddenInput,
@@ -33,15 +35,12 @@ const MessageBar = ({
   const handleChange = ({ target: { value } }) => setMessage(value);
 
   useEffect(() => {
-    console.log('useEffect triggered');
-    console.log('countryData:', countryData);
-
     if (countryData?.isSubscribed) {
       setIsShowJoinBtn(false);
     } else {
       setIsShowJoinBtn(true);
     }
-  }, [countryData?.isSubscribed]);
+  }, [countryData.isSubscribed]);
 
   useSubscription(
     `/countries/${countryData?.country?.name}/messages`,
@@ -99,6 +98,8 @@ const MessageBar = ({
           setIsShowJoinBtn(false);
         }
 
+        countryData.isSubscribed = true;
+
         setSubscriptionCountryRooms(prevRooms => [
           ...prevRooms,
           countryData?.country,
@@ -114,7 +115,17 @@ const MessageBar = ({
   return (
     <MessageBarStyled>
       {isShowJoinBtn ? (
-        <ButtonSendMessage onClick={handleJoinClick}>Join</ButtonSendMessage>
+        <ButtonJoinWrapper>
+          <BasicButton
+            variant="contained"
+            color="primary"
+            sx={{
+              marginTop: '32px',
+            }}
+            text="Join to the country chat"
+            handleClick={handleJoinClick}
+          />
+        </ButtonJoinWrapper>
       ) : (
         <MessageInputs onSubmit={handleSubmit}>
           <ButtonAttachFile component="label" variant="contained">

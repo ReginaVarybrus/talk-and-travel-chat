@@ -14,7 +14,7 @@ import {
   Text,
 } from './SearchInputStyled';
 
-const SearchInput = ({ setCurrentCountryRoom, onCountryRoomDataReceived }) => {
+const SearchInput = ({ onCountryRoomDataReceived }) => {
   const [searchedValue, setSearchedValue] = useState('');
   const [showItem, setShowItem] = useState(false);
   const [selectedCountry, setSelectedCountry] = useState(null);
@@ -31,8 +31,6 @@ const SearchInput = ({ setCurrentCountryRoom, onCountryRoomDataReceived }) => {
         selectedCountry,
         onCountryRoomDataReceived
       );
-      setCurrentCountryRoom(selectedCountry);
-      console.log('Subscribe succesfull');
     }
   }, [stompClient, selectedCountry]);
 
@@ -107,11 +105,7 @@ const SearchInput = ({ setCurrentCountryRoom, onCountryRoomDataReceived }) => {
             ) : (
               <>
                 {filterCountries.map((country, id) => (
-                  <Item
-                    key={id}
-                    // key={country.properties.code}
-                    onClick={() => handleCountryClick(country)}
-                  >
+                  <Item key={id} onClick={() => handleCountryClick(country)}>
                     <Flag
                       loading="lazy"
                       width="32"

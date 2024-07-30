@@ -16,7 +16,6 @@ const RoomsList = () => {
   const { responseData } = useFetch(ULRs.userCountries(userId));
   const context = useOutletContext();
   const {
-    setCurrentCountryRoom,
     onCountryRoomDataReceived,
     subscriptionCountryRooms,
     setSubscriptionCountryRooms,
@@ -28,7 +27,6 @@ const RoomsList = () => {
     } else {
       console.log('responseData & userID', responseData, userId);
     }
-    console.log('response country', responseData);
   }, [responseData, userId]);
 
   useEffect(() => {
@@ -47,9 +45,7 @@ const RoomsList = () => {
         selectedCountry,
         onCountryRoomDataReceived
       );
-      setCurrentCountryRoom(selectedCountry);
       openCountryRoom(dataToSend);
-      console.log('Subscribe successful', selectedCountry);
     }
   }, [stompClient, selectedCountry]);
 

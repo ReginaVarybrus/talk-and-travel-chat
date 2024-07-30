@@ -16,6 +16,12 @@ export const MessageBarStyled = styled.footer`
   transition: height 0.3s ease;
 `;
 
+export const ButtonJoinWrapper = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+`;
+
 export const MessageInputs = styled.form`
   display: flex;
   justify-content: space-between;
