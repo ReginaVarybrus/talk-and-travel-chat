@@ -9,7 +9,6 @@ import SearchInput from '../SearchInput/SearchInput';
 import ChatMap from '../ChatMap/ChatMap';
 
 const SearchBar = ({
-  countryData,
   onCountryRoomDataReceived,
   subscriptionCountryRooms,
   setSubscriptionCountryRooms,
@@ -25,7 +24,6 @@ const SearchBar = ({
       <div>
         <Outlet
           context={{
-            countryData,
             onCountryRoomDataReceived,
             subscriptionCountryRooms,
             setSubscriptionCountryRooms,

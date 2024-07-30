@@ -35,10 +35,8 @@ const SideBar = () => {
   };
 
   const handleLogOut = () => {
-    console.log('Logging out...');
     dispatch(logOut())
       .then(() => {
-        console.log('Logout successful.');
         navigate(routesPath.MAIN);
       })
       .catch(error => {

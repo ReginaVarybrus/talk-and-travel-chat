@@ -3,7 +3,6 @@ import { useNavigate } from 'react-router-dom';
 import { logIn } from '@/redux-store/AuthOperations/AuthOperations';
 import { useDispatch } from 'react-redux';
 import { routesPath } from '@/routes/routesConfig';
-// import { useWebSocket } from '@/hooks/useWebSocket.js';
 import {
   formFields,
   schema,
@@ -33,7 +32,6 @@ Object.keys(formFields).forEach(key => {
 const LoginForm = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  // const { connect } = useWebSocket();
 
   const redirect = () => {
     navigate(routesPath.REGISTER);
@@ -46,7 +44,6 @@ const LoginForm = () => {
     onSubmit: async (values, { resetForm }) => {
       await dispatch(logIn(values));
       navigate(routesPath.ROOMS);
-      // connect();
       resetForm();
     },
   });

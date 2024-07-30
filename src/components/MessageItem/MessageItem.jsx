@@ -1,7 +1,5 @@
 /* eslint-disable react/forbid-prop-types */
 import { useState, useEffect } from 'react';
-import { useSelector } from 'react-redux';
-import { getUser } from '@/redux-store/selectors.js';
 import { useFetch } from '@/hooks/useFetch.js';
 import ULRs from '@/redux-store/constants';
 import PropTypes from 'prop-types';
@@ -16,7 +14,7 @@ import {
 
 const MessageItem = ({ message }) => {
   const [avatarSrc, setAvatarSrc] = useState('');
-  const userId = useSelector(getUser)?.id;
+  const userId = message?.user.id;
   const { responseData } = useFetch(ULRs.userAvatart(userId), {
     responseType: 'arraybuffer',
   });
@@ -31,8 +29,6 @@ const MessageItem = ({ message }) => {
         )
       );
       setAvatarSrc(`data:image/png;base64,${base64String}`);
-    } else {
-      console.log('responseData & userID', responseData, userId);
     }
   }, [responseData, userId]);
 

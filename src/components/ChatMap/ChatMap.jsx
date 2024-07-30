@@ -1,33 +1,19 @@
 import { useState } from 'react';
-// import { useDispatch, useSelector } from 'react-redux';
 import PropTypes from 'prop-types';
 import { GeoJSON } from 'react-leaflet';
 import mapData from '@/data/countries.json';
 import 'leaflet/dist/leaflet.css';
 import '@/css/ChatMap.css';
 
-// import { sendDataCountryToBackend } from '@/redux-store/AuthOperations/AuthOperations';
-// import { getUser } from '@/redux-store/selectors';
 import {
   CountryName,
   ShowCountry,
   MainMapBlock,
   MapWrapper,
 } from './ChatMapStyled';
-// TODO
-// import { useMap } from 'react-leaflet/hooks';
 
 const ChatMap = ({ closeMap }) => {
-  // const dispatch = useDispatch();
-  // const userId = useSelector(getUser)?.id;
   const [selectedCountry, setSelectedCountry] = useState(null);
-  // const [countryData, setCountryData] = useState({});
-
-  // TODO
-  // const onCountryHover = e => {
-  //   const countryName = e.target.feature.properties.ADMIN;
-  //   setSelectedCountry(countryName);
-  // };
 
   const color = [
     'var(--color-blue-1)',
@@ -59,7 +45,6 @@ const ChatMap = ({ closeMap }) => {
           flagCode: e.target.feature.properties.code,
         };
         setSelectedCountry(data.name);
-        // setCountryData(data);
       },
       mouseover: e => {
         e.target.setStyle({
@@ -75,7 +60,6 @@ const ChatMap = ({ closeMap }) => {
   };
 
   const handleClick = () => {
-    // dispatch(sendDataCountryToBackend({ userId, countryDto: countryData }));
     closeMap();
   };
 
