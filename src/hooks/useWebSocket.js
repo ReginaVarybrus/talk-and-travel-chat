@@ -30,6 +30,24 @@ export const useWebSocket = () => {
     }
   };
 
+  const subscribeToGroupMessages = (response, setCountryData) => {
+    const receivedMessage = JSON.parse(response.body);
+
+    setCountryData(prevCountryData => {
+      const updatedGroupMessages = [
+        ...(prevCountryData.country.groupMessages || []),
+        receivedMessage,
+      ];
+      return {
+        ...prevCountryData,
+        country: {
+          ...prevCountryData.country,
+          groupMessages: updatedGroupMessages,
+        },
+      };
+    });
+  };
+
   const openCountryRoom = countryData => {
     if (stompClient && stompClient.connected) {
       stompClient.publish({
@@ -68,6 +86,7 @@ export const useWebSocket = () => {
   return {
     stompClient,
     subscribeToCountryRoom,
+    subscribeToGroupMessages,
     openCountryRoom,
     sendMessage,
   };

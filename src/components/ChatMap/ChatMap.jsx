@@ -12,27 +12,27 @@ import {
   MapWrapper,
 } from './ChatMapStyled';
 
+const color = [
+  'var(--color-blue-1)',
+  'var(--color-blue-2)',
+  'var(--color-blue-3)',
+  'var(--color-blue-4)',
+  'var(--color-blue-5)',
+  'var(--color-brand-blue)',
+  'var(--color-blue-7)',
+  'var(--color-blue-8)',
+  'var(--color-blue-9)',
+  'var(--color-blue-10)',
+];
+
+const countryStyle = {
+  fillOpacity: 1,
+  color: 'var(--color-dark)',
+  weight: 1,
+};
+
 const ChatMap = ({ closeMap }) => {
   const [selectedCountry, setSelectedCountry] = useState(null);
-
-  const color = [
-    'var(--color-blue-1)',
-    'var(--color-blue-2)',
-    'var(--color-blue-3)',
-    'var(--color-blue-4)',
-    'var(--color-blue-5)',
-    'var(--color-brand-blue)',
-    'var(--color-blue-7)',
-    'var(--color-blue-8)',
-    'var(--color-blue-9)',
-    'var(--color-blue-10)',
-  ];
-
-  const countryStyle = {
-    fillOpacity: 1,
-    color: 'var(--color-dark)',
-    weight: 1,
-  };
 
   const onEachCountry = (country, layer) => {
     const colorIndex = Math.floor(Math.random() * color.length);

@@ -1,23 +1,25 @@
 import { useEffect, useRef } from 'react';
-
-import MessageItem from '../MessageItem/MessageItem';
-
+import MessageItem from '@/components/MessageItem/MessageItem';
 import { MessageListStyled } from './MessageListStyles.js';
 
-const MessageList = ({ countryData }) => {
+const MessageList = ({ groupMessages }) => {
   const messagesEndRef = useRef(null);
   const scrollToBottom = () => {
     messagesEndRef.current.scrollIntoView({ behavior: 'smooth' });
   };
 
-  const messagesList = countryData?.country?.groupMessages;
-  useEffect(scrollToBottom, [messagesList]);
+  useEffect(scrollToBottom, [groupMessages]);
 
   return (
     <MessageListStyled>
-      {messagesList &&
-        messagesList.map((message, id) => (
-          <MessageItem key={id} message={message} />
+      {groupMessages &&
+        groupMessages.map((message, id) => (
+          <MessageItem
+            key={id}
+            content={message.content}
+            userId={message.user.id}
+            date={message.creationDate}
+          />
         ))}
       <div ref={messagesEndRef} />
     </MessageListStyled>

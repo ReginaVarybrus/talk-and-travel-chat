@@ -1,7 +1,7 @@
 import logo from '@/images/logo.svg';
-import ChatHeader from '../ChatHeader/ChatHeader';
-import MessageList from '../MessageList/MessageList';
-import MessageBar from '../MessageBar/MessageBar';
+import ChatHeader from '@/components/ChatHeader/ChatHeader';
+import MessageList from '@/components/MessageList/MessageList';
+import MessageBar from '@/components/MessageBar/MessageBar';
 import {
   ChatStyled,
   MessageBlock,
@@ -9,21 +9,34 @@ import {
   Logo,
 } from './ChatStyled';
 
-const Chat = ({ countryData, setCountryData, setSubscriptionCountryRooms }) => (
+const Chat = ({
+  countryName,
+  participantsAmount,
+  groupMessages,
+  country,
+  isSubscribed,
+  setCountryData,
+  setSubscriptionCountryRooms,
+}) => (
   <ChatStyled>
-    <ChatHeader countryData={countryData} />
+    <ChatHeader
+      countryName={countryName}
+      participantsAmount={participantsAmount}
+    />
     <MessageBlock>
-      {countryData?.country?.groupMessages.length ? (
-        <MessageList countryData={countryData} />
+      {groupMessages?.length ? (
+        <MessageList groupMessages={groupMessages} />
       ) : (
         <NoMassegesNotification>
-          <Logo src={logo} alt="logo" />
+          <Logo src={logo} alt="logo" width="200" height="160" />
           <p>There are no discussions yet. Be the first to start.</p>
         </NoMassegesNotification>
       )}
     </MessageBlock>
     <MessageBar
-      countryData={countryData}
+      countryName={countryName}
+      country={country}
+      isSubscribed={isSubscribed}
       setCountryData={setCountryData}
       setSubscriptionCountryRooms={setSubscriptionCountryRooms}
     />

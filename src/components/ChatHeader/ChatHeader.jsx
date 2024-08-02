@@ -1,11 +1,9 @@
-import { ChatHeaderStyled, HeaderContent } from './ChatHeaderStyled';
+import { ChatHeaderStyled } from './ChatHeaderStyled';
 
-const ChatHeader = ({ countryData }) => (
+const ChatHeader = ({ countryName, participantsAmount }) => (
   <ChatHeaderStyled>
-    <HeaderContent>
-      <h5>{countryData?.country?.name || 'Country Name'}</h5>
-      <p>{`${countryData?.country?.participantsAmount || '0'} participants`}</p>
-    </HeaderContent>
+    <h5>{countryName || 'Country Name'}</h5>
+    <p>{`${participantsAmount || '0'} participants`}</p>
   </ChatHeaderStyled>
 );
 

@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { getUser } from '@/redux-store/selectors.js';
 import { useWebSocket } from '@/hooks/useWebSocket.js';
@@ -6,7 +6,7 @@ import { axiosClient } from '@/services/api';
 import ULRs from '@/redux-store/constants';
 import BasicButton from '@/components/Buttons/BasicButton/BasicButton';
 // eslint-disable-next-line import/no-extraneous-dependencies
-import { useStompClient, useSubscription } from 'react-stomp-hooks';
+import { useSubscription } from 'react-stomp-hooks';
 import {
   MessageBarStyled,
   ButtonJoinWrapper,
@@ -20,50 +20,32 @@ import {
 } from './MessageBarStyled';
 
 const MessageBar = ({
-  countryData,
+  countryName,
+  country,
+  isSubscribed,
   setCountryData,
   setSubscriptionCountryRooms,
 }) => {
   const [message, setMessage] = useState('');
-  const [isShowJoinBtn, setIsShowJoinBtn] = useState(true);
+  const [isShowJoinBtn, setIsShowJoinBtn] = useState(!isSubscribed);
   const userId = useSelector(getUser)?.id;
-  const textAreaRef = useRef(null);
-  const stompClient = useStompClient();
-  const { sendMessage } = useWebSocket();
+  const { stompClient, subscribeToGroupMessages, sendMessage } = useWebSocket();
 
-  const isInputNotEmpty = Boolean(message?.trim().length);
+  const isMessageNotEmpty = Boolean(message?.trim().length);
 
   const handleChange = ({ target: { value } }) => setMessage(value);
 
   useEffect(() => {
-    if (countryData?.isSubscribed) {
+    if (isSubscribed) {
       setIsShowJoinBtn(false);
     } else {
       setIsShowJoinBtn(true);
     }
-  }, [countryData.isSubscribed]);
+  }, [isSubscribed]);
 
-  useSubscription(
-    `/countries/${countryData?.country?.name}/messages`,
-    response => {
-      const receivedMessage = JSON.parse(response.body);
-
-      setCountryData(prevCountryData => {
-        const updatedGroupMessages = [
-          ...(prevCountryData.country.groupMessages || []),
-          receivedMessage,
-        ];
-        return {
-          ...prevCountryData,
-          country: {
-            ...prevCountryData.country,
-            groupMessages: updatedGroupMessages,
-          },
-        };
-      });
-      console.log('response message', receivedMessage);
-    }
-  );
+  useSubscription(ULRs.subscriptionToGroupMessages(countryName), response => {
+    subscribeToGroupMessages(response, setCountryData);
+  });
 
   const handleSubmit = e => {
     e.preventDefault();
@@ -75,7 +57,7 @@ const MessageBar = ({
 
     const dataToSend = {
       content: message,
-      countryId: countryData?.country.id,
+      countryId: country?.id,
       senderId: userId,
     };
 
@@ -85,32 +67,24 @@ const MessageBar = ({
   };
 
   const handleJoinClick = async () => {
-    console.log('Joined to current country');
-    const fetchData = async id => {
-      try {
-        const response = await axiosClient.post(
-          ULRs.joinToCountryRoom(countryData?.country.name),
-          id
-        );
+    try {
+      const response = await axiosClient.post(
+        ULRs.joinToCountryRoom(countryName),
+        userId
+      );
 
-        console.log('Join data:', response);
+      console.log('Join data:', response);
 
-        if (response.status === 200) {
-          setIsShowJoinBtn(false);
-        }
-
-        countryData.isSubscribed = true;
-
-        setSubscriptionCountryRooms(prevRooms => [
-          ...prevRooms,
-          countryData?.country,
-        ]);
-      } catch (error) {
-        console.error('Error fetching country rooms:', error);
+      if (response.status === 200) {
+        setIsShowJoinBtn(false);
       }
-    };
 
-    fetchData(userId);
+      isSubscribed = true;
+
+      setSubscriptionCountryRooms(prevRooms => [...prevRooms, country]);
+    } catch (error) {
+      console.error('Error fetching country rooms:', error);
+    }
   };
 
   return (
@@ -139,13 +113,12 @@ const MessageBar = ({
             value={message}
             onKeyUp={e => e.key === 'Enter' && handleSubmit(e)}
             onChange={handleChange}
-            ref={textAreaRef}
             maxLength="1000"
           />
           <ButtonSendMessage
             type="submit"
             value="Send"
-            $isInputNotEmpty={isInputNotEmpty}
+            $isMessageNotEmpty={isMessageNotEmpty}
           >
             <SendIcon />
           </ButtonSendMessage>
