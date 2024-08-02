@@ -21,7 +21,6 @@ export const useWebSocket = () => {
         `/countries/${countryName}/user/${userId}`,
         response => {
           const data = JSON.parse(response.body);
-          console.log('recieved websocket data:', data);
           onCountryRoomDataReceived(data);
         }
       );
