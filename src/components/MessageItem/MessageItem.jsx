@@ -13,7 +13,7 @@ import {
   Time,
 } from './MessageItemStyles.js';
 
-const MessageItem = ({ content, userId, date }) => {
+const MessageItem = ({ content, userId, date, isShownAvatar }) => {
   const currentUserId = useSelector(getUser)?.id;
   const { responseData } = useFetch(ULRs.userAvatart(userId), {
     responseType: 'arraybuffer',
@@ -23,9 +23,14 @@ const MessageItem = ({ content, userId, date }) => {
   const isCurrentUser = userId === currentUserId;
 
   return (
-    <MessageItemStyled>
-      {responseData && userId && <UserAvatar responseData={responseData} />}
-      <MessageContent $backgroundMessage={isCurrentUser}>
+    <MessageItemStyled $isShownAvatar={isShownAvatar}>
+      {responseData && userId && isShownAvatar && (
+        <UserAvatar responseData={responseData} />
+      )}
+      <MessageContent
+        $backgroundMessage={isCurrentUser}
+        $isShownAvatar={isShownAvatar}
+      >
         <Text>{content || `message`}</Text>
         <Time>{time || 'time'}</Time>
       </MessageContent>
@@ -37,6 +42,7 @@ MessageItem.propTypes = {
   content: PropTypes.string,
   userId: PropTypes.number,
   date: PropTypes.string,
+  isShownAvatar: PropTypes.bool,
 };
 
 export default MessageItem;

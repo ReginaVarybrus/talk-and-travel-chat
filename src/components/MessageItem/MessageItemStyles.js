@@ -3,7 +3,8 @@ import styled from 'styled-components';
 export const MessageItemStyled = styled.div`
   display: flex;
   align-items: end;
-  margin: 24px 32px;
+  margin-left: 32px;
+  margin-bottom: ${({ $isShownAvatar }) => ($isShownAvatar ? '12px' : '8px')};
 `;
 
 export const MessageContent = styled.ul`
@@ -12,6 +13,7 @@ export const MessageContent = styled.ul`
   max-width: 280px;
   padding: 16px;
   border-radius: 8px;
+  margin-left: ${({ $isShownAvatar }) => ($isShownAvatar ? '16px' : '64px')};
   background: ${({ $backgroundMessage }) =>
     $backgroundMessage ? 'var(--white-color)' : 'var(--color-blue-1)'};
 `;

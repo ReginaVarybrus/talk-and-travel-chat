@@ -5,5 +5,4 @@ export const Avatar = styled.img`
   height: 48px;
   border-radius: 4px;
   background: var(--color-blue-1);
-  margin-right: 12px;
 `;

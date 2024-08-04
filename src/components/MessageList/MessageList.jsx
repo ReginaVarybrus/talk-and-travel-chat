@@ -13,14 +13,22 @@ const MessageList = ({ groupMessages }) => {
   return (
     <MessageListStyled>
       {groupMessages &&
-        groupMessages.map((message, id) => (
-          <MessageItem
-            key={id}
-            content={message.content}
-            userId={message.user.id}
-            date={message.creationDate}
-          />
-        ))}
+        groupMessages.map((message, id) => {
+          const isShownAvatar =
+            id === groupMessages.length - 1 ||
+            (id < groupMessages.length - 1 &&
+              message.user.id !== groupMessages[id + 1].user.id);
+
+          return (
+            <MessageItem
+              key={id}
+              content={message.content}
+              userId={message.user.id}
+              date={message.creationDate}
+              isShownAvatar={isShownAvatar}
+            />
+          );
+        })}
       <div ref={messagesEndRef} />
     </MessageListStyled>
   );
