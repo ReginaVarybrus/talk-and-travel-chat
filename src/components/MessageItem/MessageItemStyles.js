@@ -12,7 +12,8 @@ export const MessageContent = styled.ul`
   max-width: 280px;
   padding: 16px;
   border-radius: 8px;
-  background: var(--color-blue-1);
+  background: ${({ $backgroundMessage }) =>
+    $backgroundMessage ? 'var(--white-color)' : 'var(--color-blue-1)'};
 `;
 
 export const Text = styled.p`
