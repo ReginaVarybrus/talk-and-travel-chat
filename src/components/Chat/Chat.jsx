@@ -2,6 +2,7 @@ import logo from '@/images/logo.svg';
 import ChatHeader from '@/components/ChatHeader/ChatHeader';
 import MessageList from '@/components/MessageList/MessageList';
 import MessageBar from '@/components/MessageBar/MessageBar';
+import ChatFirstLoading from '@/components/ChatFirstLoading/ChatFirstLoading';
 import {
   ChatStyled,
   MessageBlock,
@@ -19,6 +20,8 @@ const Chat = ({
   setSubscriptionCountryRooms,
 }) => (
   <ChatStyled>
+    {countryName === undefined && <ChatFirstLoading />}
+
     <ChatHeader
       countryName={countryName}
       participantsAmount={participantsAmount}
