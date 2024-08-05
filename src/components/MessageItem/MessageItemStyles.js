@@ -4,7 +4,7 @@ export const MessageItemStyled = styled.div`
   display: flex;
   align-items: end;
   margin-left: 32px;
-  margin-bottom: ${({ $isShownAvatar }) => ($isShownAvatar ? '12px' : '8px')};
+  margin-bottom: ${({ $isShownAvatar }) => ($isShownAvatar ? '24px' : '8px')};
 `;
 
 export const MessageContent = styled.ul`
