@@ -43,6 +43,7 @@ height: 18px;
 background-image: url(${props => props.$icon === 'edit' ? PencilIcon : CloseIcon});
 background-position: center;
 background-size: contain;
+background-color: var(--white-color);
 border: none;
 outline: none;
 cursor: pointer;

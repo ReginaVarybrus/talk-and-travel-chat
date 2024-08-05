@@ -31,6 +31,7 @@ const InputField = ({ props, formik, disabled }) => {
   return (
     <InputFieldStyled>
       <StyledLabel htmlFor={props.general} />
+      {disabled ? props.placeholder : ''}
       <StyledInput
         autoComplete="off"
         id={props.general}
@@ -38,7 +39,7 @@ const InputField = ({ props, formik, disabled }) => {
         type={props.type}
         disabled={disabled}
         onChange={formik.handleChange}
-        value={formik.values[props.general]}
+        value={formik.values[props.general] || ''}
         placeholder={props.placeholder}
         $isErrorColor={formik.errors[props.general]}
         $isSuccessColor={formik.touched[props.general]}
