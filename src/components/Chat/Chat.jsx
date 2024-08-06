@@ -20,7 +20,7 @@ const Chat = ({
   setSubscriptionCountryRooms,
 }) => (
   <ChatStyled>
-    {countryName === undefined && <ChatFirstLoading />}
+    {!countryName && <ChatFirstLoading />}
 
     <ChatHeader
       countryName={countryName}
