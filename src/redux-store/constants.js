@@ -4,6 +4,7 @@ const ULRs = {
   logout: 'authentication/logout',
   currentUser: 'current',
   updateUser: 'users',
+  userInfo: userId => `users/${userId}`,
   userCountries: userId => `countries/all-by-user/${userId}/participating`,
   userAvatart: userId => `avatars/user/${userId}`,
   subscriptionToGroupMessages: countryName =>

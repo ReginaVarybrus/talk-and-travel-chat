@@ -1,6 +1,6 @@
 import { useEffect, useRef } from 'react';
 import MessageItem from '@/components/MessageItem/MessageItem';
-import { MessageListStyled } from './MessageListStyles.js';
+import { MessageListStyled } from './MessageListStyled.js';
 
 const MessageList = ({ groupMessages }) => {
   const messagesEndRef = useRef(null);

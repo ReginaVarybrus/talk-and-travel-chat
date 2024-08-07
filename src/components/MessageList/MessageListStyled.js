@@ -1,8 +1,6 @@
 import styled from 'styled-components';
 
-export const MessageListStyled = styled.div`
-  height: 100%;
-  display: flex;
+export const MessageListStyled = styled.ul`
   flex-direction: column;
-  justify-content: end;
+  align-items: start;
 `;

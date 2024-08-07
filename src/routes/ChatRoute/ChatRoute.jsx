@@ -1,7 +1,6 @@
 import { useState } from 'react';
 import SearchBar from '@/components/SearchBar/SearchBar';
-// import Chat from '@/components/Chat/Chat';
-import TestWebSocketChat from '@/components/TestWebSocketChat/TestWebSocketChat';
+import Chat from '@/components/Chat/Chat';
 
 import { ChatRouteStyled } from './ChatRouteStyled.js';
 

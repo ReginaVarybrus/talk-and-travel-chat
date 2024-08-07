@@ -1,6 +1,6 @@
-import { Avatar } from './UserAvatarStyles.js';
+import { Avatar } from './UserAvatarStyled.js';
 
-const UserAvatar = ({ responseData }) => {
+const UserAvatar = ({ responseData, handleOpen }) => {
   const compileAvatar = () => {
     const base64String = btoa(
       new Uint8Array(responseData).reduce(
@@ -10,7 +10,8 @@ const UserAvatar = ({ responseData }) => {
     );
     return `data:image/png;base64,${base64String}`;
   };
-  return <Avatar src={compileAvatar()} alt="avatar" />;
+
+  return <Avatar onClick={handleOpen} src={compileAvatar()} alt="avatar" />;
 };
 
 export default UserAvatar;
