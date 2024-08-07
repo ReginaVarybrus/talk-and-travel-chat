@@ -1,23 +1,48 @@
-import { useSelector } from 'react-redux';
-import { getCountryName } from '@/redux-store/selectors.js';
-import { ChatStyled, Header, HeaderContent, MessageBlock } from './ChatStyled';
+import logo from '@/images/logo.svg';
+import ChatHeader from '@/components/ChatHeader/ChatHeader';
+import MessageList from '@/components/MessageList/MessageList';
+import MessageBar from '@/components/MessageBar/MessageBar';
+import ChatFirstLoading from '@/components/ChatFirstLoading/ChatFirstLoading';
+import {
+  ChatStyled,
+  MessageBlock,
+  NoMassegesNotification,
+  Logo,
+} from './ChatStyled';
 
-import MessageBar from '../MessageBar/MessageBar';
+const Chat = ({
+  countryName,
+  participantsAmount,
+  groupMessages,
+  country,
+  isSubscribed,
+  setCountryData,
+  setSubscriptionCountryRooms,
+}) => (
+  <ChatStyled>
+    {!countryName && <ChatFirstLoading />}
 
-const Chat = () => {
-  const countryName = useSelector(getCountryName);
-
-  return (
-    <ChatStyled>
-      <Header>
-        <HeaderContent>
-          <h5>{countryName || 'Country Name'}</h5>
-        </HeaderContent>
-      </Header>
-      <MessageBlock />
-      <MessageBar />
-    </ChatStyled>
-  );
-};
-
+    <ChatHeader
+      countryName={countryName}
+      participantsAmount={participantsAmount}
+    />
+    <MessageBlock>
+      {groupMessages?.length ? (
+        <MessageList groupMessages={groupMessages} />
+      ) : (
+        <NoMassegesNotification>
+          <Logo src={logo} alt="logo" width="200" height="160" />
+          <p>There are no discussions yet. Be the first to start.</p>
+        </NoMassegesNotification>
+      )}
+    </MessageBlock>
+    <MessageBar
+      countryName={countryName}
+      country={country}
+      isSubscribed={isSubscribed}
+      setCountryData={setCountryData}
+      setSubscriptionCountryRooms={setSubscriptionCountryRooms}
+    />
+  </ChatStyled>
+);
 export default Chat;

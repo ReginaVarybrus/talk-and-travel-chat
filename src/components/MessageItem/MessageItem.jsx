@@ -1,79 +1,48 @@
-import { useState } from 'react';
-import Backdrop from '@mui/material/Backdrop';
-import Modal from '@mui/material/Modal';
-import Fade from '@mui/material/Fade';
-import avatarImage from '@/images/img/Avatar.png';
-import { SignUpBtn } from '@/components/RegisterForm/RegisterForm.styled';
+/* eslint-disable react/forbid-prop-types */
+import { useFetch } from '@/hooks/useFetch.js';
+import { useSelector } from 'react-redux';
+import { getUser } from '@/redux-store/selectors';
+import ULRs from '@/redux-store/constants';
+import PropTypes from 'prop-types';
+import UserAvatar from '../UserAvatar/UserAvatart';
+import { timeStampConverter } from '../utils/timeUtil.js';
 import {
   MessageItemStyled,
   MessageContent,
   Text,
   Time,
-  UserInfoModal,
-  ButtonClose,
-  UserContactInfo,
-  ModalAvatar,
-  AboutUser,
-  InfoIcon,
-  ButtonBlock,
-} from './MessageItemStyled';
+} from './MessageItemStyles.js';
 
-import { Avatar } from '../DMsList/DMsListStyled.js';
+const MessageItem = ({ content, userId, date, isShownAvatar }) => {
+  const currentUserId = useSelector(getUser)?.id;
+  const { responseData } = useFetch(ULRs.userAvatart(userId), {
+    responseType: 'arraybuffer',
+  });
+  const time = timeStampConverter(date);
 
-export const MessageItem = ({ message }) => {
-  const [open, setOpen] = useState(false);
-  const handleOpen = () => setOpen(true);
-  const handleClose = () => setOpen(false);
+  const isCurrentUser = userId === currentUserId;
 
   return (
-    <MessageItemStyled>
-      <Avatar onClick={handleOpen}>
-        <img src={avatarImage} alt="avatar" />
-      </Avatar>
-      <MessageContent>
-        <Text>{message || 'Hi there! How are you? '}</Text>
-        <Time>9.10</Time>
-      </MessageContent>
-
-      <Modal
-        aria-labelledby="transition-modal-title"
-        aria-describedby="transition-modal-description"
-        open={open}
-        onClose={handleClose}
-        closeAfterTransition
-        slots={{ backdrop: Backdrop }}
-        slotProps={{
-          backdrop: {
-            timeout: 500,
-          },
-        }}
+    <MessageItemStyled $isShownAvatar={isShownAvatar}>
+      {responseData && userId && isShownAvatar && (
+        <UserAvatar responseData={responseData} />
+      )}
+      <MessageContent
+        $backgroundMessage={isCurrentUser}
+        $isShownAvatar={isShownAvatar}
       >
-        <Fade in={open}>
-          <UserInfoModal>
-            <ButtonClose onClick={handleClose} />
-            <UserContactInfo>
-              <ModalAvatar src={avatarImage} alt="avatar" />
-              <div>
-                <h5>Contact info</h5>
-                <p>email@gmail.com</p>
-              </div>
-            </UserContactInfo>
-            <hr />
-            <AboutUser>
-              <InfoIcon />
-              <p>
-                I have dog that travel with me all the time. I like It so much.
-                Also I love cold countries, so I usually travel to Norway or
-                Denmark
-              </p>
-            </AboutUser>
-            <hr />
-            <ButtonBlock>
-              <SignUpBtn onClick={() => {}}>Message</SignUpBtn>
-            </ButtonBlock>
-          </UserInfoModal>
-        </Fade>
-      </Modal>
+        <Text>{content || `message`}</Text>
+        <Time>{time || 'time'}</Time>
+      </MessageContent>
     </MessageItemStyled>
   );
 };
+
+MessageItem.propTypes = {
+  content: PropTypes.string,
+  userId: PropTypes.number,
+  date: PropTypes.string,
+  isShownAvatar: PropTypes.bool,
+};
+
+export default MessageItem;

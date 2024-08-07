@@ -1,6 +1,9 @@
 import styled from 'styled-components';
 
-export const ChatStyled = styled.div`
+export const ChatFistLoadingStyled = styled.div`
+  position: absolute;
+  top: 0;
+  left: 0;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -8,20 +11,12 @@ export const ChatStyled = styled.div`
   width: 100%;
   height: 100vh;
   background: var(--white-color);
-  position: relative;
-`;
-
-export const LogoBox = styled.div`
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  align-items: center;
-  width: 100%;
-  height: 235px;
+  z-index: 10;
 `;
 
 export const Logo = styled.img`
   width: 240px;
   height: 200px;
+  margin-bottom: 16px;
   stroke: var(--color-brand-blue);
 `;

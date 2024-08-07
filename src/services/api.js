@@ -1,7 +1,7 @@
 import ULRs from '@/redux-store/constants';
 import axios from 'axios';
 
-const urlToOmit = [ULRs.login, ULRs.register];
+const urlToOmit = [ULRs.login, ULRs.register, ULRs.logout];
 
 const axiosClient = axios.create({
   baseURL: `${import.meta.env.VITE_APP_API_URL}/api/`,
@@ -12,10 +12,11 @@ const axiosClient = axios.create({
 
 axiosClient.interceptors.request.use(
   config => {
-    const { token } = JSON.parse(localStorage.getItem('persist:auth'));
-    const isAuthUrl = urlToOmit.includes[config.url];
+    const authData = JSON.parse(localStorage.getItem('persist:auth'));
+    const token = authData ? authData?.token?.replace(/"/g, '') : null;
+    const isAuthUrl = urlToOmit.includes(config.url);
 
-    if (!isAuthUrl && token && token !== 'null') {
+    if (!isAuthUrl && token) {
       config.headers.Authorization = `Bearer ${token}`;
     }
 
@@ -25,8 +26,8 @@ axiosClient.interceptors.request.use(
 );
 
 const token = {
-  set() {
-    axiosClient.defaults.headers.common.Authorization = `Bearer ${token}`;
+  set(tokenValue) {
+    axiosClient.defaults.headers.common.Authorization = `Bearer ${tokenValue}`;
   },
   unset() {
     delete axiosClient.defaults.headers.common.Authorization;

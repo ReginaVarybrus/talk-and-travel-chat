@@ -1,44 +1,65 @@
 import { useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
-// import axios from 'axios';
-import { axiosClient } from '@/services/api';
+import { useOutletContext } from 'react-router-dom';
+import { useFetch } from '@/hooks/useFetch.js';
 import { useWebSocket } from '@/hooks/useWebSocket.js';
+import ULRs from '@/redux-store/constants';
 import { getUser } from '@/redux-store/selectors.js';
 import { ListStyled, Text, Item, ListItems } from './RoomsListStyled';
 import { Flag, ScrollBar } from '../SearchInput/SearchInputStyled.js';
 
 const RoomsList = () => {
-  const [countryRooms, setCountryRooms] = useState([]);
+  const [selectedCountry, setSelectedCountry] = useState(null);
   const userId = useSelector(getUser)?.id;
-  const { openCountryRoom } = useWebSocket();
-  // const countryRooms = useSelector(getCountryData)?.countryRooms;
-
-  const getCountryRooms = async () => {
-    try {
-      const { data } = await axiosClient.get(
-        `countries/all-by-user/${userId}/participating`
-      );
-      setCountryRooms(data);
-    } catch (error) {
-      console.error('Error fetching country rooms:', error);
-    }
-  };
+  const { stompClient, subscribeToCountryRoom, openCountryRoom } =
+    useWebSocket();
+  const { responseData } = useFetch(ULRs.userCountries(userId, ''));
+  const context = useOutletContext();
+  const {
+    onCountryRoomDataReceived,
+    subscriptionCountryRooms,
+    setSubscriptionCountryRooms,
+  } = context;
 
   useEffect(() => {
-    getCountryRooms();
-  }, [userId]);
+    if (responseData && userId) {
+      setSubscriptionCountryRooms(responseData);
+    } else {
+      console.log('responseData & userID', responseData, userId);
+    }
+  }, [responseData, userId]);
 
-  const handleOpenCountryRoom = () => {
-    openCountryRoom();
+  useEffect(() => {
+    if (stompClient && selectedCountry) {
+      const countryRoom = subscriptionCountryRooms.find(
+        room => room.name === selectedCountry
+      );
+      const dataToSend = {
+        countryName: countryRoom?.name,
+        flagCode: countryRoom?.flagCode,
+        userId,
+      };
+
+      subscribeToCountryRoom(
+        userId,
+        selectedCountry,
+        onCountryRoomDataReceived
+      );
+      openCountryRoom(dataToSend);
+    }
+  }, [stompClient, selectedCountry]);
+
+  const handleOpenCountryRoom = countryName => {
+    setSelectedCountry(countryName);
   };
 
   return (
     <ListStyled>
-      {countryRooms.length ? (
+      {subscriptionCountryRooms.length ? (
         <ListItems>
           <ScrollBar>
-            {countryRooms.map(room => (
-              <Item key={room.id} onClick={handleOpenCountryRoom}>
+            {subscriptionCountryRooms.map((room, id) => (
+              <Item key={id} onClick={() => handleOpenCountryRoom(room.name)}>
                 <Flag
                   loading="lazy"
                   width="32"

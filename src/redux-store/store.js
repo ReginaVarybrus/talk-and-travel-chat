@@ -17,7 +17,7 @@ import { countrySlice } from './slices/countrySlice';
 const authPersistConfig = {
   key: 'auth',
   storage,
-  whitelist: ['token'],
+  whitelist: ['token', 'isLoggedIn'],
 };
 
 const rootPersistConfig = {

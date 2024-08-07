@@ -4,17 +4,16 @@ import { register, logIn, logOut } from '../AuthOperations/AuthOperations.js';
 const initialState = {
   token: null,
   isLoggedIn: false,
-  isRefresh: true,
   error: null,
 };
 
 const handlePending = () => ({
-  isRefresh: true,
+  isLoggedIn: false,
 });
 
 const handleRejected = (state, action) => ({
   ...state,
-  isRefresh: false,
+  isLoggedIn: false,
   error: action.payload,
 });
 

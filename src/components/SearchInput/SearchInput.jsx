@@ -1,6 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { addCountryRoom } from '@/redux-store/slices/countrySlice';
+import { useSelector } from 'react-redux';
 import { getUser } from '@/redux-store/selectors';
 import { useWebSocket } from '@/hooks/useWebSocket.js';
 import mapData from '@/data/countries.json';
@@ -15,14 +14,25 @@ import {
   Text,
 } from './SearchInputStyled';
 
-const SearchInput = () => {
+const SearchInput = ({ onCountryRoomDataReceived }) => {
   const [searchedValue, setSearchedValue] = useState('');
   const [showItem, setShowItem] = useState(false);
+  const [selectedCountry, setSelectedCountry] = useState(null);
   const autoCompleteRef = useRef(null);
-  const dispatch = useDispatch();
   const userId = useSelector(getUser)?.id;
 
-  const { createCountryRoom } = useWebSocket();
+  const { stompClient, subscribeToCountryRoom, openCountryRoom } =
+    useWebSocket();
+
+  useEffect(() => {
+    if (stompClient && selectedCountry) {
+      subscribeToCountryRoom(
+        userId,
+        selectedCountry,
+        onCountryRoomDataReceived
+      );
+    }
+  }, [stompClient, selectedCountry]);
 
   const filterCountries = mapData.features.filter(name =>
     name.properties.ADMIN.toLowerCase().includes(searchedValue.toLowerCase())
@@ -46,16 +56,21 @@ const SearchInput = () => {
   };
 
   const handleCountryClick = country => {
+    const countryName = country.properties.ADMIN;
+    const flagCode = country.properties.code;
+    setSelectedCountry(countryName);
+
     const dataToSend = {
+      countryName,
+      flagCode,
       userId,
-      name: country.properties.ADMIN,
-      flagCode: country.properties.code,
     };
 
-    setSearchedValue(country.properties.ADMIN);
+    setSearchedValue(countryName);
     setShowItem(false);
-    createCountryRoom(dataToSend.name, dataToSend, onDataReceived);
-    console.log('data to send:', dataToSend);
+
+    openCountryRoom(dataToSend);
+
     setSearchedValue('');
   };
 
@@ -94,8 +109,8 @@ const SearchInput = () => {
               </Text>
             ) : (
               <>
-                {filterCountries.map((country, index) => (
-                  <Item key={index} onClick={() => handleCountryClick(country)}>
+                {filterCountries.map((country, id) => (
+                  <Item key={id} onClick={() => handleCountryClick(country)}>
                     <Flag
                       loading="lazy"
                       width="32"

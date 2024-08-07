@@ -1,6 +1,5 @@
 import { useNavigate, useLocation } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-
 import { routesPath } from '@/routes/routesConfig';
 import { getUser } from '@/redux-store/selectors';
 import { logOut } from '@/redux-store/AuthOperations/AuthOperations';
@@ -35,9 +34,14 @@ const SideBar = () => {
     navigate(routesPath.DMS);
   };
 
-  const handleLogOut = (event, values) => {
-    dispatch(logOut(values));
-    navigate(routesPath.MAIN);
+  const handleLogOut = () => {
+    dispatch(logOut())
+      .then(() => {
+        navigate(routesPath.MAIN);
+      })
+      .catch(error => {
+        console.error('Logout failed:', error.message);
+      });
   };
 
   return (

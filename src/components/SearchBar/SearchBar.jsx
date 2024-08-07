@@ -8,16 +8,28 @@ import { SearchBarStyled, ButtonMapOpen, MapBox } from './SearchBarStyled';
 import SearchInput from '../SearchInput/SearchInput';
 import ChatMap from '../ChatMap/ChatMap';
 
-const SearchBar = ({ isOpen, onSelect }) => {
+const SearchBar = ({
+  onCountryRoomDataReceived,
+  subscriptionCountryRooms,
+  setSubscriptionCountryRooms,
+}) => {
   const [openMap, setOpenMap] = useState(false);
   const handleOpen = () => setOpenMap(true);
   const handleClose = () => setOpenMap(false);
 
   return (
     <SearchBarStyled>
-      <SearchInput />
+      <SearchInput onCountryRoomDataReceived={onCountryRoomDataReceived} />
       <ButtonMapOpen onClick={handleOpen}>Search by map</ButtonMapOpen>
-      <Outlet />
+      <div>
+        <Outlet
+          context={{
+            onCountryRoomDataReceived,
+            subscriptionCountryRooms,
+            setSubscriptionCountryRooms,
+          }}
+        />
+      </div>
 
       <Modal
         aria-labelledby="transition-modal-title"

@@ -72,6 +72,8 @@ h6 {
   line-height: 19px;
 } 
 
+
+
 p {
   font-size: 14px;
   font-weight: 400;

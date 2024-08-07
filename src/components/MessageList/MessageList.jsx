@@ -1,24 +1,34 @@
 import { useEffect, useRef } from 'react';
-// import { getUser } from '@/redux-store/selectors';
-// import { useSelector } from 'react-redux';
-import { MessageListStyled } from './MessageListStyled.js';
-import { MessageItem } from '../MessageItem/MessageItem';
+import MessageItem from '@/components/MessageItem/MessageItem';
+import { MessageListStyled } from './MessageListStyles.js';
 
-export const MessageList = ({ messageList, username }) => {
+const MessageList = ({ groupMessages }) => {
   const messagesEndRef = useRef(null);
-  // const username = useSelector(getUser)?.name;
   const scrollToBottom = () => {
     messagesEndRef.current.scrollIntoView({ behavior: 'smooth' });
   };
-  useEffect(scrollToBottom, [messageList]);
+
+  useEffect(scrollToBottom, [groupMessages]);
 
   return (
     <MessageListStyled>
-      <MessageItem />
-      {messageList &&
-        messageList.map((message, idx) => (
-          <MessageItem key={idx} message={message} username={username} />
-        ))}
+      {groupMessages &&
+        groupMessages.map((message, id) => {
+          const isShownAvatar =
+            id === groupMessages.length - 1 ||
+            (id < groupMessages.length - 1 &&
+              message.user.id !== groupMessages[id + 1].user.id);
+
+          return (
+            <MessageItem
+              key={id}
+              content={message.content}
+              userId={message.user.id}
+              date={message.creationDate}
+              isShownAvatar={isShownAvatar}
+            />
+          );
+        })}
       <div ref={messagesEndRef} />
     </MessageListStyled>
   );
