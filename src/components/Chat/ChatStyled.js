@@ -5,37 +5,34 @@ import { TextareaAutosize as BaseTextareaAutosize } from '@mui/material';
 export const ChatStyled = styled.div`
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
   align-items: center;
   width: 100%;
-  min-height: 100vh;
+  height: 100vh;
+  max-height: 100vh;
   background: var(--white-color);
   position: relative;
+  overflow: hidden;
 `;
 
-export const Header = styled.header`
+export const NoMassegesNotification = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: center;
-  align-items: start;
+  align-items: center;
   width: 100%;
-  min-height: 75px;
-  background: var(--white-color);
-  border-bottom: 1px solid var(--color-grey-6);
+  height: 100%;
 `;
 
-export const HeaderContent = styled.div`
-  padding-left: 32px;
-  p {
-    font-size: 14px;
-    font-weight: 400;
-    line-height: 20px;
-    color: var(--color-grey-9);
-  }
+export const Logo = styled.img`
+  width: 200px;
+  height: 160px;
+  margin-bottom: 20px;
+  stroke: var(--color-brand-blue);
 `;
 
 export const MessageBlock = styled.div`
-  flex-grow: 1;
+  flex: 1;
+  overflow-y: auto;
   width: 100%;
   background: var(--color-grey-3);
   transition: height 0.3s ease;

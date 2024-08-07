@@ -4,7 +4,11 @@ const ULRs = {
   logout: 'authentication/logout',
   currentUser: 'current',
   updateUser: 'users',
-  country: 'countries',
+  userCountries: userId => `countries/all-by-user/${userId}/participating`,
+  userAvatart: userId => `avatars/user/${userId}`,
+  subscriptionToGroupMessages: countryName =>
+    `/countries/${countryName}/messages`,
+  joinToCountryRoom: countryName => `countries/${countryName}/join`,
 };
 
 export default ULRs;
