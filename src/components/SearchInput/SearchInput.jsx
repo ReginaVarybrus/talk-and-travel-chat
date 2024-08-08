@@ -104,8 +104,11 @@ const SearchInput = ({ onCountryRoomDataReceived }) => {
               </Text>
             ) : (
               <>
-                {filterCountries.map((country, id) => (
-                  <Item key={id} onClick={() => handleCountryClick(country)}>
+                {filterCountries.map(country => (
+                  <Item
+                    key={country.id}
+                    onClick={() => handleCountryClick(country)}
+                  >
                     <Flag
                       loading="lazy"
                       width="32"
