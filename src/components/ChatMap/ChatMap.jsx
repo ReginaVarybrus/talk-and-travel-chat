@@ -1,15 +1,18 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
+import { useSelector } from 'react-redux';
+import { getUser } from '@/redux-store/selectors';
+import { useWebSocket } from '@/hooks/useWebSocket.js';
 import { GeoJSON } from 'react-leaflet';
 import mapData from '@/data/countries.json';
+import BasicButton from '@/components/Buttons/BasicButton/BasicButton';
 import 'leaflet/dist/leaflet.css';
-import '@/css/ChatMap.css';
 
 import {
-  CountryName,
-  ShowCountry,
-  MainMapBlock,
+  ChatMapStyled,
   MapWrapper,
+  ShowCountry,
+  CountryName,
 } from './ChatMapStyled';
 
 const color = [
@@ -31,8 +34,23 @@ const countryStyle = {
   weight: 1,
 };
 
-const ChatMap = ({ closeMap }) => {
+const ChatMap = ({ openMap, closeMap, onCountryRoomDataReceived }) => {
   const [selectedCountry, setSelectedCountry] = useState(null);
+  const [countryFlagCode, setCountryFlagCode] = useState(null);
+  const userId = useSelector(getUser)?.id;
+
+  const { stompClient, subscribeToCountryRoom, openCountryRoom } =
+    useWebSocket();
+
+  useEffect(() => {
+    if (stompClient && selectedCountry) {
+      subscribeToCountryRoom(
+        userId,
+        selectedCountry,
+        onCountryRoomDataReceived
+      );
+    }
+  }, [stompClient, selectedCountry]);
 
   const onEachCountry = (country, layer) => {
     const colorIndex = Math.floor(Math.random() * color.length);
@@ -45,6 +63,7 @@ const ChatMap = ({ closeMap }) => {
           flagCode: e.target.feature.properties.code,
         };
         setSelectedCountry(data.name);
+        setCountryFlagCode(data.flagCode);
       },
       mouseover: e => {
         e.target.setStyle({
@@ -59,30 +78,47 @@ const ChatMap = ({ closeMap }) => {
     });
   };
 
-  const handleClick = () => {
+  const handleJoinClick = () => {
+    const dataToSend = {
+      selectedCountry,
+      countryFlagCode,
+      userId,
+    };
+    console.log('map data to send', dataToSend);
+    console.log('country data received in map', onCountryRoomDataReceived);
+    openCountryRoom(dataToSend);
     closeMap();
   };
 
   return (
-    <MainMapBlock>
-      <MapWrapper zoom={2.3} center={[40, 0]}>
+    <ChatMapStyled>
+      <MapWrapper zoom={2.3} center={[40, 0]} inert={!openMap}>
         <GeoJSON
           style={countryStyle}
           data={mapData.features}
           onEachFeature={onEachCountry}
         />
-        <ShowCountry>
-          <CountryName>{selectedCountry}</CountryName>
-          <button type="button" onClick={handleClick}>
-            Join
-          </button>
-        </ShowCountry>
+        {selectedCountry && (
+          <ShowCountry>
+            <CountryName>{selectedCountry}</CountryName>
+            <BasicButton
+              variant="contained"
+              color="primary"
+              sx={{
+                marginTop: '12px',
+              }}
+              text="Join"
+              handleClick={handleJoinClick}
+            />
+          </ShowCountry>
+        )}
       </MapWrapper>
-    </MainMapBlock>
+    </ChatMapStyled>
   );
 };
 
 ChatMap.propTypes = {
+  openMap: PropTypes.bool,
   closeMap: PropTypes.func,
 };
 

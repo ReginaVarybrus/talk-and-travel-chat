@@ -21,7 +21,6 @@ export const MessageContent = styled.ul`
 export const Text = styled.p`
   text-align: start;
   font-size: 16px;
-  color: var(--color-dark);
 `;
 
 export const Time = styled.span`

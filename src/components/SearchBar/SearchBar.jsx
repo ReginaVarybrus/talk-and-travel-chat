@@ -46,7 +46,11 @@ const SearchBar = ({
       >
         <Fade in={openMap}>
           <MapBox>
-            <ChatMap closeMap={handleClose} />
+            <ChatMap
+              openMap={openMap}
+              closeMap={handleClose}
+              onCountryRoomDataReceived={onCountryRoomDataReceived}
+            />
           </MapBox>
         </Fade>
       </Modal>
