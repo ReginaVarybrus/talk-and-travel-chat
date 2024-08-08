@@ -7,7 +7,7 @@ export const MessageItemStyled = styled.div`
   margin-bottom: ${({ $isShownAvatar }) => ($isShownAvatar ? '24px' : '8px')};
 `;
 
-export const MessageContent = styled.ul`
+export const MessageContent = styled.div`
   display: flex;
   align-items: end;
   max-width: 280px;

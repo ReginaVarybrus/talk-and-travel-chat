@@ -50,11 +50,6 @@ const SearchInput = ({ onCountryRoomDataReceived }) => {
 
   const handleClick = () => setShowItem(!showItem);
 
-  const onDataReceived = data => {
-    console.log('recieved data:', data);
-    dispatch(addCountryRoom(data));
-  };
-
   const handleCountryClick = country => {
     const countryName = country.properties.ADMIN;
     const flagCode = country.properties.code;
@@ -109,8 +104,11 @@ const SearchInput = ({ onCountryRoomDataReceived }) => {
               </Text>
             ) : (
               <>
-                {filterCountries.map((country, id) => (
-                  <Item key={id} onClick={() => handleCountryClick(country)}>
+                {filterCountries.map(country => (
+                  <Item
+                    key={country.id}
+                    onClick={() => handleCountryClick(country)}
+                  >
                     <Flag
                       loading="lazy"
                       width="32"

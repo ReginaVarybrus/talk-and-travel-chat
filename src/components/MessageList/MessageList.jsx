@@ -14,14 +14,13 @@ const MessageList = ({ groupMessages }) => {
     <MessageListStyled>
       {groupMessages &&
         groupMessages.map((message, id) => {
+          const nextUserMessage = groupMessages[id + 1];
           const isShownAvatar =
-            id === groupMessages.length - 1 ||
-            (id < groupMessages.length - 1 &&
-              message.user.id !== groupMessages[id + 1].user.id);
+            !nextUserMessage || message.user.id !== nextUserMessage.user.id;
 
           return (
             <MessageItem
-              key={id}
+              key={message.id}
               content={message.content}
               userId={message.user.id}
               date={message.creationDate}

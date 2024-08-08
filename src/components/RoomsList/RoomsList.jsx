@@ -58,8 +58,11 @@ const RoomsList = () => {
       {subscriptionCountryRooms.length ? (
         <ListItems>
           <ScrollBar>
-            {subscriptionCountryRooms.map((room, id) => (
-              <Item key={id} onClick={() => handleOpenCountryRoom(room.name)}>
+            {subscriptionCountryRooms.map(room => (
+              <Item
+                key={room.id}
+                onClick={() => handleOpenCountryRoom(room.name)}
+              >
                 <Flag
                   loading="lazy"
                   width="32"

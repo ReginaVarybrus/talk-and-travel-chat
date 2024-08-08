@@ -1,20 +1,26 @@
 import styled from 'styled-components';
 import Box from '@mui/material/Box';
+import Modal from '@mui/material/Modal';
 import { IoCloseOutline } from 'react-icons/io5';
 import { LuInfo } from 'react-icons/lu';
+import { TbUser } from 'react-icons/tb';
 import { device } from '@/constants/mediaQueries';
 
-export const InfoModal = styled(Box)`
+export const ModalWindowStyled = styled(Modal)`
+  display: grid;
+  place-items: center;
+`;
+
+export const InfoModalStyled = styled(Box)`
   box-sizing: border-box;
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
+  position: relative;
   width: 279px;
   padding: 32px;
+  margin: auto;
   background: var(--white-color);
   border-radius: 16px;
-  box-shadow: 24;
+  box-shadow: 0 2px 6px 2px rgba(0, 0, 0, 0.3);
+  z-index: 1;
   @media ${device.mobileM} {
     width: 327px;
   }
@@ -23,15 +29,29 @@ export const InfoModal = styled(Box)`
   }
 `;
 
-export const ButtonClose = styled(IoCloseOutline)`
+export const UserIcon = styled(TbUser)`
+  width: 24px;
+  height: 48px;
+  stroke: var(--color-grey-9);
+`;
+
+export const ButtonClose = styled.button`
   position: absolute;
   top: 20px;
   right: 20px;
   width: 24px;
   height: 24px;
-  &:hover {
-    cursor: pointer;
-  }
+  background: none;
+  border: none;
+  cursor: pointer;
+`;
+
+export const CloseIcon = styled(IoCloseOutline)`
+  position: absolute;
+  top: -2px;
+  right: -2px;
+  width: 24px;
+  height: 24px;
 `;
 
 export const InfoIcon = styled(LuInfo)`

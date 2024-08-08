@@ -7,7 +7,7 @@ import ULRs from '@/redux-store/constants';
 import { axiosClient } from '@/services/api';
 import PropTypes from 'prop-types';
 import UserInfoModal from '../UserInfoModal/UserInfoModal';
-import UserAvatar from '../UserAvatar/UserAvatart';
+import UserAvatar from '../UserAvatar/UserAvatar';
 import { timeStampConverter } from '../utils/timeUtil.js';
 
 import {
@@ -44,7 +44,12 @@ const MessageItem = ({ content, userId, date, isShownAvatar }) => {
   return (
     <MessageItemStyled $isShownAvatar={isShownAvatar}>
       {responseData && userId && isShownAvatar && (
-        <UserAvatar handleOpen={handleOpen} responseData={responseData} />
+        <UserAvatar
+          handleOpen={handleOpen}
+          responseData={responseData}
+          size="36px"
+          sizeTablet="48px"
+        />
       )}
       <MessageContent
         $backgroundMessage={isCurrentUser}
@@ -58,6 +63,7 @@ const MessageItem = ({ content, userId, date, isShownAvatar }) => {
         open={open}
         handleClose={handleClose}
         currentUserId={currentUserId}
+        userId={userId}
         avatar={userInfo?.avatar}
         userName={userInfo?.userName}
         userEmail={userInfo?.userEmail}

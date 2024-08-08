@@ -73,8 +73,6 @@ const MessageBar = ({
         userId
       );
 
-      console.log('Join data:', response);
-
       if (response.status === 200) {
         setIsShowJoinBtn(false);
       }
