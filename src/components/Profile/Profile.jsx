@@ -27,7 +27,8 @@ Object.keys(formFields).forEach(key => {
   initialValues[key] = '';
 });
 
-const Profile = () => {
+const Profile = () =>
+{
   const user = useSelector(getUser);
   const dispatch = useDispatch();
   const navigate = useNavigate();

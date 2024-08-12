@@ -21,15 +21,15 @@ export const schema = yup.object().shape({
 });
 
 export const formFields = {
+    userName: {
+        general: 'userName',
+        type: 'text',
+        placeholder: 'Name',
+    },
     userEmail: {
         general: 'userEmail',
         type: 'email',
         placeholder: 'E-mail',
-    },
-    userName: {
-        general: 'userName',
-        type: 'text',
-        placeholder: 'User name',
     },
     about: {
         general: 'about',

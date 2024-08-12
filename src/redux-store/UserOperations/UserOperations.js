@@ -13,6 +13,7 @@ export const fetchCurrentUser = createAsyncThunk(
     try {
       const response = await axiosClient.post(ULRs.currentUser, userId);
       dispatch(setUsers(response.data));
+      console.log('fetchCurrentUser:', response.data);
       return response.data;
     } catch (e) {
       throw new Error(swal('Error!', 'login failed', 'error'));
