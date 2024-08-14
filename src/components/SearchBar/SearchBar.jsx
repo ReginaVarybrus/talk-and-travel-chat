@@ -9,9 +9,13 @@ import SearchInput from '../SearchInput/SearchInput';
 import ChatMap from '../ChatMap/ChatMap';
 
 const SearchBar = ({
-  onCountryRoomDataReceived,
+  countryChatId,
+  setCountryData,
   subscriptionCountryRooms,
   setSubscriptionCountryRooms,
+  isSubscribed,
+  setIsSubscribed,
+  setIsShowJoinBtn,
 }) => {
   const [openMap, setOpenMap] = useState(false);
   const handleOpen = () => setOpenMap(true);
@@ -19,14 +23,23 @@ const SearchBar = ({
 
   return (
     <SearchBarStyled>
-      <SearchInput onCountryRoomDataReceived={onCountryRoomDataReceived} />
+      <SearchInput
+        countryChatId={countryChatId}
+        setCountryData={setCountryData}
+        isSubscribed={isSubscribed}
+        setIsSubscribed={setIsSubscribed}
+        setIsShowJoinBtn={setIsShowJoinBtn}
+      />
       <ButtonMapOpen onClick={handleOpen}>Search by map</ButtonMapOpen>
       <div>
         <Outlet
           context={{
-            onCountryRoomDataReceived,
+            countryChatId,
+            setCountryData,
             subscriptionCountryRooms,
             setSubscriptionCountryRooms,
+            isSubscribed,
+            setIsSubscribed,
           }}
         />
       </div>

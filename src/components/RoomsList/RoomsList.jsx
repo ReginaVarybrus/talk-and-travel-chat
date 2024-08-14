@@ -2,7 +2,6 @@ import { useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { useOutletContext } from 'react-router-dom';
 import { useFetch } from '@/hooks/useFetch.js';
-import { useWebSocket } from '@/hooks/useWebSocket.js';
 import ULRs from '@/redux-store/constants';
 import { getUser } from '@/redux-store/selectors.js';
 import { ListStyled, Text, Item, ListItems } from './RoomsListStyled';
@@ -15,43 +14,35 @@ const RoomsList = () => {
   const handleClose = () => setOpenModal(false);
   const [selectedCountry, setSelectedCountry] = useState(null);
   const userId = useSelector(getUser)?.id;
-  const { stompClient, subscribeToCountryRoom, openCountryRoom } =
-    useWebSocket();
-  const { responseData } = useFetch(ULRs.userCountries(userId, ''));
+  const { responseData: dataUserCountries } = useFetch(
+    ULRs.userCountries(userId, '')
+  );
+  const { responseData: dataMainCountryChat } = useFetch(
+    selectedCountry ? ULRs.getMainCountryChatByName(selectedCountry, '') : null
+  );
+
   const context = useOutletContext();
   const {
-    onCountryRoomDataReceived,
+    setCountryData,
     subscriptionCountryRooms,
     setSubscriptionCountryRooms,
+    setIsSubscribed,
   } = context;
 
   useEffect(() => {
-    if (responseData && userId) {
-      setSubscriptionCountryRooms(responseData);
+    if (dataUserCountries && userId) {
+      setSubscriptionCountryRooms(dataUserCountries);
     } else {
-      console.log('responseData & userID', responseData, userId);
+      console.log('responseData & userID', dataUserCountries, userId);
     }
-  }, [responseData, userId]);
+  }, [dataUserCountries, userId]);
 
   useEffect(() => {
-    if (stompClient && selectedCountry) {
-      const countryRoom = subscriptionCountryRooms.find(
-        room => room.name === selectedCountry
-      );
-      const dataToSend = {
-        countryName: countryRoom?.name,
-        flagCode: countryRoom?.flagCode,
-        userId,
-      };
-
-      subscribeToCountryRoom(
-        userId,
-        selectedCountry,
-        onCountryRoomDataReceived
-      );
-      openCountryRoom(dataToSend);
+    if (dataMainCountryChat) {
+      setCountryData(dataMainCountryChat);
+      setIsSubscribed(true);
     }
-  }, [stompClient, selectedCountry]);
+  }, [dataMainCountryChat]);
 
   const handleOpenCountryRoom = countryName => {
     setSelectedCountry(countryName);
@@ -62,8 +53,11 @@ const RoomsList = () => {
       {subscriptionCountryRooms.length ? (
         <ListItems>
           <ScrollBar>
-            {subscriptionCountryRooms.map((room, id) => (
-              <Item key={id} onClick={() => handleOpenCountryRoom(room.name)}>
+            {subscriptionCountryRooms.map(room => (
+              <Item
+                key={room.id}
+                onClick={() => handleOpenCountryRoom(room.name)}
+              >
                 <Flag
                   loading="lazy"
                   width="32"

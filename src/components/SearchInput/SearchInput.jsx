@@ -1,7 +1,8 @@
 import { useState, useEffect, useRef } from 'react';
 import { useSelector } from 'react-redux';
-import { getUser } from '@/redux-store/selectors';
-import { useWebSocket } from '@/hooks/useWebSocket.js';
+import { getUser } from '@/redux-store/selectors.js';
+import { useFetch } from '@/hooks/useFetch.js';
+import ULRs from '@/redux-store/constants';
 import mapData from '@/data/countries.json';
 import {
   AutocompleteInputStyled,
@@ -14,29 +15,29 @@ import {
   Text,
 } from './SearchInputStyled';
 
-const SearchInput = ({ onCountryRoomDataReceived }) => {
+const SearchInput = ({ setCountryData, setIsSubscribed, setIsShowJoinBtn }) => {
+  const [selectedCountry, setSelectedCountry] = useState(null);
   const [searchedValue, setSearchedValue] = useState('');
   const [showItem, setShowItem] = useState(false);
-  const [selectedCountry, setSelectedCountry] = useState(null);
   const autoCompleteRef = useRef(null);
   const userId = useSelector(getUser)?.id;
-
-  const { stompClient, subscribeToCountryRoom, openCountryRoom } =
-    useWebSocket();
-
-  useEffect(() => {
-    if (stompClient && selectedCountry) {
-      subscribeToCountryRoom(
-        userId,
-        selectedCountry,
-        onCountryRoomDataReceived
-      );
-    }
-  }, [stompClient, selectedCountry]);
+  const { responseData: dataUserCountries } = useFetch(
+    ULRs.userCountries(userId, '')
+  );
+  const { responseData: dataMainCountryChat } = useFetch(
+    selectedCountry ? ULRs.getMainCountryChatByName(selectedCountry, '') : null
+  );
 
   const filterCountries = mapData.features.filter(name =>
     name.properties.ADMIN.toLowerCase().includes(searchedValue.toLowerCase())
   );
+
+  useEffect(() => {
+    if (dataMainCountryChat) {
+      setCountryData(dataMainCountryChat);
+      setIsSubscribed(true);
+    }
+  }, [dataMainCountryChat]);
 
   const handleChange = event => {
     const { value } = event.target;
@@ -52,20 +53,19 @@ const SearchInput = ({ onCountryRoomDataReceived }) => {
 
   const handleCountryClick = country => {
     const countryName = country.properties.ADMIN;
-    const flagCode = country.properties.code;
     setSelectedCountry(countryName);
 
-    const dataToSend = {
-      countryName,
-      flagCode,
-      userId,
-    };
+    const nameOfCountry = dataUserCountries.find(
+      item => item.name === countryName
+    );
+    if (nameOfCountry) {
+      setIsShowJoinBtn(false);
+    } else {
+      setIsShowJoinBtn(true);
+    }
 
     setSearchedValue(countryName);
     setShowItem(false);
-
-    openCountryRoom(dataToSend);
-
     setSearchedValue('');
   };
 
@@ -104,8 +104,11 @@ const SearchInput = ({ onCountryRoomDataReceived }) => {
               </Text>
             ) : (
               <>
-                {filterCountries.map((country, id) => (
-                  <Item key={id} onClick={() => handleCountryClick(country)}>
+                {filterCountries.map(country => (
+                  <Item
+                    key={country.id}
+                    onClick={() => handleCountryClick(country)}
+                  >
                     <Flag
                       loading="lazy"
                       width="32"

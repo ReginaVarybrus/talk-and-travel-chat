@@ -3,71 +3,71 @@ import { useRef, useEffect } from 'react';
 import { useStompClient } from 'react-stomp-hooks';
 
 export const useWebSocket = () => {
-  const subscriptionRoom = useRef(null);
-  const onDataReceivedRef = useRef(null);
   const stompClient = useStompClient();
+  const isSubscribedToMessages = useRef(false);
+  const isSubscribedToEvents = useRef(false);
 
-  const subscribeToCountryRoom = (
-    userId,
-    countryName,
-    onCountryRoomDataReceived
-  ) => {
-    if (stompClient && stompClient.connected) {
-      if (subscriptionRoom.current) {
-        subscriptionRoom.current.unsubscribe();
-      }
+  const subscribeToGroupMessages = (endpoint, setCountryData) => {
+    if (stompClient && stompClient.connected && isSubscribedToMessages) {
+      stompClient.subscribe(endpoint, response => {
+        const receivedMessage = JSON.parse(response.body);
 
-      subscriptionRoom.current = stompClient.subscribe(
-        `/countries/${countryName}/user/${userId}`,
-        response => {
-          const data = JSON.parse(response.body);
-          onCountryRoomDataReceived(data);
-        }
-      );
-
-      onDataReceivedRef.current = onCountryRoomDataReceived;
+        setCountryData(prevCountryData => {
+          const updatedGroupMessages = [
+            ...(prevCountryData.messages || []),
+            receivedMessage,
+          ];
+          return {
+            ...prevCountryData,
+            messages: updatedGroupMessages,
+          };
+        });
+      });
+      isSubscribedToMessages.current = true;
     }
   };
 
-  const subscribeToGroupMessages = (response, setCountryData) => {
-    const receivedMessage = JSON.parse(response.body);
+  const subscribeToGroupEvents = (endpoint, setCountryData) => {
+    if (stompClient && stompClient.connected && isSubscribedToEvents) {
+      stompClient.subscribe(endpoint, response => {
+        const receivedEvent = JSON.parse(response.body);
 
-    setCountryData(prevCountryData => {
-      const updatedGroupMessages = [
-        ...(prevCountryData.country.groupMessages || []),
-        receivedMessage,
-      ];
-      return {
-        ...prevCountryData,
-        country: {
-          ...prevCountryData.country,
-          groupMessages: updatedGroupMessages,
-        },
-      };
-    });
-  };
-
-  const openCountryRoom = countryData => {
-    if (stompClient && stompClient.connected) {
-      stompClient.publish({
-        destination: `/chat/countries/open`,
-        body: JSON.stringify(countryData),
+        setCountryData(prevCountryData => {
+          const updatedEvents = [
+            ...(prevCountryData.events || []),
+            receivedEvent,
+          ];
+          return {
+            ...prevCountryData,
+            events: updatedEvents,
+          };
+        });
       });
-    } else {
-      console.error('OPEN. Stomp client is not connected.');
+      isSubscribedToEvents.current = true;
     }
   };
 
   const sendMessage = message => {
     if (stompClient && stompClient.connected) {
       stompClient.publish({
-        destination: `/chat/group-messages`,
+        destination: `/chat/messages`,
         body: JSON.stringify(message),
       });
     } else {
       console.error(
         'MESSAGE.Stomp client is not connected or no current room.'
       );
+    }
+  };
+
+  const sendEvent = (message, endpoint) => {
+    if (stompClient && stompClient.connected) {
+      stompClient.publish({
+        destination: endpoint,
+        body: JSON.stringify(message),
+      });
+    } else {
+      console.error('EVENT.Stomp client is not connected or no current room.');
     }
   };
 
@@ -84,9 +84,9 @@ export const useWebSocket = () => {
 
   return {
     stompClient,
-    subscribeToCountryRoom,
     subscribeToGroupMessages,
-    openCountryRoom,
+    subscribeToGroupEvents,
     sendMessage,
+    sendEvent,
   };
 };
