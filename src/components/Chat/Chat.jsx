@@ -48,6 +48,7 @@ const Chat = ({
       <ChatHeader
         countryName={countryName}
         participantsAmount={participantsAmount}
+        countryChatId={countryChatId}
       />
       <MessageBlock>
         {groupMessages?.length ? (

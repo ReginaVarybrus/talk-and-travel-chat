@@ -56,19 +56,20 @@ export const ContactsList = styled.ul`
 
 export const Flag = styled.img`
   width: 48px;
-  height: 48px;
-  background: var(--color-blue-2);
+  height: 36px;
+  padding: 6px 0;
 
   @media screen and (min-width: 768px) {
     width: 100px;
-    height: 100px;
+    height: 75px;
+    padding: 12.5px 0;
   }
 `;
 
 export const CountryNameWrap = styled.div`
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 4px;
 
   h5 {
     font-size: 16px;
@@ -79,6 +80,8 @@ export const CountryNameWrap = styled.div`
     color: var(--color-grey-9);
   }
   @media screen and (min-width: 768px) {
+    gap: 8px;
+
     h5 {
       font-size: 18px;
       font-weight: 600;
@@ -239,5 +242,16 @@ export const ReportBtn = styled.button`
     width: 20px;
     height: 20px;
     stroke: var(--color-error);
+  }
+`;
+
+export const Subtitle = styled.p`
+  text-align: center;
+  padding: 20px 0;
+  font-size: 12px;
+  font-weight: 700;
+
+  @media screen and (min-width: 768px) {
+    font-size: 16px;
   }
 `;

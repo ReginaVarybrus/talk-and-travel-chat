@@ -9,6 +9,7 @@ const ULRs = {
   subscriptionToGroupMessages: chatId => `/countries/${chatId}/messages`,
   subscriptionToGroupEvents: chatId => `/countries/${chatId}/events`,
   joinToGroupChat: '/chat/events.joinChat',
+  getChatsMembers: chatId => `/chats/${chatId}/users`,
 };
 
 export default ULRs;

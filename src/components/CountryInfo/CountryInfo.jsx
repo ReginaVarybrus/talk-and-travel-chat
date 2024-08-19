@@ -4,6 +4,10 @@ import { IoCloseOutline } from 'react-icons/io5';
 import { HiOutlineExclamationCircle } from 'react-icons/hi';
 import { FaRegMessage } from 'react-icons/fa6';
 import Modal from '@mui/material/Modal';
+import { useFetch } from '@/hooks/useFetch.js';
+import ULRs from '@/redux-store/constants';
+import mapData from '@/data/countries.json';
+
 import {
   BoxWrap,
   ContactsList,
@@ -19,57 +23,84 @@ import {
   CountryNameWrap,
   ExitBtn,
   ReportBtn,
+  Subtitle,
 } from './CountryInfoStyled.js';
 
-const CountryInfo = ({ open, onClose, countryName }) => {
-  const members = [
-    { name: 'Anna', email: 'anna@gmail.com', avatar: avatarImage },
-    { name: 'Bob', email: 'bob@gmail.com', avatar: avatarImage },
-    { name: 'Joanna', email: 'joanna@gmail.com', avatar: avatarImage },
-    { name: 'Tomas', email: 'tomas@gmail.com', avatar: avatarImage },
-    { name: 'JohnDou', email: 'johndou@gmail.com', avatar: avatarImage },
-  ];
+const CountryInfo = ({
+  isOpen,
+  onClose,
+  countryName,
+  participantsAmount,
+  countryChatId,
+}) => {
+  const handleLeaveGroup = () => {
+    // ADD LEAVE GROUP LOGIC
+    onClose();
+  };
+  const url = countryChatId ? ULRs.getChatsMembers(countryChatId) : null;
+  const { responseData: members } = useFetch(url, '');
+
+  if (!countryName) {
+    return null;
+  }
+
+  const countryData = mapData.features.find(
+    country =>
+      country.properties.ADMIN.toLowerCase() === countryName.toLowerCase()
+  );
+
+  const hasMembers = Array.isArray(members) && members.length > 0;
+
   return (
     <Modal
       aria-labelledby="country-info-title"
       aria-describedby="country-info-description"
-      open={open}
+      open={isOpen}
       onClose={onClose}
+      closeAfterTransition
     >
       <BoxWrap>
-        <CloseBtn onClick={onClose} type="button">
+        <CloseBtn type="button" onClick={onClose}>
           <IoCloseOutline />
         </CloseBtn>
         <CountryWrap>
-          <Flag />
+          <Flag
+            loading="lazy"
+            srcSet={`https://flagcdn.com/w40/${countryData.properties.code}.png 2x`}
+            src={`https://flagcdn.com/w20/${countryData.properties.code}.png`}
+            alt={`${countryData.properties.ADMIN} flag`}
+          />
           <CountryNameWrap>
-            {/* change to selected country */}
-            <h5>Ukraine</h5>
-            {/* change to real memders number */}
-            <p>1555 members</p>
+            <h5>{countryName}</h5>
+            <p>{`${participantsAmount}`} members</p>
           </CountryNameWrap>
         </CountryWrap>
-        <ContactsWrap>
-          <ContactsList>
-            {/* change to real members array */}
-            {members.map(user => (
-              <Item key={user.name}>
-                <Avatar>
-                  <img src={user.avatar} alt={user.name} />
-                </Avatar>
-                <UserWrap>
-                  <h5>{user.name}</h5>
-                  <p>{user.email}</p>
-                </UserWrap>
-                <MessageBtn type="button">
-                  <FaRegMessage />
-                </MessageBtn>
-              </Item>
-            ))}
-          </ContactsList>
-        </ContactsWrap>
+
+        {!hasMembers ? (
+          <Subtitle>There are no members here yet. Be the first.</Subtitle>
+        ) : (
+          <ContactsWrap>
+            <ContactsList>
+              {members?.map(user => (
+                <Item key={user.id}>
+                  <Avatar>
+                    <img src={user.avatar || avatarImage} alt={user.userName} />
+                  </Avatar>
+                  <UserWrap>
+                    <h5>{user.userName}</h5>
+                    <p>{user.userEmail}</p>
+                  </UserWrap>
+                  <MessageBtn type="button">
+                    <FaRegMessage />
+                  </MessageBtn>
+                </Item>
+              ))}
+            </ContactsList>
+          </ContactsWrap>
+        )}
+
         <ButtonsWrap>
-          <ExitBtn type="button">
+          <ExitBtn type="button" onClick={handleLeaveGroup}>
             <LuLogOut />
             Leave group
           </ExitBtn>
