@@ -24,12 +24,17 @@ min-width: 1045px;
 background-color: var(--white-color);
 display: flex;
 margin: 32px;
+border-radius: 16px;
+padding: 32px;
 min-height: 320px;
+box-sizing: border-box;
 `;
 
 export const Avatar = styled.div`
 width: 256px;
 height: 256px;
+border-radius: 8px;
+margin-right: 42px;
 background-color: var(--color-grey-12);
 `;
 

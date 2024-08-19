@@ -31,7 +31,7 @@ export const formFields = {
         type: 'email',
         placeholder: 'E-mail',
     },
-    about: {
+    userbout: {
         general: 'about',
         type: 'text',
         placeholder: 'About',

@@ -7,6 +7,18 @@ import {
   PasswordReapetLable,
 } from '@/components/InputField/InputField.styled';
 
+/* 
+{disabled} variable is passed to determine whether input filed is asctive or not and 
+implement the relavant styles. Because in Login and RegisterForm forms 
+styles are different then in Profile.
+{props} passed here have interface like:
+ {
+    general: string,
+    type: string,
+    placeholder: string,
+  }
+  to pass the data rendered for each input field.
+*/
 const InputField = ({ props, formik, disabled }) => {
   const renderValidationMessage = () => {
     const label =
@@ -30,8 +42,9 @@ const InputField = ({ props, formik, disabled }) => {
 
   return (
     <InputFieldStyled>
-      <StyledLabel htmlFor={props.general} />
-      {disabled ? props.placeholder : ''}
+      <StyledLabel disabled={disabled} htmlFor={props.general}>
+        {props.placeholder}
+      </StyledLabel>
       <StyledInput
         autoComplete="off"
         id={props.general}

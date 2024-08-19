@@ -18,7 +18,12 @@ export const InputFieldStyled = styled.div`
 `;
 
 export const StyledLabel = styled.label`
-  color: ${getNotificationColor};
+  position: absolute;
+  left: 1px;
+  transform: translateY(-50%);
+  background: var(--white-color);
+  margin: 0 12px;
+  color: #49454F;
 `;
 
 export const StyledInput = styled.input`
@@ -28,10 +33,10 @@ export const StyledInput = styled.input`
   height: 56px;
   border-radius: 8px;
   border: 1px solid;
-  border-color: ${getNotificationColor};
+  border-color: ${({ disabled }) => (disabled ? 'transparent' : getNotificationColor)};
 
   &:hover {
-    border: 1px solid #111;
+    border: 1px solid ${({ disabled }) => (disabled ? 'transparent' : '#111')};;
   }
 
   &::placeholder {

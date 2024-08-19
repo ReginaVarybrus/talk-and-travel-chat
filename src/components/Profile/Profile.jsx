@@ -22,19 +22,23 @@ import {
   schema,
 } from '@/components/Profile/ProfileValidationSchema';
 
+/* initialValues are used to render all input fields of Profile form 
+indicated in formFields imported from a ProfileValidationSchema
+*/
 const initialValues = {};
 Object.keys(formFields).forEach(key => {
   initialValues[key] = '';
 });
 
-const Profile = () =>
-{
+const Profile = () => {
+  // User details to display in Profile form are taken from Redux data.
   const user = useSelector(getUser);
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
   const [editMode, setEditMode] = useState(false);
 
+  // This const is to toggle the Profile form from view to edit.
   const toggleEditMode = () => {
     setEditMode(!editMode);
   };
@@ -52,6 +56,7 @@ const Profile = () =>
   });
 
   useEffect(() => {
+    console.log(user);
     if (user) {
       formik.setValues(user);
     }
