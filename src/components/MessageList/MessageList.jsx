@@ -13,8 +13,8 @@ const MessageList = ({ groupMessages }) => {
   return (
     <MessageListStyled>
       {groupMessages &&
-        groupMessages.map(message => {
-          const nextUserMessage = groupMessages[message.id + 1];
+        groupMessages.map((message, id) => {
+          const nextUserMessage = groupMessages[id + 1];
           const isShownAvatar =
             !nextUserMessage || message.user?.id !== nextUserMessage.user?.id;
 
@@ -23,6 +23,7 @@ const MessageList = ({ groupMessages }) => {
               key={message.id}
               content={message.content}
               userId={message.user?.id}
+              userName={message.user?.userName}
               date={message.creationDate}
               isShownAvatar={isShownAvatar}
             />

@@ -11,15 +11,15 @@ import {
   Time,
 } from './MessageItemStyles.js';
 
-const MessageItem = ({ content, userId, date, isShownAvatar }) => {
+const MessageItem = ({ content, userId, userName, date, isShownAvatar }) => {
   const currentUserId = useSelector(getUser)?.id;
   const time = timeStampConverter(date);
-
+  const firstLetterOfName = userName.substr(0, 1).toUpperCase();
   const isCurrentUser = userId === currentUserId;
 
   return (
     <MessageItemStyled $isShownAvatar={isShownAvatar}>
-      {userId && isShownAvatar && <Avatar>{userId}</Avatar>}
+      {userId && isShownAvatar && <Avatar>{firstLetterOfName}</Avatar>}
       <MessageContent
         $backgroundMessage={isCurrentUser}
         $isShownAvatar={isShownAvatar}
