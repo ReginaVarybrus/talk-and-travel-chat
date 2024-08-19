@@ -7,8 +7,12 @@ import ULRs from '@/redux-store/constants';
 import { getUser } from '@/redux-store/selectors.js';
 import { ListStyled, Text, Item, ListItems } from './RoomsListStyled';
 import { Flag, ScrollBar } from '../SearchInput/SearchInputStyled.js';
+import CountryInfo from '../CountryInfo/CountryInfo.jsx';
 
 const RoomsList = () => {
+  const [openModal, setOpenModal] = useState(false);
+  const handleOpen = () => setOpenModal(true);
+  const handleClose = () => setOpenModal(false);
   const [selectedCountry, setSelectedCountry] = useState(null);
   const userId = useSelector(getUser)?.id;
   const { stompClient, subscribeToCountryRoom, openCountryRoom } =
@@ -76,8 +80,16 @@ const RoomsList = () => {
         <Text>
           There are no rooms in the list.
           <br /> Find chat of a country and it will be shown here
+          <button type="button" onClick={handleOpen}>
+            Open info
+          </button>
         </Text>
       )}
+      <CountryInfo
+        open={openModal}
+        onClose={handleClose}
+        countryName={selectedCountry}
+      />
     </ListStyled>
   );
 };
