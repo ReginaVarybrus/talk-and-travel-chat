@@ -28,6 +28,7 @@ export const Avatar = styled.div`
   font-weight: 600;
   font-size: 18px;
   background: var(--color-grey-6);
+  color: var(--white-color);
 `;
 
 export const Text = styled.p`
