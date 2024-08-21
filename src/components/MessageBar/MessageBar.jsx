@@ -1,12 +1,10 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { useSelector } from 'react-redux';
+import ULRs from '@/redux-store/constants';
 import { getUser } from '@/redux-store/selectors.js';
 import { useWebSocket } from '@/hooks/useWebSocket.js';
-import { axiosClient } from '@/services/api';
-import ULRs from '@/redux-store/constants';
 import BasicButton from '@/components/Buttons/BasicButton/BasicButton';
 // eslint-disable-next-line import/no-extraneous-dependencies
-import { useSubscription } from 'react-stomp-hooks';
 import {
   MessageBarStyled,
   ButtonJoinWrapper,
@@ -20,32 +18,18 @@ import {
 } from './MessageBarStyled';
 
 const MessageBar = ({
-  countryName,
+  countryChatId,
   country,
-  isSubscribed,
-  setCountryData,
   setSubscriptionCountryRooms,
+  isShowJoinBtn,
+  setIsShowJoinBtn,
 }) => {
   const [message, setMessage] = useState('');
-  const [isShowJoinBtn, setIsShowJoinBtn] = useState(!isSubscribed);
   const userId = useSelector(getUser)?.id;
-  const { stompClient, subscribeToGroupMessages, sendMessage } = useWebSocket();
-
+  const { stompClient, sendMessage, sendEvent } = useWebSocket();
   const isMessageNotEmpty = Boolean(message?.trim().length);
 
   const handleChange = ({ target: { value } }) => setMessage(value);
-
-  useEffect(() => {
-    if (isSubscribed) {
-      setIsShowJoinBtn(false);
-    } else {
-      setIsShowJoinBtn(true);
-    }
-  }, [isSubscribed]);
-
-  useSubscription(ULRs.subscriptionToGroupMessages(countryName), response => {
-    subscribeToGroupMessages(response, setCountryData);
-  });
 
   const handleSubmit = e => {
     e.preventDefault();
@@ -55,34 +39,25 @@ const MessageBar = ({
       return;
     }
 
-    const dataToSend = {
+    const dataMessageToSend = {
       content: message,
-      countryId: country?.id,
+      chatId: countryChatId,
       senderId: userId,
     };
 
-    sendMessage(dataToSend);
-
+    sendMessage(dataMessageToSend);
     setMessage('');
   };
 
-  const handleJoinClick = async () => {
-    try {
-      const response = await axiosClient.post(
-        ULRs.joinToCountryRoom(countryName),
-        userId
-      );
+  const handleJoinClick = () => {
+    const dataEventToSend = {
+      authorId: userId,
+      chatId: countryChatId,
+    };
 
-      if (response.status === 200) {
-        setIsShowJoinBtn(false);
-      }
-
-      isSubscribed = true;
-
-      setSubscriptionCountryRooms(prevRooms => [...prevRooms, country]);
-    } catch (error) {
-      console.error('Error fetching country rooms:', error);
-    }
+    sendEvent(dataEventToSend, ULRs.joinToGroupChat);
+    setIsShowJoinBtn(false);
+    setSubscriptionCountryRooms(prevRooms => [...prevRooms, country.country]);
   };
 
   return (

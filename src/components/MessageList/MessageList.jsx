@@ -15,15 +15,18 @@ const MessageList = ({ groupMessages }) => {
       {groupMessages &&
         groupMessages.map((message, id) => {
           const nextUserMessage = groupMessages[id + 1];
-          const isShownAvatar =
-            !nextUserMessage || message.user.id !== nextUserMessage.user.id;
+          const isLastMessage =
+            !nextUserMessage || message.user?.id !== nextUserMessage.user?.id;
 
+          const isShownAvatar = message.type === 'TEXT' && isLastMessage;
           return (
             <MessageItem
               key={message.id}
               content={message.content}
-              userId={message.user.id}
+              userId={message.user?.id}
+              userName={message.user?.userName}
               date={message.creationDate}
+              type={message.type}
               isShownAvatar={isShownAvatar}
             />
           );

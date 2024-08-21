@@ -1,6 +1,5 @@
 /* eslint-disable react/forbid-prop-types */
 import { useState } from 'react';
-import { useFetch } from '@/hooks/useFetch.js';
 import { useSelector } from 'react-redux';
 import { getUser } from '@/redux-store/selectors';
 import ULRs from '@/redux-store/constants';
@@ -13,19 +12,25 @@ import { timeStampConverter } from '../utils/timeUtil.js';
 import {
   MessageItemStyled,
   MessageContent,
-  Text,
+  Avatar,
+  ContentMessage,
+  ContentJoin,
   Time,
 } from './MessageItemStyled';
 
-const MessageItem = ({ content, userId, date, isShownAvatar }) => {
+const MessageItem = ({
+  content,
+  userId,
+  userName,
+  date,
+  type,
+  isShownAvatar,
+}) => {
   const [open, setOpen] = useState(false);
   const [userInfo, setUserInfo] = useState({});
   const currentUserId = useSelector(getUser)?.id;
-  const { responseData } = useFetch(ULRs.userAvatart(userId), {
-    responseType: 'arraybuffer',
-  });
   const time = timeStampConverter(date);
-
+  const firstLetterOfName = userName.substr(0, 1).toUpperCase();
   const isCurrentUser = userId === currentUserId;
 
   const handleOpen = async () => {
@@ -43,21 +48,17 @@ const MessageItem = ({ content, userId, date, isShownAvatar }) => {
 
   return (
     <MessageItemStyled $isShownAvatar={isShownAvatar}>
-      {responseData && userId && isShownAvatar && (
-        <UserAvatar
-          handleOpen={handleOpen}
-          responseData={responseData}
-          size="36px"
-          sizeTablet="48px"
-        />
+      {type === 'TEXT' && userId && isShownAvatar && (
+        <Avatar>{firstLetterOfName}</Avatar>
       )}
-      <MessageContent
-        $backgroundMessage={isCurrentUser}
-        $isShownAvatar={isShownAvatar}
-      >
-        <Text>{content || `message`}</Text>
-        <Time>{time || 'time'}</Time>
-      </MessageContent>
+      {type === 'TEXT' && (
+        <MessageContent
+          $backgroundMessage={isCurrentUser}
+          $isShownAvatar={isShownAvatar}
+        >
+          <ContentMessage>{content || `message`}</ContentMessage>
+          <Time>{time || 'time'}</Time>
+        </MessageContent>
 
       <UserInfoModal
         open={open}
@@ -69,6 +70,8 @@ const MessageItem = ({ content, userId, date, isShownAvatar }) => {
         userEmail={userInfo?.userEmail}
         about={userInfo?.about}
       />
+      )}
+      {type === 'JOIN' && <ContentJoin>{content || `message`}</ContentJoin>}
     </MessageItemStyled>
   );
 };
@@ -76,7 +79,9 @@ const MessageItem = ({ content, userId, date, isShownAvatar }) => {
 MessageItem.propTypes = {
   content: PropTypes.string,
   userId: PropTypes.number,
+  userName: PropTypes.string,
   date: PropTypes.string,
+  type: PropTypes.string,
   isShownAvatar: PropTypes.bool,
 };
 
