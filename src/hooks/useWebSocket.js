@@ -3,65 +3,54 @@ import { useRef, useEffect } from 'react';
 import { useStompClient } from 'react-stomp-hooks';
 
 export const useWebSocket = () => {
-  const subscriptionRoom = useRef(null);
-  const onDataReceivedRef = useRef(null);
   const stompClient = useStompClient();
+  const isSubscribedToMessages = useRef(false);
+  const isSubscribedToErrors = useRef(false);
 
-  const subscribeToCountryRoom = (
-    userId,
-    countryName,
-    onCountryRoomDataReceived
-  ) => {
-    if (stompClient && stompClient.connected) {
-      if (subscriptionRoom.current) {
-        subscriptionRoom.current.unsubscribe();
-      }
+  const subscribeToGroupMessages = (endpoint, setCountryData) => {
+    if (stompClient && stompClient.connected && isSubscribedToMessages) {
+      stompClient.subscribe(endpoint, response => {
+        const receivedMessage = JSON.parse(response.body);
 
-      subscriptionRoom.current = stompClient.subscribe(
-        `/countries/${countryName}/user/${userId}`,
-        response => {
-          const data = JSON.parse(response.body);
-          onCountryRoomDataReceived(data);
-        }
-      );
-
-      onDataReceivedRef.current = onCountryRoomDataReceived;
+        setCountryData(prevCountryData => {
+          const updatedGroupMessages = [
+            ...(prevCountryData.messages || []),
+            receivedMessage,
+          ];
+          return {
+            ...prevCountryData,
+            messages: updatedGroupMessages,
+          };
+        });
+      });
+      isSubscribedToMessages.current = true;
     }
   };
 
-  const subscribeToGroupMessages = (response, setCountryData) => {
-    const receivedMessage = JSON.parse(response.body);
+  const subscribeToUserErrors = (endpoint, setCountryData) => {
+    if (stompClient && stompClient.connected && isSubscribedToErrors) {
+      stompClient.subscribe(endpoint, response => {
+        const receivedError = JSON.parse(response.body);
 
-    setCountryData(prevCountryData => {
-      const updatedGroupMessages = [
-        ...(prevCountryData.country.groupMessages || []),
-        receivedMessage,
-      ];
-      return {
-        ...prevCountryData,
-        country: {
-          ...prevCountryData.country,
-          groupMessages: updatedGroupMessages,
-        },
-      };
-    });
-  };
-
-  const openCountryRoom = countryData => {
-    if (stompClient && stompClient.connected) {
-      stompClient.publish({
-        destination: `/chat/countries/open`,
-        body: JSON.stringify(countryData),
+        setCountryData(prevCountryData => {
+          const updatedError = [
+            ...(prevCountryData.events || []),
+            receivedError,
+          ];
+          return {
+            ...prevCountryData,
+            events: updatedError,
+          };
+        });
       });
-    } else {
-      console.error('OPEN. Stomp client is not connected.');
+      isSubscribedToErrors.current = true;
     }
   };
 
   const sendMessage = message => {
     if (stompClient && stompClient.connected) {
       stompClient.publish({
-        destination: `/chat/group-messages`,
+        destination: `/chat/messages`,
         body: JSON.stringify(message),
       });
     } else {
@@ -71,22 +60,36 @@ export const useWebSocket = () => {
     }
   };
 
+  const sendEvent = (message, endpoint) => {
+    if (stompClient && stompClient.connected) {
+      stompClient.publish({
+        destination: endpoint,
+        body: JSON.stringify(message),
+      });
+    } else {
+      console.error('EVENT.Stomp client is not connected or no current room.');
+    }
+  };
+
+  const handleDeactivateStopmClient = () => {
+    if (stompClient && stompClient.connected) {
+      stompClient.deactivate();
+      console.log('Stomp client deactivated on logout');
+    }
+  };
+
   useEffect(() => {
     if (stompClient && !stompClient.connected) {
       stompClient.activate();
     }
-    return () => {
-      if (stompClient && stompClient.connected) {
-        stompClient.deactivate();
-      }
-    };
   }, [stompClient]);
 
   return {
     stompClient,
-    subscribeToCountryRoom,
     subscribeToGroupMessages,
-    openCountryRoom,
+    subscribeToUserErrors,
     sendMessage,
+    sendEvent,
+    handleDeactivateStopmClient,
   };
 };

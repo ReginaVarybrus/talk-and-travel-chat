@@ -2,7 +2,7 @@
 import { StompSessionProvider } from 'react-stomp-hooks';
 
 const WebSocketProvider = ({ children }) => (
-  <StompSessionProvider url={`${import.meta.env.VITE_APP_API_URL}/ws/`}>
+  <StompSessionProvider url={`${import.meta.env.VITE_APP_API_WS_URL}/ws/`}>
     {children}
   </StompSessionProvider>
 );

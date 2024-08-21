@@ -6,6 +6,6 @@ export const ScrollBar = styled(SimpleBar)`
 `;
 
 export const MessageListStyled = styled.ul`
-  flex-direction: column;
-  align-items: start;
+  flex-direction: column-reverse;
+  align-items: end;
 `;

@@ -6,26 +6,31 @@ import { ChatRouteStyled } from './ChatRouteStyled.js';
 const ChatRoute = () => {
   const [countryData, setCountryData] = useState({});
   const [subscriptionCountryRooms, setSubscriptionCountryRooms] = useState([]);
-
-  const onCountryRoomDataReceived = data => {
-    setCountryData(data);
-  };
+  const [isSubscribed, setIsSubscribed] = useState(false);
+  const [isShowJoinBtn, setIsShowJoinBtn] = useState(false);
 
   return (
     <ChatRouteStyled>
       <SearchBar
-        onCountryRoomDataReceived={onCountryRoomDataReceived}
+        countryChatId={countryData?.id}
+        setCountryData={setCountryData}
         subscriptionCountryRooms={subscriptionCountryRooms}
         setSubscriptionCountryRooms={setSubscriptionCountryRooms}
+        isSubscribed={isSubscribed}
+        setIsSubscribed={setIsSubscribed}
+        setIsShowJoinBtn={setIsShowJoinBtn}
       />
       <Chat
-        countryName={countryData?.country?.name}
-        participantsAmount={countryData?.country?.participantsAmount}
-        groupMessages={countryData?.country?.groupMessages}
-        country={countryData?.country}
-        isSubscribed={countryData?.isSubscribed}
+        countryName={countryData?.name}
+        participantsAmount={countryData?.usersCount}
+        countryChatId={countryData?.id}
+        groupMessages={countryData.messages}
+        country={countryData}
         setCountryData={setCountryData}
         setSubscriptionCountryRooms={setSubscriptionCountryRooms}
+        isSubscribed={isSubscribed}
+        isShowJoinBtn={isShowJoinBtn}
+        setIsShowJoinBtn={setIsShowJoinBtn}
       />
     </ChatRouteStyled>
   );
