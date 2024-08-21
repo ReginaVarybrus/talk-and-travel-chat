@@ -24,7 +24,7 @@ const ChatRoute = () => {
         countryName={countryData?.name}
         participantsAmount={countryData?.usersCount}
         countryChatId={countryData?.id}
-        groupMessages={countryData?.messages}
+        groupMessages={countryData.messages}
         country={countryData}
         setCountryData={setCountryData}
         setSubscriptionCountryRooms={setSubscriptionCountryRooms}

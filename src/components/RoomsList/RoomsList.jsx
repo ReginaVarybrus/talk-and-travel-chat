@@ -17,19 +17,16 @@ const RoomsList = () => {
     selectedCountry ? ULRs.getMainCountryChatByName(selectedCountry, '') : null
   );
 
-  const context = useOutletContext();
   const {
     setCountryData,
     subscriptionCountryRooms,
     setSubscriptionCountryRooms,
     setIsSubscribed,
-  } = context;
+  } = useOutletContext();
 
   useEffect(() => {
     if (dataUserCountries && userId) {
       setSubscriptionCountryRooms(dataUserCountries);
-    } else {
-      console.log('responseData & userID', dataUserCountries, userId);
     }
   }, [dataUserCountries, userId]);
 

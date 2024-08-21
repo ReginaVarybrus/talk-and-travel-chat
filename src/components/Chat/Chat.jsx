@@ -1,4 +1,6 @@
 import { useEffect } from 'react';
+import { useSelector } from 'react-redux';
+import { getUser } from '@/redux-store/selectors.js';
 import { useWebSocket } from '@/hooks/useWebSocket.js';
 import ULRs from '@/redux-store/constants';
 import logo from '@/images/logo.svg';
@@ -25,7 +27,8 @@ const Chat = ({
   isShowJoinBtn,
   setIsShowJoinBtn,
 }) => {
-  const { subscribeToGroupMessages, subscribeToGroupEvents } = useWebSocket();
+  const userId = useSelector(getUser)?.id;
+  const { subscribeToGroupMessages, subscribeToUserErrors } = useWebSocket();
 
   useEffect(() => {
     if (isSubscribed) {
@@ -34,11 +37,12 @@ const Chat = ({
         setCountryData
       );
 
-      subscribeToGroupEvents(
-        ULRs.subscriptionToGroupEvents(countryChatId),
+      subscribeToUserErrors(
+        ULRs.subscriptionToUserErrors(userId),
         setCountryData
       );
     }
+    console.log('chatId', countryChatId);
   }, [countryChatId]);
 
   return (
@@ -62,6 +66,7 @@ const Chat = ({
       <MessageBar
         countryChatId={countryChatId}
         country={country}
+        setCountryData={setCountryData}
         setSubscriptionCountryRooms={setSubscriptionCountryRooms}
         isShowJoinBtn={isShowJoinBtn}
         setIsShowJoinBtn={setIsShowJoinBtn}

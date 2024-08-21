@@ -7,11 +7,19 @@ import {
   MessageItemStyled,
   MessageContent,
   Avatar,
-  Text,
+  ContentMessage,
+  ContentJoin,
   Time,
 } from './MessageItemStyles.js';
 
-const MessageItem = ({ content, userId, userName, date, isShownAvatar }) => {
+const MessageItem = ({
+  content,
+  userId,
+  userName,
+  date,
+  type,
+  isShownAvatar,
+}) => {
   const currentUserId = useSelector(getUser)?.id;
   const time = timeStampConverter(date);
   const firstLetterOfName = userName.substr(0, 1).toUpperCase();
@@ -19,14 +27,19 @@ const MessageItem = ({ content, userId, userName, date, isShownAvatar }) => {
 
   return (
     <MessageItemStyled $isShownAvatar={isShownAvatar}>
-      {userId && isShownAvatar && <Avatar>{firstLetterOfName}</Avatar>}
-      <MessageContent
-        $backgroundMessage={isCurrentUser}
-        $isShownAvatar={isShownAvatar}
-      >
-        <Text>{content || `message`}</Text>
-        <Time>{time || 'time'}</Time>
-      </MessageContent>
+      {type === 'TEXT' && userId && isShownAvatar && (
+        <Avatar>{firstLetterOfName}</Avatar>
+      )}
+      {type === 'TEXT' && (
+        <MessageContent
+          $backgroundMessage={isCurrentUser}
+          $isShownAvatar={isShownAvatar}
+        >
+          <ContentMessage>{content || `message`}</ContentMessage>
+          <Time>{time || 'time'}</Time>
+        </MessageContent>
+      )}
+      {type === 'JOIN' && <ContentJoin>{content || `message`}</ContentJoin>}
     </MessageItemStyled>
   );
 };
@@ -34,7 +47,9 @@ const MessageItem = ({ content, userId, userName, date, isShownAvatar }) => {
 MessageItem.propTypes = {
   content: PropTypes.string,
   userId: PropTypes.number,
+  userName: PropTypes.string,
   date: PropTypes.string,
+  type: PropTypes.string,
   isShownAvatar: PropTypes.bool,
 };
 
