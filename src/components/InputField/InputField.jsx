@@ -5,8 +5,8 @@ import {
   ErrorStyled,
   SuccessStyled,
   PasswordReapetLable,
-  EyeIcon,
-} from '@/components/InputField/InputField.styled';
+  IconContainer,
+} from '@/components/InputField/InputFieldStyled';
 import { useState } from 'react';
 import { TbEye, TbEyeClosed } from 'react-icons/tb';
 
@@ -54,9 +54,9 @@ const InputField = ({ props, formik }) => {
         $isSuccessColor={formik.touched[props.general]}
       />
       {props.general === 'password' && (
-        <EyeIcon onClick={togglePassword}>
+        <IconContainer onClick={togglePassword}>
           {showPassword ? <TbEyeClosed /> : <TbEye />}
-        </EyeIcon>
+        </IconContainer>
       )}
       {renderValidationMessage()}
     </InputFieldStyled>

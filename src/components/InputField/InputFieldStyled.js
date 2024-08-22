@@ -60,7 +60,7 @@ export const PasswordReapetLable = styled.p`
   color: #49454f;
 `;
 
-export const EyeIcon = styled.div`
+export const IconContainer = styled.div`
   position: absolute;
   right: 14px;
   top: 16px;
@@ -69,13 +69,13 @@ export const EyeIcon = styled.div`
   svg {
     width: 24px;
     height: 24px;
-    stroke: var(--color-grey-9);
-    transition: stroke 0.3s;
+    color: var(--color-grey-9);
+    transition: all 0.3s;
   }
 
   &:hover {
     svg {
-      stroke: var(--color-blue-3);
+      color: var(--color-blue-3);
     }
   }
 `;
