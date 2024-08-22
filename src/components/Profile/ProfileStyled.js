@@ -1,6 +1,7 @@
 import styled from 'styled-components';
 import PencilIcon from '@/images/icons/pencil_edit_icon.svg'
 import CloseIcon from '@/images/icons/cross_close_icon.svg'
+import { Box } from '@mui/material';
 
 export const ProfileStyled = styled.section`
 background-color: var(--color-grey-3);
@@ -20,7 +21,7 @@ line-height: 28.8px;
 `;
 
 export const ProfileContainer = styled.div`
-min-width: 1045px;
+width: 1045px;
 background-color: var(--white-color);
 display: flex;
 margin: 32px;
@@ -30,15 +31,24 @@ min-height: 320px;
 box-sizing: border-box;
 `;
 
+export const AvatarBlock = styled(Box)`
+text-align: center;
+`
+
 export const Avatar = styled.div`
 width: 256px;
 height: 256px;
 border-radius: 8px;
-margin-right: 42px;
 background-color: var(--color-grey-12);
 `;
 
+export const ChangeAvatar = styled.a`
+padding-top: 8px;
+color: var(--color-brand-blue);
+`
+
 export const InputBlock = styled.div`
+margin: 0px 48px;
 min-width: 605px;
 `;
 

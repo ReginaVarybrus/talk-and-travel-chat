@@ -12,10 +12,12 @@ import {
   Header,
   Title,
   ProfileContainer,
+  AvatarBlock,
   Avatar,
   InputBlock,
   EditButton,
 } from '@/components/Profile/ProfileStyled';
+import BasicButton from '@/components/Buttons/BasicButton/BasicButton';
 import InputField from '@/components/InputField/InputField';
 import {
   formFields,
@@ -43,6 +45,10 @@ const Profile = () => {
     setEditMode(!editMode);
   };
 
+  const cancelEdit = () => {
+    setEditMode(false);
+  };
+
   const formik = useFormik({
     initialValues,
     validationSchema: schema,
@@ -68,7 +74,18 @@ const Profile = () => {
         <Title>Profile</Title>
       </Header>
       <ProfileContainer>
-        <Avatar />
+        <AvatarBlock>
+          <Avatar />
+          {editMode ? (
+            <BasicButton
+              sx={{ marginTop: '8px' }}
+              variant="transparent"
+              text="Change photo"
+            />
+          ) : (
+            ''
+          )}
+        </AvatarBlock>
         <InputBlock>
           {Object.entries(formFields).map(([key, value]) => (
             <InputField
@@ -77,11 +94,30 @@ const Profile = () => {
               formik={formik}
               name={value.general}
               disabled={!editMode}
+              backgroundColor="var(--color-white)"
             />
           ))}
+          {editMode ? (
+            <BasicButton
+              sx={{ marginRight: '16px' }}
+              variant="outlined"
+              text="Cancel"
+              handleClick={cancelEdit}
+            />
+          ) : (
+            ''
+          )}
+          {editMode ? (
+            <BasicButton
+              sx={{ marginRight: '16px' }}
+              text="Update"
+              variant="contained"
+            />
+          ) : (
+            ''
+          )}{' '}
         </InputBlock>
         <EditButton
-          type="button"
           onClick={toggleEditMode}
           $icon={editMode ? 'close' : 'edit'}
         />

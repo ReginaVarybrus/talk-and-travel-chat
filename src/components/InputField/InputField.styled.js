@@ -45,7 +45,7 @@ export const StyledInput = styled.input`
   padding-left: 16px;
 
   @media screen and (min-width: 768px) {
-    background-color: var(--color-grey-4);
+    background-color: ${({ backgroundColor }) => backgroundColor || 'var(--color-grey-4)'};
   }
 `;
 

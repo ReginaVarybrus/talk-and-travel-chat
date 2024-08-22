@@ -19,7 +19,7 @@ styles are different then in Profile.
   }
   to pass the data rendered for each input field.
 */
-const InputField = ({ props, formik, disabled }) => {
+const InputField = ({ props, formik, disabled, backgroundColor }) => {
   const renderValidationMessage = () => {
     const label =
       props.general === 'password'
@@ -56,6 +56,7 @@ const InputField = ({ props, formik, disabled }) => {
         placeholder={props.placeholder}
         $isErrorColor={formik.errors[props.general]}
         $isSuccessColor={formik.touched[props.general]}
+        backgroundColor={backgroundColor}
       />
 
       {renderValidationMessage()}
