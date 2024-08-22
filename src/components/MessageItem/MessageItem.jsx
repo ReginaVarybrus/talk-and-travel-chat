@@ -7,6 +7,7 @@ import { axiosClient } from '@/services/api';
 import PropTypes from 'prop-types';
 import UserInfoModal from '../UserInfoModal/UserInfoModal';
 import { timeStampConverter } from '../utils/timeUtil.js';
+import { MESSAGE_TYPES } from '../../constants/messageTypes.js';
 
 import {
   MessageItemStyled,
@@ -32,18 +33,18 @@ const MessageItem = ({
   const firstLetterOfName = userName.substr(0, 1).toUpperCase();
   const isCurrentUser = userId === currentUserId;
 
-  const messageTypeText = type === 'TEXT';
-  const messageTypeJoin = type === 'JOIN';
+  const messageTypeText = type === MESSAGE_TYPES.TEXT;
+  const messageTypeJoin = type === MESSAGE_TYPES.JOIN;
 
   const handleOpen = async () => {
-    setOpen(true);
-
     try {
       const response = await axiosClient.get(ULRs.userInfo(userId));
       setUserInfo(response.data);
     } catch (error) {
       console.error('Error fetching user info:', error);
     }
+
+    setOpen(true);
   };
 
   const handleClose = () => setOpen(false);

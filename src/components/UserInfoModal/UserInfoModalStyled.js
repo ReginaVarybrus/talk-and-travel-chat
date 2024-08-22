@@ -32,17 +32,14 @@ export const ButtonClose = styled.button`
   position: absolute;
   top: 20px;
   right: 20px;
-  width: 24px;
-  height: 24px;
+  display: flex;
   background: none;
   border: none;
   cursor: pointer;
+  padding: 0;
 `;
 
 export const CloseIcon = styled(IoCloseOutline)`
-  position: absolute;
-  top: -2px;
-  right: -2px;
   width: 24px;
   height: 24px;
 `;
