@@ -10,8 +10,8 @@ import { timeStampConverter } from '../utils/timeUtil.js';
 
 import {
   MessageItemStyled,
-  MessageContent,
-  LetterAvatar,
+  MessageContentStyled,
+  LetterAvatarStyled,
   ContentMessage,
   ContentJoin,
   Time,
@@ -32,6 +32,9 @@ const MessageItem = ({
   const firstLetterOfName = userName.substr(0, 1).toUpperCase();
   const isCurrentUser = userId === currentUserId;
 
+  const messageTypeText = type === 'TEXT';
+  const messageTypeJoin = type === 'JOIN';
+
   const handleOpen = async () => {
     setOpen(true);
 
@@ -47,19 +50,21 @@ const MessageItem = ({
 
   return (
     <MessageItemStyled $isShownAvatar={isShownAvatar}>
-      {type === 'TEXT' && userId && isShownAvatar && (
-        <LetterAvatar onClick={handleOpen}>{firstLetterOfName}</LetterAvatar>
+      {messageTypeText && userId && isShownAvatar && (
+        <LetterAvatarStyled onClick={handleOpen}>
+          {firstLetterOfName}
+        </LetterAvatarStyled>
       )}
-      {type === 'TEXT' && (
-        <MessageContent
+      {messageTypeText && (
+        <MessageContentStyled
           $backgroundMessage={isCurrentUser}
           $isShownAvatar={isShownAvatar}
         >
           <ContentMessage>{content || `message`}</ContentMessage>
           <Time>{time || 'time'}</Time>
-        </MessageContent>
+        </MessageContentStyled>
       )}
-      {type === 'JOIN' && <ContentJoin>{content || `message`}</ContentJoin>}
+      {messageTypeJoin && <ContentJoin>{content || `message`}</ContentJoin>}
       <UserInfoModal
         open={open}
         handleClose={handleClose}

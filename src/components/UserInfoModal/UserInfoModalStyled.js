@@ -77,7 +77,7 @@ export const ModalAvatar = styled.img`
   }
 `;
 
-export const LetterAvatar = styled.div`
+export const LetterAvatarStyled = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;

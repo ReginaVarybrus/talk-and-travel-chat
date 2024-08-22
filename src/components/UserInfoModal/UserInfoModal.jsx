@@ -9,7 +9,7 @@ import {
   CloseIcon,
   UserContactInfo,
   ModalAvatar,
-  LetterAvatar,
+  LetterAvatarStyled,
   AboutUser,
   InfoIcon,
   ButtonBlock,
@@ -48,7 +48,7 @@ const UserInfoModal = ({
             {avatar ? (
               <ModalAvatar />
             ) : (
-              <LetterAvatar>{firstLetterOfName}</LetterAvatar>
+              <LetterAvatarStyled>{firstLetterOfName}</LetterAvatarStyled>
             )}
 
             <div>
