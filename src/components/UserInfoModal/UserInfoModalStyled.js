@@ -3,7 +3,6 @@ import Box from '@mui/material/Box';
 import Modal from '@mui/material/Modal';
 import { IoCloseOutline } from 'react-icons/io5';
 import { LuInfo } from 'react-icons/lu';
-import { TbUser } from 'react-icons/tb';
 import { device } from '@/constants/mediaQueries';
 
 export const ModalWindowStyled = styled(Modal)`
@@ -27,12 +26,6 @@ export const InfoModalStyled = styled(Box)`
   @media ${device.tablet} {
     width: 480px;
   }
-`;
-
-export const UserIcon = styled(TbUser)`
-  width: 24px;
-  height: 48px;
-  stroke: var(--color-grey-9);
 `;
 
 export const ButtonClose = styled.button`
@@ -81,6 +74,25 @@ export const ModalAvatar = styled.img`
   @media ${device.tablet} {
     width: 100px;
     height: 100px;
+  }
+`;
+
+export const LetterAvatar = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 48px;
+  height: 48px;
+  margin-right: 16px;
+  border-radius: 8px;
+  background: var(--color-grey-6);
+  color: var(--white-color);
+  font-weight: 600;
+  font-size: 18px;
+  @media ${device.tablet} {
+    width: 100px;
+    height: 100px;
+    font-size: 36px;
   }
 `;
 

@@ -6,13 +6,12 @@ import ULRs from '@/redux-store/constants';
 import { axiosClient } from '@/services/api';
 import PropTypes from 'prop-types';
 import UserInfoModal from '../UserInfoModal/UserInfoModal';
-import UserAvatar from '../UserAvatar/UserAvatar';
 import { timeStampConverter } from '../utils/timeUtil.js';
 
 import {
   MessageItemStyled,
   MessageContent,
-  Avatar,
+  LetterAvatar,
   ContentMessage,
   ContentJoin,
   Time,
@@ -49,7 +48,7 @@ const MessageItem = ({
   return (
     <MessageItemStyled $isShownAvatar={isShownAvatar}>
       {type === 'TEXT' && userId && isShownAvatar && (
-        <Avatar>{firstLetterOfName}</Avatar>
+        <LetterAvatar onClick={handleOpen}>{firstLetterOfName}</LetterAvatar>
       )}
       {type === 'TEXT' && (
         <MessageContent
@@ -59,19 +58,16 @@ const MessageItem = ({
           <ContentMessage>{content || `message`}</ContentMessage>
           <Time>{time || 'time'}</Time>
         </MessageContent>
-
+      )}
+      {type === 'JOIN' && <ContentJoin>{content || `message`}</ContentJoin>}
       <UserInfoModal
         open={open}
         handleClose={handleClose}
-        currentUserId={currentUserId}
-        userId={userId}
         avatar={userInfo?.avatar}
         userName={userInfo?.userName}
         userEmail={userInfo?.userEmail}
         about={userInfo?.about}
       />
-      )}
-      {type === 'JOIN' && <ContentJoin>{content || `message`}</ContentJoin>}
     </MessageItemStyled>
   );
 };

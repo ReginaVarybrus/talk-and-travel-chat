@@ -1,10 +1,7 @@
 import Backdrop from '@mui/material/Backdrop';
 import Fade from '@mui/material/Fade';
-import { useFetch } from '@/hooks/useFetch.js';
-import ULRs from '@/redux-store/constants';
 import { SignUpBtn } from '@/components/RegisterForm/RegisterForm.styled';
 import PropTypes from 'prop-types';
-import UserAvatar from '../UserAvatar/UserAvatar';
 import {
   ModalWindowStyled,
   InfoModalStyled,
@@ -12,6 +9,7 @@ import {
   CloseIcon,
   UserContactInfo,
   ModalAvatar,
+  LetterAvatar,
   AboutUser,
   InfoIcon,
   ButtonBlock,
@@ -20,15 +18,12 @@ import {
 const UserInfoModal = ({
   open,
   handleClose,
-  userId,
   avatar,
   userName = 'User name',
   userEmail = 'email@gmail.com',
   about,
 }) => {
-  const { responseData } = useFetch(ULRs.userAvatart(userId), {
-    responseType: 'arraybuffer',
-  });
+  const firstLetterOfName = userName.substr(0, 1).toUpperCase();
 
   return (
     <ModalWindowStyled
@@ -53,11 +48,7 @@ const UserInfoModal = ({
             {avatar ? (
               <ModalAvatar />
             ) : (
-              <UserAvatar
-                responseData={responseData}
-                size="48px"
-                sizeTablet="100px"
-              />
+              <LetterAvatar>{firstLetterOfName}</LetterAvatar>
             )}
 
             <div>
@@ -86,7 +77,6 @@ const UserInfoModal = ({
 UserInfoModal.propTypes = {
   open: PropTypes.bool,
   handleClose: PropTypes.func,
-  userId: PropTypes.number,
   avatar: PropTypes.string,
   userName: PropTypes.string,
   userEmail: PropTypes.string,

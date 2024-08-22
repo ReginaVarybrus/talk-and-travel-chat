@@ -18,7 +18,7 @@ export const MessageContent = styled.div`
     $backgroundMessage ? 'var(--white-color)' : 'var(--color-blue-1)'};
 `;
 
-export const Avatar = styled.div`
+export const LetterAvatar = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
