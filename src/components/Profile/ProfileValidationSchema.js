@@ -18,22 +18,28 @@ export const schema = yup.object().shape({
             'invalid email address'
         )
         .required('the field is empty'),
+    about: yup
+        .string()
+        .max(10, 'to long')
 });
 
 export const formFields = {
     userName: {
         general: 'userName',
         type: 'text',
-        placeholder: 'Name',
+        label: 'Name',
+        placeholder: 'please enter your name',
     },
     userEmail: {
         general: 'userEmail',
         type: 'email',
-        placeholder: 'E-mail',
+        label: 'E-mail',
+        placeholder: 'please enter your e-mail',
     },
-    userbout: {
+    about: {
         general: 'about',
         type: 'text',
-        placeholder: 'About',
+        label: 'About',
+        placeholder: '',
     },
 };

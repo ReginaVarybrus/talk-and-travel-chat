@@ -54,6 +54,7 @@ const Profile = () => {
     validationSchema: schema,
     validateOnChange: false,
     onSubmit: (values, { resetForm }) => {
+      console.log('SUBMIT');
       dispatch(updateUser(values));
       navigate(routesPath.ACCOUNT);
       resetForm();
@@ -76,46 +77,45 @@ const Profile = () => {
       <ProfileContainer>
         <AvatarBlock>
           <Avatar />
-          {editMode ? (
+          {editMode && (
             <BasicButton
               sx={{ marginTop: '8px' }}
               variant="transparent"
               text="Change photo"
             />
-          ) : (
-            ''
           )}
         </AvatarBlock>
         <InputBlock>
-          {Object.entries(formFields).map(([key, value]) => (
-            <InputField
-              key={key}
-              props={value}
-              formik={formik}
-              name={value.general}
-              disabled={!editMode}
-              backgroundColor="var(--color-white)"
-            />
-          ))}
-          {editMode ? (
-            <BasicButton
-              sx={{ marginRight: '16px' }}
-              variant="outlined"
-              text="Cancel"
-              handleClick={cancelEdit}
-            />
-          ) : (
-            ''
-          )}
-          {editMode ? (
-            <BasicButton
-              sx={{ marginRight: '16px' }}
-              text="Update"
-              variant="contained"
-            />
-          ) : (
-            ''
-          )}{' '}
+          <form onSubmit={formik.handleSubmit} autoComplete="off">
+            {Object.entries(formFields).map(([key, value]) => (
+              <InputField
+                key={key}
+                props={value}
+                formik={formik}
+                name={value.general}
+                disabled={!editMode}
+                nolabel="false"
+                backgroundColor="var(--color-white)"
+              />
+            ))}
+            {editMode && (
+              <>
+                <BasicButton
+                  sx={{ marginRight: '16px' }}
+                  variant="outlined"
+                  text="Cancel"
+                  handleClick={cancelEdit}
+                />
+                <BasicButton
+                  sx={{ marginRight: '16px' }}
+                  onClick={formik}
+                  type="submit"
+                  text="Update"
+                  variant="contained"
+                />
+              </>
+            )}
+          </form>
         </InputBlock>
         <EditButton
           onClick={toggleEditMode}

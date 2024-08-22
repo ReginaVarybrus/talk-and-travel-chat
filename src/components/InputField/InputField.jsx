@@ -11,6 +11,9 @@ import {
 {disabled} variable is passed to determine whether input filed is asctive or not and 
 implement the relavant styles. Because in Login and RegisterForm forms 
 styles are different then in Profile.
+
+{nolabel} variable is passed to render InputFieldStyled without visible lable
+
 {props} passed here have interface like:
  {
     general: string,
@@ -18,8 +21,9 @@ styles are different then in Profile.
     placeholder: string,
   }
   to pass the data rendered for each input field.
+
 */
-const InputField = ({ props, formik, disabled, backgroundColor }) => {
+const InputField = ({ props, formik, disabled, nolabel, backgroundColor }) => {
   const renderValidationMessage = () => {
     const label =
       props.general === 'password'
@@ -42,9 +46,13 @@ const InputField = ({ props, formik, disabled, backgroundColor }) => {
 
   return (
     <InputFieldStyled>
-      <StyledLabel disabled={disabled} htmlFor={props.general}>
-        {props.placeholder}
-      </StyledLabel>
+      {nolabel ? (
+        <StyledLabel disabled={disabled} htmlFor={props.general}>
+          {props.label}
+        </StyledLabel>
+      ) : (
+        ''
+      )}
       <StyledInput
         autoComplete="off"
         id={props.general}
@@ -58,7 +66,6 @@ const InputField = ({ props, formik, disabled, backgroundColor }) => {
         $isSuccessColor={formik.touched[props.general]}
         backgroundColor={backgroundColor}
       />
-
       {renderValidationMessage()}
     </InputFieldStyled>
   );
