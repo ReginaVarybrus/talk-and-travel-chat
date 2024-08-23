@@ -92,6 +92,7 @@ const MessageBar = ({
             type="submit"
             value="Send"
             $isMessageNotEmpty={isMessageNotEmpty}
+            disabled={!isMessageNotEmpty}
           >
             <SendIcon />
           </ButtonSendMessage>

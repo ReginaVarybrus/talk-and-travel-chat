@@ -8,8 +8,11 @@ const ULRs = {
   userCountries: userId => `countries/user/${userId}`,
   subscriptionToGroupMessages: chatId => `/countries/${chatId}/messages`,
   subscriptionToGroupEvents: chatId => `/countries/${chatId}/events`,
+  subscriptionToUserErrors: userId => `/user/${userId}/errors`,
   joinToGroupChat: '/chat/events.joinChat',
-  getChatsMembers: chatId => `/chats/${chatId}/users`,
+  leaveOutGroupChat: '/chat/events.leaveChat',
+  startTyping: '/chat/events.startTyping',
+  stopTyping: '/chat/events.stopTyping',
 };
 
 export default ULRs;

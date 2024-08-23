@@ -5,7 +5,7 @@ import { useStompClient } from 'react-stomp-hooks';
 export const useWebSocket = () => {
   const stompClient = useStompClient();
   const isSubscribedToMessages = useRef(false);
-  const isSubscribedToEvents = useRef(false);
+  const isSubscribedToErrors = useRef(false);
 
   const subscribeToGroupMessages = (endpoint, setCountryData) => {
     if (stompClient && stompClient.connected && isSubscribedToMessages) {
@@ -27,23 +27,23 @@ export const useWebSocket = () => {
     }
   };
 
-  const subscribeToGroupEvents = (endpoint, setCountryData) => {
-    if (stompClient && stompClient.connected && isSubscribedToEvents) {
+  const subscribeToUserErrors = (endpoint, setCountryData) => {
+    if (stompClient && stompClient.connected && isSubscribedToErrors) {
       stompClient.subscribe(endpoint, response => {
-        const receivedEvent = JSON.parse(response.body);
+        const receivedError = JSON.parse(response.body);
 
         setCountryData(prevCountryData => {
-          const updatedEvents = [
+          const updatedError = [
             ...(prevCountryData.events || []),
-            receivedEvent,
+            receivedError,
           ];
           return {
             ...prevCountryData,
-            events: updatedEvents,
+            events: updatedError,
           };
         });
       });
-      isSubscribedToEvents.current = true;
+      isSubscribedToErrors.current = true;
     }
   };
 
@@ -71,22 +71,25 @@ export const useWebSocket = () => {
     }
   };
 
+  const handleDeactivateStopmClient = () => {
+    if (stompClient && stompClient.connected) {
+      stompClient.deactivate();
+      console.log('Stomp client deactivated on logout');
+    }
+  };
+
   useEffect(() => {
     if (stompClient && !stompClient.connected) {
       stompClient.activate();
     }
-    return () => {
-      if (stompClient && stompClient.connected) {
-        stompClient.deactivate();
-      }
-    };
   }, [stompClient]);
 
   return {
     stompClient,
     subscribeToGroupMessages,
-    subscribeToGroupEvents,
+    subscribeToUserErrors,
     sendMessage,
     sendEvent,
+    handleDeactivateStopmClient,
   };
 };
