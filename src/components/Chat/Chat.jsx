@@ -42,7 +42,6 @@ const Chat = ({
         setCountryData
       );
     }
-    console.log('chatId', countryChatId);
   }, [countryChatId]);
 
   return (
