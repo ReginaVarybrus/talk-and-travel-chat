@@ -18,6 +18,25 @@ export const MessageContent = styled.ul`
     $backgroundMessage ? 'var(--white-color)' : 'var(--color-blue-1)'};
 `;
 
+export const Avatar = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 48px;
+  height: 48px;
+  border-radius: 4px;
+  font-weight: 600;
+  font-size: 18px;
+  background: var(--color-grey-6);
+  color: var(--white-color);
+`;
+
+export const ContentMessage = styled.p`
+  text-align: start;
+  font-size: 16px;
+  color: var(--color-dark);
+`;
+
 export const Text = styled.p`
   text-align: start;
   font-size: 16px;
