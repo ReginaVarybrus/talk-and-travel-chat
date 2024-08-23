@@ -40,11 +40,12 @@ const MessageItem = ({
     try {
       const response = await axiosClient.get(ULRs.userInfo(userId));
       setUserInfo(response.data);
+      if (response.data.userName) {
+        setOpen(true);
+      }
     } catch (error) {
       console.error('Error fetching user info:', error);
     }
-
-    setOpen(true);
   };
 
   const handleClose = () => setOpen(false);
