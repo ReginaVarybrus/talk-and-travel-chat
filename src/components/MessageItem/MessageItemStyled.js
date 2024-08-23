@@ -7,7 +7,7 @@ export const MessageItemStyled = styled.li`
   margin-bottom: ${({ $isShownAvatar }) => ($isShownAvatar ? '24px' : '8px')};
 `;
 
-export const MessageContent = styled.ul`
+export const MessageContentStyled = styled.div`
   display: flex;
   align-items: end;
   max-width: 280px;
@@ -18,7 +18,7 @@ export const MessageContent = styled.ul`
     $backgroundMessage ? 'var(--white-color)' : 'var(--color-blue-1)'};
 `;
 
-export const Avatar = styled.div`
+export const LetterAvatarStyled = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
@@ -29,6 +29,7 @@ export const Avatar = styled.div`
   font-size: 18px;
   background: var(--color-grey-6);
   color: var(--white-color);
+  cursor: pointer;
 `;
 
 export const ContentMessage = styled.p`
