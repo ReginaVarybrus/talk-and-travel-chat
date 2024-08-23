@@ -1,4 +1,3 @@
-import avatarImage from '@/images/img/Avatar.png';
 import { LuLogOut } from 'react-icons/lu';
 import { IoCloseOutline } from 'react-icons/io5';
 import { HiOutlineExclamationCircle } from 'react-icons/hi';
@@ -7,6 +6,9 @@ import Modal from '@mui/material/Modal';
 import { useFetch } from '@/hooks/useFetch.js';
 import ULRs from '@/redux-store/constants';
 import mapData from '@/data/countries.json';
+import { useWebSocket } from '@/hooks/useWebSocket.js';
+import { useSelector } from 'react-redux';
+import { getUser } from '@/redux-store/selectors.js';
 
 import {
   BoxWrap,
@@ -24,6 +26,7 @@ import {
   ExitBtn,
   ReportBtn,
   Subtitle,
+  LetterAvatar,
 } from './CountryInfoStyled.js';
 
 const CountryInfo = ({
@@ -31,10 +34,23 @@ const CountryInfo = ({
   onClose,
   countryName,
   participantsAmount,
+  setSubscriptionCountryRooms,
   countryChatId,
+  isSubscribed,
 }) => {
+  console.log(isSubscribed);
+  const userId = useSelector(getUser)?.id;
+  const { sendEvent } = useWebSocket();
+
   const handleLeaveGroup = () => {
-    // ADD LEAVE GROUP LOGIC
+    const dataEventToSend = {
+      authorId: userId,
+      chatId: countryChatId,
+    };
+    sendEvent(dataEventToSend, ULRs.leaveOutGroupChat);
+    setSubscriptionCountryRooms(prevRooms =>
+      prevRooms.filter(room => room.name !== countryName)
+    );
     onClose();
   };
   const url = countryChatId ? ULRs.getChatsMembers(countryChatId) : null;
@@ -50,7 +66,6 @@ const CountryInfo = ({
   );
 
   const hasMembers = Array.isArray(members) && members.length > 0;
-
   return (
     <Modal
       aria-labelledby="country-info-title"
@@ -84,7 +99,13 @@ const CountryInfo = ({
               {members?.map(user => (
                 <Item key={user.id}>
                   <Avatar>
-                    <img src={user.avatar || avatarImage} alt={user.userName} />
+                    {user.avatar ? (
+                      <img src={user.avatar} alt={user.userName} />
+                    ) : (
+                      <LetterAvatar>
+                        {user.userName.charAt(0).toUpperCase()}
+                      </LetterAvatar>
+                    )}
                   </Avatar>
                   <UserWrap>
                     <h5>{user.userName}</h5>

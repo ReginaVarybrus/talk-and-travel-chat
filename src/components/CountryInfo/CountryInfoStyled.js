@@ -97,6 +97,25 @@ export const Avatar = styled.div`
     width: 100%;
     height: 100%;
   }
+
+  @media screen and (min-width: 768px) {
+    width: 48px;
+    height: 48px;
+  }
+`;
+
+export const LetterAvatar = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 4px;
+  font-weight: 600;
+  font-size: 18px;
+  background: var(--color-grey-6);
+  color: var(--white-color);
+
   @media screen and (min-width: 768px) {
     width: 48px;
     height: 48px;

@@ -2,7 +2,13 @@ import { useState } from 'react';
 import CountryInfo from '../CountryInfo/CountryInfo';
 import { ChatHeaderStyled } from './ChatHeaderStyled';
 
-const ChatHeader = ({ countryName, participantsAmount, countryChatId }) => {
+const ChatHeader = ({
+  countryName,
+  participantsAmount,
+  countryChatId,
+  setSubscriptionCountryRooms,
+  isSubscribed,
+}) => {
   const [openModal, setOpenModal] = useState(false);
   const handleOpen = () => setOpenModal(true);
   const handleClose = () => {
@@ -22,6 +28,8 @@ const ChatHeader = ({ countryName, participantsAmount, countryChatId }) => {
         countryName={countryName}
         participantsAmount={participantsAmount}
         countryChatId={countryChatId}
+        setSubscriptionCountryRooms={setSubscriptionCountryRooms}
+        isSubscribed={isSubscribed}
       />
     </>
   );
