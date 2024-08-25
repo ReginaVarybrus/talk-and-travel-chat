@@ -1,15 +1,57 @@
-import { useRef, useEffect } from 'react';
-// eslint-disable-next-line import/no-extraneous-dependencies
-import { useStompClient } from 'react-stomp-hooks';
+/* eslint-disable consistent-return */
+/* eslint-disable import/no-extraneous-dependencies */
+import { useState, useRef, useEffect } from 'react';
+
+import { Client } from '@stomp/stompjs';
+import SockJS from 'sockjs-client/dist/sockjs';
+import { useSelector } from 'react-redux';
+import { getToken } from '@/redux-store/selectors.js';
 
 export const useWebSocket = () => {
-  const stompClient = useStompClient();
-  const isSubscribedToMessages = useRef(false);
-  const isSubscribedToErrors = useRef(false);
+  const [client, setClient] = useState(null);
+  const [connected, setConnected] = useState(false);
+  const token = useSelector(getToken);
+  const currentSubscription = useRef({ messages: null, errors: null });
 
+  useEffect(() => {
+    if (!token) return;
+
+    const socket = new SockJS(`${import.meta.env.VITE_APP_API_WS_URL}/ws/`);
+    const stompClient = new Client({
+      webSocketFactory: () => socket,
+      connectHeaders: {
+        Authorization: `Bearer ${token}`,
+      },
+      onConnect: () => {
+        setConnected(true);
+        console.log('Connected');
+      },
+      onDisconnect: () => {
+        setConnected(false);
+        console.log('Disconnected');
+      },
+      onStompError: frame => {
+        console.error(`Broker reported error: ${frame.headers.message}`);
+      },
+    });
+
+    stompClient.activate();
+    setClient(stompClient);
+
+    return () => {
+      stompClient.deactivate();
+      setConnected(false);
+      console.log('WebSocket deactivated');
+    };
+  }, [token]);
+
+  // Function of subscribing to the recieved messages in the chat room. Subscribe depends of chatId
   const subscribeToGroupMessages = (endpoint, setCountryData) => {
-    if (stompClient && stompClient.connected && isSubscribedToMessages) {
-      stompClient.subscribe(endpoint, response => {
+    if (client && connected) {
+      if (currentSubscription.messages) {
+        currentSubscription.messages.unsubscribe();
+      }
+      const subscribing = client.subscribe(endpoint, response => {
         const receivedMessage = JSON.parse(response.body);
 
         setCountryData(prevCountryData => {
@@ -23,13 +65,21 @@ export const useWebSocket = () => {
           };
         });
       });
-      isSubscribedToMessages.current = true;
+      currentSubscription.messages = subscribing;
+    } else {
+      console.error(
+        'Client is not connected. Unable to subscribe to messages.'
+      );
     }
   };
 
+  // Function of subscribing to the user errors in the chat room. Subscribe depends of userId
   const subscribeToUserErrors = (endpoint, setCountryData) => {
-    if (stompClient && stompClient.connected && isSubscribedToErrors) {
-      stompClient.subscribe(endpoint, response => {
+    if (client && connected) {
+      if (currentSubscription.errors) {
+        currentSubscription.errors.unsubscribe();
+      }
+      const subscribing = client.subscribe(endpoint, response => {
         const receivedError = JSON.parse(response.body);
 
         setCountryData(prevCountryData => {
@@ -43,13 +93,15 @@ export const useWebSocket = () => {
           };
         });
       });
-      isSubscribedToErrors.current = true;
+      currentSubscription.current.errors = subscribing;
+    } else {
+      console.error('Client is not connected. Unable to subscribe to errors.');
     }
   };
 
   const sendMessage = message => {
-    if (stompClient && stompClient.connected) {
-      stompClient.publish({
+    if (client && connected) {
+      client.publish({
         destination: `/chat/messages`,
         body: JSON.stringify(message),
       });
@@ -61,8 +113,8 @@ export const useWebSocket = () => {
   };
 
   const sendEvent = (message, endpoint) => {
-    if (stompClient && stompClient.connected) {
-      stompClient.publish({
+    if (client && connected) {
+      client.publish({
         destination: endpoint,
         body: JSON.stringify(message),
       });
@@ -71,25 +123,11 @@ export const useWebSocket = () => {
     }
   };
 
-  const handleDeactivateStopmClient = () => {
-    if (stompClient && stompClient.connected) {
-      stompClient.deactivate();
-      console.log('Stomp client deactivated on logout');
-    }
-  };
-
-  useEffect(() => {
-    if (stompClient && !stompClient.connected) {
-      stompClient.activate();
-    }
-  }, [stompClient]);
-
   return {
-    stompClient,
+    connected,
     subscribeToGroupMessages,
     subscribeToUserErrors,
     sendMessage,
     sendEvent,
-    handleDeactivateStopmClient,
   };
 };

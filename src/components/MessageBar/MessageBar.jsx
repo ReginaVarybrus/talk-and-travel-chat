@@ -26,7 +26,7 @@ const MessageBar = ({
 }) => {
   const [message, setMessage] = useState('');
   const userId = useSelector(getUser)?.id;
-  const { stompClient, sendMessage, sendEvent } = useWebSocket();
+  const { connected, sendMessage, sendEvent } = useWebSocket();
   const isMessageNotEmpty = Boolean(message?.trim().length);
 
   const handleChange = ({ target: { value } }) => setMessage(value);
@@ -34,7 +34,7 @@ const MessageBar = ({
   const handleSubmit = e => {
     e.preventDefault();
 
-    if (!stompClient) {
+    if (!connected) {
       console.error('Cannot send message: WebSocket not connected');
       return;
     }

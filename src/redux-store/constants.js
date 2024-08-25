@@ -8,7 +8,6 @@ const ULRs = {
   getMainCountryChatByName: countryName => `chats/${countryName}/main`,
   userCountries: userId => `countries/user/${userId}`,
   subscriptionToGroupMessages: chatId => `/countries/${chatId}/messages`,
-  subscriptionToGroupEvents: chatId => `/countries/${chatId}/events`,
   subscriptionToUserErrors: userId => `/user/${userId}/errors`,
   joinToGroupChat: '/chat/events.joinChat',
   leaveOutGroupChat: '/chat/events.leaveChat',
