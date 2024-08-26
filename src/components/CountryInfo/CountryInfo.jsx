@@ -36,9 +36,7 @@ const CountryInfo = ({
   participantsAmount,
   setSubscriptionCountryRooms,
   countryChatId,
-  isSubscribed,
 }) => {
-  console.log(isSubscribed);
   const userId = useSelector(getUser)?.id;
   const { sendEvent } = useWebSocket();
 

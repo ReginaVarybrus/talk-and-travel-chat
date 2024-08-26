@@ -35,6 +35,7 @@ const MessageItem = ({
 
   const messageTypeText = type === MESSAGE_TYPES.TEXT;
   const messageTypeJoin = type === MESSAGE_TYPES.JOIN;
+  const messageTypeLeave = type === MESSAGE_TYPES.LEAVE;
 
   const handleOpen = async () => {
     try {
@@ -66,7 +67,9 @@ const MessageItem = ({
           <Time>{time || 'time'}</Time>
         </MessageContentStyled>
       )}
-      {messageTypeJoin && <ContentJoin>{content || `message`}</ContentJoin>}
+      {(messageTypeJoin || messageTypeLeave) && (
+        <ContentJoin>{content || `message`}</ContentJoin>
+      )}
       <UserInfoModal
         open={open}
         handleClose={handleClose}
