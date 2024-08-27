@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { getUser } from '@/redux-store/selectors.js';
-import { useWebSocket } from '@/hooks/useWebSocket.js';
+import { useWebSocket } from '@/provider/WebSocketProvider.jsx';
 import ULRs from '@/redux-store/constants';
 import logo from '@/images/logo.svg';
 import ChatHeader from '@/components/ChatHeader/ChatHeader';

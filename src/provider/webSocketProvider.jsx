@@ -1,13 +1,23 @@
 /* eslint-disable consistent-return */
 /* eslint-disable import/no-extraneous-dependencies */
-import { useState, useRef, useEffect } from 'react';
-
+import {
+  createContext,
+  useState,
+  useRef,
+  useEffect,
+  useContext,
+  useMemo,
+} from 'react';
 import { Client } from '@stomp/stompjs';
 import SockJS from 'sockjs-client/dist/sockjs';
 import { useSelector } from 'react-redux';
 import { getToken } from '@/redux-store/selectors.js';
 
-export const useWebSocket = () => {
+const WebSocketContext = createContext(null);
+
+export const useWebSocket = () => useContext(WebSocketContext);
+
+export const WebSocketProvider = ({ url, children }) => {
   const [client, setClient] = useState(null);
   const [connected, setConnected] = useState(false);
   const token = useSelector(getToken);
@@ -16,7 +26,8 @@ export const useWebSocket = () => {
   useEffect(() => {
     if (!token) return;
 
-    const socket = new SockJS(`${import.meta.env.VITE_APP_API_WS_URL}/ws/`);
+    // const socket = new SockJS(`${import.meta.env.VITE_APP_API_WS_URL}/ws/`);
+    const socket = new SockJS(url);
     const stompClient = new Client({
       webSocketFactory: () => socket,
       connectHeaders: {
@@ -123,11 +134,20 @@ export const useWebSocket = () => {
     }
   };
 
-  return {
-    connected,
-    subscribeToGroupMessages,
-    subscribeToUserErrors,
-    sendMessage,
-    sendEvent,
-  };
+  const value = useMemo(
+    () => ({
+      connected,
+      subscribeToGroupMessages,
+      subscribeToUserErrors,
+      sendMessage,
+      sendEvent,
+    }),
+    [connected, client]
+  );
+
+  return (
+    <WebSocketContext.Provider value={value}>
+      {children}
+    </WebSocketContext.Provider>
+  );
 };

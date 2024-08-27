@@ -2,9 +2,8 @@ import { useState } from 'react';
 import { useSelector } from 'react-redux';
 import ULRs from '@/redux-store/constants';
 import { getUser } from '@/redux-store/selectors.js';
-import { useWebSocket } from '@/hooks/useWebSocket.js';
+import { useWebSocket } from '@/provider/WebSocketProvider.jsx';
 import BasicButton from '@/components/Buttons/BasicButton/BasicButton';
-// eslint-disable-next-line import/no-extraneous-dependencies
 import {
   MessageBarStyled,
   ButtonJoinWrapper,
