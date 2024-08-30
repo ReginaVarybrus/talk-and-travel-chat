@@ -11,18 +11,18 @@ import { useSelector } from 'react-redux';
 import { getUser } from '@/redux-store/selectors.js';
 
 import {
-  BoxWrap,
+  BoxStyled,
   ContactsList,
-  ContactsWrap,
-  ButtonsWrap,
+  ContactsBoxStyled,
+  ButtonsBoxStyled,
   Flag,
   Item,
   Avatar,
   CloseBtn,
-  UserWrap,
+  UserBoxStyled,
   MessageBtn,
-  CountryWrap,
-  CountryNameWrap,
+  NameBoxStyled,
+  HeaderStyled,
   ExitBtn,
   ReportBtn,
   Subtitle,
@@ -51,8 +51,8 @@ const CountryInfo = ({
     );
     onClose();
   };
-  const url = countryChatId ? ULRs.getChatsMembers(countryChatId) : null;
-  const { responseData: members } = useFetch(url, '');
+  const url = countryChatId && ULRs.getChatsParticipants(countryChatId);
+  const { responseData: participants } = useFetch(url, '');
 
   if (!countryName) {
     return null;
@@ -63,7 +63,7 @@ const CountryInfo = ({
       country.properties.ADMIN.toLowerCase() === countryName.toLowerCase()
   );
 
-  const hasMembers = Array.isArray(members) && members.length > 0;
+  const hasMembers = Array.isArray(participants) && participants.length > 0;
   return (
     <Modal
       aria-labelledby="country-info-title"
@@ -72,29 +72,29 @@ const CountryInfo = ({
       onClose={onClose}
       closeAfterTransition
     >
-      <BoxWrap>
+      <BoxStyled>
         <CloseBtn type="button" onClick={onClose}>
           <IoCloseOutline />
         </CloseBtn>
-        <CountryWrap>
+        <HeaderStyled>
           <Flag
             loading="lazy"
             srcSet={`https://flagcdn.com/w40/${countryData.properties.code}.png 2x`}
             src={`https://flagcdn.com/w20/${countryData.properties.code}.png`}
             alt={`${countryData.properties.ADMIN} flag`}
           />
-          <CountryNameWrap>
+          <NameBoxStyled>
             <h5>{countryName}</h5>
             <p>{`${participantsAmount}`} members</p>
-          </CountryNameWrap>
-        </CountryWrap>
+          </NameBoxStyled>
+        </HeaderStyled>
 
         {!hasMembers ? (
           <Subtitle>There are no members here yet. Be the first.</Subtitle>
         ) : (
-          <ContactsWrap>
+          <ContactsBoxStyled>
             <ContactsList>
-              {members?.map(user => (
+              {participants?.map(user => (
                 <Item key={user.id}>
                   <Avatar>
                     {user.avatar ? (
@@ -105,20 +105,20 @@ const CountryInfo = ({
                       </LetterAvatar>
                     )}
                   </Avatar>
-                  <UserWrap>
+                  <UserBoxStyled>
                     <h5>{user.userName}</h5>
                     <p>{user.userEmail}</p>
-                  </UserWrap>
+                  </UserBoxStyled>
                   <MessageBtn type="button">
                     <FaRegMessage />
                   </MessageBtn>
                 </Item>
               ))}
             </ContactsList>
-          </ContactsWrap>
+          </ContactsBoxStyled>
         )}
 
-        <ButtonsWrap>
+        <ButtonsBoxStyled>
           <ExitBtn type="button" onClick={handleLeaveGroup}>
             <LuLogOut />
             Leave group
@@ -127,8 +127,8 @@ const CountryInfo = ({
             <HiOutlineExclamationCircle />
             Report
           </ReportBtn>
-        </ButtonsWrap>
-      </BoxWrap>
+        </ButtonsBoxStyled>
+      </BoxStyled>
     </Modal>
   );
 };

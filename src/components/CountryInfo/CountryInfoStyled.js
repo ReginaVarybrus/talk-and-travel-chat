@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 import { Box } from '@mui/material';
 
-export const BoxWrap = styled(Box)`
+export const BoxStyled = styled(Box)`
   position: absolute;
   display: flex;
   flex-direction: column;
@@ -24,14 +24,14 @@ export const BoxWrap = styled(Box)`
   }
 `;
 
-export const CountryWrap = styled.div`
+export const HeaderStyled = styled.div`
   display: flex;
   flex-direction: row;
   gap: 16px;
   align-items: center;
 `;
 
-export const ContactsWrap = styled.div`
+export const ContactsBoxStyled = styled.div`
   border-top: 1px solid rgb(222, 222, 222);
   border-bottom: 1px solid rgb(222, 222, 222);
   padding-top: 16px;
@@ -66,7 +66,7 @@ export const Flag = styled.img`
   }
 `;
 
-export const CountryNameWrap = styled.div`
+export const NameBoxStyled = styled.div`
   display: flex;
   flex-direction: column;
   gap: 4px;
@@ -143,7 +143,7 @@ export const Item = styled.li`
     }
   }
 `;
-export const UserWrap = styled.div`
+export const UserBoxStyled = styled.div`
   display: flex;
   flex-direction: column;
   width: 209px;
@@ -217,7 +217,7 @@ export const CloseBtn = styled.button`
   }
 `;
 
-export const ButtonsWrap = styled.div`
+export const ButtonsBoxStyled = styled.div`
   display: flex;
   flex-direction: column;
   align-items: start;

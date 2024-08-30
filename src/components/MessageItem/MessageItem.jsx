@@ -14,7 +14,7 @@ import {
   MessageContentStyled,
   LetterAvatarStyled,
   ContentMessage,
-  ContentJoin,
+  ContentJoinOrLeave,
   Time,
 } from './MessageItemStyled';
 
@@ -68,7 +68,7 @@ const MessageItem = ({
         </MessageContentStyled>
       )}
       {(messageTypeJoin || messageTypeLeave) && (
-        <ContentJoin>{content || `message`}</ContentJoin>
+        <ContentJoinOrLeave>{content || `message`}</ContentJoinOrLeave>
       )}
       <UserInfoModal
         open={open}
