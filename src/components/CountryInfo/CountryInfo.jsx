@@ -63,7 +63,8 @@ const CountryInfo = ({
       country.properties.ADMIN.toLowerCase() === countryName.toLowerCase()
   );
 
-  const hasMembers = Array.isArray(participants) && participants.length > 0;
+  const hasParticipants =
+    Array.isArray(participants) && participants.length > 0;
   return (
     <Modal
       aria-labelledby="country-info-title"
@@ -89,7 +90,7 @@ const CountryInfo = ({
           </NameBoxStyled>
         </HeaderStyled>
 
-        {!hasMembers ? (
+        {!hasParticipants ? (
           <Subtitle>There are no members here yet. Be the first.</Subtitle>
         ) : (
           <ContactsBoxStyled>
