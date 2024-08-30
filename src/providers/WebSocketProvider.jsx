@@ -1,4 +1,3 @@
-// eslint-disable-next-line import/no-extraneous-dependencies
 import { StompSessionProvider } from 'react-stomp-hooks';
 import { useSelector } from 'react-redux';
 import { getToken } from '@/redux-store/selectors.js';
