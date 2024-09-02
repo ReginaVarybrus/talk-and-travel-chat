@@ -51,6 +51,9 @@ const Chat = ({
       <ChatHeader
         countryName={countryName}
         participantsAmount={participantsAmount}
+        countryChatId={countryChatId}
+        setSubscriptionCountryRooms={setSubscriptionCountryRooms}
+        isSubscribed={isSubscribed}
       />
       <MessageBlock>
         {groupMessages?.length ? (
