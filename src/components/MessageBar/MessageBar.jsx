@@ -18,9 +18,9 @@ import {
 } from './MessageBarStyled';
 
 const MessageBar = ({
-  countryChatId,
-  country,
-  setSubscriptionCountryRooms,
+  chatId,
+  chatData,
+  setSubscriptionRooms,
   isShowJoinBtn,
   setIsShowJoinBtn,
 }) => {
@@ -41,7 +41,7 @@ const MessageBar = ({
 
     const dataMessageToSend = {
       content: message,
-      chatId: countryChatId,
+      chatId,
       senderId: userId,
     };
 
@@ -52,12 +52,12 @@ const MessageBar = ({
   const handleJoinClick = () => {
     const dataEventToSend = {
       authorId: userId,
-      chatId: countryChatId,
+      chatId,
     };
 
     sendEvent(dataEventToSend, ULRs.joinToGroupChat);
     setIsShowJoinBtn(false);
-    setSubscriptionCountryRooms(prevRooms => [...prevRooms, country.country]);
+    setSubscriptionRooms(prevRooms => [...prevRooms, chatData.country]);
   };
 
   return (

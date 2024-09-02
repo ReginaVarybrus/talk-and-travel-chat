@@ -2,6 +2,10 @@ import Backdrop from '@mui/material/Backdrop';
 import Fade from '@mui/material/Fade';
 import { SignUpBtn } from '@/components/RegisterForm/RegisterForm.styled';
 import PropTypes from 'prop-types';
+import ULRs from '@/redux-store/constants';
+import { axiosClient } from '@/services/api';
+import { useSelector } from 'react-redux';
+import { getUser } from '@/redux-store/selectors';
 import {
   ModalWindowStyled,
   InfoModalStyled,
@@ -22,9 +26,25 @@ const UserInfoModal = ({
   userName = 'User name',
   userEmail = 'email@gmail.com',
   about,
+  id,
 }) => {
-  const firstLetterOfName = userName.substr(0, 1).toUpperCase();
+  const userId = useSelector(getUser)?.id;
 
+  const firstLetterOfName = userName.substr(0, 1).toUpperCase();
+  const handleCreatePrivateChat = async companionId => {
+    try {
+      const response = await axiosClient.post(ULRs.createPrivateChat, {
+        userId,
+        companionId,
+      });
+      const chatId = response.data;
+      console.log(`user: ${userId}, companion: ${companionId}`);
+      return console.log(`Chat created with ID: ${chatId}`);
+    } catch (error) {
+      console.error(error);
+      return null;
+    }
+  };
   return (
     <ModalWindowStyled
       aria-labelledby="transition-modal-title"
@@ -66,7 +86,9 @@ const UserInfoModal = ({
           </AboutUser>
           <hr />
           <ButtonBlock>
-            <SignUpBtn onClick={() => {}}>Message</SignUpBtn>
+            <SignUpBtn onClick={() => handleCreatePrivateChat(id)}>
+              Message
+            </SignUpBtn>
           </ButtonBlock>
         </InfoModalStyled>
       </Fade>

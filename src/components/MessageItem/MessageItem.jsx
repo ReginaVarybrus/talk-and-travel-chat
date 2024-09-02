@@ -74,6 +74,7 @@ const MessageItem = ({
         userName={userInfo?.userName}
         userEmail={userInfo?.userEmail}
         about={userInfo?.about}
+        id={userInfo?.id}
       />
     </MessageItemStyled>
   );

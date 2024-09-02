@@ -15,7 +15,12 @@ import {
   Text,
 } from './SearchInputStyled';
 
-const SearchInput = ({ setCountryData, setIsSubscribed, setIsShowJoinBtn }) => {
+const SearchInput = ({
+  chatId,
+  setChatData,
+  setIsSubscribed,
+  setIsShowJoinBtn,
+}) => {
   const [selectedCountry, setSelectedCountry] = useState(null);
   const [searchedValue, setSearchedValue] = useState('');
   const [showItem, setShowItem] = useState(false);
@@ -34,10 +39,10 @@ const SearchInput = ({ setCountryData, setIsSubscribed, setIsShowJoinBtn }) => {
 
   useEffect(() => {
     if (dataMainCountryChat) {
-      setCountryData(dataMainCountryChat);
+      setChatData(dataMainCountryChat, 'group');
       setIsSubscribed(true);
     }
-  }, [dataMainCountryChat]);
+  }, [dataMainCountryChat, setChatData]);
 
   const handleChange = event => {
     const { value } = event.target;

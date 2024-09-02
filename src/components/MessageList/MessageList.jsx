@@ -2,19 +2,19 @@ import { useEffect, useRef } from 'react';
 import MessageItem from '@/components/MessageItem/MessageItem';
 import { MessageListStyled } from './MessageListStyled.js';
 
-const MessageList = ({ groupMessages }) => {
+const MessageList = ({ messages }) => {
   const messagesEndRef = useRef(null);
   const scrollToBottom = () => {
     messagesEndRef.current.scrollIntoView({ behavior: 'smooth' });
   };
 
-  useEffect(scrollToBottom, [groupMessages]);
+  useEffect(scrollToBottom, [messages]);
 
   return (
     <MessageListStyled>
-      {groupMessages &&
-        groupMessages.map((message, id) => {
-          const nextUserMessage = groupMessages[id + 1];
+      {messages &&
+        messages.map((message, id) => {
+          const nextUserMessage = messages[id + 1];
           const isLastMessage =
             !nextUserMessage || message.user?.id !== nextUserMessage.user?.id;
 

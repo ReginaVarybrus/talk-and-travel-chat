@@ -10,32 +10,32 @@ import { Flag, ScrollBar } from '../SearchInput/SearchInputStyled.js';
 const RoomsList = () => {
   const [selectedCountry, setSelectedCountry] = useState(null);
   const userId = useSelector(getUser)?.id;
+
   const { responseData: dataUserCountries } = useFetch(
     ULRs.userCountries(userId, '')
   );
   const { responseData: dataMainCountryChat } = useFetch(
     selectedCountry ? ULRs.getMainCountryChatByName(selectedCountry, '') : null
   );
-
   const {
-    setCountryData,
-    subscriptionCountryRooms,
-    setSubscriptionCountryRooms,
+    setChatData,
     setIsSubscribed,
+    subscriptionRooms,
+    setSubscriptionRooms,
   } = useOutletContext();
 
   useEffect(() => {
     if (dataUserCountries && userId) {
-      setSubscriptionCountryRooms(dataUserCountries);
+      setSubscriptionRooms(dataUserCountries);
     }
   }, [dataUserCountries, userId]);
 
   useEffect(() => {
     if (dataMainCountryChat) {
-      setCountryData(dataMainCountryChat);
+      setChatData(dataMainCountryChat); // Выбор группового чата
       setIsSubscribed(true);
     }
-  }, [dataMainCountryChat]);
+  }, [dataMainCountryChat, setChatData, setIsSubscribed]);
 
   const handleOpenCountryRoom = countryName => {
     setSelectedCountry(countryName);
@@ -43,10 +43,10 @@ const RoomsList = () => {
 
   return (
     <ListStyled>
-      {subscriptionCountryRooms.length ? (
+      {subscriptionRooms.length ? (
         <ListItems>
           <ScrollBar>
-            {subscriptionCountryRooms.map(room => (
+            {subscriptionRooms.map(room => (
               <Item
                 key={room.id}
                 onClick={() => handleOpenCountryRoom(room.name)}

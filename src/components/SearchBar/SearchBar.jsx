@@ -9,10 +9,10 @@ import SearchInput from '../SearchInput/SearchInput';
 import ChatMap from '../ChatMap/ChatMap';
 
 const SearchBar = ({
-  countryChatId,
-  setCountryData,
-  subscriptionCountryRooms,
-  setSubscriptionCountryRooms,
+  chatId,
+  setChatData,
+  subscriptionRooms,
+  setSubscriptionRooms,
   isSubscribed,
   setIsSubscribed,
   setIsShowJoinBtn,
@@ -24,8 +24,8 @@ const SearchBar = ({
   return (
     <SearchBarStyled>
       <SearchInput
-        countryChatId={countryChatId}
-        setCountryData={setCountryData}
+        chatId={chatId}
+        setChatData={setChatData}
         isSubscribed={isSubscribed}
         setIsSubscribed={setIsSubscribed}
         setIsShowJoinBtn={setIsShowJoinBtn}
@@ -34,12 +34,12 @@ const SearchBar = ({
       <div>
         <Outlet
           context={{
-            countryChatId,
-            setCountryData,
-            subscriptionCountryRooms,
-            setSubscriptionCountryRooms,
+            setChatData,
+            subscriptionRooms,
+            setSubscriptionRooms,
             isSubscribed,
             setIsSubscribed,
+            setIsShowJoinBtn,
           }}
         />
       </div>

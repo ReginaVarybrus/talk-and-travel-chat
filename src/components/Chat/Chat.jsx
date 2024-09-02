@@ -16,45 +16,48 @@ import {
 } from './ChatStyled';
 
 const Chat = ({
-  countryName,
+  chatName,
   participantsAmount,
-  countryChatId,
-  groupMessages,
-  country,
-  setCountryData,
-  setSubscriptionCountryRooms,
+  chatId,
+  messages,
+  chatData,
+  setChatData,
+  setSubscriptionRooms,
   isSubscribed,
   isShowJoinBtn,
   setIsShowJoinBtn,
+  isPrivateChat,
 }) => {
   const userId = useSelector(getUser)?.id;
   const { subscribeToGroupMessages, subscribeToUserErrors } = useWebSocket();
 
   useEffect(() => {
-    if (isSubscribed) {
-      subscribeToGroupMessages(
-        ULRs.subscriptionToGroupMessages(countryChatId),
-        setCountryData
-      );
+    if (isSubscribed && chatId) {
+      if (!isPrivateChat) {
+        subscribeToGroupMessages(
+          ULRs.subscriptionToGroupMessages(chatId),
+          setChatData
+        );
+      }
 
-      subscribeToUserErrors(
-        ULRs.subscriptionToUserErrors(userId),
-        setCountryData
-      );
+      subscribeToUserErrors(ULRs.subscriptionToUserErrors(userId), setChatData);
     }
-  }, [countryChatId]);
+  }, [chatId, isSubscribed, isPrivateChat]);
 
   return (
     <ChatStyled>
-      {!countryName && <ChatFirstLoading />}
+      {!chatName && !isPrivateChat && <ChatFirstLoading />}
 
       <ChatHeader
-        countryName={countryName}
+        chatName={chatName}
         participantsAmount={participantsAmount}
+        chatId={chatId}
+        setChatData={setChatData}
+        isSubscribed={isSubscribed}
       />
       <MessageBlock>
-        {groupMessages?.length ? (
-          <MessageList groupMessages={groupMessages} />
+        {messages?.length ? (
+          <MessageList messages={messages} />
         ) : (
           <NoMassegesNotification>
             <Logo src={logo} alt="logo" width="200" height="160" />
@@ -63,11 +66,11 @@ const Chat = ({
         )}
       </MessageBlock>
       <MessageBar
-        countryChatId={countryChatId}
-        country={country}
-        setCountryData={setCountryData}
-        setSubscriptionCountryRooms={setSubscriptionCountryRooms}
-        isShowJoinBtn={isShowJoinBtn}
+        chatId={chatId}
+        chatData={chatData}
+        setChatData={setChatData}
+        setSubscriptionRooms={setSubscriptionRooms}
+        isShowJoinBtn={isShowJoinBtn && !isPrivateChat}
         setIsShowJoinBtn={setIsShowJoinBtn}
       />
     </ChatStyled>
