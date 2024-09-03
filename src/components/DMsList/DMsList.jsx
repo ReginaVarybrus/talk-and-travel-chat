@@ -1,11 +1,11 @@
 import SimpleBar from 'simplebar-react';
 import { useSelector } from 'react-redux';
-import { useFetch } from '@/hooks/useFetch';
 import { useEffect, useState } from 'react';
 import { useOutletContext } from 'react-router-dom';
 
 import ULRs from '@/redux-store/constants';
 import { getUser } from '@/redux-store/selectors';
+import { useFetch } from '@/hooks/useFetch';
 import avatarImage from '@/images/Avatar.png';
 import { Item, Avatar, ChatName, MessageDay } from './DMsListStyled';
 import { ListStyled, Text, ListItems } from '../RoomsList/RoomsListStyled.js';
@@ -13,29 +13,43 @@ import 'simplebar-react/dist/simplebar.min.css';
 
 const DMsList = () => {
   const [selectedChat, setSelectedChat] = useState(null);
-  const [chatMessages, setChatMessages] = useState([]);
-
   const userId = useSelector(getUser)?.id;
 
-  // Загружаем список чатов пользователя
+  const { setChatData } = useOutletContext();
+  // console.log('selectedChat', selectedChat);
+  // Получаем список чатов пользователя
   const { responseData: dataUserChats } = useFetch(
     ULRs.getPrivateChats(userId, '')
   );
 
   // Загружаем сообщения для выбранного чата
   const { responseData: fetchedMessages } = useFetch(
-    selectedChat ? ULRs.getChatsMessages(selectedChat, '') : null
+    selectedChat ? ULRs.getChatsMessages(selectedChat.chat.id, '') : null
   );
 
-  // Когда выбран чат, загружаем его сообщения
   useEffect(() => {
     if (fetchedMessages && selectedChat) {
-      setChatMessages(fetchedMessages.content);
+      const messageWithType = fetchedMessages.content.map(message => ({
+        ...message,
+        type: 'TEXT',
+      }));
+      setChatData({
+        id: selectedChat.chat.id,
+        name: selectedChat.companion.userName,
+        messages: messageWithType,
+      });
     }
-  }, [fetchedMessages, selectedChat]);
+  }, [fetchedMessages, selectedChat, setChatData]);
+
+  // console.log('fetchedMessages', fetchedMessages);
 
   const handleOpenChat = chatId => {
-    setSelectedChat(chatId);
+    const selectedChatData = dataUserChats.find(
+      chat => chat.chat.id === chatId
+    );
+    if (selectedChatData) {
+      setSelectedChat(selectedChatData);
+    }
   };
 
   return (

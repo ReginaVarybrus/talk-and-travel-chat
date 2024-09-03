@@ -54,16 +54,18 @@ export const router = createBrowserRouter([
       {
         path: routesPath.CHAT,
         element: (
+          // <ChatTypeProvider chatType="group">
           <PrivateRoute
             component={importComponent.CHAT}
             redirectTo={routesPath.LOGIN}
           />
+          // </ChatTypeProvider>
         ),
         children: [
           {
             path: routesPath.ROOMS,
             element: (
-              <ChatTypeProvider chatType="rooms">
+              <ChatTypeProvider chatType="group">
                 <PrivateRoute
                   component={importComponent.ROOMS}
                   redirectTo={routesPath.LOGIN}

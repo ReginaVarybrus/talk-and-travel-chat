@@ -9,7 +9,7 @@ const MessageList = ({ messages }) => {
   };
 
   useEffect(scrollToBottom, [messages]);
-
+  // console.log('messages', messages);
   return (
     <MessageListStyled>
       {messages &&

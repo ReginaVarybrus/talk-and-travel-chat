@@ -111,7 +111,7 @@ const SearchInput = ({
               <>
                 {filterCountries.map(country => (
                   <Item
-                    key={country.id}
+                    key={country.name}
                     onClick={() => handleCountryClick(country)}
                   >
                     <Flag

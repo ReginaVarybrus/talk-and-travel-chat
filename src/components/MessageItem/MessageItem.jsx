@@ -21,7 +21,7 @@ import {
 const MessageItem = ({
   content,
   userId,
-  userName,
+  // userName,
   date,
   type,
   isShownAvatar,
@@ -30,7 +30,7 @@ const MessageItem = ({
   const [userInfo, setUserInfo] = useState({});
   const currentUserId = useSelector(getUser)?.id;
   const time = timeStampConverter(date);
-  const firstLetterOfName = userName.substr(0, 1).toUpperCase();
+  // const firstLetterOfName = userName.substr(0, 1).toUpperCase();
   const isCurrentUser = userId === currentUserId;
 
   const messageTypeText = type === MESSAGE_TYPES.TEXT;
@@ -54,7 +54,7 @@ const MessageItem = ({
     <MessageItemStyled $isShownAvatar={isShownAvatar}>
       {messageTypeText && userId && isShownAvatar && (
         <LetterAvatarStyled onClick={handleOpen}>
-          {firstLetterOfName}
+          {/* {firstLetterOfName} */}
         </LetterAvatarStyled>
       )}
       {messageTypeText && (
@@ -83,7 +83,7 @@ const MessageItem = ({
 MessageItem.propTypes = {
   content: PropTypes.string,
   userId: PropTypes.number,
-  userName: PropTypes.string,
+  // userName: PropTypes.string,
   date: PropTypes.string,
   type: PropTypes.string,
   isShownAvatar: PropTypes.bool,
