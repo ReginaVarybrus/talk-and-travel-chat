@@ -1,5 +1,7 @@
-import { useEffect } from 'react';
+/* eslint-disable react/forbid-prop-types */
+import { useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
+import PropTypes from 'prop-types';
 import { getUser } from '@/redux-store/selectors.js';
 import { useWebSocket } from '@/hooks/useWebSocket.js';
 import ULRs from '@/redux-store/constants';
@@ -27,6 +29,8 @@ const Chat = ({
   isShowJoinBtn,
   setIsShowJoinBtn,
 }) => {
+  const [isUserTyping, setIsUserTyping] = useState(false);
+  const [userNameisTyping, setUserNameisTyping] = useState('');
   const userId = useSelector(getUser)?.id;
   const { subscribeToGroupMessages, subscribeToUserErrors } = useWebSocket();
 
@@ -51,10 +55,16 @@ const Chat = ({
       <ChatHeader
         countryName={countryName}
         participantsAmount={participantsAmount}
+        isUserTyping={isUserTyping}
+        userNameisTyping={userNameisTyping}
       />
       <MessageBlock>
         {groupMessages?.length ? (
-          <MessageList groupMessages={groupMessages} />
+          <MessageList
+            groupMessages={groupMessages}
+            setIsUserTyping={setIsUserTyping}
+            setUserNameisTyping={setUserNameisTyping}
+          />
         ) : (
           <NoMassegesNotification>
             <Logo src={logo} alt="logo" width="200" height="160" />
@@ -73,4 +83,18 @@ const Chat = ({
     </ChatStyled>
   );
 };
+
+ChatHeader.propTypes = {
+  countryName: PropTypes.string,
+  participantsAmount: PropTypes.number,
+  countryChatId: PropTypes.bool,
+  groupMessages: PropTypes.string,
+  country: PropTypes.object,
+  setCountryData: PropTypes.func,
+  setSubscriptionCountryRooms: PropTypes.func,
+  isSubscribed: PropTypes.bool,
+  isShowJoinBtn: PropTypes.bool,
+  setIsShowJoinBtn: PropTypes.func,
+};
+
 export default Chat;
