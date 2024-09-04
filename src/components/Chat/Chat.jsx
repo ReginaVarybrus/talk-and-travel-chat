@@ -75,10 +75,11 @@ const Chat = ({
       <MessageBar
         countryChatId={countryChatId}
         country={country}
-        setCountryData={setCountryData}
         setSubscriptionCountryRooms={setSubscriptionCountryRooms}
         isShowJoinBtn={isShowJoinBtn}
         setIsShowJoinBtn={setIsShowJoinBtn}
+        isUserTyping={isUserTyping}
+        setIsUserTyping={setIsUserTyping}
       />
     </ChatStyled>
   );

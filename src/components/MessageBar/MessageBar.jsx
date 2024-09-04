@@ -1,7 +1,6 @@
 /* eslint-disable react/forbid-prop-types */
 import { useState, useRef } from 'react';
 import { useSelector } from 'react-redux';
-import debounce from 'lodash/debounce';
 import PropTypes from 'prop-types';
 import ULRs from '@/redux-store/constants';
 import { getUser } from '@/redux-store/selectors.js';
@@ -25,6 +24,8 @@ const MessageBar = ({
   setSubscriptionCountryRooms,
   isShowJoinBtn,
   setIsShowJoinBtn,
+  isUserTyping,
+  setIsUserTyping,
 }) => {
   const [message, setMessage] = useState('');
   const typingTimeoutRef = useRef(null);
@@ -37,25 +38,29 @@ const MessageBar = ({
     chatId: countryChatId,
   };
 
-  const debouncedISUserTyping = debounce(() => {
-    sendEvent(dataEventToSend, ULRs.startTyping);
-  }, 300);
+  const handleStartTyping = () => {
+    if (!isUserTyping) {
+      setIsUserTyping(true);
+      sendEvent(dataEventToSend, ULRs.startTyping);
+    }
+  };
 
-  const sendUserIsStopTyping = () => {
+  const handleStopTyping = () => {
+    setIsUserTyping(false);
     sendEvent(dataEventToSend, ULRs.stopTyping);
   };
 
   const handleChange = ({ target: { value } }) => {
     setMessage(value);
 
-    debouncedISUserTyping();
+    handleStartTyping();
 
     if (typingTimeoutRef.current) {
       clearTimeout(typingTimeoutRef.current);
     }
 
     typingTimeoutRef.current = setTimeout(() => {
-      sendUserIsStopTyping();
+      handleStopTyping();
     }, 1500);
   };
 
@@ -75,7 +80,7 @@ const MessageBar = ({
 
     sendMessage(dataMessageToSend);
     setMessage('');
-    sendUserIsStopTyping();
+    handleStopTyping();
     clearTimeout(typingTimeoutRef.current);
   };
 
@@ -132,7 +137,9 @@ MessageBar.propTypes = {
   country: PropTypes.object,
   setSubscriptionCountryRooms: PropTypes.func,
   isShowJoinBtn: PropTypes.bool,
-  setIsShowJoinBtn: PropTypes.bool,
+  setIsShowJoinBtn: PropTypes.func,
+  isUserTyping: PropTypes.bool,
+  setIsUserTyping: PropTypes.func,
 };
 
 export default MessageBar;
