@@ -18,13 +18,14 @@ const RoomsList = () => {
   const { responseData: dataMainCountryChat } = useFetch(
     selectedCountry ? ULRs.getMainCountryChatByName(selectedCountry, '') : null
   );
+
   const {
     setChatData,
     setIsSubscribed,
     subscriptionRooms,
     setSubscriptionRooms,
   } = useOutletContext();
-  // console.log('dataMainCountryChat', dataMainCountryChat);
+
   useEffect(() => {
     if (dataUserCountries && userId) {
       setSubscriptionRooms(dataUserCountries);

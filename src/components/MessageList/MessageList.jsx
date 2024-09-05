@@ -7,9 +7,7 @@ const MessageList = ({ messages }) => {
   const scrollToBottom = () => {
     messagesEndRef.current.scrollIntoView({ behavior: 'smooth' });
   };
-
   useEffect(scrollToBottom, [messages]);
-  console.log('messages', messages);
   return (
     <MessageListStyled>
       {messages &&

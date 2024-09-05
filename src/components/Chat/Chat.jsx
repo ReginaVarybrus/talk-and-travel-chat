@@ -22,25 +22,36 @@ const Chat = ({
   isSubscribed,
   isShowJoinBtn,
   setIsShowJoinBtn,
-  isPrivateChat,
+  selectedCompanion,
+  setSelectedCompanion,
 }) => {
   const userId = useSelector(getUser)?.id;
-  const { subscribeToGroupMessages, subscribeToUserErrors } = useWebSocket();
-  console.log('chatData', chatData);
-  const { id, name, messages, usersCount } = chatData;
+  const { id, name, messages, usersCount, chatType } = chatData;
+  const isPrivateChat = chatType === 'PRIVATE';
+
+  const {
+    subscribeToMessages,
+    subscribeToUserErrors,
+    unsubscribeFromMessages,
+  } = useWebSocket();
 
   useEffect(() => {
     if (isSubscribed && id) {
-      if (!isPrivateChat) {
-        subscribeToGroupMessages(
-          ULRs.subscriptionToGroupMessages(id),
+      subscribeToMessages(ULRs.subscriptionToMessages(id), setChatData);
+      if (!isPrivateChat && selectedCompanion) {
+        setSelectedCompanion(null);
+      }
+      if (userId) {
+        subscribeToUserErrors(
+          ULRs.subscriptionToUserErrors(userId),
           setChatData
         );
       }
-
-      subscribeToUserErrors(ULRs.subscriptionToUserErrors(userId), setChatData);
+      return () => {
+        unsubscribeFromMessages();
+      };
     }
-  }, [id, isSubscribed, isPrivateChat]);
+  }, [id, isSubscribed, setChatData]);
 
   return (
     <ChatStyled>
@@ -49,9 +60,8 @@ const Chat = ({
       <ChatHeader
         chatName={name}
         participantsAmount={usersCount}
-        chatId={id}
-        setChatData={setChatData}
-        isSubscribed={isSubscribed}
+        selectedCompanion={selectedCompanion}
+        isPrivateChat={isPrivateChat}
       />
       <MessageBlock>
         {messages?.length ? (

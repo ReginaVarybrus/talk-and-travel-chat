@@ -34,7 +34,6 @@ const MessageItem = ({
     typeof userName === 'string' ? userName : userName?.userName || '';
   const firstLetterOfName = resolvedUserName.substr(0, 1).toUpperCase();
   const isCurrentUser = userId === currentUserId;
-  // console.log('userName:', userName);
   const messageTypeText = type === MESSAGE_TYPES.TEXT;
   const messageTypeJoin = type === MESSAGE_TYPES.JOIN;
 
@@ -85,7 +84,7 @@ const MessageItem = ({
 MessageItem.propTypes = {
   content: PropTypes.string,
   userId: PropTypes.number,
-  userName: PropTypes.oneOfType([PropTypes.string, PropTypes.object]),
+  userName: PropTypes.string,
   date: PropTypes.string,
   type: PropTypes.string,
   isShownAvatar: PropTypes.bool,

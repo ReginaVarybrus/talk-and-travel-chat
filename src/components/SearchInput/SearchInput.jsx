@@ -15,17 +15,13 @@ import {
   Text,
 } from './SearchInputStyled';
 
-const SearchInput = ({
-  chatId,
-  setChatData,
-  setIsSubscribed,
-  setIsShowJoinBtn,
-}) => {
+const SearchInput = ({ setChatData, setIsSubscribed, setIsShowJoinBtn }) => {
   const [selectedCountry, setSelectedCountry] = useState(null);
   const [searchedValue, setSearchedValue] = useState('');
   const [showItem, setShowItem] = useState(false);
   const autoCompleteRef = useRef(null);
   const userId = useSelector(getUser)?.id;
+
   const { responseData: dataUserCountries } = useFetch(
     ULRs.userCountries(userId, '')
   );
@@ -39,7 +35,7 @@ const SearchInput = ({
 
   useEffect(() => {
     if (dataMainCountryChat) {
-      setChatData(dataMainCountryChat, 'group');
+      setChatData(dataMainCountryChat);
       setIsSubscribed(true);
     }
   }, [dataMainCountryChat, setChatData]);

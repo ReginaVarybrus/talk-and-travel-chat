@@ -4,31 +4,45 @@ import { useStompClient } from 'react-stomp-hooks';
 
 export const useWebSocket = () => {
   const stompClient = useStompClient();
-  const isSubscribedToMessages = useRef(false);
+  const isSubscribedToMessages = useRef(null);
   const isSubscribedToErrors = useRef(false);
 
-  const subscribeToGroupMessages = (endpoint, setCountryData) => {
-    if (stompClient && stompClient.connected && isSubscribedToMessages) {
-      stompClient.subscribe(endpoint, response => {
+  const subscribeToMessages = (endpoint, setCountryData) => {
+    if (
+      stompClient &&
+      stompClient.connected &&
+      !isSubscribedToMessages.current
+    ) {
+      const subscription = stompClient.subscribe(endpoint, response => {
         const receivedMessage = JSON.parse(response.body);
 
-        setCountryData(prevCountryData => {
-          const updatedGroupMessages = [
-            ...(prevCountryData.messages || []),
+        setCountryData(prevChatData => {
+          const updatedMessages = [
+            ...(prevChatData.messages || []),
             receivedMessage,
           ];
           return {
-            ...prevCountryData,
-            messages: updatedGroupMessages,
+            ...prevChatData,
+            messages: updatedMessages,
           };
         });
       });
-      isSubscribedToMessages.current = true;
+      isSubscribedToMessages.current = subscription;
+      return subscription;
+    }
+  };
+
+  const unsubscribeFromMessages = () => {
+    const subscription = isSubscribedToMessages.current;
+
+    if (stompClient && stompClient.connected && subscription) {
+      subscription.unsubscribe();
+      isSubscribedToMessages.current = null;
     }
   };
 
   const subscribeToUserErrors = (endpoint, setCountryData) => {
-    if (stompClient && stompClient.connected && isSubscribedToErrors) {
+    if (stompClient && stompClient.connected && !isSubscribedToErrors.current) {
       stompClient.subscribe(endpoint, response => {
         const receivedError = JSON.parse(response.body);
 
@@ -82,11 +96,17 @@ export const useWebSocket = () => {
     if (stompClient && !stompClient.connected) {
       stompClient.activate();
     }
+    return () => {
+      if (stompClient && stompClient.connected) {
+        stompClient.deactivate();
+      }
+    };
   }, [stompClient]);
 
   return {
     stompClient,
-    subscribeToGroupMessages,
+    subscribeToMessages,
+    unsubscribeFromMessages,
     subscribeToUserErrors,
     sendMessage,
     sendEvent,

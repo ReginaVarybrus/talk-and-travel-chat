@@ -16,6 +16,8 @@ const SearchBar = ({
   isSubscribed,
   setIsSubscribed,
   setIsShowJoinBtn,
+  selectedCompanion,
+  setSelectedCompanion,
 }) => {
   const [openMap, setOpenMap] = useState(false);
   const handleOpen = () => setOpenMap(true);
@@ -40,6 +42,8 @@ const SearchBar = ({
             isSubscribed,
             setIsSubscribed,
             setIsShowJoinBtn,
+            selectedCompanion,
+            setSelectedCompanion,
           }}
         />
       </div>

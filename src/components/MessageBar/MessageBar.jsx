@@ -44,11 +44,17 @@ const MessageBar = ({
       chatId,
       senderId: userId,
     };
-
+    console.log('Preparing to send message:', dataMessageToSend);
     sendMessage(dataMessageToSend);
     setMessage('');
   };
 
+  const handleKeyDown = e => {
+    if (e.key === 'Enter' && !e.shiftKey && isMessageNotEmpty) {
+      e.preventDefault();
+      handleSubmit(e);
+    }
+  };
   const handleJoinClick = () => {
     const dataEventToSend = {
       authorId: userId,
@@ -83,7 +89,7 @@ const MessageBar = ({
             aria-label="empty textarea"
             placeholder="Type here"
             value={message}
-            onKeyUp={e => e.key === 'Enter' && handleSubmit(e)}
+            onKeyDown={handleKeyDown}
             onChange={handleChange}
             maxLength="1000"
           />

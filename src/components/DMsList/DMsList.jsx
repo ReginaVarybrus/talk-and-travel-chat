@@ -15,14 +15,13 @@ const DMsList = () => {
   const [selectedChat, setSelectedChat] = useState(null);
   const userId = useSelector(getUser)?.id;
 
-  const { setChatData } = useOutletContext();
-  // console.log('selectedChat', selectedChat);
+  const { setChatData, setIsSubscribed, setSelectedCompanion } =
+    useOutletContext();
 
   const { responseData: dataUserChats } = useFetch(
     ULRs.getPrivateChats(userId, '')
   );
 
-  // Загружаем сообщения для выбранного чата
   const { responseData: dataChat } = useFetch(
     selectedChat ? ULRs.getChatsMessages(selectedChat, '') : null
   );
@@ -30,11 +29,13 @@ const DMsList = () => {
   useEffect(() => {
     if (dataChat) {
       setChatData(dataChat);
+      setIsSubscribed(true);
     }
-  }, [setChatData, dataChat]);
+  }, [setChatData, dataChat, setIsSubscribed]);
 
-  const handleOpenChat = chatId => {
+  const handleOpenChat = (chatId, companion) => {
     setSelectedChat(chatId);
+    setSelectedCompanion(companion);
   };
 
   return (
@@ -43,7 +44,10 @@ const DMsList = () => {
         <ListItems>
           <SimpleBar style={{ maxHeight: 570 }}>
             {dataUserChats.map(({ chat, companion, lastReadMessageId }) => (
-              <Item key={chat.id} onClick={() => handleOpenChat(chat.id)}>
+              <Item
+                key={chat.id}
+                onClick={() => handleOpenChat(chat.id, companion)}
+              >
                 <Avatar>
                   <img src={avatarImage} alt="avatar" />
                 </Avatar>

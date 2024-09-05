@@ -1,7 +1,6 @@
 import { lazy } from 'react';
 import PrivateRoute from '@/routes/PrivateRoute';
 import { createBrowserRouter } from 'react-router-dom';
-import { ChatTypeProvider } from '@/providers/ChatTypeProvider';
 
 const ROOT = import.meta.env.BASE_URL;
 
@@ -54,34 +53,28 @@ export const router = createBrowserRouter([
       {
         path: routesPath.CHAT,
         element: (
-          // <ChatTypeProvider chatType="group">
           <PrivateRoute
             component={importComponent.CHAT}
             redirectTo={routesPath.LOGIN}
           />
-          // </ChatTypeProvider>
         ),
         children: [
           {
             path: routesPath.ROOMS,
             element: (
-              <ChatTypeProvider chatType="group">
-                <PrivateRoute
-                  component={importComponent.ROOMS}
-                  redirectTo={routesPath.LOGIN}
-                />
-              </ChatTypeProvider>
+              <PrivateRoute
+                component={importComponent.ROOMS}
+                redirectTo={routesPath.LOGIN}
+              />
             ),
           },
           {
             path: routesPath.DMS,
             element: (
-              <ChatTypeProvider chatType="dms">
-                <PrivateRoute
-                  component={importComponent.DMS}
-                  redirectTo={routesPath.LOGIN}
-                />
-              </ChatTypeProvider>
+              <PrivateRoute
+                component={importComponent.DMS}
+                redirectTo={routesPath.LOGIN}
+              />
             ),
           },
         ],
