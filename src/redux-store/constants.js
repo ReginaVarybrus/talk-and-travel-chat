@@ -16,8 +16,7 @@ const ULRs = {
   stopTyping: '/chat/events.stopTyping',
   getPrivateChats: userId => `chats/user/${userId}/private`,
   createPrivateChat: 'chats/private',
-  getChatsMessages: chatId =>
-    `chats/${chatId}/messages?page=0&size=5&sort=creationDate`,
+  getChatsMessages: chatId => `chats/${chatId}`,
 };
 
 export default ULRs;

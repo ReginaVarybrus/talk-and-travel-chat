@@ -23,7 +23,6 @@ const Chat = ({
   isShowJoinBtn,
   setIsShowJoinBtn,
   isPrivateChat,
-  chatType,
 }) => {
   const userId = useSelector(getUser)?.id;
   const { subscribeToGroupMessages, subscribeToUserErrors } = useWebSocket();

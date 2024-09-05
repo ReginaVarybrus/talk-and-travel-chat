@@ -33,7 +33,7 @@ const RoomsList = () => {
 
   useEffect(() => {
     if (dataMainCountryChat) {
-      setChatData(dataMainCountryChat); // Выбор группового чата
+      setChatData(dataMainCountryChat);
       setIsSubscribed(true);
     }
   }, [dataMainCountryChat, setChatData, setIsSubscribed]);

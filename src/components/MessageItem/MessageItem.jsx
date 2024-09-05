@@ -21,7 +21,7 @@ import {
 const MessageItem = ({
   content,
   userId,
-  // userName,
+  userName,
   date,
   type,
   isShownAvatar,
@@ -30,9 +30,11 @@ const MessageItem = ({
   const [userInfo, setUserInfo] = useState({});
   const currentUserId = useSelector(getUser)?.id;
   const time = timeStampConverter(date);
-  // const firstLetterOfName = userName.substr(0, 1).toUpperCase();
+  const resolvedUserName =
+    typeof userName === 'string' ? userName : userName?.userName || '';
+  const firstLetterOfName = resolvedUserName.substr(0, 1).toUpperCase();
   const isCurrentUser = userId === currentUserId;
-
+  // console.log('userName:', userName);
   const messageTypeText = type === MESSAGE_TYPES.TEXT;
   const messageTypeJoin = type === MESSAGE_TYPES.JOIN;
 
@@ -54,7 +56,7 @@ const MessageItem = ({
     <MessageItemStyled $isShownAvatar={isShownAvatar}>
       {messageTypeText && userId && isShownAvatar && (
         <LetterAvatarStyled onClick={handleOpen}>
-          {/* {firstLetterOfName} */}
+          {firstLetterOfName}
         </LetterAvatarStyled>
       )}
       {messageTypeText && (
@@ -83,7 +85,7 @@ const MessageItem = ({
 MessageItem.propTypes = {
   content: PropTypes.string,
   userId: PropTypes.number,
-  // userName: PropTypes.string,
+  userName: PropTypes.oneOfType([PropTypes.string, PropTypes.object]),
   date: PropTypes.string,
   type: PropTypes.string,
   isShownAvatar: PropTypes.bool,

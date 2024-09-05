@@ -54,7 +54,6 @@ const MessageBar = ({
       authorId: userId,
       chatId,
     };
-
     sendEvent(dataEventToSend, ULRs.joinToGroupChat);
     setIsShowJoinBtn(false);
     setSubscriptionRooms(prevRooms => [...prevRooms, chatData.country]);

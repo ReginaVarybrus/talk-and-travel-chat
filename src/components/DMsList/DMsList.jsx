@@ -17,39 +17,24 @@ const DMsList = () => {
 
   const { setChatData } = useOutletContext();
   // console.log('selectedChat', selectedChat);
-  // Получаем список чатов пользователя
+
   const { responseData: dataUserChats } = useFetch(
     ULRs.getPrivateChats(userId, '')
   );
 
   // Загружаем сообщения для выбранного чата
-  const { responseData: fetchedMessages } = useFetch(
-    selectedChat ? ULRs.getChatsMessages(selectedChat.chat.id, '') : null
+  const { responseData: dataChat } = useFetch(
+    selectedChat ? ULRs.getChatsMessages(selectedChat, '') : null
   );
 
   useEffect(() => {
-    if (fetchedMessages && selectedChat) {
-      const messageWithType = fetchedMessages.content.map(message => ({
-        ...message,
-        type: 'TEXT',
-      }));
-      setChatData({
-        id: selectedChat.chat.id,
-        name: selectedChat.companion.userName,
-        messages: messageWithType,
-      });
+    if (dataChat) {
+      setChatData(dataChat);
     }
-  }, [fetchedMessages, selectedChat, setChatData]);
-
-  // console.log('fetchedMessages', fetchedMessages);
+  }, [setChatData, dataChat]);
 
   const handleOpenChat = chatId => {
-    const selectedChatData = dataUserChats.find(
-      chat => chat.chat.id === chatId
-    );
-    if (selectedChatData) {
-      setSelectedChat(selectedChatData);
-    }
+    setSelectedChat(chatId);
   };
 
   return (
