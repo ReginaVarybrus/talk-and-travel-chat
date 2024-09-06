@@ -28,29 +28,46 @@ const UserInfoModal = ({
   userEmail = 'email@gmail.com',
   about,
   id,
+  dataUserChats,
 }) => {
   const userId = useSelector(getUser)?.id;
-
   const navigate = useNavigate();
 
   const firstLetterOfName = userName.substr(0, 1).toUpperCase();
 
+  const checkExistingPrivateChat = companionId => {
+    const isExist = dataUserChats?.find(
+      chat => chat.companion.id === companionId
+    );
+    return isExist ? isExist.chat.id : null;
+  };
+
   const handleCreatePrivateChat = async companionId => {
     try {
-      const response = await axiosClient.post(ULRs.createPrivateChat, {
-        userId,
-        companionId,
-      });
-      const privateChatId = response.data;
-      navigate('dms-chat', {
-        state: {
-          privateChatId,
-          companionObject: { id: companionId, userName, userEmail },
-        },
-      });
+      const existingChatId = checkExistingPrivateChat(companionId);
+
+      if (existingChatId) {
+        navigate('dms-chat', {
+          state: {
+            privateChatId: existingChatId,
+            companionObject: { id: companionId, userName, userEmail },
+          },
+        });
+      } else {
+        const response = await axiosClient.post(ULRs.createPrivateChat, {
+          userId,
+          companionId,
+        });
+        const privateChatId = response.data;
+        navigate('dms-chat', {
+          state: {
+            privateChatId,
+            companionObject: { id: companionId, userName, userEmail },
+          },
+        });
+      }
     } catch (error) {
       console.error(error);
-      return null;
     }
   };
   return (
