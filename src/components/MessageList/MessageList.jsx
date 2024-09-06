@@ -74,8 +74,8 @@ MessageList.propTypes = {
       }),
     })
   ),
-  setIsUserTyping: PropTypes.bool,
-  setUserNameisTyping: PropTypes.string,
+  setIsUserTyping: PropTypes.func,
+  setUserNameisTyping: PropTypes.func,
 };
 
 export default MessageList;

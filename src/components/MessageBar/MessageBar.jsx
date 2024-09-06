@@ -1,4 +1,3 @@
-/* eslint-disable react/forbid-prop-types */
 import { useState, useRef } from 'react';
 import { useSelector } from 'react-redux';
 import PropTypes from 'prop-types';
@@ -134,7 +133,38 @@ const MessageBar = ({
 
 MessageBar.propTypes = {
   countryChatId: PropTypes.number,
-  country: PropTypes.object,
+  country: PropTypes.shape({
+    chatType: PropTypes.oneOf(['GROUP', 'PRIVATE']),
+    country: PropTypes.shape({
+      flagCode: PropTypes.string,
+      name: PropTypes.string,
+    }),
+    creationDate: PropTypes.string,
+    description: PropTypes.string,
+    id: PropTypes.number,
+    messages: PropTypes.arrayOf(
+      PropTypes.shape({
+        chatId: PropTypes.number,
+        content: PropTypes.string,
+        creationDate: PropTypes.string,
+        id: PropTypes.number,
+        repliedMessageId: PropTypes.number,
+        type: PropTypes.oneOf([
+          'TEXT',
+          'JOIN',
+          'LEAVE',
+          'START_TYPING',
+          'STOP_TYPING',
+        ]),
+        user: PropTypes.shape({
+          id: PropTypes.number,
+          userName: PropTypes.string,
+        }),
+      })
+    ),
+    name: PropTypes.string,
+    usersCount: PropTypes.number,
+  }),
   setSubscriptionCountryRooms: PropTypes.func,
   isShowJoinBtn: PropTypes.bool,
   setIsShowJoinBtn: PropTypes.func,

@@ -1,34 +1,18 @@
 import { useState, useEffect } from 'react';
-import { useSelector } from 'react-redux';
 import { useOutletContext } from 'react-router-dom';
 import { useFetch } from '@/hooks/useFetch.js';
 import ULRs from '@/redux-store/constants';
-import { getUser } from '@/redux-store/selectors.js';
-import { ListStyled, Text, Item, ListItems } from './RoomsListStyled';
 import { Flag, ScrollBar } from '../SearchInput/SearchInputStyled.js';
+import { ListStyled, Text, Item, ListItems } from './RoomsListStyled';
 
 const RoomsList = () => {
   const [selectedCountry, setSelectedCountry] = useState(null);
-  const userId = useSelector(getUser)?.id;
-  const { responseData: dataUserCountries } = useFetch(
-    ULRs.userCountries(userId, '')
-  );
   const { responseData: dataMainCountryChat } = useFetch(
     selectedCountry ? ULRs.getMainCountryChatByName(selectedCountry, '') : null
   );
 
-  const {
-    setCountryData,
-    subscriptionCountryRooms,
-    setSubscriptionCountryRooms,
-    setIsSubscribed,
-  } = useOutletContext();
-
-  useEffect(() => {
-    if (dataUserCountries && userId) {
-      setSubscriptionCountryRooms(dataUserCountries);
-    }
-  }, [dataUserCountries, userId]);
+  const { setCountryData, subscriptionCountryRooms, setIsSubscribed } =
+    useOutletContext();
 
   useEffect(() => {
     if (dataMainCountryChat) {
@@ -48,7 +32,7 @@ const RoomsList = () => {
           <ScrollBar>
             {subscriptionCountryRooms.map(room => (
               <Item
-                key={room.id}
+                key={room.flagCode}
                 onClick={() => handleOpenCountryRoom(room.name)}
               >
                 <Flag
