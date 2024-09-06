@@ -1,4 +1,3 @@
-/* eslint-disable react/forbid-prop-types */
 import { useEffect, useRef } from 'react';
 import PropTypes from 'prop-types';
 import MessageItem from '@/components/MessageItem/MessageItem';
@@ -55,7 +54,26 @@ const MessageList = ({
 };
 
 MessageList.propTypes = {
-  groupMessages: PropTypes.array,
+  groupMessages: PropTypes.arrayOf(
+    PropTypes.shape({
+      chatId: PropTypes.number,
+      content: PropTypes.string,
+      creationDate: PropTypes.string,
+      id: PropTypes.number,
+      repliedMessageId: PropTypes.number,
+      type: PropTypes.oneOf([
+        'TEXT',
+        'JOIN',
+        'LEAVE',
+        'START_TYPING',
+        'STOP_TYPING',
+      ]),
+      user: PropTypes.shape({
+        id: PropTypes.number,
+        userName: PropTypes.string,
+      }),
+    })
+  ),
   setIsUserTyping: PropTypes.bool,
   setUserNameisTyping: PropTypes.string,
 };

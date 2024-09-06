@@ -32,10 +32,7 @@ const MessageItem = ({
   const firstLetterOfName = userName.substr(0, 1).toUpperCase();
   const isCurrentUser = userId === currentUserId;
 
-  if (
-    type === MESSAGE_TYPES.START_TYPING ||
-    type === MESSAGE_TYPES.STOP_TYPING
-  ) {
+  if ([MESSAGE_TYPES.START_TYPING, MESSAGE_TYPES.STOP_TYPING].includes(type)) {
     return null;
   }
 

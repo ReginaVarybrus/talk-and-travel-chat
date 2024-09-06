@@ -1,4 +1,3 @@
-/* eslint-disable react/forbid-prop-types */
 import PropTypes from 'prop-types';
 import { useSelector } from 'react-redux';
 import { getUser } from '@/redux-store/selectors.js';
@@ -17,11 +16,11 @@ const ChatHeader = ({
   return (
     <ChatHeaderStyled>
       <h5>{countryName || 'Country Name'}</h5>
-      {showUserIsTyping ? (
-        <p>{`${userNameisTyping} is typing...`}</p>
-      ) : (
-        <p>{`${participantsAmount || '0'} participants`}</p>
-      )}
+      <p>
+        {showUserIsTyping
+          ? `${userNameisTyping} is typing...`
+          : `${participantsAmount || '0'} participants`}
+      </p>
     </ChatHeaderStyled>
   );
 };
