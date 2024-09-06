@@ -47,14 +47,16 @@ const Chat = ({
   return (
     <ChatStyled>
       {!countryName && <ChatFirstLoading />}
+      {countryName && (
+        <ChatHeader
+          countryName={countryName}
+          participantsAmount={participantsAmount}
+          countryChatId={countryChatId}
+          setSubscriptionCountryRooms={setSubscriptionCountryRooms}
+          isSubscribed={isSubscribed}
+        />
+      )}
 
-      <ChatHeader
-        countryName={countryName}
-        participantsAmount={participantsAmount}
-        countryChatId={countryChatId}
-        setSubscriptionCountryRooms={setSubscriptionCountryRooms}
-        isSubscribed={isSubscribed}
-      />
       <MessageBlock>
         {groupMessages?.length ? (
           <MessageList groupMessages={groupMessages} />
