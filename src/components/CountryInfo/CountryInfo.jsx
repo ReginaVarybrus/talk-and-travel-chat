@@ -19,14 +19,14 @@ import {
   Item,
   Avatar,
   CloseBtn,
-  UserBoxStyled,
-  MessageBtn,
-  NameBoxStyled,
+  InfoBoxStyled,
   HeaderStyled,
   ExitBtn,
   ReportBtn,
   Subtitle,
   LetterAvatar,
+  UserContactInfo,
+  SendMessageBtn,
 } from './CountryInfoStyled.js';
 
 const CountryInfo = ({
@@ -74,7 +74,7 @@ const CountryInfo = ({
       closeAfterTransition
     >
       <BoxStyled>
-        <CloseBtn type="button" onClick={onClose}>
+        <CloseBtn onClick={onClose}>
           <IoCloseOutline />
         </CloseBtn>
         <HeaderStyled>
@@ -84,10 +84,10 @@ const CountryInfo = ({
             src={`https://flagcdn.com/w20/${countryData.properties.code}.png`}
             alt={`${countryData.properties.ADMIN} flag`}
           />
-          <NameBoxStyled>
+          <InfoBoxStyled>
             <h5>{countryName}</h5>
-            <p>{`${participantsAmount}`} members</p>
-          </NameBoxStyled>
+            <p>{participantsAmount} members</p>
+          </InfoBoxStyled>
         </HeaderStyled>
 
         {!hasParticipants ? (
@@ -99,20 +99,25 @@ const CountryInfo = ({
                 <Item key={user.id}>
                   <Avatar>
                     {user.avatar ? (
-                      <img src={user.avatar} alt={user.userName} />
+                      <img
+                        src={user.avatar}
+                        alt={user.userName}
+                        width="48"
+                        height="48"
+                      />
                     ) : (
                       <LetterAvatar>
                         {user.userName.charAt(0).toUpperCase()}
                       </LetterAvatar>
                     )}
                   </Avatar>
-                  <UserBoxStyled>
+                  <UserContactInfo>
                     <h5>{user.userName}</h5>
                     <p>{user.userEmail}</p>
-                  </UserBoxStyled>
-                  <MessageBtn type="button">
+                  </UserContactInfo>
+                  <SendMessageBtn>
                     <FaRegMessage />
-                  </MessageBtn>
+                  </SendMessageBtn>
                 </Item>
               ))}
             </ContactsList>
@@ -120,11 +125,11 @@ const CountryInfo = ({
         )}
 
         <ButtonsBoxStyled>
-          <ExitBtn type="button" onClick={handleLeaveGroup}>
+          <ExitBtn onClick={handleLeaveGroup}>
             <LuLogOut />
             Leave group
           </ExitBtn>
-          <ReportBtn type="button">
+          <ReportBtn>
             <HiOutlineExclamationCircle />
             Report
           </ReportBtn>

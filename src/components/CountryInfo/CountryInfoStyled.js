@@ -66,7 +66,7 @@ export const Flag = styled.img`
   }
 `;
 
-export const NameBoxStyled = styled.div`
+export const InfoBoxStyled = styled.div`
   display: flex;
   flex-direction: column;
   gap: 4px;
@@ -143,7 +143,7 @@ export const Item = styled.li`
     }
   }
 `;
-export const UserBoxStyled = styled.div`
+export const UserContactInfo = styled.div`
   display: flex;
   flex-direction: column;
   width: 209px;
@@ -170,7 +170,7 @@ export const UserBoxStyled = styled.div`
     }
   }
 `;
-export const MessageBtn = styled.button`
+export const SendMessageBtn = styled.button`
   opacity: 0;
   visibility: hidden;
   background: none;

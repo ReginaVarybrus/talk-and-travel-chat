@@ -3,8 +3,8 @@ import CountryInfo from '../CountryInfo/CountryInfo';
 import { ChatHeaderStyled } from './ChatHeaderStyled';
 
 const ChatHeader = ({
-  countryName,
-  participantsAmount,
+  countryName = 'Country Name',
+  participantsAmount = 0,
   countryChatId,
   setSubscriptionCountryRooms,
   isSubscribed,
@@ -17,8 +17,8 @@ const ChatHeader = ({
   return (
     <>
       <ChatHeaderStyled onClick={handleOpen}>
-        <h5>{countryName || 'Country Name'}</h5>
-        <p>{`${participantsAmount || '0'} participants`}</p>
+        <h5>{countryName}</h5>
+        <p>{`${participantsAmount} participants`}</p>
       </ChatHeaderStyled>
       <CountryInfo
         isOpen={openModal}
