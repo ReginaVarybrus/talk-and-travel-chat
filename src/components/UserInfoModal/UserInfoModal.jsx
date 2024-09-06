@@ -5,6 +5,7 @@ import PropTypes from 'prop-types';
 import ULRs from '@/redux-store/constants';
 import { axiosClient } from '@/services/api';
 import { useSelector } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
 import { getUser } from '@/redux-store/selectors';
 import {
   ModalWindowStyled,
@@ -30,16 +31,23 @@ const UserInfoModal = ({
 }) => {
   const userId = useSelector(getUser)?.id;
 
+  const navigate = useNavigate();
+
   const firstLetterOfName = userName.substr(0, 1).toUpperCase();
+
   const handleCreatePrivateChat = async companionId => {
     try {
       const response = await axiosClient.post(ULRs.createPrivateChat, {
         userId,
         companionId,
       });
-      const chatId = response.data;
-      console.log(`user: ${userId}, companion: ${companionId}`);
-      return console.log(`Chat created with ID: ${chatId}`);
+      const privateChatId = response.data;
+      navigate('dms-chat', {
+        state: {
+          privateChatId,
+          companionObject: { id: companionId, userName, userEmail },
+        },
+      });
     } catch (error) {
       console.error(error);
       return null;

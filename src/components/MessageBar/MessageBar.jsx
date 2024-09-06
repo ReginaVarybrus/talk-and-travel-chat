@@ -44,22 +44,17 @@ const MessageBar = ({
       chatId,
       senderId: userId,
     };
-    console.log('Preparing to send message:', dataMessageToSend);
+
     sendMessage(dataMessageToSend);
     setMessage('');
   };
 
-  const handleKeyDown = e => {
-    if (e.key === 'Enter' && !e.shiftKey && isMessageNotEmpty) {
-      e.preventDefault();
-      handleSubmit(e);
-    }
-  };
   const handleJoinClick = () => {
     const dataEventToSend = {
       authorId: userId,
       chatId,
     };
+
     sendEvent(dataEventToSend, ULRs.joinToGroupChat);
     setIsShowJoinBtn(false);
     setSubscriptionRooms(prevRooms => [...prevRooms, chatData.country]);
@@ -89,7 +84,7 @@ const MessageBar = ({
             aria-label="empty textarea"
             placeholder="Type here"
             value={message}
-            onKeyDown={handleKeyDown}
+            onKeyUp={e => e.key === 'Enter' && handleSubmit(e)}
             onChange={handleChange}
             maxLength="1000"
           />
