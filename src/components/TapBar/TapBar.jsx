@@ -1,18 +1,8 @@
 import { useState, useRef } from 'react';
-
+import { useNavigate, useLocation } from 'react-router-dom';
+import { routesPath } from '@/routes/routesConfig';
 import CssBaseline from '@mui/material/CssBaseline';
-// import BottomNavigation from '@mui/material/BottomNavigation';
-// import BottomNavigationAction from '@mui/material/BottomNavigationAction';
-// import RestoreIcon from '@mui/icons-material/Restore';
-// import FavoriteIcon from '@mui/icons-material/Favorite';
-// import ArchiveIcon from '@mui/icons-material/Archive';
 import Paper from '@mui/material/Paper';
-// import List from '@mui/material/List';
-// import ListItemButton from '@mui/material/ListItemButton';
-// import ListItemAvatar from '@mui/material/ListItemAvatar';
-// import ListItemText from '@mui/material/ListItemText';
-// import Avatar from '@mui/material/Avatar';
-// import { MdMoreHoriz } from 'react-icons/md';
 
 import { RoomsIcon, DMsIcon } from '../SideBar/SideBarStyled.js';
 import {
@@ -22,37 +12,28 @@ import {
   MoreIcon,
 } from './TapBarStyled.js';
 
-// function refreshMessages() {
-//   const getRandomInt = max => Math.floor(Math.random() * Math.floor(max));
-
-//   return Array.from(new Array(50)).map(
-//     () => messageExamples[getRandomInt(messageExamples.length)]
-//   );
-// }
-
 const TapBar = () => {
   const [value, setValue] = useState(0);
   const ref = useRef(null);
-  //   const [messages, setMessages] = useState(() => refreshMessages());
+  const navigate = useNavigate();
+  const location = useLocation();
+  const currentPage = location.pathname;
 
-  //   useEffect(() => {
-  //     ref.current.ownerDocument.body.scrollTop = 0;
-  //     setMessages(refreshMessages());
-  //   }, [value, setMessages]);
+  const handleProfileOpen = () => {
+    navigate(routesPath.ACCOUNT);
+  };
+
+  const handleRoomsOpen = () => {
+    navigate(routesPath.ROOMS);
+  };
+
+  const handleDMsOpen = () => {
+    navigate(routesPath.DMS);
+  };
 
   return (
     <TapBarStyled sx={{ pb: 7 }} ref={ref}>
       <CssBaseline />
-      {/* <List>
-        {messages.map(({ primary, secondary, person }, index) => (
-          <ListItemButton key={index + person}>
-            <ListItemAvatar>
-              <Avatar alt="Profile Picture" src={person} />
-            </ListItemAvatar>
-            <ListItemText primary={primary} secondary={secondary} />
-          </ListItemButton>
-        ))}
-      </List> */}
       <Paper
         sx={{ position: 'fixed', bottom: 0, left: 0, right: 0 }}
         elevation={3}
@@ -64,9 +45,27 @@ const TapBar = () => {
             setValue(newValue);
           }}
         >
-          <TapBarButton label="DMs" icon={<DMsIcon />} />
-          <TapBarButton label="Rooms" icon={<RoomsIcon />} />
-          <TapBarButton label="More" icon={<MoreIcon />} />
+          <TapBarButton
+            label="DMs"
+            icon={<DMsIcon />}
+            sx={{ flexDirection: 'row' }}
+            onClick={handleDMsOpen}
+            $isActive={currentPage === routesPath.DMS}
+          />
+          <TapBarButton
+            label="Rooms"
+            icon={<RoomsIcon />}
+            sx={{ flexDirection: 'row' }}
+            onClick={handleRoomsOpen}
+            $isActive={currentPage === routesPath.ROOMS}
+          />
+          <TapBarButton
+            label="More"
+            icon={<MoreIcon />}
+            sx={{ flexDirection: 'row' }}
+            onClick={handleProfileOpen}
+            $isActive={currentPage === routesPath.ACCOUNT}
+          />
         </TapBarButtonsWrapper>
       </Paper>
     </TapBarStyled>

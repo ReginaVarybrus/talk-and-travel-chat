@@ -87,4 +87,12 @@ svg{
   margin: 0;
   padding: 0;
 }
+
+// TapBar custom styles
+
+.css-gy4i07-MuiPaper-root {
+  height: 100px;
+  align-content: center;
+}
+  
 `;

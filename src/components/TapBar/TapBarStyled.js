@@ -12,16 +12,15 @@ export const TapBarStyled = styled(Box)`
   }
 `;
 
-export const TapBarButtonsWrapper = styled(BottomNavigation)`
-  heigth: 100px;
-`;
+export const TapBarButtonsWrapper = styled(BottomNavigation)``;
 
 export const TapBarButton = styled(BottomNavigationAction)`
-  heigth: 100px;
+  flex-direction: row;
 `;
 
 export const MoreIcon = styled(MdMoreHoriz)`
-  width: 48px;
-  height: 36px;
+  width: 24px;
+  height: 24px;
+  margin-right: 12px;
   stroke: var(--color-grey-9);
 `;

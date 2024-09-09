@@ -3,9 +3,10 @@ import { device } from '@/constants/mediaQueries';
 import { LuLogOut, LuMessagesSquare } from 'react-icons/lu';
 import { TbUser, TbUsers } from 'react-icons/tb';
 
-const iconProperties = (width = '24px', height = '48px') => `
+const iconProperties = (width = '24px', height = '48px', marginRight = '0') => `
   width: ${width};
   height: ${height};
+  margin-right: ${marginRight};
   stroke: var(--color-grey-9);
 `;
 
@@ -39,14 +40,14 @@ export const UserIcon = styled(TbUser)`
 `;
 
 export const RoomsIcon = styled(TbUsers)`
-  ${iconProperties('36px', '24px')};
+  ${iconProperties('24px', '24px', '12px')};
   @media ${device.tablet} {
     ${iconProperties()};
   }
 `;
 
 export const DMsIcon = styled(LuMessagesSquare)`
-  ${iconProperties('36px', '24px')};
+  ${iconProperties('24px', '24px', '12px')};
   @media ${device.tablet} {
     ${iconProperties()};
   }

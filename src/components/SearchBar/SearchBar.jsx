@@ -44,6 +44,7 @@ const SearchBar = ({
           }}
         />
       </div>
+      <TapBar />
 
       <Modal
         aria-labelledby="transition-modal-title"
