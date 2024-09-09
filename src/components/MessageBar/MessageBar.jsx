@@ -1,10 +1,7 @@
 import { useState } from 'react';
-import { useSelector } from 'react-redux';
 import ULRs from '@/redux-store/constants';
-import { getUser } from '@/redux-store/selectors.js';
 import { useWebSocket } from '@/hooks/useWebSocket.js';
 import BasicButton from '@/components/Buttons/BasicButton/BasicButton';
-// eslint-disable-next-line import/no-extraneous-dependencies
 import {
   MessageBarStyled,
   ButtonJoinWrapper,
@@ -25,7 +22,6 @@ const MessageBar = ({
   setIsShowJoinBtn,
 }) => {
   const [message, setMessage] = useState('');
-  const userId = useSelector(getUser)?.id;
   const { stompClient, sendMessage, sendEvent } = useWebSocket();
   const isMessageNotEmpty = Boolean(message?.trim().length);
 
@@ -42,7 +38,7 @@ const MessageBar = ({
     const dataMessageToSend = {
       content: message,
       chatId: countryChatId,
-      senderId: userId,
+      repliedMessageId: null,
     };
 
     sendMessage(dataMessageToSend);
@@ -51,7 +47,6 @@ const MessageBar = ({
 
   const handleJoinClick = () => {
     const dataEventToSend = {
-      authorId: userId,
       chatId: countryChatId,
     };
 
