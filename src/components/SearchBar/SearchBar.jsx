@@ -9,17 +9,41 @@ import SearchInput from '../SearchInput/SearchInput';
 import ChatMap from '../ChatMap/ChatMap';
 import TapBar from '../TapBar/TapBar';
 
-const SearchBar = () => {
+const SearchBar = ({
+  countryChatId,
+  setCountryData,
+  subscriptionCountryRooms,
+  setSubscriptionCountryRooms,
+  isSubscribed,
+  setIsSubscribed,
+  setIsShowJoinBtn,
+}) => {
   const [openMap, setOpenMap] = useState(false);
   const handleOpen = () => setOpenMap(true);
   const handleClose = () => setOpenMap(false);
 
   return (
     <SearchBarStyled>
-      <SearchInput />
+      <SearchInput
+        countryChatId={countryChatId}
+        setCountryData={setCountryData}
+        isSubscribed={isSubscribed}
+        setIsSubscribed={setIsSubscribed}
+        setIsShowJoinBtn={setIsShowJoinBtn}
+      />
       <ButtonMapOpen onClick={handleOpen}>Search by map</ButtonMapOpen>
-      <Outlet />
-      <TapBar />
+      <div>
+        <Outlet
+          context={{
+            countryChatId,
+            setCountryData,
+            subscriptionCountryRooms,
+            setSubscriptionCountryRooms,
+            isSubscribed,
+            setIsSubscribed,
+          }}
+        />
+      </div>
 
       <Modal
         aria-labelledby="transition-modal-title"

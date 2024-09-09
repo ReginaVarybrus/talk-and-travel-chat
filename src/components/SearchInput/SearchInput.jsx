@@ -1,31 +1,43 @@
 import { useState, useEffect, useRef } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { sendDataCountryToBackend } from '@/redux-store/AuthOperations/AuthOperations.js';
-import { getUser } from '@/redux-store/selectors';
-
+import { useSelector } from 'react-redux';
+import { getUser } from '@/redux-store/selectors.js';
+import { useFetch } from '@/hooks/useFetch.js';
+import ULRs from '@/redux-store/constants';
 import mapData from '@/data/countries.json';
 import {
   AutocompleteInputStyled,
   AutocompleteInput,
   IconSearch,
-  ListWrapper,
-  ListItems,
+  ListItemsStyled,
   Item,
   Flag,
   ScrollBar,
   Text,
 } from './SearchInputStyled';
 
-const SearchInput = () => {
+const SearchInput = ({ setCountryData, setIsSubscribed, setIsShowJoinBtn }) => {
+  const [selectedCountry, setSelectedCountry] = useState(null);
   const [searchedValue, setSearchedValue] = useState('');
   const [showItem, setShowItem] = useState(false);
   const autoCompleteRef = useRef(null);
-  const dispatch = useDispatch();
   const userId = useSelector(getUser)?.id;
+  const { responseData: dataUserCountries } = useFetch(
+    ULRs.userCountries(userId, '')
+  );
+  const { responseData: dataMainCountryChat } = useFetch(
+    selectedCountry ? ULRs.getMainCountryChatByName(selectedCountry, '') : null
+  );
 
   const filterCountries = mapData.features.filter(name =>
     name.properties.ADMIN.toLowerCase().includes(searchedValue.toLowerCase())
   );
+
+  useEffect(() => {
+    if (dataMainCountryChat) {
+      setCountryData(dataMainCountryChat);
+      setIsSubscribed(true);
+    }
+  }, [dataMainCountryChat]);
 
   const handleChange = event => {
     const { value } = event.target;
@@ -40,14 +52,21 @@ const SearchInput = () => {
   const handleClick = () => setShowItem(!showItem);
 
   const handleCountryClick = country => {
-    const countryData = {
-      name: country.properties.ADMIN,
-      flagCode: country.properties.code,
-    };
+    const countryName = country.properties.ADMIN;
+    setSelectedCountry(countryName);
 
-    setSearchedValue(country.properties.ADMIN);
+    const nameOfCountry = dataUserCountries.find(
+      item => item.name === countryName
+    );
+    if (nameOfCountry) {
+      setIsShowJoinBtn(false);
+    } else {
+      setIsShowJoinBtn(true);
+    }
+
+    setSearchedValue(countryName);
     setShowItem(false);
-    dispatch(sendDataCountryToBackend({ userId, countryDto: countryData }));
+    setSearchedValue('');
   };
 
   useEffect(() => {
@@ -76,36 +95,34 @@ const SearchInput = () => {
       />
       <IconSearch />
       {showItem && (
-        <ListWrapper>
-          <ListItems>
-            <ScrollBar>
-              {!filterCountries.length ? (
-                <Text>
-                  Sorry, the room for this country does not exist, try creating
-                  one yourself
-                </Text>
-              ) : (
-                <>
-                  {filterCountries.map((country, index) => (
-                    <Item
-                      key={index}
-                      onClick={() => handleCountryClick(country)}
-                    >
-                      <Flag
-                        loading="lazy"
-                        width="32"
-                        srcSet={`https://flagcdn.com/w40/${country.properties.code}.png 2x`}
-                        src={`https://flagcdn.com/w20/${country.properties.code}.png`}
-                        alt={`${country.properties.ADMIN} flag`}
-                      />
-                      <p>{country.properties.ADMIN}</p>
-                    </Item>
-                  ))}
-                </>
-              )}
-            </ScrollBar>
-          </ListItems>
-        </ListWrapper>
+        <ListItemsStyled>
+          <ScrollBar>
+            {!filterCountries.length ? (
+              <Text>
+                Sorry, the room for this country does not exist, try creating
+                one yourself
+              </Text>
+            ) : (
+              <>
+                {filterCountries.map(country => (
+                  <Item
+                    key={country.id}
+                    onClick={() => handleCountryClick(country)}
+                  >
+                    <Flag
+                      loading="lazy"
+                      width="32"
+                      srcSet={`https://flagcdn.com/w40/${country.properties.code}.png 2x`}
+                      src={`https://flagcdn.com/w20/${country.properties.code}.png`}
+                      alt={`${country.properties.ADMIN} flag`}
+                    />
+                    <p>{country.properties.ADMIN}</p>
+                  </Item>
+                ))}
+              </>
+            )}
+          </ScrollBar>
+        </ListItemsStyled>
       )}
     </AutocompleteInputStyled>
   );

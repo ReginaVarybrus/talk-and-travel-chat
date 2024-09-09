@@ -5,9 +5,18 @@ import {
   ErrorStyled,
   SuccessStyled,
   PasswordReapetLable,
-} from '@/components/InputField/InputField.styled';
+  IconContainer,
+} from '@/components/InputField/InputFieldStyled';
+import { useState } from 'react';
+import { TbEye, TbEyeClosed } from 'react-icons/tb';
 
 const InputField = ({ props, formik }) => {
+  const [showPassword, setShowPassword] = useState(false);
+
+  const togglePassword = () => {
+    setShowPassword(!showPassword);
+  };
+
   const renderValidationMessage = () => {
     const label =
       props.general === 'password'
@@ -35,14 +44,20 @@ const InputField = ({ props, formik }) => {
         autoComplete="off"
         id={props.general}
         name={props.general}
-        type={props.type}
+        type={
+          showPassword && props.general === 'password' ? 'text' : props.type
+        }
         onChange={formik.handleChange}
         value={formik.values[props.general]}
         placeholder={props.placeholder}
         $isErrorColor={formik.errors[props.general]}
         $isSuccessColor={formik.touched[props.general]}
       />
-
+      {props.general === 'password' && (
+        <IconContainer onClick={togglePassword}>
+          {showPassword ? <TbEyeClosed /> : <TbEye />}
+        </IconContainer>
+      )}
       {renderValidationMessage()}
     </InputFieldStyled>
   );

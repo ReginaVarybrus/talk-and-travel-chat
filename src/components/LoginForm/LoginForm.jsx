@@ -3,7 +3,6 @@ import { useNavigate } from 'react-router-dom';
 import { logIn } from '@/redux-store/AuthOperations/AuthOperations';
 import { useDispatch } from 'react-redux';
 import { routesPath } from '@/routes/routesConfig';
-
 import {
   formFields,
   schema,
@@ -42,8 +41,8 @@ const LoginForm = () => {
     initialValues,
     validationSchema: schema,
     validateOnChange: false,
-    onSubmit: (values, { resetForm }) => {
-      dispatch(logIn(values));
+    onSubmit: async (values, { resetForm }) => {
+      await dispatch(logIn(values));
       navigate(routesPath.ROOMS);
       resetForm();
     },
