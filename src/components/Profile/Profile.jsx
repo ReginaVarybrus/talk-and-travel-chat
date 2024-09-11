@@ -108,7 +108,7 @@ const Profile = () => {
                 />
                 <BasicButton
                   sx={{ marginRight: '16px' }}
-                  onClick={formik}
+                  handleClick={formik.handleSubmit}
                   type="submit"
                   text="Update"
                   variant="contained"
