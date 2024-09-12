@@ -7,7 +7,7 @@ export const useWebSocket = () => {
   const isSubscribedToMessages = useRef(false);
   const isSubscribedToErrors = useRef(false);
 
-  const subscribeToGroupMessages = (endpoint, setCountryData) => {
+  const subscribeToMessages = (endpoint, setCountryData) => {
     if (stompClient && stompClient.connected && isSubscribedToMessages) {
       stompClient.subscribe(endpoint, response => {
         const receivedMessage = JSON.parse(response.body);
@@ -86,7 +86,7 @@ export const useWebSocket = () => {
 
   return {
     stompClient,
-    subscribeToGroupMessages,
+    subscribeToMessages,
     subscribeToUserErrors,
     sendMessage,
     sendEvent,

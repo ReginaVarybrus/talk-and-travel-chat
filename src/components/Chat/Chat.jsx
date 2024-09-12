@@ -28,12 +28,12 @@ const Chat = ({
   setIsShowJoinBtn,
 }) => {
   const userId = useSelector(getUser)?.id;
-  const { subscribeToGroupMessages, subscribeToUserErrors } = useWebSocket();
+  const { subscribeToMessages, subscribeToUserErrors } = useWebSocket();
 
   useEffect(() => {
     if (isSubscribed) {
-      subscribeToGroupMessages(
-        ULRs.subscriptionToGroupMessages(countryChatId),
+      subscribeToMessages(
+        ULRs.subscriptionToMessages(countryChatId),
         setCountryData
       );
 

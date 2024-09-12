@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
-import { useSelector } from 'react-redux';
-import { getUser } from '@/redux-store/selectors.js';
+// import { useSelector } from 'react-redux';
+// import { getUser } from '@/redux-store/selectors.js';
 import { useFetch } from '@/hooks/useFetch.js';
 import ULRs from '@/redux-store/constants';
 import mapData from '@/data/countries.json';
@@ -20,10 +20,8 @@ const SearchInput = ({ setCountryData, setIsSubscribed, setIsShowJoinBtn }) => {
   const [searchedValue, setSearchedValue] = useState('');
   const [showItem, setShowItem] = useState(false);
   const autoCompleteRef = useRef(null);
-  const userId = useSelector(getUser)?.id;
-  const { responseData: dataUserCountries } = useFetch(
-    ULRs.userCountries(userId, '')
-  );
+  // const userId = useSelector(getUser)?.id;
+  const { responseData: dataUserCountries } = useFetch(ULRs.userCountries, '');
   const { responseData: dataMainCountryChat } = useFetch(
     selectedCountry ? ULRs.getMainCountryChatByName(selectedCountry, '') : null
   );

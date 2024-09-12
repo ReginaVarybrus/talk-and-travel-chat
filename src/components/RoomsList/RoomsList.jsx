@@ -10,9 +10,7 @@ import { Flag, ScrollBar } from '../SearchInput/SearchInputStyled.js';
 const RoomsList = () => {
   const [selectedCountry, setSelectedCountry] = useState(null);
   const userId = useSelector(getUser)?.id;
-  const { responseData: dataUserCountries } = useFetch(
-    ULRs.userCountries(userId, '')
-  );
+  const { responseData: dataUserCountries } = useFetch(ULRs.userCountries, '');
   const { responseData: dataMainCountryChat } = useFetch(
     selectedCountry ? ULRs.getMainCountryChatByName(selectedCountry, '') : null
   );
