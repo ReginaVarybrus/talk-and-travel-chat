@@ -93,26 +93,7 @@ ChatHeader.propTypes = {
   countryName: PropTypes.string,
   participantsAmount: PropTypes.number,
   countryChatId: PropTypes.bool,
-  groupMessages: PropTypes.PropTypes.arrayOf(
-    PropTypes.shape({
-      chatId: PropTypes.number,
-      content: PropTypes.string,
-      creationDate: PropTypes.string,
-      id: PropTypes.number,
-      repliedMessageId: PropTypes.number,
-      type: PropTypes.oneOf([
-        'TEXT',
-        'JOIN',
-        'LEAVE',
-        'START_TYPING',
-        'STOP_TYPING',
-      ]),
-      user: PropTypes.shape({
-        id: PropTypes.number,
-        userName: PropTypes.string,
-      }),
-    })
-  ),
+  groupMessages: PropTypes.array,
   country: PropTypes.shape({
     chatType: PropTypes.oneOf(['GROUP', 'PRIVATE']),
     country: PropTypes.shape({
@@ -122,26 +103,7 @@ ChatHeader.propTypes = {
     creationDate: PropTypes.string,
     description: PropTypes.string,
     id: PropTypes.number,
-    messages: PropTypes.arrayOf(
-      PropTypes.shape({
-        chatId: PropTypes.number,
-        content: PropTypes.string,
-        creationDate: PropTypes.string,
-        id: PropTypes.number,
-        repliedMessageId: PropTypes.number,
-        type: PropTypes.oneOf([
-          'TEXT',
-          'JOIN',
-          'LEAVE',
-          'START_TYPING',
-          'STOP_TYPING',
-        ]),
-        user: PropTypes.shape({
-          id: PropTypes.number,
-          userName: PropTypes.string,
-        }),
-      })
-    ),
+    messages: PropTypes.array,
     name: PropTypes.string,
     usersCount: PropTypes.number,
   }),

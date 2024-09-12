@@ -130,12 +130,7 @@ const SearchInput = ({
 
 SearchInput.propTypes = {
   setCountryData: PropTypes.func,
-  subscriptionCountryRooms: PropTypes.arrayOf(
-    PropTypes.shape({
-      name: PropTypes.string,
-      flagCode: PropTypes.string,
-    })
-  ),
+  subscriptionCountryRooms: PropTypes.array,
   setIsSubscribed: PropTypes.func,
   setIsShowJoinBtn: PropTypes.func,
 };

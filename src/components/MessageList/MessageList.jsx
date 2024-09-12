@@ -54,26 +54,7 @@ const MessageList = ({
 };
 
 MessageList.propTypes = {
-  groupMessages: PropTypes.arrayOf(
-    PropTypes.shape({
-      chatId: PropTypes.number,
-      content: PropTypes.string,
-      creationDate: PropTypes.string,
-      id: PropTypes.number,
-      repliedMessageId: PropTypes.number,
-      type: PropTypes.oneOf([
-        'TEXT',
-        'JOIN',
-        'LEAVE',
-        'START_TYPING',
-        'STOP_TYPING',
-      ]),
-      user: PropTypes.shape({
-        id: PropTypes.number,
-        userName: PropTypes.string,
-      }),
-    })
-  ),
+  groupMessages: PropTypes.array,
   setIsUserTyping: PropTypes.func,
   setUserNameisTyping: PropTypes.func,
 };
