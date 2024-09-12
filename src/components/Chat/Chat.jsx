@@ -1,5 +1,6 @@
-import { useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
+import PropTypes from 'prop-types';
 import { getUser } from '@/redux-store/selectors.js';
 import { useWebSocket } from '@/hooks/useWebSocket.js';
 import ULRs from '@/redux-store/constants';
@@ -27,6 +28,8 @@ const Chat = ({
   isShowJoinBtn,
   setIsShowJoinBtn,
 }) => {
+  const [isUserTyping, setIsUserTyping] = useState(false);
+  const [userNameisTyping, setUserNameisTyping] = useState('');
   const userId = useSelector(getUser)?.id;
   const { subscribeToGroupMessages, subscribeToUserErrors } = useWebSocket();
 
@@ -47,14 +50,25 @@ const Chat = ({
   return (
     <ChatStyled>
       {!countryName && <ChatFirstLoading />}
+      {countryName && (
+        <ChatHeader
+          countryName={countryName}
+          participantsAmount={participantsAmount}
+          isUserTyping={isUserTyping}
+          userNameisTyping={userNameisTyping}
+          countryChatId={countryChatId}
+          setSubscriptionCountryRooms={setSubscriptionCountryRooms}
+          isSubscribed={isSubscribed}
+        />
+      )}
 
-      <ChatHeader
-        countryName={countryName}
-        participantsAmount={participantsAmount}
-      />
       <MessageBlock>
         {groupMessages?.length ? (
-          <MessageList groupMessages={groupMessages} />
+          <MessageList
+            groupMessages={groupMessages}
+            setIsUserTyping={setIsUserTyping}
+            setUserNameisTyping={setUserNameisTyping}
+          />
         ) : (
           <NoMassegesNotification>
             <Logo src={logo} alt="logo" width="200" height="160" />
@@ -65,12 +79,39 @@ const Chat = ({
       <MessageBar
         countryChatId={countryChatId}
         country={country}
-        setCountryData={setCountryData}
         setSubscriptionCountryRooms={setSubscriptionCountryRooms}
         isShowJoinBtn={isShowJoinBtn}
         setIsShowJoinBtn={setIsShowJoinBtn}
+        isUserTyping={isUserTyping}
+        setIsUserTyping={setIsUserTyping}
       />
     </ChatStyled>
   );
 };
+
+ChatHeader.propTypes = {
+  countryName: PropTypes.string,
+  participantsAmount: PropTypes.number,
+  countryChatId: PropTypes.bool,
+  groupMessages: PropTypes.array,
+  country: PropTypes.shape({
+    chatType: PropTypes.oneOf(['GROUP', 'PRIVATE']),
+    country: PropTypes.shape({
+      flagCode: PropTypes.string,
+      name: PropTypes.string,
+    }),
+    creationDate: PropTypes.string,
+    description: PropTypes.string,
+    id: PropTypes.number,
+    messages: PropTypes.array,
+    name: PropTypes.string,
+    usersCount: PropTypes.number,
+  }),
+  setCountryData: PropTypes.func,
+  setSubscriptionCountryRooms: PropTypes.func,
+  isSubscribed: PropTypes.bool,
+  isShowJoinBtn: PropTypes.bool,
+  setIsShowJoinBtn: PropTypes.func,
+};
+
 export default Chat;

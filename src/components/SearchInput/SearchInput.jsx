@@ -1,6 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
-import { useSelector } from 'react-redux';
-import { getUser } from '@/redux-store/selectors.js';
+import PropTypes from 'prop-types';
 import { useFetch } from '@/hooks/useFetch.js';
 import ULRs from '@/redux-store/constants';
 import mapData from '@/data/countries.json';
@@ -15,15 +14,16 @@ import {
   Text,
 } from './SearchInputStyled';
 
-const SearchInput = ({ setCountryData, setIsSubscribed, setIsShowJoinBtn }) => {
+const SearchInput = ({
+  setCountryData,
+  subscriptionCountryRooms,
+  setIsSubscribed,
+  setIsShowJoinBtn,
+}) => {
   const [selectedCountry, setSelectedCountry] = useState(null);
   const [searchedValue, setSearchedValue] = useState('');
   const [showItem, setShowItem] = useState(false);
   const autoCompleteRef = useRef(null);
-  const userId = useSelector(getUser)?.id;
-  const { responseData: dataUserCountries } = useFetch(
-    ULRs.userCountries(userId, '')
-  );
   const { responseData: dataMainCountryChat } = useFetch(
     selectedCountry ? ULRs.getMainCountryChatByName(selectedCountry, '') : null
   );
@@ -55,7 +55,7 @@ const SearchInput = ({ setCountryData, setIsSubscribed, setIsShowJoinBtn }) => {
     const countryName = country.properties.ADMIN;
     setSelectedCountry(countryName);
 
-    const nameOfCountry = dataUserCountries.find(
+    const nameOfCountry = subscriptionCountryRooms.find(
       item => item.name === countryName
     );
     if (nameOfCountry) {
@@ -106,7 +106,7 @@ const SearchInput = ({ setCountryData, setIsSubscribed, setIsShowJoinBtn }) => {
               <>
                 {filterCountries.map(country => (
                   <Item
-                    key={country.id}
+                    key={country.properties.ADMIN}
                     onClick={() => handleCountryClick(country)}
                   >
                     <Flag
@@ -126,6 +126,13 @@ const SearchInput = ({ setCountryData, setIsSubscribed, setIsShowJoinBtn }) => {
       )}
     </AutocompleteInputStyled>
   );
+};
+
+SearchInput.propTypes = {
+  setCountryData: PropTypes.func,
+  subscriptionCountryRooms: PropTypes.array,
+  setIsSubscribed: PropTypes.func,
+  setIsShowJoinBtn: PropTypes.func,
 };
 
 export default SearchInput;
