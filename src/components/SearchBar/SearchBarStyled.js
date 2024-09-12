@@ -7,7 +7,7 @@ export const SearchBarStyled = styled.div`
   flex-direction: column;
   justify-content: start;
   align-items: center;
-  width: 100vw;
+  min-width: 100vw;
   height: 100vh;
   padding: 48px 16px;
   box-sizing: border-box;
