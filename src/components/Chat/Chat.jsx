@@ -54,11 +54,11 @@ const Chat = ({
         <ChatHeader
           countryName={countryName}
           participantsAmount={participantsAmount}
-          isUserTyping={isUserTyping}
-          userNameisTyping={userNameisTyping}
           countryChatId={countryChatId}
           setSubscriptionCountryRooms={setSubscriptionCountryRooms}
           isSubscribed={isSubscribed}
+          isUserTyping={isUserTyping}
+          userNameisTyping={userNameisTyping}
         />
       )}
 

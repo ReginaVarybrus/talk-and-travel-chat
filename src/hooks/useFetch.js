@@ -3,16 +3,14 @@ import { axiosClient } from '@/services/api';
 
 export const useFetch = (url, type) => {
   const [responseData, setResponseData] = useState(null);
-  const [hasFetched, setHasFetched] = useState(false);
 
   useEffect(() => {
-    if (!url || hasFetched) return;
+    if (!url) return;
 
     const fetchData = async () => {
       try {
         const response = await axiosClient.get(url, type);
         setResponseData(response.data);
-        setHasFetched(true);
         console.log(response.data);
       } catch (error) {
         console.error('Error fetching country rooms:', error);
@@ -20,7 +18,7 @@ export const useFetch = (url, type) => {
     };
 
     fetchData();
-  }, [url, hasFetched]);
+  }, [url]);
 
   return { responseData };
 };

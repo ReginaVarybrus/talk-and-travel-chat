@@ -11,10 +11,8 @@ import { SearchBarStyled, ButtonMapOpen, MapBox } from './SearchBarStyled';
 const SearchBar = ({
   setCountryData,
   subscriptionCountryRooms,
-  isSubscribed,
   setIsSubscribed,
   setIsShowJoinBtn,
-  countryChatId,
 }) => {
   const [openMap, setOpenMap] = useState(false);
   const handleOpen = () => setOpenMap(true);
@@ -34,9 +32,7 @@ const SearchBar = ({
           context={{
             setCountryData,
             subscriptionCountryRooms,
-            isSubscribed,
             setIsSubscribed,
-            countryChatId,
           }}
         />
       </div>
@@ -67,7 +63,6 @@ const SearchBar = ({
 SearchBar.propTypes = {
   setCountryData: PropTypes.func,
   subscriptionCountryRooms: PropTypes.array,
-  isSubscribed: PropTypes.bool,
   setIsSubscribed: PropTypes.func,
   setIsShowJoinBtn: PropTypes.func,
 };

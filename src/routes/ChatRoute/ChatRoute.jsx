@@ -28,9 +28,7 @@ const ChatRoute = () => {
     <ChatRouteStyled>
       <SearchBar
         setCountryData={setCountryData}
-        countryChatId={countryData?.id}
         subscriptionCountryRooms={subscriptionCountryRooms}
-        isSubscribed={isSubscribed}
         setIsSubscribed={setIsSubscribed}
         setIsShowJoinBtn={setIsShowJoinBtn}
       />
