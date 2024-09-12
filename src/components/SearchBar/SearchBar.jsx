@@ -14,6 +14,7 @@ const SearchBar = ({
   isSubscribed,
   setIsSubscribed,
   setIsShowJoinBtn,
+  countryChatId,
 }) => {
   const [openMap, setOpenMap] = useState(false);
   const handleOpen = () => setOpenMap(true);
@@ -35,6 +36,7 @@ const SearchBar = ({
             subscriptionCountryRooms,
             isSubscribed,
             setIsSubscribed,
+            countryChatId,
           }}
         />
       </div>

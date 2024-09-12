@@ -23,6 +23,7 @@ const RoomsList = () => {
 
   const handleOpenCountryRoom = countryName => {
     setSelectedCountry(countryName);
+    console.log('country click');
   };
 
   return (

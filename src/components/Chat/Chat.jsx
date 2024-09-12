@@ -89,10 +89,10 @@ const Chat = ({
   );
 };
 
-ChatHeader.propTypes = {
+Chat.propTypes = {
   countryName: PropTypes.string,
   participantsAmount: PropTypes.number,
-  countryChatId: PropTypes.bool,
+  countryChatId: PropTypes.number,
   groupMessages: PropTypes.array,
   country: PropTypes.shape({
     chatType: PropTypes.oneOf(['GROUP', 'PRIVATE']),
