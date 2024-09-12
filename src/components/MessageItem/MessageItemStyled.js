@@ -38,7 +38,7 @@ export const ContentMessage = styled.p`
   color: var(--color-dark);
 `;
 
-export const ContentJoin = styled.p`
+export const ContentJoinOrLeave = styled.p`
   text-align: start;
   font-size: 14px;
   color: var(--color-grey-6);

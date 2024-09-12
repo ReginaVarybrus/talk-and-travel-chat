@@ -56,13 +56,18 @@ const Chat = ({
   return (
     <ChatStyled>
       {!name && <ChatFirstLoading />}
+      {countryName && (
+        <ChatHeader
+          chatName={name}
+          participantsAmount={usersCount}
+          selectedCompanion={selectedCompanion}
+          isPrivateChat={isPrivateChat}
+          countryChatId={countryChatId}
+          setSubscriptionCountryRooms={setSubscriptionCountryRooms}
+          isSubscribed={isSubscribed}
+        />
+      )}
 
-      <ChatHeader
-        chatName={name}
-        participantsAmount={usersCount}
-        selectedCompanion={selectedCompanion}
-        isPrivateChat={isPrivateChat}
-      />
       <MessageBlock>
         {messages?.length ? (
           <MessageList messages={messages} />
