@@ -1,18 +1,16 @@
 import { useState } from 'react';
+import PropTypes from 'prop-types';
 import Backdrop from '@mui/material/Backdrop';
 import Modal from '@mui/material/Modal';
 import Fade from '@mui/material/Fade';
-
 import { Outlet } from 'react-router-dom';
-import { SearchBarStyled, ButtonMapOpen, MapBox } from './SearchBarStyled';
 import SearchInput from '../SearchInput/SearchInput';
 import ChatMap from '../ChatMap/ChatMap';
+import { SearchBarStyled, ButtonMapOpen, MapBox } from './SearchBarStyled';
 
 const SearchBar = ({
-  countryChatId,
   setCountryData,
   subscriptionCountryRooms,
-  setSubscriptionCountryRooms,
   isSubscribed,
   setIsSubscribed,
   setIsShowJoinBtn,
@@ -24,9 +22,8 @@ const SearchBar = ({
   return (
     <SearchBarStyled>
       <SearchInput
-        countryChatId={countryChatId}
         setCountryData={setCountryData}
-        isSubscribed={isSubscribed}
+        subscriptionCountryRooms={subscriptionCountryRooms}
         setIsSubscribed={setIsSubscribed}
         setIsShowJoinBtn={setIsShowJoinBtn}
       />
@@ -34,10 +31,8 @@ const SearchBar = ({
       <div>
         <Outlet
           context={{
-            countryChatId,
             setCountryData,
             subscriptionCountryRooms,
-            setSubscriptionCountryRooms,
             isSubscribed,
             setIsSubscribed,
           }}
@@ -65,6 +60,14 @@ const SearchBar = ({
       </Modal>
     </SearchBarStyled>
   );
+};
+
+SearchBar.propTypes = {
+  setCountryData: PropTypes.func,
+  subscriptionCountryRooms: PropTypes.array,
+  isSubscribed: PropTypes.bool,
+  setIsSubscribed: PropTypes.func,
+  setIsShowJoinBtn: PropTypes.func,
 };
 
 export default SearchBar;

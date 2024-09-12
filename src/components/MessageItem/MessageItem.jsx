@@ -1,13 +1,12 @@
-/* eslint-disable react/forbid-prop-types */
 import { useState } from 'react';
 import { useSelector } from 'react-redux';
 import { getUser } from '@/redux-store/selectors';
 import ULRs from '@/redux-store/constants';
 import { axiosClient } from '@/services/api';
+import { MESSAGE_TYPES } from '@/constants/messageTypes.js';
 import PropTypes from 'prop-types';
 import UserInfoModal from '../UserInfoModal/UserInfoModal';
 import { timeStampConverter } from '../utils/timeUtil.js';
-import { MESSAGE_TYPES } from '../../constants/messageTypes.js';
 
 import {
   MessageItemStyled,
@@ -32,6 +31,10 @@ const MessageItem = ({
   const time = timeStampConverter(date);
   const firstLetterOfName = userName.substr(0, 1).toUpperCase();
   const isCurrentUser = userId === currentUserId;
+
+  if ([MESSAGE_TYPES.START_TYPING, MESSAGE_TYPES.STOP_TYPING].includes(type)) {
+    return null;
+  }
 
   const messageTypeText = type === MESSAGE_TYPES.TEXT;
   const messageTypeJoin = type === MESSAGE_TYPES.JOIN;

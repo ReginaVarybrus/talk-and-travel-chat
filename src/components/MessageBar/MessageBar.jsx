@@ -1,10 +1,10 @@
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 import { useSelector } from 'react-redux';
+import PropTypes from 'prop-types';
 import ULRs from '@/redux-store/constants';
 import { getUser } from '@/redux-store/selectors.js';
 import { useWebSocket } from '@/hooks/useWebSocket.js';
 import BasicButton from '@/components/Buttons/BasicButton/BasicButton';
-// eslint-disable-next-line import/no-extraneous-dependencies
 import {
   MessageBarStyled,
   ButtonJoinWrapper,
@@ -23,13 +23,45 @@ const MessageBar = ({
   setSubscriptionCountryRooms,
   isShowJoinBtn,
   setIsShowJoinBtn,
+  isUserTyping,
+  setIsUserTyping,
 }) => {
   const [message, setMessage] = useState('');
+  const typingTimeoutRef = useRef(null);
   const userId = useSelector(getUser)?.id;
   const { stompClient, sendMessage, sendEvent } = useWebSocket();
   const isMessageNotEmpty = Boolean(message?.trim().length);
 
-  const handleChange = ({ target: { value } }) => setMessage(value);
+  const dataEventToSend = {
+    authorId: userId,
+    chatId: countryChatId,
+  };
+
+  const handleStartTyping = () => {
+    if (!isUserTyping) {
+      setIsUserTyping(true);
+      sendEvent(dataEventToSend, ULRs.startTyping);
+    }
+  };
+
+  const handleStopTyping = () => {
+    setIsUserTyping(false);
+    sendEvent(dataEventToSend, ULRs.stopTyping);
+  };
+
+  const handleChange = ({ target: { value } }) => {
+    setMessage(value);
+
+    handleStartTyping();
+
+    if (typingTimeoutRef.current) {
+      clearTimeout(typingTimeoutRef.current);
+    }
+
+    typingTimeoutRef.current = setTimeout(() => {
+      handleStopTyping();
+    }, 1500);
+  };
 
   const handleSubmit = e => {
     e.preventDefault();
@@ -47,14 +79,11 @@ const MessageBar = ({
 
     sendMessage(dataMessageToSend);
     setMessage('');
+    handleStopTyping();
+    clearTimeout(typingTimeoutRef.current);
   };
 
   const handleJoinClick = () => {
-    const dataEventToSend = {
-      authorId: userId,
-      chatId: countryChatId,
-    };
-
     sendEvent(dataEventToSend, ULRs.joinToGroupChat);
     setIsShowJoinBtn(false);
     setSubscriptionCountryRooms(prevRooms => [...prevRooms, country.country]);
@@ -100,6 +129,28 @@ const MessageBar = ({
       )}
     </MessageBarStyled>
   );
+};
+
+MessageBar.propTypes = {
+  countryChatId: PropTypes.number,
+  country: PropTypes.shape({
+    chatType: PropTypes.oneOf(['GROUP', 'PRIVATE']),
+    country: PropTypes.shape({
+      flagCode: PropTypes.string,
+      name: PropTypes.string,
+    }),
+    creationDate: PropTypes.string,
+    description: PropTypes.string,
+    id: PropTypes.number,
+    messages: PropTypes.array,
+    name: PropTypes.string,
+    usersCount: PropTypes.number,
+  }),
+  setSubscriptionCountryRooms: PropTypes.func,
+  isShowJoinBtn: PropTypes.bool,
+  setIsShowJoinBtn: PropTypes.func,
+  isUserTyping: PropTypes.bool,
+  setIsUserTyping: PropTypes.func,
 };
 
 export default MessageBar;

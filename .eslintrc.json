@@ -19,6 +19,12 @@
     "react/react-in-jsx-scope": "off",
     //below rule allows not to check props types validation in  REact components.
     "react/prop-types": "off",
+    "react/forbid-prop-types": [
+      "error", 
+      {
+        "forbid": ["any", "object"]
+      }
+    ],
     //below rule ensures that files containing JSX code have .js or .jsx extensions;
     "react/jsx-filename-extension": [
       "error",
