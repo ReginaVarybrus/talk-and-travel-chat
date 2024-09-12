@@ -4,7 +4,7 @@ import Button from '@mui/material/Button';
 import { TextareaAutosize as BaseTextareaAutosize } from '@mui/material';
 
 export const ChatStyled = styled.div`
-  display: none;
+  display: ${({ $isChatVisible }) => ($isChatVisible ? 'flex' : 'none')};
   @media ${device.tablet} {
     display: flex;
     flex-direction: column;

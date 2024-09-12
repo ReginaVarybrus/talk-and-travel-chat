@@ -1,4 +1,5 @@
 import styled from 'styled-components';
+import { device } from '@/constants/mediaQueries';
 
 export const ChatHeaderStyled = styled.header`
   display: flex;
@@ -23,5 +24,12 @@ export const ChatHeaderStyled = styled.header`
   }
   &:hover p {
     color: var(--color-blue-3);
+  }
+`;
+
+export const ButtonBack = styled.button`
+  display: block;
+  @media ${device.tablet} {
+    display: none;
   }
 `;

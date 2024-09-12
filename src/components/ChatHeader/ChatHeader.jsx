@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { useSelector } from 'react-redux';
 import { getUser } from '@/redux-store/selectors.js';
 import CountryInfo from '../CountryInfo/CountryInfo';
-import { ChatHeaderStyled } from './ChatHeaderStyled';
+import { ChatHeaderStyled, ButtonBack } from './ChatHeaderStyled';
 
 const ChatHeader = ({
   countryName = 'Country Name',
@@ -13,6 +13,7 @@ const ChatHeader = ({
   isSubscribed,
   isUserTyping,
   userNameisTyping,
+  setIsChatVisible,
 }) => {
   const [openModal, setOpenModal] = useState(false);
   const userName = useSelector(getUser)?.userName;
@@ -20,11 +21,15 @@ const ChatHeader = ({
   const handleClose = () => {
     setOpenModal(false);
   };
+  const handleBackToSearchBar = () => {
+    setIsChatVisible(false);
+  };
 
   const showUserIsTyping = isUserTyping && userNameisTyping !== userName;
 
   return (
     <>
+      <ButtonBack onClick={handleBackToSearchBar}>Back</ButtonBack>
       <ChatHeaderStyled onClick={handleOpen}>
         <h5>{countryName}</h5>
         <p>

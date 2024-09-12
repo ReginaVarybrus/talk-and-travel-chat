@@ -27,6 +27,8 @@ const Chat = ({
   isSubscribed,
   isShowJoinBtn,
   setIsShowJoinBtn,
+  isChatVisible,
+  setIsChatVisible,
 }) => {
   const [isUserTyping, setIsUserTyping] = useState(false);
   const [userNameisTyping, setUserNameisTyping] = useState('');
@@ -48,7 +50,7 @@ const Chat = ({
   }, [countryChatId]);
 
   return (
-    <ChatStyled>
+    <ChatStyled $isChatVisible={isChatVisible}>
       {!countryName && <ChatFirstLoading />}
       {countryName && (
         <ChatHeader
@@ -59,6 +61,7 @@ const Chat = ({
           countryChatId={countryChatId}
           setSubscriptionCountryRooms={setSubscriptionCountryRooms}
           isSubscribed={isSubscribed}
+          setIsChatVisible={setIsChatVisible}
         />
       )}
 

@@ -11,8 +11,12 @@ const RoomsList = () => {
     selectedCountry ? ULRs.getMainCountryChatByName(selectedCountry, '') : null
   );
 
-  const { setCountryData, subscriptionCountryRooms, setIsSubscribed } =
-    useOutletContext();
+  const {
+    setCountryData,
+    subscriptionCountryRooms,
+    setIsSubscribed,
+    setIsChatVisible,
+  } = useOutletContext();
 
   useEffect(() => {
     if (dataMainCountryChat) {
@@ -23,6 +27,7 @@ const RoomsList = () => {
 
   const handleOpenCountryRoom = countryName => {
     setSelectedCountry(countryName);
+    setIsChatVisible(true);
   };
 
   return (

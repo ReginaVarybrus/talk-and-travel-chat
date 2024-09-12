@@ -5,7 +5,7 @@ import WebSocketProvider from '@/providers/WebSocketProvider';
 // import { LayoutStyled } from './LayoutStyled';
 // import SideBar from '../SideBar/SideBar';
 
-import { device } from '../../constants/mediaQueries.js'; // Імпортуємо файл з медіа-запитами
+import { device } from '../../constants/mediaQueries.js';
 import DesktopLayout from '../DesktopLayout/DesktopLayout';
 import MobileLayout from '../MobileLayout/MobileLayout';
 

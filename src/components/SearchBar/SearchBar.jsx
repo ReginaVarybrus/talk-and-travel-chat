@@ -7,7 +7,6 @@ import { Outlet } from 'react-router-dom';
 import SearchInput from '../SearchInput/SearchInput';
 import ChatMap from '../ChatMap/ChatMap';
 import { SearchBarStyled, ButtonMapOpen, MapBox } from './SearchBarStyled';
-import TapBar from '../TapBar/TapBar';
 
 const SearchBar = ({
   setCountryData,
@@ -15,18 +14,21 @@ const SearchBar = ({
   isSubscribed,
   setIsSubscribed,
   setIsShowJoinBtn,
+  isChatVisible,
+  setIsChatVisible,
 }) => {
   const [openMap, setOpenMap] = useState(false);
   const handleOpen = () => setOpenMap(true);
   const handleClose = () => setOpenMap(false);
 
   return (
-    <SearchBarStyled>
+    <SearchBarStyled $isChatVisible={isChatVisible}>
       <SearchInput
         setCountryData={setCountryData}
         subscriptionCountryRooms={subscriptionCountryRooms}
         setIsSubscribed={setIsSubscribed}
         setIsShowJoinBtn={setIsShowJoinBtn}
+        setIsChatVisible={setIsChatVisible}
       />
       <ButtonMapOpen onClick={handleOpen}>Search by map</ButtonMapOpen>
       <div>
@@ -36,10 +38,10 @@ const SearchBar = ({
             subscriptionCountryRooms,
             isSubscribed,
             setIsSubscribed,
+            setIsChatVisible,
           }}
         />
       </div>
-      <TapBar />
 
       <Modal
         aria-labelledby="transition-modal-title"

@@ -3,22 +3,29 @@ import Box from '@mui/material/Box';
 import { device } from '@/constants/mediaQueries';
 
 export const SearchBarStyled = styled.div`
-  display: flex;
+  /* display: flex; */
+  display: ${({ $isChatVisible }) => ($isChatVisible ? 'none' : 'flex')};
   flex-direction: column;
   justify-content: start;
   align-items: center;
-  min-width: 100vw;
-  height: 100vh;
-  padding: 48px 16px;
+  min-width: 100%;
+  padding: 48px 16px 0;
   box-sizing: border-box;
-  border-right: 1px solid var(--color-grey-6);
-  border-left: 1px solid var(--color-grey-6);
   background: var(--white-color);
+
   @media ${device.tablet} {
+    display: flex;
     min-width: 250px;
+    border-right: 1px solid var(--color-grey-6);
+    border-left: 1px solid var(--color-grey-6);
+    padding: 48px 16px;
   }
   @media ${device.laptop} {
+    display: flex;
     min-width: 300px;
+    border-right: 1px solid var(--color-grey-6);
+    border-left: 1px solid var(--color-grey-6);
+    padding: 48px 16px;
   }
 `;
 

@@ -19,6 +19,7 @@ const SearchInput = ({
   subscriptionCountryRooms,
   setIsSubscribed,
   setIsShowJoinBtn,
+  setIsChatVisible,
 }) => {
   const [selectedCountry, setSelectedCountry] = useState(null);
   const [searchedValue, setSearchedValue] = useState('');
@@ -66,6 +67,7 @@ const SearchInput = ({
 
     setSearchedValue(countryName);
     setShowItem(false);
+    setIsChatVisible(true);
     setSearchedValue('');
   };
 
