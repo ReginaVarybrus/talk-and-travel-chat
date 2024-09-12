@@ -62,7 +62,7 @@ const CountryInfo = ({
     country =>
       country.properties.ADMIN.toLowerCase() === countryName.toLowerCase()
   );
-
+  console.log(countryData);
   const hasParticipants =
     Array.isArray(participants) && participants.length > 0;
   return (

@@ -56,14 +56,14 @@ const Chat = ({
   return (
     <ChatStyled>
       {!name && <ChatFirstLoading />}
-      {countryName && (
+      {name && (
         <ChatHeader
           chatName={name}
           participantsAmount={usersCount}
           selectedCompanion={selectedCompanion}
           isPrivateChat={isPrivateChat}
-          countryChatId={countryChatId}
-          setSubscriptionCountryRooms={setSubscriptionCountryRooms}
+          countryChatId={id}
+          setSubscriptionCountryRooms={setSubscriptionRooms}
           isSubscribed={isSubscribed}
         />
       )}
