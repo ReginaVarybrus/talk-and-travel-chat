@@ -17,7 +17,12 @@ const ChatHeader = ({
 }) => {
   const [openModal, setOpenModal] = useState(false);
   const userName = useSelector(getUser)?.userName;
-  const handleOpen = () => setOpenModal(true);
+
+  const handleOpen = () => {
+    if (!isPrivateChat) {
+      setOpenModal(true);
+    }
+  };
   const handleClose = () => {
     setOpenModal(false);
   };
@@ -38,7 +43,7 @@ const ChatHeader = ({
             : !isPrivateChat && `${participantsAmount || '0'} participants`}
         </p>
       </ChatHeaderStyled>
-      {isPrivateChat && !isPrivateChat && (
+      {!isPrivateChat && (
         <CountryInfo
           isOpen={openModal}
           onClose={handleClose}

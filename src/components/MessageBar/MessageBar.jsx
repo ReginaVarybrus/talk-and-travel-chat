@@ -26,8 +26,6 @@ const MessageBar = ({
   setIsShowJoinBtn,
   isUserTyping,
   setIsUserTyping,
-  isUserTyping,
-  setIsUserTyping,
 }) => {
   const [message, setMessage] = useState('');
   const typingTimeoutRef = useRef(null);
@@ -136,8 +134,8 @@ const MessageBar = ({
 };
 
 MessageBar.propTypes = {
-  countryChatId: PropTypes.number,
-  country: PropTypes.shape({
+  chatId: PropTypes.number,
+  chatData: PropTypes.shape({
     chatType: PropTypes.oneOf(['GROUP', 'PRIVATE']),
     country: PropTypes.shape({
       flagCode: PropTypes.string,
@@ -150,7 +148,7 @@ MessageBar.propTypes = {
     name: PropTypes.string,
     usersCount: PropTypes.number,
   }),
-  setSubscriptionCountryRooms: PropTypes.func,
+  setSubscriptionRooms: PropTypes.func,
   isShowJoinBtn: PropTypes.bool,
   setIsShowJoinBtn: PropTypes.func,
   isUserTyping: PropTypes.bool,

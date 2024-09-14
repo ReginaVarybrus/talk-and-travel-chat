@@ -2,7 +2,6 @@ import SimpleBar from 'simplebar-react';
 import { useSelector } from 'react-redux';
 import { useEffect, useState } from 'react';
 import { useOutletContext, useLocation } from 'react-router-dom';
-
 import ULRs from '@/redux-store/constants';
 import { getUser } from '@/redux-store/selectors';
 import { useFetch } from '@/hooks/useFetch';
@@ -15,7 +14,6 @@ const DMsList = () => {
   const [selectedChat, setSelectedChat] = useState(null);
   const userId = useSelector(getUser)?.id;
   const location = useLocation();
-  console.log('selectedChat', selectedChat);
   const { privateChatId, companionObject } = location.state || {};
   const { setChatData, setIsSubscribed, setSelectedCompanion } =
     useOutletContext();

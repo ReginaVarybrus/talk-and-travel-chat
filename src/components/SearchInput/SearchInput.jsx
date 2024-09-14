@@ -132,8 +132,7 @@ const SearchInput = ({ setChatData, setIsSubscribed, setIsShowJoinBtn }) => {
 };
 
 SearchInput.propTypes = {
-  setCountryData: PropTypes.func,
-  subscriptionCountryRooms: PropTypes.array,
+  setChatData: PropTypes.func,
   setIsSubscribed: PropTypes.func,
   setIsShowJoinBtn: PropTypes.func,
 };

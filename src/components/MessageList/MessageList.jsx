@@ -2,7 +2,6 @@ import { useEffect, useRef } from 'react';
 import PropTypes from 'prop-types';
 import MessageItem from '@/components/MessageItem/MessageItem';
 import { MESSAGE_TYPES } from '@/constants/messageTypes.js';
-import { MESSAGE_TYPES } from '@/constants/messageTypes.js';
 import { MessageListStyled } from './MessageListStyled.js';
 
 const MessageList = ({ messages, setIsUserTyping, setUserNameisTyping }) => {
@@ -51,7 +50,7 @@ const MessageList = ({ messages, setIsUserTyping, setUserNameisTyping }) => {
 };
 
 MessageList.propTypes = {
-  groupMessages: PropTypes.array,
+  messages: PropTypes.array,
   setIsUserTyping: PropTypes.func,
   setUserNameisTyping: PropTypes.func,
 };

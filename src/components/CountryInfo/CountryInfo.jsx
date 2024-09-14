@@ -54,16 +54,16 @@ const CountryInfo = ({
   const url = chatId && ULRs.getChatsParticipants(chatId);
   const { responseData: participants } = useFetch(url, '');
 
-  if (!countryName) {
+  if (!isOpen || !countryName || !chatId) {
     return null;
   }
-
   const countryData = mapData.features.find(
     country =>
       country.properties.ADMIN.toLowerCase() === countryName.toLowerCase()
   );
   const hasParticipants =
     Array.isArray(participants) && participants.length > 0;
+
   return (
     <Modal
       aria-labelledby="country-info-title"
