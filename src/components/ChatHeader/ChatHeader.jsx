@@ -17,7 +17,6 @@ const ChatHeader = ({
 }) => {
   const [openModal, setOpenModal] = useState(false);
   const userName = useSelector(getUser)?.userName;
-
   const handleOpen = () => {
     if (!isPrivateChat) {
       setOpenModal(true);
@@ -43,17 +42,16 @@ const ChatHeader = ({
             : !isPrivateChat && `${participantsAmount || '0'} participants`}
         </p>
       </ChatHeaderStyled>
-      {!isPrivateChat && (
-        <CountryInfo
-          isOpen={openModal}
-          onClose={handleClose}
-          countryName={chatName || 'Country Name'}
-          participantsAmount={participantsAmount || 0}
-          chatId={chatId}
-          setSubscriptionRooms={setSubscriptionRooms}
-          isSubscribed={isSubscribed}
-        />
-      )}
+
+      <CountryInfo
+        isOpen={openModal}
+        onClose={handleClose}
+        countryName={chatName || 'Country Name'}
+        participantsAmount={participantsAmount || 0}
+        chatId={chatId}
+        setSubscriptionRooms={setSubscriptionRooms}
+        isSubscribed={isSubscribed}
+      />
     </>
   );
 };
