@@ -1,5 +1,7 @@
 import { useEffect, useRef } from 'react';
+import PropTypes from 'prop-types';
 import MessageItem from '@/components/MessageItem/MessageItem';
+import { MESSAGE_TYPES } from '@/constants/messageTypes.js';
 import { MESSAGE_TYPES } from '@/constants/messageTypes.js';
 import { MessageListStyled } from './MessageListStyled.js';
 
@@ -28,7 +30,9 @@ const MessageList = ({ messages, setIsUserTyping, setUserNameisTyping }) => {
           const isLastMessage =
             !nextUserMessage || message.user?.id !== nextUserMessage.user?.id;
 
-          const isShownAvatar = message.type === 'TEXT' && isLastMessage;
+          const isShownAvatar =
+            message.type === MESSAGE_TYPES.TEXT && isLastMessage;
+
           return (
             <MessageItem
               key={message.id || message.creationDate}
@@ -44,6 +48,12 @@ const MessageList = ({ messages, setIsUserTyping, setUserNameisTyping }) => {
       <div ref={messagesEndRef} />
     </MessageListStyled>
   );
+};
+
+MessageList.propTypes = {
+  groupMessages: PropTypes.array,
+  setIsUserTyping: PropTypes.func,
+  setUserNameisTyping: PropTypes.func,
 };
 
 export default MessageList;

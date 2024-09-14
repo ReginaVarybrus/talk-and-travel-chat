@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef } from 'react';
 import { useSelector } from 'react-redux';
 import { routesPath } from '@/routes/routesConfig';
+import PropTypes from 'prop-types';
 import { getUser } from '@/redux-store/selectors.js';
 import { useFetch } from '@/hooks/useFetch.js';
 import ULRs from '@/redux-store/constants';
@@ -128,6 +129,13 @@ const SearchInput = ({ setChatData, setIsSubscribed, setIsShowJoinBtn }) => {
       )}
     </AutocompleteInputStyled>
   );
+};
+
+SearchInput.propTypes = {
+  setCountryData: PropTypes.func,
+  subscriptionCountryRooms: PropTypes.array,
+  setIsSubscribed: PropTypes.func,
+  setIsShowJoinBtn: PropTypes.func,
 };
 
 export default SearchInput;

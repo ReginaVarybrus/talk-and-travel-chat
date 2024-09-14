@@ -1,11 +1,12 @@
 import { useState, useEffect } from 'react';
-import { useSelector } from 'react-redux';
 import { useOutletContext } from 'react-router-dom';
 import { useFetch } from '@/hooks/useFetch.js';
 import ULRs from '@/redux-store/constants';
+import { useSelector } from 'react-redux';
 import { getUser } from '@/redux-store/selectors.js';
-import { ListStyled, Text, Item, ListItems } from './RoomsListStyled';
+
 import { Flag, ScrollBar } from '../SearchInput/SearchInputStyled.js';
+import { ListStyled, Text, Item, ListItems } from './RoomsListStyled';
 
 const RoomsList = () => {
   const [selectedCountry, setSelectedCountry] = useState(null);

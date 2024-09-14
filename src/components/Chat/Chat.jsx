@@ -1,5 +1,6 @@
-import { useEffect, useState } from 'react';
+import { useState, useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
+import PropTypes from 'prop-types';
 import { getUser } from '@/redux-store/selectors.js';
 import { useWebSocket } from '@/hooks/useWebSocket.js';
 import ULRs from '@/redux-store/constants';
@@ -93,8 +94,36 @@ const Chat = ({
         setIsShowJoinBtn={setIsShowJoinBtn}
         isUserTyping={isUserTyping}
         setIsUserTyping={setIsUserTyping}
+        isUserTyping={isUserTyping}
+        setIsUserTyping={setIsUserTyping}
       />
     </ChatStyled>
   );
 };
+
+Chat.propTypes = {
+  countryName: PropTypes.string,
+  participantsAmount: PropTypes.number,
+  countryChatId: PropTypes.number,
+  groupMessages: PropTypes.array,
+  country: PropTypes.shape({
+    chatType: PropTypes.oneOf(['GROUP', 'PRIVATE']),
+    country: PropTypes.shape({
+      flagCode: PropTypes.string,
+      name: PropTypes.string,
+    }),
+    creationDate: PropTypes.string,
+    description: PropTypes.string,
+    id: PropTypes.number,
+    messages: PropTypes.array,
+    name: PropTypes.string,
+    usersCount: PropTypes.number,
+  }),
+  setCountryData: PropTypes.func,
+  setSubscriptionCountryRooms: PropTypes.func,
+  isSubscribed: PropTypes.bool,
+  isShowJoinBtn: PropTypes.bool,
+  setIsShowJoinBtn: PropTypes.func,
+};
+
 export default Chat;

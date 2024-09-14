@@ -1,11 +1,11 @@
 import { useRef, useState } from 'react';
 import { useSelector } from 'react-redux';
+import PropTypes from 'prop-types';
 import ULRs from '@/redux-store/constants';
 import { CHAT_TYPES } from '@/constants/chatTypes';
 import { getUser } from '@/redux-store/selectors.js';
 import { useWebSocket } from '@/hooks/useWebSocket.js';
 import BasicButton from '@/components/Buttons/BasicButton/BasicButton';
-// eslint-disable-next-line import/no-extraneous-dependencies
 import {
   MessageBarStyled,
   ButtonJoinWrapper,
@@ -26,10 +26,13 @@ const MessageBar = ({
   setIsShowJoinBtn,
   isUserTyping,
   setIsUserTyping,
+  isUserTyping,
+  setIsUserTyping,
 }) => {
   const [message, setMessage] = useState('');
-  const userId = useSelector(getUser)?.id;
   const typingTimeoutRef = useRef(null);
+  const userId = useSelector(getUser)?.id;
+
   const { stompClient, sendMessage, sendEvent } = useWebSocket();
   const isMessageNotEmpty = Boolean(message?.trim().length);
   const isGroupChat = chatData?.chatType === CHAT_TYPES.GROUP;
@@ -80,6 +83,8 @@ const MessageBar = ({
 
     sendMessage(dataMessageToSend);
     setMessage('');
+    handleStopTyping();
+    clearTimeout(typingTimeoutRef.current);
   };
 
   const handleJoinClick = () => {
@@ -128,6 +133,28 @@ const MessageBar = ({
       )}
     </MessageBarStyled>
   );
+};
+
+MessageBar.propTypes = {
+  countryChatId: PropTypes.number,
+  country: PropTypes.shape({
+    chatType: PropTypes.oneOf(['GROUP', 'PRIVATE']),
+    country: PropTypes.shape({
+      flagCode: PropTypes.string,
+      name: PropTypes.string,
+    }),
+    creationDate: PropTypes.string,
+    description: PropTypes.string,
+    id: PropTypes.number,
+    messages: PropTypes.array,
+    name: PropTypes.string,
+    usersCount: PropTypes.number,
+  }),
+  setSubscriptionCountryRooms: PropTypes.func,
+  isShowJoinBtn: PropTypes.bool,
+  setIsShowJoinBtn: PropTypes.func,
+  isUserTyping: PropTypes.bool,
+  setIsUserTyping: PropTypes.func,
 };
 
 export default MessageBar;
