@@ -64,19 +64,12 @@ const Chat = ({
         participantsAmount={usersCount}
         selectedCompanion={selectedCompanion}
         isPrivateChat={isPrivateChat}
+        userNameisTyping={userNameisTyping}
+        isUserTyping={isUserTyping}
+        chatId={id}
+        isSubscribed={isSubscribed}
+        setSubscriptionRooms={setSubscriptionRooms}
       />
-      =========
-      {!countryName && <ChatFirstLoading />}
-      {countryName && (
-        <ChatHeader
-          countryName={countryName}
-          participantsAmount={participantsAmount}
-          countryChatId={countryChatId}
-          setSubscriptionCountryRooms={setSubscriptionCountryRooms}
-          isSubscribed={isSubscribed}
-        />
-      )}
-      >>>>>>>>> Temporary merge branch 2
       <MessageBlock>
         {messages?.length ? (
           <MessageList
