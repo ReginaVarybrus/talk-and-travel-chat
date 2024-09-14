@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { getUser } from '@/redux-store/selectors.js';
 import { useWebSocket } from '@/hooks/useWebSocket.js';
@@ -25,6 +25,8 @@ const Chat = ({
   selectedCompanion,
   setSelectedCompanion,
 }) => {
+  const [isUserTyping, setIsUserTyping] = useState(false);
+  const [userNameisTyping, setUserNameisTyping] = useState('');
   const userId = useSelector(getUser)?.id;
   const { id, name, messages, usersCount, chatType } = chatData;
   const isPrivateChat = chatType === 'PRIVATE';
@@ -59,13 +61,22 @@ const Chat = ({
 
       <ChatHeader
         chatName={name}
+        chatId={id}
         participantsAmount={usersCount}
         selectedCompanion={selectedCompanion}
         isPrivateChat={isPrivateChat}
+        isUserTyping={isUserTyping}
+        userNameisTyping={userNameisTyping}
+        isSubscribed={isSubscribed}
+        setSubscriptionRooms={setSubscriptionRooms}
       />
       <MessageBlock>
         {messages?.length ? (
-          <MessageList messages={messages} />
+          <MessageList
+            messages={messages}
+            setIsUserTyping={setIsUserTyping}
+            setUserNameisTyping={setUserNameisTyping}
+          />
         ) : (
           <NoMassegesNotification>
             <Logo src={logo} alt="logo" width="200" height="160" />
@@ -80,6 +91,8 @@ const Chat = ({
         setSubscriptionRooms={setSubscriptionRooms}
         isShowJoinBtn={isShowJoinBtn}
         setIsShowJoinBtn={setIsShowJoinBtn}
+        isUserTyping={isUserTyping}
+        setIsUserTyping={setIsUserTyping}
       />
     </ChatStyled>
   );

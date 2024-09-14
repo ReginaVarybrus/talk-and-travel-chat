@@ -6,6 +6,7 @@ import ULRs from '@/redux-store/constants';
 import { axiosClient } from '@/services/api';
 import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
+import { routesPath } from '@/routes/routesConfig';
 import { getUser } from '@/redux-store/selectors';
 import {
   ModalWindowStyled,
@@ -47,7 +48,7 @@ const UserInfoModal = ({
       const existingChatId = checkExistingPrivateChat(companionId);
 
       if (existingChatId) {
-        navigate('dms-chat', {
+        navigate(routesPath.DMS, {
           state: {
             privateChatId: existingChatId,
             companionObject: { id: companionId, userName, userEmail },
@@ -59,7 +60,7 @@ const UserInfoModal = ({
           companionId,
         });
         const privateChatId = response.data;
-        navigate('dms-chat', {
+        navigate(routesPath.DMS, {
           state: {
             privateChatId,
             companionObject: { id: companionId, userName, userEmail },

@@ -1,6 +1,7 @@
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import { useSelector } from 'react-redux';
 import ULRs from '@/redux-store/constants';
+import { CHAT_TYPES } from '@/constants/chatTypes';
 import { getUser } from '@/redux-store/selectors.js';
 import { useWebSocket } from '@/hooks/useWebSocket.js';
 import BasicButton from '@/components/Buttons/BasicButton/BasicButton';
@@ -23,13 +24,45 @@ const MessageBar = ({
   setSubscriptionRooms,
   isShowJoinBtn,
   setIsShowJoinBtn,
+  isUserTyping,
+  setIsUserTyping,
 }) => {
   const [message, setMessage] = useState('');
   const userId = useSelector(getUser)?.id;
+  const typingTimeoutRef = useRef(null);
   const { stompClient, sendMessage, sendEvent } = useWebSocket();
   const isMessageNotEmpty = Boolean(message?.trim().length);
+  const isGroupChat = chatData?.chatType === CHAT_TYPES.GROUP;
+  const dataEventToSend = {
+    authorId: userId,
+    chatId,
+  };
 
-  const handleChange = ({ target: { value } }) => setMessage(value);
+  const handleStartTyping = () => {
+    if (!isUserTyping) {
+      setIsUserTyping(true);
+      sendEvent(dataEventToSend, ULRs.startTyping);
+    }
+  };
+
+  const handleStopTyping = () => {
+    setIsUserTyping(false);
+    sendEvent(dataEventToSend, ULRs.stopTyping);
+  };
+
+  const handleChange = ({ target: { value } }) => {
+    setMessage(value);
+
+    handleStartTyping();
+
+    if (typingTimeoutRef.current) {
+      clearTimeout(typingTimeoutRef.current);
+    }
+
+    typingTimeoutRef.current = setTimeout(() => {
+      handleStopTyping();
+    }, 1500);
+  };
 
   const handleSubmit = e => {
     e.preventDefault();
@@ -50,11 +83,6 @@ const MessageBar = ({
   };
 
   const handleJoinClick = () => {
-    const dataEventToSend = {
-      authorId: userId,
-      chatId,
-    };
-
     sendEvent(dataEventToSend, ULRs.joinToGroupChat);
     setIsShowJoinBtn(false);
     setSubscriptionRooms(prevRooms => [...prevRooms, chatData.country]);
@@ -62,7 +90,7 @@ const MessageBar = ({
 
   return (
     <MessageBarStyled>
-      {isShowJoinBtn ? (
+      {isShowJoinBtn && isGroupChat ? (
         <ButtonJoinWrapper>
           <BasicButton
             variant="contained"

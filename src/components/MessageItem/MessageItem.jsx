@@ -14,7 +14,7 @@ import {
   MessageContentStyled,
   LetterAvatarStyled,
   ContentMessage,
-  ContentJoin,
+  ContentJoinOrLeave,
   Time,
 } from './MessageItemStyled';
 
@@ -37,6 +37,7 @@ const MessageItem = ({
   const isCurrentUser = userId === currentUserId;
   const messageTypeText = type === MESSAGE_TYPES.TEXT;
   const messageTypeJoin = type === MESSAGE_TYPES.JOIN;
+  const messageTypeLeave = type === MESSAGE_TYPES.LEAVE;
 
   const handleOpen = async () => {
     if (isCurrentUser) {
@@ -78,7 +79,9 @@ const MessageItem = ({
           <Time>{time || 'time'}</Time>
         </MessageContentStyled>
       )}
-      {messageTypeJoin && <ContentJoin>{content || `message`}</ContentJoin>}
+      {(messageTypeJoin || messageTypeLeave) && (
+        <ContentJoinOrLeave>{content || `message`}</ContentJoinOrLeave>
+      )}
       <UserInfoModal
         open={open}
         handleClose={handleClose}

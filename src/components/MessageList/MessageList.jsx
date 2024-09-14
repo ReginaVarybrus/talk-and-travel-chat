@@ -1,12 +1,24 @@
 import { useEffect, useRef } from 'react';
 import MessageItem from '@/components/MessageItem/MessageItem';
+import { MESSAGE_TYPES } from '@/constants/messageTypes.js';
 import { MessageListStyled } from './MessageListStyled.js';
 
-const MessageList = ({ messages }) => {
+const MessageList = ({ messages, setIsUserTyping, setUserNameisTyping }) => {
   const messagesEndRef = useRef(null);
   const scrollToBottom = () => {
     messagesEndRef.current.scrollIntoView({ behavior: 'smooth' });
   };
+
+  useEffect(() => {
+    messages?.forEach(message => {
+      if (message.type === MESSAGE_TYPES.START_TYPING) {
+        setIsUserTyping(true);
+        setUserNameisTyping(message.user?.userName);
+      } else if (message.type === MESSAGE_TYPES.STOP_TYPING) {
+        setIsUserTyping(false);
+      }
+    });
+  }, [messages, setIsUserTyping, setUserNameisTyping]);
   useEffect(scrollToBottom, [messages]);
   return (
     <MessageListStyled>
@@ -19,7 +31,7 @@ const MessageList = ({ messages }) => {
           const isShownAvatar = message.type === 'TEXT' && isLastMessage;
           return (
             <MessageItem
-              key={message.id}
+              key={message.id || message.creationDate}
               content={message.content}
               userId={message.user?.id}
               userName={message.user?.userName}

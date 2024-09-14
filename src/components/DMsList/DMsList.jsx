@@ -15,7 +15,7 @@ const DMsList = () => {
   const [selectedChat, setSelectedChat] = useState(null);
   const userId = useSelector(getUser)?.id;
   const location = useLocation();
-
+  console.log('selectedChat', selectedChat);
   const { privateChatId, companionObject } = location.state || {};
   const { setChatData, setIsSubscribed, setSelectedCompanion } =
     useOutletContext();

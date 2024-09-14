@@ -1,4 +1,3 @@
-// RoomsList.jsx
 import { useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { useOutletContext } from 'react-router-dom';
@@ -22,6 +21,7 @@ const RoomsList = () => {
   const {
     setChatData,
     setIsSubscribed,
+    setIsShowJoinBtn,
     subscriptionRooms,
     setSubscriptionRooms,
   } = useOutletContext();
@@ -41,6 +41,7 @@ const RoomsList = () => {
 
   const handleOpenCountryRoom = countryName => {
     setSelectedCountry(countryName);
+    setIsShowJoinBtn(false);
   };
 
   return (
@@ -50,7 +51,7 @@ const RoomsList = () => {
           <ScrollBar>
             {subscriptionRooms.map(room => (
               <Item
-                key={room.name}
+                key={room.flagCode}
                 onClick={() => handleOpenCountryRoom(room.name)}
               >
                 <Flag

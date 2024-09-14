@@ -1,9 +1,11 @@
 import { useState, useEffect, useRef } from 'react';
 import { useSelector } from 'react-redux';
+import { routesPath } from '@/routes/routesConfig';
 import { getUser } from '@/redux-store/selectors.js';
 import { useFetch } from '@/hooks/useFetch.js';
 import ULRs from '@/redux-store/constants';
 import mapData from '@/data/countries.json';
+import { useNavigate } from 'react-router-dom';
 import {
   AutocompleteInputStyled,
   AutocompleteInput,
@@ -16,19 +18,18 @@ import {
 } from './SearchInputStyled';
 
 const SearchInput = ({ setChatData, setIsSubscribed, setIsShowJoinBtn }) => {
+  const navigate = useNavigate();
   const [selectedCountry, setSelectedCountry] = useState(null);
   const [searchedValue, setSearchedValue] = useState('');
   const [showItem, setShowItem] = useState(false);
   const autoCompleteRef = useRef(null);
   const userId = useSelector(getUser)?.id;
-
-  const { responseData: dataUserCountries } = useFetch(
-    ULRs.userCountries(userId, '')
-  );
   const { responseData: dataMainCountryChat } = useFetch(
     selectedCountry ? ULRs.getMainCountryChatByName(selectedCountry, '') : null
   );
-
+  const { responseData: dataUserCountries } = useFetch(
+    ULRs.userCountries(userId, '')
+  );
   const filterCountries = mapData.features.filter(name =>
     name.properties.ADMIN.toLowerCase().includes(searchedValue.toLowerCase())
   );
@@ -55,7 +56,6 @@ const SearchInput = ({ setChatData, setIsSubscribed, setIsShowJoinBtn }) => {
   const handleCountryClick = country => {
     const countryName = country.properties.ADMIN;
     setSelectedCountry(countryName);
-
     const nameOfCountry = dataUserCountries.find(
       item => item.name === countryName
     );
@@ -67,6 +67,7 @@ const SearchInput = ({ setChatData, setIsSubscribed, setIsShowJoinBtn }) => {
 
     setSearchedValue(countryName);
     setShowItem(false);
+    navigate(routesPath.ROOMS);
     setSearchedValue('');
   };
 
@@ -107,7 +108,7 @@ const SearchInput = ({ setChatData, setIsSubscribed, setIsShowJoinBtn }) => {
               <>
                 {filterCountries.map(country => (
                   <Item
-                    key={country.name}
+                    key={country.properties.ADMIN}
                     onClick={() => handleCountryClick(country)}
                   >
                     <Flag
