@@ -1,23 +1,19 @@
 import { useState, useRef } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { routesPath } from '@/routes/routesConfig';
+import BottomNavigation from '@mui/material/BottomNavigation';
 import CssBaseline from '@mui/material/CssBaseline';
 import Paper from '@mui/material/Paper';
 
-import { RoomsIcon, DMsIcon } from '../SideBar/SideBarStyled.js';
-import {
-  TapBarStyled,
-  TapBarButtonsWrapper,
-  TapBarButton,
-  MoreIcon,
-} from './TapBarStyled.js';
+import { RoomsIcon, DMsIcon } from '@/components/SideBar/SideBarStyled.js';
+import { TapBarStyled, TapBarButton, MoreIcon } from './TapBarStyled.js';
 
-const TapBar = () => {
-  const [value, setValue] = useState(0);
-  const ref = useRef(null);
-  const navigate = useNavigate();
+const TapBar = ({ isChatVisible }) => {
   const location = useLocation();
   const currentPage = location.pathname;
+  const [value, setValue] = useState(1);
+  const ref = useRef(null);
+  const navigate = useNavigate();
 
   const handleProfileOpen = () => {
     navigate(routesPath.ACCOUNT);
@@ -32,13 +28,13 @@ const TapBar = () => {
   };
 
   return (
-    <TapBarStyled sx={{ pb: 7 }} ref={ref}>
+    <TapBarStyled sx={{ pb: 7 }} ref={ref} $isChatVisible={isChatVisible}>
       <CssBaseline />
       <Paper
         sx={{ position: 'fixed', bottom: 0, left: 0, right: 0 }}
         elevation={3}
       >
-        <TapBarButtonsWrapper
+        <BottomNavigation
           showLabels
           value={value}
           onChange={(event, newValue) => {
@@ -66,7 +62,7 @@ const TapBar = () => {
             onClick={handleProfileOpen}
             $isActive={currentPage === routesPath.ACCOUNT}
           />
-        </TapBarButtonsWrapper>
+        </BottomNavigation>
       </Paper>
     </TapBarStyled>
   );

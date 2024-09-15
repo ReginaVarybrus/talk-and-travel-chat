@@ -67,9 +67,9 @@ export const Item = styled.li`
 `;
 
 export const Flag = styled.img`
-  width: 32px;
-  height: 24px;
-  padding-right: 12px;
+  /* width: 32px;
+  height: 24px; */
+  margin-right: 12px;
 `;
 
 export const ScrollBar = styled(SimpleBar)`

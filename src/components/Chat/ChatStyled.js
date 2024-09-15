@@ -5,16 +5,24 @@ import { TextareaAutosize as BaseTextareaAutosize } from '@mui/material';
 
 export const ChatStyled = styled.div`
   display: ${({ $isChatVisible }) => ($isChatVisible ? 'flex' : 'none')};
+  align-items: center;
+  flex-direction: column;
+  width: 100%;
+  height: 100vh;
+  max-height: 100vh;
+  background: var(--white-color);
+  position: relative;
+  overflow: hidden;
   @media ${device.tablet} {
     display: flex;
-    flex-direction: column;
+    /* flex-direction: column; 
     align-items: center;
     width: 100%;
     height: 100vh;
-    max-height: 100vh;
-    background: var(--white-color);
+    max-height: 100vh; 
+    background: var(--white-color); 
     position: relative;
-    overflow: hidden;
+    overflow: hidden; */
   }
 `;
 

@@ -3,7 +3,11 @@ import { device } from '@/constants/mediaQueries';
 import { LuLogOut, LuMessagesSquare } from 'react-icons/lu';
 import { TbUser, TbUsers } from 'react-icons/tb';
 
-const iconProperties = (width = '24px', height = '48px', marginRight = '0') => `
+export const iconProperties = (
+  width = '24px',
+  height = '48px',
+  marginRight = '0'
+) => `
   width: ${width};
   height: ${height};
   margin-right: ${marginRight};
