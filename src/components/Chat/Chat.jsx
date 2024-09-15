@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import PropTypes from 'prop-types';
+import { CHAT_TYPES } from '@/constants/chatTypes';
 import { getUser } from '@/redux-store/selectors.js';
 import { useWebSocket } from '@/hooks/useWebSocket.js';
 import ULRs from '@/redux-store/constants';
@@ -30,7 +31,7 @@ const Chat = ({
   const [userNameisTyping, setUserNameisTyping] = useState('');
   const userId = useSelector(getUser)?.id;
   const { id, name, messages, usersCount, chatType } = chatData;
-  const isPrivateChat = chatType === 'PRIVATE';
+  const isPrivateChat = chatType === CHAT_TYPES.PRIVATE;
 
   const {
     subscribeToMessages,
