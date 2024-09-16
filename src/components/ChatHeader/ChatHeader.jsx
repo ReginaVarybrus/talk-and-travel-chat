@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 import { useSelector } from 'react-redux';
 import { getUser } from '@/redux-store/selectors.js';
 import CountryInfo from '@/components/CountryInfo/CountryInfo';
-import { MoreIcon } from '@/components/TapBar/TapBarStyled.js';
 import {
   ChatHeaderStyled,
   MobileHeaderStyled,
@@ -12,6 +11,7 @@ import {
   HeaderButton,
   BackIcon,
   FlagImg,
+  OpenCountryInfoIcon,
 } from './ChatHeaderStyled';
 
 const ChatHeader = ({
@@ -46,8 +46,7 @@ const ChatHeader = ({
         <MobileHeaderContentStyled>
           <FlagImg
             loading="lazy"
-            // width="36"
-            // height="36"
+            width="36"
             srcSet={`https://flagcdn.com/w40/${countryFlagCode}.png 2x`}
             src={`https://flagcdn.com/w20/${countryFlagCode}.png`}
             alt={`${countryFlagCode} flag`}
@@ -62,7 +61,7 @@ const ChatHeader = ({
           </div>
         </MobileHeaderContentStyled>
         <HeaderButton onClick={handleOpen}>
-          <MoreIcon />
+          <OpenCountryInfoIcon />
         </HeaderButton>
       </MobileHeaderStyled>
 

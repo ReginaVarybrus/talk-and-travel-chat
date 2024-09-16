@@ -3,7 +3,7 @@ import { device } from '@/constants/mediaQueries';
 import Box from '@mui/material/Box';
 import BottomNavigationAction from '@mui/material/BottomNavigationAction';
 import { MdMoreHoriz } from 'react-icons/md';
-import { iconProperties } from '../SideBar/SideBarStyled';
+import { iconProperties } from '@/components/SideBar/SideBarStyled';
 
 export const TapBarStyled = styled(Box)`
   display: ${({ $isChatVisible }) => ($isChatVisible ? 'none' : 'block')};

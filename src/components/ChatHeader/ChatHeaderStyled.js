@@ -1,10 +1,10 @@
 import styled from 'styled-components';
 import { device } from '@/constants/mediaQueries';
 import { IoIosArrowBack } from 'react-icons/io';
+import { MdMoreHoriz } from 'react-icons/md';
+import { iconProperties } from '@/components/SideBar/SideBarStyled';
 
 export const ChatHeaderStyled = styled.header`
-  display: flex;
-  /* align-items: center; */
   width: 100%;
   background: var(--white-color);
   border-bottom: 1px solid var(--color-grey-6);
@@ -40,7 +40,14 @@ export const MobileHeaderContentStyled = styled.div`
   display: flex;
   flex: 1;
   align-items: center;
-  justify-content: center;
+  margin: 0 16px;
+
+  h5 {
+    width: 144px;
+    overflow: hidden;
+    text-wrap: nowrap;
+    text-overflow: ellipsis;
+  }
 `;
 
 export const DesktopHeaderStyled = styled.div`
@@ -74,6 +81,7 @@ export const HeaderButton = styled.button`
   width: 24px;
   padding: 0;
   background: none;
+  border: none;
   cursor: pointer;
   color: var(--color-grey-9);
   @media ${device.tablet} {
@@ -84,11 +92,12 @@ export const HeaderButton = styled.button`
 export const BackIcon = styled(IoIosArrowBack)`
   width: 24px;
   height: 24px;
-  /* stroke: var(--color-grey-9); */
 `;
 
 export const FlagImg = styled.img`
-  width: 36px;
-  height: 36px;
   margin-right: 12px;
+`;
+
+export const OpenCountryInfoIcon = styled(MdMoreHoriz)`
+  ${iconProperties('24px', '24px')};
 `;

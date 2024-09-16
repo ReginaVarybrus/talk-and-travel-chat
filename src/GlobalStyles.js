@@ -60,10 +60,14 @@ h1,h2,h3,h4,h5,h6,p{
 }
 
 h5 {
-  font-size: 18px;
+  font-size: 16px;
   font-weight: 600;
-  line-height: 21.6px;
+  line-height: 19.2px;
   color: var(--color-dark);
+  @media ${device.tablet} {
+    font-size: 18px;
+    line-height: 21.6px;
+  }
 }
 
 h6 {
@@ -80,7 +84,6 @@ p {
   @media ${device.tablet} {
     font-size: 16px;
   }
-  
 }
 
 svg{

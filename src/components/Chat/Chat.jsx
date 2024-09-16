@@ -29,14 +29,14 @@ const Chat = ({
   isSubscribed,
   isShowJoinBtn,
   setIsShowJoinBtn,
-  // isChatVisible,
-  // setIsChatVisible,
 }) => {
   const [isUserTyping, setIsUserTyping] = useState(false);
   const [userNameisTyping, setUserNameisTyping] = useState('');
   const userId = useSelector(getUser)?.id;
   const { subscribeToGroupMessages, subscribeToUserErrors } = useWebSocket();
-  const { isChatVisible, setIsChatVisible } = useOutletContext();
+  const context = useOutletContext();
+  const isChatVisible = context?.isChatVisible;
+  const setIsChatVisible = context?.setIsChatVisible;
 
   useEffect(() => {
     if (isSubscribed) {

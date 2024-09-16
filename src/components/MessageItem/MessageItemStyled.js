@@ -1,4 +1,5 @@
 import styled from 'styled-components';
+import { device } from '@/constants/mediaQueries';
 
 export const MessageItemStyled = styled.li`
   display: flex;
@@ -10,12 +11,20 @@ export const MessageItemStyled = styled.li`
 export const MessageContentStyled = styled.div`
   display: flex;
   align-items: end;
-  max-width: 280px;
+  max-width: 190px;
   padding: 16px;
   border-radius: 8px;
   margin-left: ${({ $isShownAvatar }) => ($isShownAvatar ? '16px' : '64px')};
   background: ${({ $backgroundMessage }) =>
     $backgroundMessage ? 'var(--white-color)' : 'var(--color-blue-1)'};
+
+  @media ${device.mobileM} {
+    max-width: 275px;
+  }
+
+  @media ${device.tablet} {
+    max-width: 280px;
+  }
 `;
 
 export const LetterAvatarStyled = styled.div`
@@ -34,8 +43,13 @@ export const LetterAvatarStyled = styled.div`
 
 export const ContentMessage = styled.p`
   text-align: start;
-  font-size: 16px;
+  font-size: 14px;
+  word-break: break-all;
   color: var(--color-dark);
+
+  @media ${device.tablet} {
+    font-size: 16px;
+  }
 `;
 
 export const ContentJoinOrLeave = styled.p`

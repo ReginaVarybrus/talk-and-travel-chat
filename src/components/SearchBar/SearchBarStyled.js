@@ -3,26 +3,25 @@ import Box from '@mui/material/Box';
 import { device } from '@/constants/mediaQueries';
 
 export const SearchBarStyled = styled.div`
-  /* display: flex; */
   display: ${({ $isChatVisible }) => ($isChatVisible ? 'none' : 'flex')};
   flex-direction: column;
   justify-content: start;
   align-items: center;
-  min-width: 100%;
-  padding: 48px 16px 0;
+  width: 100%;
+  padding: 48px 0 0;
   box-sizing: border-box;
   background: var(--white-color);
 
   @media ${device.tablet} {
     display: flex;
-    min-width: 250px;
+    width: 250px;
     border-right: 1px solid var(--color-grey-6);
     border-left: 1px solid var(--color-grey-6);
     padding: 48px 16px;
   }
   @media ${device.laptop} {
     display: flex;
-    min-width: 300px;
+    width: 300px;
     border-right: 1px solid var(--color-grey-6);
     border-left: 1px solid var(--color-grey-6);
     padding: 48px 16px;
@@ -36,7 +35,7 @@ export const Text = styled.p`
 `;
 
 export const ButtonMapOpen = styled.button`
-  width: 100%;
+  width: 90%;
   min-height: 36px;
   margin-bottom: 34px;
   font-size: 14px;
@@ -49,6 +48,10 @@ export const ButtonMapOpen = styled.button`
   &:hover {
     background: var(--color-blue-1);
   }
+
+  @media ${device.laptop} {
+    width: 100%;
+  }
 `;
 
 export const MapBox = styled(Box)`
@@ -56,7 +59,6 @@ export const MapBox = styled(Box)`
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  /* width: 400, */
   background: var(--white-color);
   border-radius: 32px;
   boxshadow: 24;
