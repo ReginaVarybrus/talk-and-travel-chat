@@ -1,8 +1,9 @@
+import CountryInfo from '@/components/CountryInfo/CountryInfo';
+import PropTypes from 'prop-types';
 import { useSelector } from 'react-redux';
 import { useState } from 'react';
 import { getUser } from '@/redux-store/selectors';
 import { ChatHeaderStyled } from './ChatHeaderStyled';
-import CountryInfo from '../CountryInfo/CountryInfo';
 
 const ChatHeader = ({
   chatName,
@@ -54,6 +55,16 @@ const ChatHeader = ({
   );
 };
 
-export default ChatHeader;
+ChatHeader.propTypes = {
+  chatName: PropTypes.string,
+  participantsAmount: PropTypes.number,
+  selectedCompanion: PropTypes.number,
+  chatId: PropTypes.number,
+  isPrivateChat: PropTypes.bool,
+  setSubscriptionRooms: PropTypes.func,
+  isSubscribed: PropTypes.bool,
+  isUserTyping: PropTypes.bool,
+  userNameisTyping: PropTypes.string,
+};
 
-// add online status for dms chat
+export default ChatHeader;

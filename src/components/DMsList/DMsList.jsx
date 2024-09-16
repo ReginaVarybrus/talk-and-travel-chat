@@ -6,7 +6,6 @@ import ULRs from '@/redux-store/constants';
 import { getUser } from '@/redux-store/selectors';
 import { useFetch } from '@/hooks/useFetch';
 import avatarImage from '@/images/Avatar.png';
-// import { timeStampConverter } from '../utils/timeUtil';
 import { Item, Avatar, ChatName, MessageDay } from './DMsListStyled';
 import { ListStyled, Text, ListItems } from '../RoomsList/RoomsListStyled.js';
 import 'simplebar-react/dist/simplebar.min.css';
@@ -65,7 +64,6 @@ const DMsList = () => {
                 </ChatName>
                 <MessageDay>
                   <p>{new Date(chat.creationDate).toLocaleDateString()}</p>
-                  {/* add day of last message instead of creationDate */}
                 </MessageDay>
               </Item>
             ))}

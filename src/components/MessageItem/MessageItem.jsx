@@ -69,7 +69,7 @@ const MessageItem = ({
       {messageTypeText && userId && isShownAvatar && (
         <LetterAvatarStyled
           $isCurrentUser={isCurrentUser}
-          onClick={isCurrentUser ? null : handleOpen}
+          onClick={!isCurrentUser && handleOpen}
         >
           {firstLetterOfName}
         </LetterAvatarStyled>
