@@ -34,6 +34,7 @@ const CountryInfo = ({
   onClose,
   countryName,
   participantsAmount,
+  setParticipantsAmount,
   setSubscriptionCountryRooms,
   countryChatId,
 }) => {
@@ -49,6 +50,7 @@ const CountryInfo = ({
     setSubscriptionCountryRooms(prevRooms =>
       prevRooms.filter(room => room.name !== countryName)
     );
+    setParticipantsAmount(prevCount => (prevCount > 0 ? prevCount - 1 : 0));
     onClose();
   };
   const url = countryChatId && ULRs.getChatsParticipants(countryChatId);

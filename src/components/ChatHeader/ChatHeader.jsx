@@ -8,6 +8,7 @@ import { ChatHeaderStyled } from './ChatHeaderStyled';
 const ChatHeader = ({
   countryName = 'Country Name',
   participantsAmount = 0,
+  setParticipantsAmount,
   countryChatId,
   setSubscriptionCountryRooms,
   isSubscribed,
@@ -38,6 +39,7 @@ const ChatHeader = ({
         onClose={handleClose}
         countryName={countryName}
         participantsAmount={participantsAmount}
+        setParticipantsAmount={setParticipantsAmount}
         countryChatId={countryChatId}
         setSubscriptionCountryRooms={setSubscriptionCountryRooms}
         isSubscribed={isSubscribed}

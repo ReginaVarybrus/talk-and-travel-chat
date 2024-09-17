@@ -19,6 +19,7 @@ import {
 const Chat = ({
   countryName,
   participantsAmount,
+  setParticipantsAmount,
   countryChatId,
   groupMessages,
   country,
@@ -54,6 +55,7 @@ const Chat = ({
         <ChatHeader
           countryName={countryName}
           participantsAmount={participantsAmount}
+          setParticipantsAmount={setParticipantsAmount}
           countryChatId={countryChatId}
           setSubscriptionCountryRooms={setSubscriptionCountryRooms}
           isSubscribed={isSubscribed}
@@ -79,6 +81,7 @@ const Chat = ({
       <MessageBar
         countryChatId={countryChatId}
         country={country}
+        setParticipantsAmount={setParticipantsAmount}
         setSubscriptionCountryRooms={setSubscriptionCountryRooms}
         isShowJoinBtn={isShowJoinBtn}
         setIsShowJoinBtn={setIsShowJoinBtn}

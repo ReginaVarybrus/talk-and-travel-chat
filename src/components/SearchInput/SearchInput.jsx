@@ -19,6 +19,7 @@ const SearchInput = ({
   subscriptionCountryRooms,
   setIsSubscribed,
   setIsShowJoinBtn,
+  setParticipantsAmount,
 }) => {
   const [selectedCountry, setSelectedCountry] = useState(null);
   const [searchedValue, setSearchedValue] = useState('');
@@ -35,6 +36,7 @@ const SearchInput = ({
   useEffect(() => {
     if (dataMainCountryChat) {
       setCountryData(dataMainCountryChat);
+      setParticipantsAmount(dataMainCountryChat.usersCount);
       setIsSubscribed(true);
     }
   }, [dataMainCountryChat]);

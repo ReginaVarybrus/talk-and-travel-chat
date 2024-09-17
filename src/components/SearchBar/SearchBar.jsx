@@ -13,6 +13,7 @@ const SearchBar = ({
   subscriptionCountryRooms,
   setIsSubscribed,
   setIsShowJoinBtn,
+  setParticipantsAmount,
 }) => {
   const [openMap, setOpenMap] = useState(false);
   const handleOpen = () => setOpenMap(true);
@@ -25,6 +26,7 @@ const SearchBar = ({
         subscriptionCountryRooms={subscriptionCountryRooms}
         setIsSubscribed={setIsSubscribed}
         setIsShowJoinBtn={setIsShowJoinBtn}
+        setParticipantsAmount={setParticipantsAmount}
       />
       <ButtonMapOpen onClick={handleOpen}>Search by map</ButtonMapOpen>
       <div>
@@ -33,6 +35,7 @@ const SearchBar = ({
             setCountryData,
             subscriptionCountryRooms,
             setIsSubscribed,
+            setParticipantsAmount,
           }}
         />
       </div>
