@@ -4,8 +4,16 @@ const ULRs = {
   logout: 'authentication/logout',
   currentUser: 'current',
   updateUser: 'users',
-  countries: 'countries',
-  userCountries: userId => `countries/all-by-user/${userId}/participating`,
+  userInfo: userId => `users/${userId}`,
+  getMainCountryChatByName: countryName => `chats/${countryName}/main`,
+  userCountries: userId => `countries/user/${userId}`,
+  subscriptionToGroupMessages: chatId => `/countries/${chatId}/messages`,
+  getChatsParticipants: chatId => `/chats/${chatId}/users`,
+  subscriptionToUserErrors: userId => `/user/${userId}/errors`,
+  joinToGroupChat: '/chat/events.joinChat',
+  leaveOutGroupChat: '/chat/events.leaveChat',
+  startTyping: '/chat/events.startTyping',
+  stopTyping: '/chat/events.stopTyping',
 };
 
 export default ULRs;

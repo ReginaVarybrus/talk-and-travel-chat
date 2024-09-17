@@ -1,5 +1,5 @@
 import SimpleBar from 'simplebar-react';
-import avatarImage from '@/images/img/Avatar.png';
+import avatarImage from '@/images/Avatar.png';
 import { Item, Avatar, ChatName, MessageDay } from './DMsListStyled';
 import { ListStyled, Text, ListItems } from '../RoomsList/RoomsListStyled.js';
 import 'simplebar-react/dist/simplebar.min.css';

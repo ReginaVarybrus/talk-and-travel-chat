@@ -2,90 +2,63 @@ import { useRef, useEffect } from 'react';
 // eslint-disable-next-line import/no-extraneous-dependencies
 import { useStompClient } from 'react-stomp-hooks';
 
-export const useWebSocket = () => {
-  // const [isConnected, setConnected] = useState(false);
-  // const [currentRoom, setCurrentRoom] = useState(null);
-  const subscriptionRoom = useRef(null);
-  const onDataReceivedRef = useRef(null);
+export const useWebSocket = () =>
+{
   const stompClient = useStompClient();
+  const isSubscribedToMessages = useRef(false);
+  const isSubscribedToErrors = useRef(false);
 
-  // const onError = err => {
-  //   console.log('connect error', err);
-  // };
+  const subscribeToGroupMessages = (endpoint, setCountryData) =>
+  {
+    if (stompClient && stompClient.connected && isSubscribedToMessages) {
+      stompClient.subscribe(endpoint, response =>
+      {
+        const receivedMessage = JSON.parse(response.body);
 
-  // const connect = () => {
-  //   const socket = new SockJS(`${import.meta.env.VITE_APP_API_URL}/ws/`);
-  //   const client = Stomp.over(socket);
-  //   client.connect(
-  //     {},
-  //     frame => {
-  //       setStompClient(client);
-  //       setConnected(true);
-  //       console.log('isConnected:', isConnected);
-  //       console.log(`Connected successfull TEST: ${frame}`);
-  //     },
-  //     onError
-  //   );
-  // };
-
-  const subscribeToCountryRoom = (countryName, onDataReceived) => {
-    if (stompClient && stompClient.connected) {
-      if (subscriptionRoom.current) {
-        subscriptionRoom.current.unsubscribe();
-      }
-
-      subscriptionRoom.current = stompClient.subscribe(
-        `/countries/${countryName}`,
-        response => {
-          const data = JSON.parse(response.body);
-          console.log('recieved websocket data:', data);
-          onDataReceived(data);
-        }
-      );
-
-      onDataReceivedRef.current = onDataReceived;
-    }
-  };
-
-  // useSubscription(`/countries/${countryName}`, (response) => setLastMessage(response.body));
-
-  const createCountryRoom = countryData => {
-    if (stompClient && stompClient.connected) {
-      stompClient.publish({
-        destination: `/chat/countries/create`,
-        body: JSON.stringify(countryData),
+        setCountryData(prevCountryData =>
+        {
+          const updatedGroupMessages = [
+            ...(prevCountryData.messages || []),
+            receivedMessage,
+          ];
+          return {
+            ...prevCountryData,
+            messages: updatedGroupMessages,
+          };
+        });
       });
-    } else {
-      console.error('CREATED. Stomp client is not connected.');
+      isSubscribedToMessages.current = true;
     }
   };
 
-  const updateCountryRoom = (countryName, countryData) => {
-    if (stompClient && stompClient.connected) {
-      stompClient.publish({
-        destination: `/chat/countries/update/${countryName}`,
-        body: JSON.stringify(countryData),
+  const subscribeToUserErrors = (endpoint, setCountryData) =>
+  {
+    if (stompClient && stompClient.connected && isSubscribedToErrors) {
+      stompClient.subscribe(endpoint, response =>
+      {
+        const receivedError = JSON.parse(response.body);
+
+        setCountryData(prevCountryData =>
+        {
+          const updatedError = [
+            ...(prevCountryData.events || []),
+            receivedError,
+          ];
+          return {
+            ...prevCountryData,
+            events: updatedError,
+          };
+        });
       });
-    } else {
-      console.error('UPDATE. Stomp client is not connected.');
+      isSubscribedToErrors.current = true;
     }
   };
 
-  const openCountryRoom = countryName => {
+  const sendMessage = message =>
+  {
     if (stompClient && stompClient.connected) {
       stompClient.publish({
-        destination: `/chat/countries/find-by-name/${countryName}`,
-        body: '',
-      });
-    } else {
-      console.error('OPEN. Stomp client is not connected.');
-    }
-  };
-
-  const sendMessage = message => {
-    if (stompClient && stompClient.connected) {
-      stompClient.publish({
-        destination: `/chat/group-messages`,
+        destination: `/chat/messages`,
         body: JSON.stringify(message),
       });
     } else {
@@ -95,23 +68,39 @@ export const useWebSocket = () => {
     }
   };
 
-  useEffect(() => {
+  const sendEvent = (message, endpoint) =>
+  {
+    if (stompClient && stompClient.connected) {
+      stompClient.publish({
+        destination: endpoint,
+        body: JSON.stringify(message),
+      });
+    } else {
+      console.error('EVENT.Stomp client is not connected or no current room.');
+    }
+  };
+
+  const handleDeactivateStopmClient = () =>
+  {
+    if (stompClient && stompClient.connected) {
+      stompClient.deactivate();
+      console.log('Stomp client deactivated on logout');
+    }
+  };
+
+  useEffect(() =>
+  {
     if (stompClient && !stompClient.connected) {
       stompClient.activate();
     }
-    return () => {
-      if (stompClient && stompClient.connected) {
-        stompClient.deactivate();
-      }
-    };
   }, [stompClient]);
 
   return {
     stompClient,
-    subscribeToCountryRoom,
-    createCountryRoom,
-    updateCountryRoom,
-    openCountryRoom,
+    subscribeToGroupMessages,
+    subscribeToUserErrors,
     sendMessage,
+    sendEvent,
+    handleDeactivateStopmClient,
   };
 };

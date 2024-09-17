@@ -1,16 +1,59 @@
-import { ChatHeaderStyled, HeaderContent } from './ChatHeaderStyled';
+import { useState } from 'react';
+import PropTypes from 'prop-types';
+import { useSelector } from 'react-redux';
+import { getUser } from '@/redux-store/selectors.js';
+import CountryInfo from '../CountryInfo/CountryInfo';
+import { ChatHeaderStyled } from './ChatHeaderStyled';
 
-const ChatHeader = ({ countryData }) => (
-  <ChatHeaderStyled>
-    <HeaderContent>
-      <h5>{countryData.name || 'Country Name'}</h5>
-      <p>
-        {`${
-          countryData.participants ? countryData.participants.length : '0'
-        } participants`}
-      </p>
-    </HeaderContent>
-  </ChatHeaderStyled>
-);
+const ChatHeader = ({
+  countryName = 'Country Name',
+  participantsAmount = 0,
+  countryChatId,
+  setSubscriptionCountryRooms,
+  isSubscribed,
+  isUserTyping,
+  userNameisTyping,
+}) => {
+  const [openModal, setOpenModal] = useState(false);
+  const userName = useSelector(getUser)?.userName;
+  const handleOpen = () => setOpenModal(true);
+  const handleClose = () => {
+    setOpenModal(false);
+  };
+
+  const showUserIsTyping = isUserTyping && userNameisTyping !== userName;
+
+  return (
+    <>
+      <ChatHeaderStyled onClick={handleOpen}>
+        <h5>{countryName}</h5>
+        <p>
+          {showUserIsTyping
+            ? `${userNameisTyping} is typing...`
+            : `${participantsAmount} participants`}
+        </p>
+      </ChatHeaderStyled>
+      <CountryInfo
+        isOpen={openModal}
+        onClose={handleClose}
+        countryName={countryName}
+        participantsAmount={participantsAmount}
+        countryChatId={countryChatId}
+        setSubscriptionCountryRooms={setSubscriptionCountryRooms}
+        isSubscribed={isSubscribed}
+      />
+    </>
+  );
+};
+
+ChatHeader.propTypes = {
+  countryName: PropTypes.string,
+  participantsAmount: PropTypes.number,
+  countryChatId: PropTypes.number,
+  setSubscriptionCountryRooms: PropTypes.func,
+  isSubscribed: PropTypes.bool,
+  isUserTyping: PropTypes.bool,
+  userNameisTyping: PropTypes.string,
+};
 
 export default ChatHeader;

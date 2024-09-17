@@ -5,7 +5,10 @@ import {
   ErrorStyled,
   SuccessStyled,
   PasswordReapetLable,
-} from '@/components/InputField/InputField.styled';
+  IconContainer,
+} from '@/components/InputField/InputFieldStyled';
+import { useState } from 'react';
+import { TbEye, TbEyeClosed } from 'react-icons/tb';
 
 /* 
 {disabled} variable is passed to determine whether input filed is asctive or not and 
@@ -24,6 +27,12 @@ styles are different then in Profile.
 
 */
 const InputField = ({ props, formik, disabled, nolabel, backgroundColor }) => {
+  const [showPassword, setShowPassword] = useState(false);
+
+  const togglePassword = () => {
+    setShowPassword(!showPassword);
+  };
+
   const renderValidationMessage = () => {
     const label =
       props.general === 'password'
@@ -57,7 +66,9 @@ const InputField = ({ props, formik, disabled, nolabel, backgroundColor }) => {
         autoComplete="off"
         id={props.general}
         name={props.general}
-        type={props.type}
+        type={
+          showPassword && props.general === 'password' ? 'text' : props.type
+        }
         disabled={disabled}
         onChange={formik.handleChange}
         value={formik.values[props.general] || ''}
@@ -66,6 +77,11 @@ const InputField = ({ props, formik, disabled, nolabel, backgroundColor }) => {
         $isSuccessColor={formik.touched[props.general]}
         backgroundColor={backgroundColor}
       />
+      {props.general === 'password' && (
+        <IconContainer onClick={togglePassword}>
+          {showPassword ? <TbEyeClosed /> : <TbEye />}
+        </IconContainer>
+      )}
       {renderValidationMessage()}
     </InputFieldStyled>
   );

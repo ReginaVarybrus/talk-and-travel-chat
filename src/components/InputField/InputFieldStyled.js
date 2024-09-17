@@ -1,7 +1,6 @@
 import styled from 'styled-components';
 
-const getNotificationColor = ({ $isErrorColor, $isSuccessColor }) =>
-{
+const getNotificationColor = ({ $isErrorColor, $isSuccessColor }) => {
   if ($isErrorColor) return 'var(--color-error)';
   if ($isSuccessColor) return 'var(--color-success)';
   return '#79747E';
@@ -43,6 +42,7 @@ export const StyledInput = styled.input`
     color: #49454f;
   }
   padding-left: 16px;
+  padding-right: ${({ type }) => (type === 'password' ? '48px' : '16px')};
 
   @media screen and (min-width: 768px) {
     background-color: ${({ backgroundColor }) => backgroundColor || 'var(--color-grey-4)'};
@@ -63,4 +63,24 @@ export const PasswordReapetLable = styled.p`
   ${generalNotificationStyles}
   padding-left: 14px;
   color: #49454f;
+`;
+
+export const IconContainer = styled.div`
+  position: absolute;
+  right: 14px;
+  top: 16px;
+  cursor: pointer;
+
+  svg {
+    width: 24px;
+    height: 24px;
+    color: var(--color-grey-9);
+    transition: all 0.3s;
+  }
+
+  &:hover {
+    svg {
+      color: var(--color-blue-3);
+    }
+  }
 `;

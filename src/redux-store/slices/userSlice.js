@@ -1,6 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit';
-import
-{
+import {
   fetchCurrentUser,
   updateUser,
 } from '@/redux-store/UserOperations/UserOperations';
@@ -33,8 +32,7 @@ export const userSlice = createSlice({
       ...state,
       ...action.payload.userDto,
     }),
-    clearUser: (state) =>
-      ({ ...state, ...initialState }),
+    clearUser: state => ({ ...state, ...initialState }),
   },
   extraReducers: builder =>
     builder

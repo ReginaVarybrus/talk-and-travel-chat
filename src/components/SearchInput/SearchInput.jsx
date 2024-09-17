@@ -1,9 +1,7 @@
 import { useState, useEffect, useRef } from 'react';
-import { useSelector } from 'react-redux';
-import ULRs from '@/redux-store/constants';
-import { getUser } from '@/redux-store/selectors';
+import PropTypes from 'prop-types';
 import { useFetch } from '@/hooks/useFetch.js';
-import { useWebSocket } from '@/hooks/useWebSocket.js';
+import ULRs from '@/redux-store/constants';
 import mapData from '@/data/countries.json';
 import {
   AutocompleteInputStyled,
@@ -17,42 +15,33 @@ import {
 } from './SearchInputStyled';
 import ModalCreateRoom from '../ModalCreateRoom/ModalCreateRoom';
 
-const SearchInput = ({ setCurrentCountryRoom, onDataReceived }) => {
-  const [open, setOpen] = useState(false);
+const SearchInput = ({
+  setCountryData,
+  subscriptionCountryRooms,
+  setIsSubscribed,
+  setIsShowJoinBtn,
+}) => {
+  const [selectedCountry, setSelectedCountry] = useState(null);
   const [searchedValue, setSearchedValue] = useState('');
   const [createdCountries, setCreatedCountries] = useState([]);
   const [dataToCreate, setDataToCreate] = useState({});
   const [showItem, setShowItem] = useState(false);
   const [selectedCountry, setSelectedCountry] = useState(null);
   const autoCompleteRef = useRef(null);
-  const userId = useSelector(getUser)?.id;
-
-  const { responseData } = useFetch(ULRs.countries);
-
-  const {
-    stompClient,
-    subscribeToCountryRoom,
-    createCountryRoom,
-    updateCountryRoom,
-  } = useWebSocket();
-
-  useEffect(() => {
-    if (stompClient && selectedCountry) {
-      subscribeToCountryRoom(selectedCountry, onDataReceived);
-      setCurrentCountryRoom(selectedCountry);
-      console.log('Subscribe succesfull');
-    }
-  }, [stompClient, selectedCountry]);
-
-  useEffect(() => {
-    if (responseData) {
-      setCreatedCountries(responseData);
-    }
-  }, [responseData]);
+  const { responseData: dataMainCountryChat } = useFetch(
+    selectedCountry ? ULRs.getMainCountryChatByName(selectedCountry, '') : null
+  );
 
   const filterCountries = mapData.features.filter(name =>
     name.properties.ADMIN.toLowerCase().includes(searchedValue.toLowerCase())
   );
+
+  useEffect(() => {
+    if (dataMainCountryChat) {
+      setCountryData(dataMainCountryChat);
+      setIsSubscribed(true);
+    }
+  }, [dataMainCountryChat]);
 
   const handleChange = event => {
     const { value } = event.target;
@@ -69,36 +58,19 @@ const SearchInput = ({ setCurrentCountryRoom, onDataReceived }) => {
   const handleCountryClick = country => {
     const countryName = country.properties.ADMIN;
     setSelectedCountry(countryName);
-    const selectedItem = createdCountries.find(
+
+    const nameOfCountry = subscriptionCountryRooms.find(
       item => item.name === countryName
     );
-
-    const dataToUpdate = {
-      id: selectedItem ? selectedItem.id : null,
-      userId,
-    };
+    if (nameOfCountry) {
+      setIsShowJoinBtn(false);
+    } else {
+      setIsShowJoinBtn(true);
+    }
 
     setSearchedValue(countryName);
     setShowItem(false);
-
-    if (selectedItem) {
-      updateCountryRoom(countryName, dataToUpdate);
-    } else {
-      setOpen(true);
-      setDataToCreate({
-        userId,
-        name: countryName,
-        flagCode: country.properties.code,
-      });
-    }
-
     setSearchedValue('');
-  };
-
-  const handleCreateCountryRoom = () => {
-    createCountryRoom(dataToCreate);
-    setSelectedCountry(dataToCreate.name);
-    setOpen(false);
   };
 
   useEffect(() => {
@@ -136,11 +108,9 @@ const SearchInput = ({ setCurrentCountryRoom, onDataReceived }) => {
               </Text>
             ) : (
               <>
-                {filterCountries.map((country, id) => (
+                {filterCountries.map(country => (
                   <Item
-                    key={id}
-                    // key={country.properties.code}
-                    // onClick={() => handleCountryClick(country.properties.ADMIN)}
+                    key={country.properties.ADMIN}
                     onClick={() => handleCountryClick(country)}
                   >
                     <Flag
@@ -158,14 +128,15 @@ const SearchInput = ({ setCurrentCountryRoom, onDataReceived }) => {
           </ScrollBar>
         </ListItemsStyled>
       )}
-      <ModalCreateRoom
-        open={open}
-        setOpen={setOpen}
-        handleCreateCountryRoom={handleCreateCountryRoom}
-        selectedCountry={selectedCountry}
-      />
     </AutocompleteInputStyled>
   );
+};
+
+SearchInput.propTypes = {
+  setCountryData: PropTypes.func,
+  subscriptionCountryRooms: PropTypes.array,
+  setIsSubscribed: PropTypes.func,
+  setIsShowJoinBtn: PropTypes.func,
 };
 
 export default SearchInput;

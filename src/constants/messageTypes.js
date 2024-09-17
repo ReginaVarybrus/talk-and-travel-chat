@@ -1,0 +1,7 @@
+export const MESSAGE_TYPES = {
+  TEXT: 'TEXT',
+  JOIN: 'JOIN',
+  LEAVE: 'LEAVE',
+  START_TYPING: 'START_TYPING',
+  STOP_TYPING: 'STOP_TYPING',
+};

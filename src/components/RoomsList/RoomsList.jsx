@@ -1,38 +1,25 @@
 import { useState, useEffect } from 'react';
-import { useSelector } from 'react-redux';
 import { useOutletContext } from 'react-router-dom';
 import { useFetch } from '@/hooks/useFetch.js';
-import { useWebSocket } from '@/hooks/useWebSocket.js';
 import ULRs from '@/redux-store/constants';
-import { getUser } from '@/redux-store/selectors.js';
-import { ListStyled, Text, Item, ListItems } from './RoomsListStyled';
 import { Flag, ScrollBar } from '../SearchInput/SearchInputStyled.js';
+import { ListStyled, Text, Item, ListItems } from './RoomsListStyled';
 
 const RoomsList = () => {
-  const [countryRooms, setCountryRooms] = useState([]);
   const [selectedCountry, setSelectedCountry] = useState(null);
-  const userId = useSelector(getUser)?.id;
-  const { stompClient, subscribeToCountryRoom, openCountryRoom } =
-    useWebSocket();
-  const { responseData } = useFetch(ULRs.userCountries(userId));
-  const context = useOutletContext();
-  const { setCurrentCountryRoom, onDataReceived } = context;
+  const { responseData: dataMainCountryChat } = useFetch(
+    selectedCountry ? ULRs.getMainCountryChatByName(selectedCountry, '') : null
+  );
+
+  const { setCountryData, subscriptionCountryRooms, setIsSubscribed } =
+    useOutletContext();
 
   useEffect(() => {
-    if (responseData && userId) {
-      setCountryRooms(responseData);
+    if (dataMainCountryChat) {
+      setCountryData(dataMainCountryChat);
+      setIsSubscribed(true);
     }
-    console.log('response country', responseData);
-  }, [responseData, userId]);
-
-  useEffect(() => {
-    if (stompClient && selectedCountry) {
-      subscribeToCountryRoom(selectedCountry, onDataReceived);
-      setCurrentCountryRoom(selectedCountry);
-      openCountryRoom(selectedCountry);
-      console.log('Subscribe succesfull', selectedCountry);
-    }
-  }, [stompClient, selectedCountry]);
+  }, [dataMainCountryChat]);
 
   const handleOpenCountryRoom = countryName => {
     setSelectedCountry(countryName);
@@ -40,11 +27,14 @@ const RoomsList = () => {
 
   return (
     <ListStyled>
-      {countryRooms.length ? (
+      {subscriptionCountryRooms.length ? (
         <ListItems>
           <ScrollBar>
-            {countryRooms.map((room, id) => (
-              <Item key={id} onClick={() => handleOpenCountryRoom(room.name)}>
+            {subscriptionCountryRooms.map(room => (
+              <Item
+                key={room.flagCode}
+                onClick={() => handleOpenCountryRoom(room.name)}
+              >
                 <Flag
                   loading="lazy"
                   width="32"

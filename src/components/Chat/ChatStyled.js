@@ -14,6 +14,22 @@ export const ChatStyled = styled.div`
   overflow: hidden;
 `;
 
+export const NoMassegesNotification = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+`;
+
+export const Logo = styled.img`
+  width: 200px;
+  height: 160px;
+  margin-bottom: 20px;
+  stroke: var(--color-brand-blue);
+`;
+
 export const MessageBlock = styled.div`
   flex: 1;
   overflow-y: auto;

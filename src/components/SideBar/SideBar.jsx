@@ -1,8 +1,8 @@
 import { useNavigate, useLocation } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-// import { useWebSocket } from '@/hooks/useWebSocket.js';
 import { routesPath } from '@/routes/routesConfig';
 import { getUser } from '@/redux-store/selectors';
+import { useWebSocket } from '@/hooks/useWebSocket.js';
 import { logOut } from '@/redux-store/AuthOperations/AuthOperations';
 import {
   SideBarStyled,
@@ -21,6 +21,7 @@ const SideBar = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const location = useLocation();
+  const { handleDeactivateStopmClient } = useWebSocket();
   const currentPage = location.pathname;
   // const { disconnect } = useWebSocket();
 
@@ -37,16 +38,15 @@ const SideBar = () => {
   };
 
   const handleLogOut = () => {
-    console.log('Logging out...');
-    // disconnect();
     dispatch(logOut())
       .then(() => {
-        console.log('Logout successful.');
         navigate(routesPath.MAIN);
       })
       .catch(error => {
         console.error('Logout failed:', error.message);
       });
+
+    handleDeactivateStopmClient();
   };
 
   return (
