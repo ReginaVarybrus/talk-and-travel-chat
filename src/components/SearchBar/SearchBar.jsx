@@ -9,10 +9,15 @@ import ChatMap from '../ChatMap/ChatMap';
 import { SearchBarStyled, ButtonMapOpen, MapBox } from './SearchBarStyled';
 
 const SearchBar = ({
-  setCountryData,
-  subscriptionCountryRooms,
+  chatId,
+  setChatData,
+  subscriptionRooms,
+  setSubscriptionRooms,
+  isSubscribed,
   setIsSubscribed,
   setIsShowJoinBtn,
+  selectedCompanion,
+  setSelectedCompanion,
 }) => {
   const [openMap, setOpenMap] = useState(false);
   const handleOpen = () => setOpenMap(true);
@@ -21,8 +26,9 @@ const SearchBar = ({
   return (
     <SearchBarStyled>
       <SearchInput
-        setCountryData={setCountryData}
-        subscriptionCountryRooms={subscriptionCountryRooms}
+        chatId={chatId}
+        setChatData={setChatData}
+        isSubscribed={isSubscribed}
         setIsSubscribed={setIsSubscribed}
         setIsShowJoinBtn={setIsShowJoinBtn}
       />
@@ -30,9 +36,14 @@ const SearchBar = ({
       <div>
         <Outlet
           context={{
-            setCountryData,
-            subscriptionCountryRooms,
+            setChatData,
+            subscriptionRooms,
+            setSubscriptionRooms,
+            isSubscribed,
             setIsSubscribed,
+            setIsShowJoinBtn,
+            selectedCompanion,
+            setSelectedCompanion,
           }}
         />
       </div>
@@ -61,8 +72,8 @@ const SearchBar = ({
 };
 
 SearchBar.propTypes = {
-  setCountryData: PropTypes.func,
-  subscriptionCountryRooms: PropTypes.array,
+  setChatData: PropTypes.func,
+  subscriptionRooms: PropTypes.array,
   setIsSubscribed: PropTypes.func,
   setIsShowJoinBtn: PropTypes.func,
 };
