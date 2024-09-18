@@ -39,17 +39,16 @@ const ChatHeader = ({
             : !isPrivateChat && `${participantsAmount} participants`}
         </p>
       </ChatHeaderStyled>
-      {!isPrivateChat && (
-        <CountryInfo
-          isOpen={openModal}
-          onClose={handleClose}
-          countryName={chatName}
-          participantsAmount={participantsAmount || 0}
-          chatId={chatId}
-          setSubscriptionRooms={setSubscriptionRooms}
-          isSubscribed={isSubscribed}
-        />
-      )}
+
+      <CountryInfo
+        isOpen={openModal}
+        onClose={handleClose}
+        countryName={chatName}
+        participantsAmount={participantsAmount || 0}
+        chatId={chatId}
+        setSubscriptionRooms={setSubscriptionRooms}
+        isSubscribed={isSubscribed}
+      />
     </>
   );
 };
