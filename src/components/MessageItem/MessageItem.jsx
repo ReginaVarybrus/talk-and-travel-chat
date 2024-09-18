@@ -30,9 +30,7 @@ const MessageItem = ({
   const [userChats, setUserChats] = useState([]);
   const currentUserId = useSelector(getUser)?.id;
   const time = timeStampConverter(date);
-  const resolvedUserName =
-    typeof userName === 'string' ? userName : userName?.userName || '';
-  const firstLetterOfName = resolvedUserName.substr(0, 1).toUpperCase();
+  const firstLetterOfName = userName.substr(0, 1).toUpperCase();
   const isCurrentUser = userId === currentUserId;
 
   if ([MESSAGE_TYPES.START_TYPING, MESSAGE_TYPES.STOP_TYPING].includes(type)) {
@@ -69,7 +67,7 @@ const MessageItem = ({
       {messageTypeText && userId && isShownAvatar && (
         <LetterAvatarStyled
           $isCurrentUser={isCurrentUser}
-          onClick={!isCurrentUser && handleOpen}
+          onClick={!isCurrentUser ? handleOpen : undefined}
         >
           {firstLetterOfName}
         </LetterAvatarStyled>

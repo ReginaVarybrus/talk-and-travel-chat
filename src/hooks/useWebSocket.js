@@ -3,15 +3,11 @@ import { useStompClient } from 'react-stomp-hooks';
 
 export const useWebSocket = () => {
   const stompClient = useStompClient();
-  const isSubscribedToMessages = useRef(null);
+  const messagesSubscription = useRef(null);
   const isSubscribedToErrors = useRef(false);
 
   const subscribeToMessages = (endpoint, setCountryData) => {
-    if (
-      stompClient &&
-      stompClient.connected &&
-      !isSubscribedToMessages.current
-    ) {
+    if (stompClient && stompClient.connected && !messagesSubscription.current) {
       const subscription = stompClient.subscribe(endpoint, response => {
         const receivedMessage = JSON.parse(response.body);
 
@@ -26,16 +22,16 @@ export const useWebSocket = () => {
           };
         });
       });
-      isSubscribedToMessages.current = subscription;
+      messagesSubscription.current = subscription;
       return subscription;
     }
   };
   const unsubscribeFromMessages = () => {
-    const subscription = isSubscribedToMessages.current;
+    const subscription = messagesSubscription.current;
 
     if (stompClient && stompClient.connected && subscription) {
       subscription.unsubscribe();
-      isSubscribedToMessages.current = null;
+      messagesSubscription.current = null;
     }
   };
 

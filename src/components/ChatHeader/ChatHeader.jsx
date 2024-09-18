@@ -6,8 +6,8 @@ import { getUser } from '@/redux-store/selectors';
 import { ChatHeaderStyled } from './ChatHeaderStyled';
 
 const ChatHeader = ({
-  chatName,
-  participantsAmount,
+  chatName = 'Country name',
+  participantsAmount = 0,
   selectedCompanion,
   isPrivateChat,
   isUserTyping,
@@ -28,7 +28,6 @@ const ChatHeader = ({
   const handleClose = () => {
     setOpenModal(false);
   };
-
   return (
     <>
       <ChatHeaderStyled onClick={handleOpen}>
@@ -37,14 +36,14 @@ const ChatHeader = ({
         <p>
           {showUserIsTyping
             ? `${userNameisTyping} is typing...`
-            : !isPrivateChat && `${participantsAmount || '0'} participants`}
+            : !isPrivateChat && `${participantsAmount} participants`}
         </p>
       </ChatHeaderStyled>
       {!isPrivateChat && (
         <CountryInfo
           isOpen={openModal}
           onClose={handleClose}
-          countryName={chatName || 'Country Name'}
+          countryName={chatName}
           participantsAmount={participantsAmount || 0}
           chatId={chatId}
           setSubscriptionRooms={setSubscriptionRooms}
@@ -58,7 +57,11 @@ const ChatHeader = ({
 ChatHeader.propTypes = {
   chatName: PropTypes.string,
   participantsAmount: PropTypes.number,
-  selectedCompanion: PropTypes.number,
+  selectedCompanion: PropTypes.shape({
+    id: PropTypes.number,
+    userName: PropTypes.string,
+    userEmail: PropTypes.string,
+  }),
   chatId: PropTypes.number,
   isPrivateChat: PropTypes.bool,
   setSubscriptionRooms: PropTypes.func,

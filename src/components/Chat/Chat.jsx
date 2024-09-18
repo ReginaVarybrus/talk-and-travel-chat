@@ -45,12 +45,9 @@ const Chat = ({
       if (!isPrivateChat && selectedCompanion) {
         setSelectedCompanion(null);
       }
-      if (userId) {
-        subscribeToUserErrors(
-          ULRs.subscriptionToUserErrors(userId),
-          setChatData
-        );
-      }
+
+      subscribeToUserErrors(ULRs.subscriptionToUserErrors(userId), setChatData);
+
       return () => {
         unsubscribeFromMessages();
       };
