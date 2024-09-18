@@ -20,7 +20,7 @@ export const schema = yup.object().shape({
         .required('the field is empty'),
     about: yup
         .string()
-        .max(10, 'to long')
+        .max(200, 'test should be less then 200 symbols')
 });
 
 export const formFields = {

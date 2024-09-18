@@ -23,13 +23,14 @@ export const fetchCurrentUser = createAsyncThunk(
 
 export const updateUser = createAsyncThunk(
   'user/update',
-  async (user, thunkAPI) =>
+  async (user) =>
   {
     try {
       const { data } = await axiosClient.put(ULRs.updateUser, user);
-      return data.user;
+      console.log(data);
+      return data;
     } catch (error) {
-      return thunkAPI.rejectWithValue(error.message);
+      throw new Error(error.message);
     }
   }
 );

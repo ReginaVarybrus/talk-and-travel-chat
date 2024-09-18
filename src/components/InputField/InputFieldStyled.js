@@ -1,6 +1,7 @@
 import styled from 'styled-components';
 
-const getNotificationColor = ({ $isErrorColor, $isSuccessColor }) => {
+const getNotificationColor = ({ $isErrorColor, $isSuccessColor }) =>
+{
   if ($isErrorColor) return 'var(--color-error)';
   if ($isSuccessColor) return 'var(--color-success)';
   return '#79747E';
@@ -21,8 +22,12 @@ export const StyledLabel = styled.label`
   left: 1px;
   transform: translateY(-50%);
   background: var(--white-color);
+  padding: 0px 4px 0px 4px;
   margin: 0 12px;
   color: #49454F;
+  font-size: 12px;
+  line-height: 16px;
+
 `;
 
 export const StyledInput = styled.input`

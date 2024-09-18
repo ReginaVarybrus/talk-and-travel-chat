@@ -13,7 +13,6 @@ import {
   ScrollBar,
   Text,
 } from './SearchInputStyled';
-import ModalCreateRoom from '../ModalCreateRoom/ModalCreateRoom';
 
 const SearchInput = ({
   setCountryData,
@@ -23,10 +22,7 @@ const SearchInput = ({
 }) => {
   const [selectedCountry, setSelectedCountry] = useState(null);
   const [searchedValue, setSearchedValue] = useState('');
-  const [createdCountries, setCreatedCountries] = useState([]);
-  const [dataToCreate, setDataToCreate] = useState({});
   const [showItem, setShowItem] = useState(false);
-  const [selectedCountry, setSelectedCountry] = useState(null);
   const autoCompleteRef = useRef(null);
   const { responseData: dataMainCountryChat } = useFetch(
     selectedCountry ? ULRs.getMainCountryChatByName(selectedCountry, '') : null

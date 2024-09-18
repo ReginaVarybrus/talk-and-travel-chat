@@ -54,7 +54,7 @@ const Profile = () => {
     validationSchema: schema,
     validateOnChange: false,
     onSubmit: (values, { resetForm }) => {
-      console.log('SUBMIT');
+      console.log('SUBMIT', values);
       dispatch(updateUser(values));
       navigate(routesPath.ACCOUNT);
       resetForm();
