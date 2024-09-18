@@ -27,6 +27,7 @@ const MessageItem = ({
 }) => {
   const [open, setOpen] = useState(false);
   const [userInfo, setUserInfo] = useState({});
+  const [userChats, setUserChats] = useState([]);
   const currentUserId = useSelector(getUser)?.id;
   const time = timeStampConverter(date);
   const firstLetterOfName = userName.substr(0, 1).toUpperCase();
@@ -41,10 +42,17 @@ const MessageItem = ({
   const messageTypeLeave = type === MESSAGE_TYPES.LEAVE;
 
   const handleOpen = async () => {
+    if (isCurrentUser) {
+      return;
+    }
     try {
-      const response = await axiosClient.get(ULRs.userInfo(userId));
-      setUserInfo(response.data);
-      if (response.data.userName) {
+      const userInfoResponse = await axiosClient.get(ULRs.userInfo(userId));
+      setUserInfo(userInfoResponse.data);
+      const privateChatsResponse = await axiosClient.get(
+        ULRs.getPrivateChats(currentUserId, '')
+      );
+      setUserChats(privateChatsResponse.data);
+      if (userInfoResponse.data.userName) {
         setOpen(true);
       }
     } catch (error) {
@@ -57,7 +65,10 @@ const MessageItem = ({
   return (
     <MessageItemStyled $isShownAvatar={isShownAvatar}>
       {messageTypeText && userId && isShownAvatar && (
-        <LetterAvatarStyled onClick={handleOpen}>
+        <LetterAvatarStyled
+          $isCurrentUser={isCurrentUser}
+          onClick={!isCurrentUser ? handleOpen : undefined}
+        >
           {firstLetterOfName}
         </LetterAvatarStyled>
       )}
@@ -80,6 +91,8 @@ const MessageItem = ({
         userName={userInfo?.userName}
         userEmail={userInfo?.userEmail}
         about={userInfo?.about}
+        id={userInfo?.id}
+        dataUserChats={userChats}
       />
     </MessageItemStyled>
   );

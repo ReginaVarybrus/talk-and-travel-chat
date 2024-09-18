@@ -38,7 +38,7 @@ export const LetterAvatarStyled = styled.div`
   font-size: 18px;
   background: var(--color-grey-6);
   color: var(--white-color);
-  cursor: pointer;
+  cursor: ${({ $isCurrentUser }) => ($isCurrentUser ? 'default' : 'pointer')};
 `;
 
 export const ContentMessage = styled.p`

@@ -6,9 +6,12 @@ import Modal from '@mui/material/Modal';
 import { useFetch } from '@/hooks/useFetch.js';
 import ULRs from '@/redux-store/constants';
 import mapData from '@/data/countries.json';
+import { useNavigate } from 'react-router-dom';
 import { useWebSocket } from '@/hooks/useWebSocket.js';
 import { useSelector } from 'react-redux';
 import { getUser } from '@/redux-store/selectors.js';
+import { routesPath } from '@/routes/routesConfig.jsx';
+import { axiosClient } from '@/services/api.js';
 
 import {
   BoxStyled,
@@ -35,15 +38,54 @@ const CountryInfo = ({
   countryName,
   participantsAmount,
   setSubscriptionCountryRooms,
-  countryChatId,
+  chatId,
 }) => {
-  const userId = useSelector(getUser)?.id;
+  const currentUserId = useSelector(getUser)?.id;
   const { sendEvent } = useWebSocket();
+  const navigate = useNavigate();
 
+  const { responseData: dataUserChats } = useFetch(
+    ULRs.getPrivateChats(currentUserId, '')
+  );
+
+  const checkExistingPrivateChat = id => {
+    const isExist = dataUserChats?.find(chat => chat.companion.id === id);
+    return isExist && isExist.chat.id;
+  };
+
+  const handleCreatePrivateChat = async (id, userName, userEmail) => {
+    try {
+      const existingChatId = checkExistingPrivateChat(id);
+
+      if (existingChatId) {
+        navigate(routesPath.DMS, {
+          state: {
+            privateChatId: existingChatId,
+            companionObject: { id, userName, userEmail },
+          },
+        });
+      } else {
+        const response = await axiosClient.post(ULRs.createPrivateChat, {
+          userId: currentUserId,
+          companionId: id,
+        });
+        const privateChatId = response.data;
+        navigate(routesPath.DMS, {
+          state: {
+            privateChatId,
+            companionObject: { id, userName, userEmail },
+          },
+        });
+      }
+    } catch (error) {
+      console.error('Error creating or navigating to private chat:', error);
+    }
+    onClose();
+  };
   const handleLeaveGroup = () => {
     const dataEventToSend = {
-      authorId: userId,
-      chatId: countryChatId,
+      authorId: currentUserId,
+      chatId,
     };
     sendEvent(dataEventToSend, ULRs.leaveOutGroupChat);
     setSubscriptionCountryRooms(prevRooms =>
@@ -51,10 +93,10 @@ const CountryInfo = ({
     );
     onClose();
   };
-  const url = countryChatId && ULRs.getChatsParticipants(countryChatId);
+  const url = chatId && ULRs.getChatsParticipants(chatId);
   const { responseData: participants } = useFetch(url, '');
 
-  if (!countryName) {
+  if (!isOpen || !countryName || !chatId) {
     return null;
   }
 
@@ -65,6 +107,7 @@ const CountryInfo = ({
 
   const hasParticipants =
     Array.isArray(participants) && participants.length > 0;
+
   return (
     <Modal
       aria-labelledby="country-info-title"
@@ -115,9 +158,19 @@ const CountryInfo = ({
                     <h5>{user.userName}</h5>
                     <p>{user.userEmail}</p>
                   </UserContactInfo>
-                  <SendMessageBtn>
-                    <FaRegMessage />
-                  </SendMessageBtn>
+                  {user.id !== currentUserId && (
+                    <SendMessageBtn
+                      onClick={() =>
+                        handleCreatePrivateChat(
+                          user.id,
+                          user.userName,
+                          user.userEmail
+                        )
+                      }
+                    >
+                      <FaRegMessage />
+                    </SendMessageBtn>
+                  )}
                 </Item>
               ))}
             </ContactsList>

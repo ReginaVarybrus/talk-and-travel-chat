@@ -2,40 +2,60 @@ import { useState, useEffect } from 'react';
 import { useOutletContext } from 'react-router-dom';
 import { useFetch } from '@/hooks/useFetch.js';
 import ULRs from '@/redux-store/constants';
-import { Flag, ScrollBar } from '@/components/SearchInput/SearchInputStyled.js';
+import { useSelector } from 'react-redux';
+import { getUser } from '@/redux-store/selectors.js';
+
+import { Flag, ScrollBar } from '../SearchInput/SearchInputStyled.js';
 import { ListStyled, Text, Item, ListItems } from './RoomsListStyled';
 
 const RoomsList = () => {
   const [selectedCountry, setSelectedCountry] = useState(null);
+  const userId = useSelector(getUser)?.id;
+
+  const { responseData: dataUserCountries } = useFetch(
+    ULRs.userCountries(userId, '')
+  );
   const { responseData: dataMainCountryChat } = useFetch(
     selectedCountry ? ULRs.getMainCountryChatByName(selectedCountry, '') : null
   );
 
   const {
-    setCountryData,
-    subscriptionCountryRooms,
+   
+    setChatData,
     setIsSubscribed,
-    setIsChatVisible,
+    setIsShowJoinBtn,
+   
+    subscriptionRooms,
+   
+    setSubscriptionRooms,
+ , setIsChatVisible,
   } = useOutletContext();
 
   useEffect(() => {
+    if (dataUserCountries && userId) {
+      setSubscriptionRooms(dataUserCountries);
+    }
+  }, [dataUserCountries, userId]);
+
+  useEffect(() => {
     if (dataMainCountryChat) {
-      setCountryData(dataMainCountryChat);
+      setChatData(dataMainCountryChat);
       setIsSubscribed(true);
     }
-  }, [dataMainCountryChat]);
+  }, [dataMainCountryChat, setChatData, setIsSubscribed]);
 
   const handleOpenCountryRoom = countryName => {
     setSelectedCountry(countryName);
+    setIsShowJoinBtn(false);
     setIsChatVisible(true);
   };
 
   return (
     <ListStyled>
-      {subscriptionCountryRooms.length ? (
+      {subscriptionRooms.length ? (
         <ListItems>
           <ScrollBar>
-            {subscriptionCountryRooms.map(room => (
+            {subscriptionRooms.map(room => (
               <Item
                 key={room.flagCode}
                 onClick={() => handleOpenCountryRoom(room.name)}

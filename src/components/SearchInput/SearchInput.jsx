@@ -1,8 +1,12 @@
 import { useState, useEffect, useRef } from 'react';
+import { useSelector } from 'react-redux';
+import { routesPath } from '@/routes/routesConfig';
 import PropTypes from 'prop-types';
+import { getUser } from '@/redux-store/selectors.js';
 import { useFetch } from '@/hooks/useFetch.js';
 import ULRs from '@/redux-store/constants';
 import mapData from '@/data/countries.json';
+import { useNavigate } from 'react-router-dom';
 import {
   AutocompleteInputStyled,
   AutocompleteInput,
@@ -14,31 +18,30 @@ import {
   Text,
 } from './SearchInputStyled';
 
-const SearchInput = ({
-  setCountryData,
-  subscriptionCountryRooms,
-  setIsSubscribed,
-  setIsShowJoinBtn,
-  setIsChatVisible,
+const SearchInput = ({ setChatData, setIsSubscribed, setIsShowJoinBtn   setIsChatVisible,
 }) => {
+  const navigate = useNavigate();
   const [selectedCountry, setSelectedCountry] = useState(null);
   const [searchedValue, setSearchedValue] = useState('');
   const [showItem, setShowItem] = useState(false);
   const autoCompleteRef = useRef(null);
+  const userId = useSelector(getUser)?.id;
   const { responseData: dataMainCountryChat } = useFetch(
     selectedCountry ? ULRs.getMainCountryChatByName(selectedCountry, '') : null
   );
-
+  const { responseData: dataUserCountries } = useFetch(
+    ULRs.userCountries(userId, '')
+  );
   const filterCountries = mapData.features.filter(name =>
     name.properties.ADMIN.toLowerCase().includes(searchedValue.toLowerCase())
   );
 
   useEffect(() => {
     if (dataMainCountryChat) {
-      setCountryData(dataMainCountryChat);
+      setChatData(dataMainCountryChat);
       setIsSubscribed(true);
     }
-  }, [dataMainCountryChat]);
+  }, [dataMainCountryChat, setChatData]);
 
   const handleChange = event => {
     const { value } = event.target;
@@ -55,8 +58,7 @@ const SearchInput = ({
   const handleCountryClick = country => {
     const countryName = country.properties.ADMIN;
     setSelectedCountry(countryName);
-
-    const nameOfCountry = subscriptionCountryRooms.find(
+    const nameOfCountry = dataUserCountries.find(
       item => item.name === countryName
     );
     if (nameOfCountry) {
@@ -67,6 +69,7 @@ const SearchInput = ({
 
     setSearchedValue(countryName);
     setShowItem(false);
+    navigate(routesPath.ROOMS);
     setIsChatVisible(true);
     setSearchedValue('');
   };
@@ -131,8 +134,7 @@ const SearchInput = ({
 };
 
 SearchInput.propTypes = {
-  setCountryData: PropTypes.func,
-  subscriptionCountryRooms: PropTypes.array,
+  setChatData: PropTypes.func,
   setIsSubscribed: PropTypes.func,
   setIsShowJoinBtn: PropTypes.func,
 };
