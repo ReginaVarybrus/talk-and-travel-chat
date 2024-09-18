@@ -18,7 +18,11 @@ import {
   Text,
 } from './SearchInputStyled';
 
-const SearchInput = ({ setChatData, setIsSubscribed, setIsShowJoinBtn   setIsChatVisible,
+const SearchInput = ({
+  setChatData,
+  setIsSubscribed,
+  setIsShowJoinBtn,
+  setIsChatVisible,
 }) => {
   const navigate = useNavigate();
   const [selectedCountry, setSelectedCountry] = useState(null);

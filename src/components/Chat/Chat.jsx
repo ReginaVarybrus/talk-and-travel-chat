@@ -31,7 +31,7 @@ const Chat = ({
   const [isUserTyping, setIsUserTyping] = useState(false);
   const [userNameisTyping, setUserNameisTyping] = useState('');
   const userId = useSelector(getUser)?.id;
-  const { id, name, messages, usersCount, chatType } = chatData;
+  const { id, name, messages, usersCount, chatType, country } = chatData;
   const isPrivateChat = chatType === CHAT_TYPES.PRIVATE;
 
   const {
@@ -59,11 +59,12 @@ const Chat = ({
   }, [id, isSubscribed, setChatData]);
 
   return (
-    <ChatStyled>
+    <ChatStyled $isChatVisible={isChatVisible}>
       {!name && <ChatFirstLoading />}
       <ChatHeader
         chatName={name}
         participantsAmount={usersCount}
+        flagCode={country?.flagCode}
         selectedCompanion={selectedCompanion}
         isPrivateChat={isPrivateChat}
         userNameisTyping={userNameisTyping}
@@ -71,6 +72,7 @@ const Chat = ({
         chatId={id}
         isSubscribed={isSubscribed}
         setSubscriptionRooms={setSubscriptionRooms}
+        setIsChatVisible={setIsChatVisible}
       />
       <MessageBlock>
         {messages?.length ? (

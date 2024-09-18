@@ -1,4 +1,4 @@
-import CountryInfo from '@/components/CountryInfo/CountryInfo';
+import { useState } from 'react';
 import PropTypes from 'prop-types';
 import { useSelector } from 'react-redux';
 import { getUser } from '@/redux-store/selectors.js';
@@ -8,6 +8,7 @@ import {
   MobileHeaderStyled,
   DesktopHeaderStyled,
   MobileHeaderContentStyled,
+  LetterAvatarStyled,
   HeaderButton,
   BackIcon,
   FlagImg,
@@ -17,6 +18,7 @@ import {
 const ChatHeader = ({
   chatName = 'Country name',
   participantsAmount = 0,
+  flagCode,
   selectedCompanion,
   isPrivateChat,
   isUserTyping,
@@ -29,6 +31,22 @@ const ChatHeader = ({
   const [openModal, setOpenModal] = useState(false);
   const userName = useSelector(getUser)?.userName;
   const showUserIsTyping = isUserTyping && userNameisTyping !== userName;
+  const nameOfChat = isPrivateChat ? selectedCompanion.userName : chatName;
+  const firstLetterOfName = selectedCompanion?.userName
+    .substr(0, 1)
+    .toUpperCase();
+
+  const getMessage = () => {
+    if (showUserIsTyping) {
+      return `${userNameisTyping} is typing...`;
+    }
+
+    if (isPrivateChat) {
+      return 'last seen 5m ago';
+    }
+
+    return `${participantsAmount} participants`;
+  };
 
   const handleOpen = () => {
     if (!isPrivateChat) {
@@ -42,8 +60,6 @@ const ChatHeader = ({
     setIsChatVisible(false);
   };
 
-  const showUserIsTyping = isUserTyping && userNameisTyping !== userName;
-
   return (
     <ChatHeaderStyled>
       <MobileHeaderStyled>
@@ -51,35 +67,33 @@ const ChatHeader = ({
           <BackIcon />
         </HeaderButton>
         <MobileHeaderContentStyled>
-          <FlagImg
-            loading="lazy"
-            width="36"
-            srcSet={`https://flagcdn.com/w40/${countryFlagCode}.png 2x`}
-            src={`https://flagcdn.com/w20/${countryFlagCode}.png`}
-            alt={`${countryFlagCode} flag`}
-          />
+          {isPrivateChat ? (
+            <LetterAvatarStyled>{firstLetterOfName}</LetterAvatarStyled>
+          ) : (
+            <FlagImg
+              loading="lazy"
+              width="36"
+              srcSet={`https://flagcdn.com/w40/${flagCode}.png 2x`}
+              src={`https://flagcdn.com/w20/${flagCode}.png`}
+              alt={`${flagCode} flag`}
+            />
+          )}
+
           <div>
-            <h5>{countryName}</h5>
-            <p>
-              {showUserIsTyping
-                ? `${userNameisTyping} is typing...`
-                : `${participantsAmount} participants`}
-            </p>
+            <h5>{nameOfChat}</h5>
+            <p>{getMessage()}</p>
           </div>
         </MobileHeaderContentStyled>
-        <HeaderButton onClick={handleOpen}>
-          <OpenCountryInfoIcon />
-        </HeaderButton>
+        {!isPrivateChat && (
+          <HeaderButton onClick={handleOpen}>
+            <OpenCountryInfoIcon />
+          </HeaderButton>
+        )}
       </MobileHeaderStyled>
 
       <DesktopHeaderStyled onClick={handleOpen}>
-        <h5>{isPrivateChat ? selectedCompanion.userName : chatName}</h5>
-
-        <p>
-          {showUserIsTyping
-            ? `${userNameisTyping} is typing...`
-            : !isPrivateChat && `${participantsAmount} participants`}
-        </p>
+        <h5>{nameOfChat}</h5>
+        <p>{getMessage()}</p>
       </DesktopHeaderStyled>
 
       {!isPrivateChat && (
