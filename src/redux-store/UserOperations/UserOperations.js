@@ -27,7 +27,6 @@ export const updateUser = createAsyncThunk(
   {
     try {
       const { data } = await axiosClient.put(ULRs.updateUser, user);
-      console.log(data);
       return data;
     } catch (error) {
       throw new Error(error.message);

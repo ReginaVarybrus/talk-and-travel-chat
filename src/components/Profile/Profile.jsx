@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { useFormik } from 'formik';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
+import Loader from '@/components/Loader/Loader';
 
 import { routesPath } from '@/routes/routesConfig';
 import { getUser } from '@/redux-store/selectors';
@@ -39,7 +40,8 @@ const Profile = () => {
   const navigate = useNavigate();
 
   const [editMode, setEditMode] = useState(false);
-
+  // This {loading} is used to trigger display of <Loader/> while updateUser performig.
+  const [loading, setLoading] = useState(false);
   // This const is to toggle the Profile form from view to edit.
   const toggleEditMode = () => {
     setEditMode(!editMode);
@@ -53,21 +55,33 @@ const Profile = () => {
     initialValues,
     validationSchema: schema,
     validateOnChange: false,
-    onSubmit: (values, { resetForm }) => {
+    onSubmit: async (values, { resetForm }) => {
       console.log('SUBMIT', values);
-      dispatch(updateUser(values));
-      navigate(routesPath.ACCOUNT);
-      resetForm();
-      setEditMode(false);
+      setLoading(true);
+      try {
+        const resultAction = await dispatch(updateUser(values));
+        console.log('Result Action:', resultAction);
+        if (updateUser.fulfilled.match(resultAction)) {
+          console.log('Update Successful:', resultAction.payload);
+          navigate(routesPath.ACCOUNT);
+          resetForm();
+          console.log('we are here wtf?');
+          setEditMode(false);
+        } else {
+          console.error('Update Failed:', resultAction.error);
+        }
+      } catch (error) {
+        console.error('Something went wrong:', error);
+      } finally {
+        setLoading(false); // Set loading to false after the async action
+      }
     },
   });
 
   useEffect(() => {
-    console.log(user);
-    if (user) {
-      formik.setValues(user);
-    }
-  }, [user]);
+    console.log('Render', user);
+    formik.setValues(user);
+  }, []);
 
   return (
     <ProfileStyled>
@@ -86,36 +100,40 @@ const Profile = () => {
           )}
         </AvatarBlock>
         <InputBlock>
-          <form onSubmit={formik.handleSubmit} autoComplete="off">
-            {Object.entries(formFields).map(([key, value]) => (
-              <InputField
-                key={key}
-                props={value}
-                formik={formik}
-                name={value.general}
-                disabled={!editMode}
-                nolabel="false"
-                backgroundColor="var(--color-white)"
-              />
-            ))}
-            {editMode && (
-              <>
-                <BasicButton
-                  sx={{ marginRight: '16px' }}
-                  variant="outlined"
-                  text="Cancel"
-                  handleClick={cancelEdit}
+          {loading ? (
+            <Loader />
+          ) : (
+            <form onSubmit={formik.handleSubmit} autoComplete="off">
+              {Object.entries(formFields).map(([key, value]) => (
+                <InputField
+                  key={key}
+                  props={value}
+                  formik={formik}
+                  name={value.general}
+                  disabled={!editMode}
+                  nolabel="false"
+                  backgroundColor="var(--color-white)"
                 />
-                <BasicButton
-                  sx={{ marginRight: '16px' }}
-                  handleClick={formik.handleSubmit}
-                  type="submit"
-                  text="Update"
-                  variant="contained"
-                />
-              </>
-            )}
-          </form>
+              ))}
+              {editMode && (
+                <>
+                  <BasicButton
+                    sx={{ marginRight: '16px' }}
+                    variant="outlined"
+                    text="Cancel"
+                    handleClick={cancelEdit}
+                  />
+                  <BasicButton
+                    sx={{ marginRight: '16px' }}
+                    handleClick={formik.handleSubmit}
+                    type="submit"
+                    text="Update"
+                    variant="contained"
+                  />
+                </>
+              )}
+            </form>
+          )}
         </InputBlock>
         <EditButton
           onClick={toggleEditMode}

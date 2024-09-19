@@ -47,10 +47,12 @@ export const userSlice = createSlice({
 
       .addCase(updateUser.pending, handlePending)
       .addCase(updateUser.rejected, handleRejected)
-      .addCase(updateUser.fulfilled, (state, action) => ({
+      .addCase(updateUser.fulfilled, (state, action) =>
+      ({
         ...state,
         ...action.payload,
-      })),
+      })
+      ),
 });
 
 export const { setUsers, clearUser } = userSlice.actions;

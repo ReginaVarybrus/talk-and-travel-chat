@@ -75,7 +75,7 @@ const InputField = ({ props, formik, disabled, nolabel, backgroundColor }) => {
         placeholder={props.placeholder}
         $isErrorColor={formik.errors[props.general]}
         $isSuccessColor={formik.touched[props.general]}
-        backgroundColor={backgroundColor}
+        $backgroundColor={backgroundColor}
       />
       {props.general === 'password' && (
         <IconContainer onClick={togglePassword}>

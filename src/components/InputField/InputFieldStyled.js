@@ -50,7 +50,7 @@ export const StyledInput = styled.input`
   padding-right: ${({ type }) => (type === 'password' ? '48px' : '16px')};
 
   @media screen and (min-width: 768px) {
-    background-color: ${({ backgroundColor }) => backgroundColor || 'var(--color-grey-4)'};
+    background-color: ${({ $backgroundColor }) => $backgroundColor || 'var(--color-grey-4)'};
   }
 `;
 
