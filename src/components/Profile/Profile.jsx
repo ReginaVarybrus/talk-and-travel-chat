@@ -52,9 +52,10 @@ const Profile = () => {
   };
 
   const formik = useFormik({
-    initialValues,
+    initialValues: user,
     validationSchema: schema,
     validateOnChange: false,
+    enableReinitialize: true,
     onSubmit: async (values, { resetForm }) => {
       console.log('SUBMIT', values);
       setLoading(true);
@@ -81,7 +82,7 @@ const Profile = () => {
   useEffect(() => {
     console.log('Render', user);
     formik.setValues(user);
-  }, []);
+  }, [user]);
 
   return (
     <ProfileStyled>
