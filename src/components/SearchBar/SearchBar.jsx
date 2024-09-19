@@ -3,9 +3,9 @@ import PropTypes from 'prop-types';
 import Backdrop from '@mui/material/Backdrop';
 import Modal from '@mui/material/Modal';
 import Fade from '@mui/material/Fade';
-import { Outlet } from 'react-router-dom';
-import SearchInput from '../SearchInput/SearchInput';
-import ChatMap from '../ChatMap/ChatMap';
+import { Outlet, useOutletContext } from 'react-router-dom';
+import SearchInput from '@/components/SearchInput/SearchInput';
+import ChatMap from '@/components/ChatMap/ChatMap';
 import { SearchBarStyled, ButtonMapOpen, MapBox } from './SearchBarStyled';
 
 const SearchBar = ({
@@ -17,14 +17,18 @@ const SearchBar = ({
   const [openMap, setOpenMap] = useState(false);
   const handleOpen = () => setOpenMap(true);
   const handleClose = () => setOpenMap(false);
+  const context = useOutletContext();
+  const isChatVisible = context?.isChatVisible;
+  const setIsChatVisible = context?.setIsChatVisible;
 
   return (
-    <SearchBarStyled>
+    <SearchBarStyled $isChatVisible={isChatVisible}>
       <SearchInput
         setCountryData={setCountryData}
         subscriptionCountryRooms={subscriptionCountryRooms}
         setIsSubscribed={setIsSubscribed}
         setIsShowJoinBtn={setIsShowJoinBtn}
+        setIsChatVisible={setIsChatVisible}
       />
       <ButtonMapOpen onClick={handleOpen}>Search by map</ButtonMapOpen>
       <div>
@@ -33,6 +37,7 @@ const SearchBar = ({
             setCountryData,
             subscriptionCountryRooms,
             setIsSubscribed,
+            setIsChatVisible,
           }}
         />
       </div>

@@ -5,7 +5,10 @@ import { FiSearch } from 'react-icons/fi';
 
 export const AutocompleteInputStyled = styled.div`
   position: relative;
-  min-width: 100%;
+  min-width: 90%;
+  @media ${device.laptop} {
+    min-width: 100%;
+  }
 `;
 
 export const AutocompleteInput = styled.input`
@@ -44,12 +47,15 @@ export const IconSearch = styled(FiSearch)`
 export const ListItemsStyled = styled.div`
   position: absolute;
   top: 130px;
-  left: -16px;
-  width: 248px;
-  height: 600px;
+  left: -5.5%;
+  width: 111%;
   margin-bottom: 48px;
   background: var(--white-color);
   z-index: 10;
+  @media ${device.tablet} {
+    left: -16px;
+    width: 248px;
+  }
   @media ${device.laptop} {
     width: 298px;
   }
@@ -59,21 +65,25 @@ export const Item = styled.li`
   display: flex;
   align-items: center;
   height: 72px;
-  padding: 0 16px;
+  padding: 0 5%;
   background: var(--white-color);
   &:hover {
     background: var(--color-grey-3);
   }
+  @media ${device.tablet} {
+    padding: 0 16px;
+  }
 `;
 
 export const Flag = styled.img`
-  width: 32px;
-  height: 24px;
-  padding-right: 12px;
+  margin-right: 12px;
 `;
 
 export const ScrollBar = styled(SimpleBar)`
-  max-height: calc(100vh - 227px);
+  max-height: calc(100vh - 279px);
+  @media ${device.tablet} {
+    max-height: calc(100vh - 229px);
+  }
 `;
 
 export const Text = styled.p`

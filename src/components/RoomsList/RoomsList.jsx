@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { useOutletContext } from 'react-router-dom';
 import { useFetch } from '@/hooks/useFetch.js';
 import ULRs from '@/redux-store/constants';
-import { Flag, ScrollBar } from '../SearchInput/SearchInputStyled.js';
+import { Flag, ScrollBar } from '@/components/SearchInput/SearchInputStyled.js';
 import { ListStyled, Text, Item, ListItems } from './RoomsListStyled';
 
 const RoomsList = () => {
@@ -11,8 +11,12 @@ const RoomsList = () => {
     selectedCountry ? ULRs.getMainCountryChatByName(selectedCountry, '') : null
   );
 
-  const { setCountryData, subscriptionCountryRooms, setIsSubscribed } =
-    useOutletContext();
+  const {
+    setCountryData,
+    subscriptionCountryRooms,
+    setIsSubscribed,
+    setIsChatVisible,
+  } = useOutletContext();
 
   useEffect(() => {
     if (dataMainCountryChat) {
@@ -23,6 +27,7 @@ const RoomsList = () => {
 
   const handleOpenCountryRoom = countryName => {
     setSelectedCountry(countryName);
+    setIsChatVisible(true);
   };
 
   return (
@@ -37,7 +42,7 @@ const RoomsList = () => {
               >
                 <Flag
                   loading="lazy"
-                  width="32"
+                  width="48"
                   srcSet={`https://flagcdn.com/w40/${room.flagCode}.png 2x`}
                   src={`https://flagcdn.com/w20/${room.flagCode}.png`}
                   alt={`${room.flagCode} flag`}

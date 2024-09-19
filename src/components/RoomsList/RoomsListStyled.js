@@ -18,10 +18,13 @@ export const Text = styled.p`
 `;
 
 export const ListItems = styled.ul`
-  width: 248px;
+  width: 100vw;
   height: 562px;
+  @media ${device.tablet} {
+    width: 248px;
+  }
   @media ${device.laptop} {
-    min-width: 298px;
+    width: 298px;
   }
 `;
 
@@ -29,10 +32,13 @@ export const Item = styled.li`
   display: flex;
   align-items: center;
   height: 72px;
-  padding: 0 16px;
+  padding: 0 5%;
   background: var(--white-color);
   &:hover {
     background: var(--color-blue-1);
+  }
+  @media ${device.tablet} {
+    padding: 0 16px;
   }
 `;
 

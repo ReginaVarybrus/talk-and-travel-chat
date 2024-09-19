@@ -19,6 +19,7 @@ const SearchInput = ({
   subscriptionCountryRooms,
   setIsSubscribed,
   setIsShowJoinBtn,
+  setIsChatVisible,
 }) => {
   const [selectedCountry, setSelectedCountry] = useState(null);
   const [searchedValue, setSearchedValue] = useState('');
@@ -66,6 +67,7 @@ const SearchInput = ({
 
     setSearchedValue(countryName);
     setShowItem(false);
+    setIsChatVisible(true);
     setSearchedValue('');
   };
 
@@ -111,7 +113,7 @@ const SearchInput = ({
                   >
                     <Flag
                       loading="lazy"
-                      width="32"
+                      width="48"
                       srcSet={`https://flagcdn.com/w40/${country.properties.code}.png 2x`}
                       src={`https://flagcdn.com/w20/${country.properties.code}.png`}
                       alt={`${country.properties.ADMIN} flag`}

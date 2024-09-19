@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { useOutletContext } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import PropTypes from 'prop-types';
 import { getUser } from '@/redux-store/selectors.js';
@@ -20,6 +21,7 @@ const Chat = ({
   countryName,
   participantsAmount,
   countryChatId,
+  countryFlagCode,
   groupMessages,
   country,
   setCountryData,
@@ -32,6 +34,9 @@ const Chat = ({
   const [userNameisTyping, setUserNameisTyping] = useState('');
   const userId = useSelector(getUser)?.id;
   const { subscribeToGroupMessages, subscribeToUserErrors } = useWebSocket();
+  const context = useOutletContext();
+  const isChatVisible = context?.isChatVisible;
+  const setIsChatVisible = context?.setIsChatVisible;
 
   useEffect(() => {
     if (isSubscribed) {
@@ -48,15 +53,17 @@ const Chat = ({
   }, [countryChatId]);
 
   return (
-    <ChatStyled>
+    <ChatStyled $isChatVisible={isChatVisible}>
       {!countryName && <ChatFirstLoading />}
       {countryName && (
         <ChatHeader
           countryName={countryName}
           participantsAmount={participantsAmount}
+          countryFlagCode={countryFlagCode}
           countryChatId={countryChatId}
           setSubscriptionCountryRooms={setSubscriptionCountryRooms}
           isSubscribed={isSubscribed}
+          setIsChatVisible={setIsChatVisible}
           isUserTyping={isUserTyping}
           userNameisTyping={userNameisTyping}
         />

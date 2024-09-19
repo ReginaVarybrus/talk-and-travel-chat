@@ -5,8 +5,8 @@ import ULRs from '@/redux-store/constants';
 import { axiosClient } from '@/services/api';
 import { MESSAGE_TYPES } from '@/constants/messageTypes.js';
 import PropTypes from 'prop-types';
-import UserInfoModal from '../UserInfoModal/UserInfoModal';
-import { timeStampConverter } from '../utils/timeUtil.js';
+import UserInfoModal from '@/components/UserInfoModal/UserInfoModal';
+import { timeStampConverter } from '@/components/utils/timeUtil.js';
 
 import {
   MessageItemStyled,
