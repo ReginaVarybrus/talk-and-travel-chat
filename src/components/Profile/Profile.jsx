@@ -57,22 +57,22 @@ const Profile = () => {
     validateOnChange: false,
     enableReinitialize: true,
     onSubmit: async (values, { resetForm }) => {
-      console.log('SUBMIT', values);
+      // console.log('SUBMIT', values);
       setLoading(true);
       try {
         const resultAction = await dispatch(updateUser(values));
-        console.log('Result Action:', resultAction);
+        // console.log('Result Action:', resultAction);
         if (updateUser.fulfilled.match(resultAction)) {
-          console.log('Update Successful:', resultAction.payload);
+          // console.log('Update Successful:', resultAction.payload);
           navigate(routesPath.ACCOUNT);
           resetForm();
-          console.log('we are here wtf?');
+          // console.log('we are here wtf?');
           setEditMode(false);
         } else {
-          console.error('Update Failed:', resultAction.error);
+          // console.error('Update Failed:', resultAction.error);
         }
       } catch (error) {
-        console.error('Something went wrong:', error);
+        // console.error('Something went wrong:', error);
       } finally {
         setLoading(false); // Set loading to false after the async action
       }
@@ -80,7 +80,7 @@ const Profile = () => {
   });
 
   useEffect(() => {
-    console.log('Render', user);
+    // console.log('Render', user);
     formik.setValues(user);
   }, [user]);
 
