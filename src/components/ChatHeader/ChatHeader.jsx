@@ -24,8 +24,8 @@ const ChatHeader = ({
   isUserTyping,
   userNameisTyping,
   chatId,
-  isSubscribed,
   setSubscriptionRooms,
+  setIsShowJoinBtn,
   setIsChatVisible,
 }) => {
   const [openModal, setOpenModal] = useState(false);
@@ -42,7 +42,7 @@ const ChatHeader = ({
     }
 
     if (isPrivateChat) {
-      return 'last seen 5m ago';
+      return '';
     }
 
     return `${participantsAmount} participants`;
@@ -53,9 +53,11 @@ const ChatHeader = ({
       setOpenModal(true);
     }
   };
+
   const handleClose = () => {
     setOpenModal(false);
   };
+
   const handleBackToSearchBar = () => {
     setIsChatVisible(false);
   };
@@ -96,17 +98,15 @@ const ChatHeader = ({
         <p>{getMessage()}</p>
       </DesktopHeaderStyled>
 
-      {!isPrivateChat && (
-        <CountryInfo
-          isOpen={openModal}
-          onClose={handleClose}
-          countryName={chatName}
-          participantsAmount={participantsAmount || 0}
-          chatId={chatId}
-          setSubscriptionRooms={setSubscriptionRooms}
-          isSubscribed={isSubscribed}
-        />
-      )}
+      <CountryInfo
+        isOpen={openModal}
+        onClose={handleClose}
+        countryName={chatName}
+        participantsAmount={participantsAmount || 0}
+        chatId={chatId}
+        setSubscriptionRooms={setSubscriptionRooms}
+        setIsShowJoinBtn={setIsShowJoinBtn}
+      />
     </ChatHeaderStyled>
   );
 };
@@ -114,6 +114,7 @@ const ChatHeader = ({
 ChatHeader.propTypes = {
   chatName: PropTypes.string,
   participantsAmount: PropTypes.number,
+  flagCode: PropTypes.string,
   selectedCompanion: PropTypes.shape({
     id: PropTypes.number,
     userName: PropTypes.string,
@@ -122,9 +123,10 @@ ChatHeader.propTypes = {
   chatId: PropTypes.number,
   isPrivateChat: PropTypes.bool,
   setSubscriptionRooms: PropTypes.func,
-  isSubscribed: PropTypes.bool,
   isUserTyping: PropTypes.bool,
   userNameisTyping: PropTypes.string,
+  setIsShowJoinBtn: PropTypes.func,
+  setIsChatVisible: PropTypes.func,
 };
 
 export default ChatHeader;

@@ -1,11 +1,13 @@
-import SimpleBar from 'simplebar-react';
 import { useSelector } from 'react-redux';
 import { useEffect, useState } from 'react';
 import { useOutletContext, useLocation } from 'react-router-dom';
+import { useMediaQuery } from 'react-responsive';
+import { device } from '@/constants/mediaQueries.js';
 import ULRs from '@/redux-store/constants';
 import { getUser } from '@/redux-store/selectors';
 import { useFetch } from '@/hooks/useFetch';
 import { dateStampConverter } from '@/components/utils/timeUtil.js';
+import { ScrollBar } from '@/components/SearchInput/SearchInputStyled.js';
 import {
   ListStyled,
   Text,
@@ -18,9 +20,9 @@ import {
   ChatName,
   MessageDay,
 } from './DMsListStyled';
-import 'simplebar-react/dist/simplebar.min.css';
 
 const DMsList = () => {
+  const isDesktop = useMediaQuery({ query: device.tablet });
   const [selectedChat, setSelectedChat] = useState(null);
   const userId = useSelector(getUser)?.id;
   const location = useLocation();
@@ -57,14 +59,16 @@ const DMsList = () => {
   const handleOpenChat = (chatId, companion) => {
     setSelectedChat(chatId);
     setSelectedCompanion(companion);
-    setIsChatVisible(true);
+    if (!isDesktop) {
+      setIsChatVisible(true);
+    }
   };
 
   return (
     <ListStyled>
       {dataUserChats?.length ? (
         <ListItems>
-          <SimpleBar style={{ maxHeight: 570 }}>
+          <ScrollBar>
             {dataUserChats.map(({ chat, companion, lastReadMessageId }) => {
               const firstLetterOfName = companion.userName
                 .substr(0, 1)
@@ -88,7 +92,7 @@ const DMsList = () => {
                 </Item>
               );
             })}
-          </SimpleBar>
+          </ScrollBar>
         </ListItems>
       ) : (
         <Text>

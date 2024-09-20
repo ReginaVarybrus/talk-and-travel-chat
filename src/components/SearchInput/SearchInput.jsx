@@ -141,6 +141,7 @@ SearchInput.propTypes = {
   setChatData: PropTypes.func,
   setIsSubscribed: PropTypes.func,
   setIsShowJoinBtn: PropTypes.func,
+  setIsChatVisible: PropTypes.func,
 };
 
 export default SearchInput;

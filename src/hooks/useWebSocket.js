@@ -26,6 +26,7 @@ export const useWebSocket = () => {
       return subscription;
     }
   };
+
   const unsubscribeFromMessages = () => {
     const subscription = messagesSubscription.current;
 

@@ -1,20 +1,24 @@
 import { useState, useEffect } from 'react';
 import { useOutletContext } from 'react-router-dom';
+import { useMediaQuery } from 'react-responsive';
+import { device } from '@/constants/mediaQueries.js';
 import { useFetch } from '@/hooks/useFetch.js';
 import ULRs from '@/redux-store/constants';
 import { useSelector } from 'react-redux';
 import { getUser } from '@/redux-store/selectors.js';
 
-import { Flag, ScrollBar } from '../SearchInput/SearchInputStyled.js';
+import { Flag, ScrollBar } from '@/components/SearchInput/SearchInputStyled.js';
 import { ListStyled, Text, Item, ListItems } from './RoomsListStyled';
 
 const RoomsList = () => {
+  const isDesktop = useMediaQuery({ query: device.tablet });
   const [selectedCountry, setSelectedCountry] = useState(null);
   const userId = useSelector(getUser)?.id;
 
   const { responseData: dataUserCountries } = useFetch(
     ULRs.userCountries(userId, '')
   );
+
   const { responseData: dataMainCountryChat } = useFetch(
     selectedCountry ? ULRs.getMainCountryChatByName(selectedCountry, '') : null
   );
@@ -44,7 +48,9 @@ const RoomsList = () => {
   const handleOpenCountryRoom = countryName => {
     setSelectedCountry(countryName);
     setIsShowJoinBtn(false);
-    setIsChatVisible(true);
+    if (!isDesktop) {
+      setIsChatVisible(true);
+    }
   };
 
   return (

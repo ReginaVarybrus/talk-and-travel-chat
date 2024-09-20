@@ -39,6 +39,7 @@ const Chat = ({
     subscribeToUserErrors,
     unsubscribeFromMessages,
   } = useWebSocket();
+
   const context = useOutletContext();
   const isChatVisible = context?.isChatVisible;
   const setIsChatVisible = context?.setIsChatVisible;
@@ -70,8 +71,8 @@ const Chat = ({
         userNameisTyping={userNameisTyping}
         isUserTyping={isUserTyping}
         chatId={id}
-        isSubscribed={isSubscribed}
         setSubscriptionRooms={setSubscriptionRooms}
+        setIsShowJoinBtn={setIsShowJoinBtn}
         setIsChatVisible={setIsChatVisible}
       />
       <MessageBlock>
@@ -91,7 +92,6 @@ const Chat = ({
       <MessageBar
         chatId={id}
         chatData={chatData}
-        setChatData={setChatData}
         setSubscriptionRooms={setSubscriptionRooms}
         isShowJoinBtn={isShowJoinBtn}
         setIsShowJoinBtn={setIsShowJoinBtn}

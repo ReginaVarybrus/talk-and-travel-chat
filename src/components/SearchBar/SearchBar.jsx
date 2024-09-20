@@ -9,14 +9,11 @@ import ChatMap from '@/components/ChatMap/ChatMap';
 import { SearchBarStyled, ButtonMapOpen, MapBox } from './SearchBarStyled';
 
 const SearchBar = ({
-  chatId,
   setChatData,
   subscriptionRooms,
   setSubscriptionRooms,
-  isSubscribed,
   setIsSubscribed,
   setIsShowJoinBtn,
-  selectedCompanion,
   setSelectedCompanion,
 }) => {
   const [openMap, setOpenMap] = useState(false);
@@ -29,9 +26,7 @@ const SearchBar = ({
   return (
     <SearchBarStyled $isChatVisible={isChatVisible}>
       <SearchInput
-        chatId={chatId}
         setChatData={setChatData}
-        isSubscribed={isSubscribed}
         setIsSubscribed={setIsSubscribed}
         setIsShowJoinBtn={setIsShowJoinBtn}
         setIsChatVisible={setIsChatVisible}
@@ -43,10 +38,8 @@ const SearchBar = ({
             setChatData,
             subscriptionRooms,
             setSubscriptionRooms,
-            isSubscribed,
             setIsSubscribed,
             setIsShowJoinBtn,
-            selectedCompanion,
             setSelectedCompanion,
             setIsChatVisible,
           }}
@@ -79,8 +72,10 @@ const SearchBar = ({
 SearchBar.propTypes = {
   setChatData: PropTypes.func,
   subscriptionRooms: PropTypes.array,
+  setSubscriptionRooms: PropTypes.func,
   setIsSubscribed: PropTypes.func,
   setIsShowJoinBtn: PropTypes.func,
+  setSelectedCompanion: PropTypes.func,
 };
 
 export default SearchBar;

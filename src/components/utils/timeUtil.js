@@ -9,7 +9,7 @@ export const timeStampConverter = time => {
 export const dateStampConverter = time => {
   const date = new Date(time);
   const day = date.getDate();
-  const month = date.getMonth();
+  const month = date.getMonth().toString().padStart(2, '0');
   const year = date.getFullYear();
 
   return `${day}.${month}.${year}`;
