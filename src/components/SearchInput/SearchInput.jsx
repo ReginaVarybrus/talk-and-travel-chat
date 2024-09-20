@@ -1,5 +1,7 @@
 import { useState, useEffect, useRef } from 'react';
 import { useSelector } from 'react-redux';
+import { useMediaQuery } from 'react-responsive';
+import { device } from '@/constants/mediaQueries.js';
 import { routesPath } from '@/routes/routesConfig';
 import PropTypes from 'prop-types';
 import { getUser } from '@/redux-store/selectors.js';
@@ -25,6 +27,7 @@ const SearchInput = ({
   setIsChatVisible,
   setParticipantsAmount,
 }) => {
+  const isDesktop = useMediaQuery({ query: device.tablet });
   const navigate = useNavigate();
   const [selectedCountry, setSelectedCountry] = useState(null);
   const [searchedValue, setSearchedValue] = useState('');
@@ -76,7 +79,9 @@ const SearchInput = ({
     setSearchedValue(countryName);
     setShowItem(false);
     navigate(routesPath.ROOMS);
-    setIsChatVisible(true);
+    if (!isDesktop) {
+      setIsChatVisible(true);
+    }
     setSearchedValue('');
   };
 
@@ -144,6 +149,7 @@ SearchInput.propTypes = {
   setIsSubscribed: PropTypes.func,
   setIsShowJoinBtn: PropTypes.func,
   setIsChatVisible: PropTypes.func,
+  setParticipantsAmount: PropTypes.func,
 };
 
 export default SearchInput;

@@ -46,6 +46,8 @@ const ChatRoute = () => {
         setIsShowJoinBtn={setIsShowJoinBtn}
         selectedCompanion={selectedCompanion}
         setSelectedCompanion={setSelectedCompanion}
+        participantsAmount={participantsAmount}
+        setParticipantsAmount={setParticipantsAmount}
       />
     </ChatRouteStyled>
   );

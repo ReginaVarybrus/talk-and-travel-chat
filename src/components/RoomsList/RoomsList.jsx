@@ -25,11 +25,12 @@ const RoomsList = () => {
 
   const {
     setChatData,
-    setIsSubscribed,
-    setIsShowJoinBtn,
     subscriptionRooms,
     setSubscriptionRooms,
+    setIsSubscribed,
+    setIsShowJoinBtn,
     setIsChatVisible,
+    setParticipantsAmount,
   } = useOutletContext();
 
   useEffect(() => {

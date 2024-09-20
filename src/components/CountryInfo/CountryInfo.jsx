@@ -38,6 +38,7 @@ const CountryInfo = ({
   onClose,
   countryName,
   participantsAmount,
+  setParticipantsAmount,
   setSubscriptionRooms,
   chatId,
   setIsShowJoinBtn,

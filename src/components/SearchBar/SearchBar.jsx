@@ -79,6 +79,7 @@ SearchBar.propTypes = {
   setIsSubscribed: PropTypes.func,
   setIsShowJoinBtn: PropTypes.func,
   setSelectedCompanion: PropTypes.func,
+  setParticipantsAmount: PropTypes.func,
 };
 
 export default SearchBar;

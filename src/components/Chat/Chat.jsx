@@ -27,11 +27,13 @@ const Chat = ({
   setIsShowJoinBtn,
   selectedCompanion,
   setSelectedCompanion,
+  participantsAmount,
+  setParticipantsAmount,
 }) => {
   const [isUserTyping, setIsUserTyping] = useState(false);
   const [userNameisTyping, setUserNameisTyping] = useState('');
   const userId = useSelector(getUser)?.id;
-  const { id, name, messages, usersCount, chatType, country } = chatData;
+  const { id, name, messages, chatType, country } = chatData;
   const isPrivateChat = chatType === CHAT_TYPES.PRIVATE;
 
   const {
@@ -64,12 +66,13 @@ const Chat = ({
       {!name && <ChatFirstLoading />}
       <ChatHeader
         chatName={name}
-        participantsAmount={usersCount}
+        participantsAmount={participantsAmount}
+        setParticipantsAmount={setParticipantsAmount}
         flagCode={country?.flagCode}
         selectedCompanion={selectedCompanion}
         isPrivateChat={isPrivateChat}
-        userNameisTyping={userNameisTyping}
         isUserTyping={isUserTyping}
+        userNameisTyping={userNameisTyping}
         chatId={id}
         setSubscriptionRooms={setSubscriptionRooms}
         setIsShowJoinBtn={setIsShowJoinBtn}
@@ -97,13 +100,13 @@ const Chat = ({
         setIsShowJoinBtn={setIsShowJoinBtn}
         isUserTyping={isUserTyping}
         setIsUserTyping={setIsUserTyping}
+        setParticipantsAmount={setParticipantsAmount}
       />
     </ChatStyled>
   );
 };
 
 Chat.propTypes = {
-  messages: PropTypes.array,
   chatData: PropTypes.shape({
     chatType: PropTypes.oneOf(['GROUP', 'PRIVATE']),
     country: PropTypes.shape({
@@ -122,6 +125,14 @@ Chat.propTypes = {
   isSubscribed: PropTypes.bool,
   isShowJoinBtn: PropTypes.bool,
   setIsShowJoinBtn: PropTypes.func,
+  selectedCompanion: PropTypes.shape({
+    id: PropTypes.number,
+    userName: PropTypes.string,
+    userEmail: PropTypes.string,
+  }),
+  setSelectedCompanion: PropTypes.func,
+  participantsAmount: PropTypes.number,
+  setParticipantsAmount: PropTypes.func,
 };
 
 export default Chat;

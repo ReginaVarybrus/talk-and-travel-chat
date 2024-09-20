@@ -155,6 +155,7 @@ MessageBar.propTypes = {
   setIsShowJoinBtn: PropTypes.func,
   isUserTyping: PropTypes.bool,
   setIsUserTyping: PropTypes.func,
+  setParticipantsAmount: PropTypes.func,
 };
 
 export default MessageBar;
