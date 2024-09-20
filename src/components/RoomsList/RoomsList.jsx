@@ -7,8 +7,12 @@ import ULRs from '@/redux-store/constants';
 import { useSelector } from 'react-redux';
 import { getUser } from '@/redux-store/selectors.js';
 
-import { Flag, ScrollBar } from '@/components/SearchInput/SearchInputStyled.js';
-import { ListStyled, Text, Item, ListItems } from './RoomsListStyled';
+import {
+  Flag,
+  ScrollBar,
+  Item,
+} from '@/components/SearchInput/SearchInputStyled.js';
+import { ListStyled, Text, ListItems } from './RoomsListStyled';
 
 const RoomsList = () => {
   const isDesktop = useMediaQuery({ query: device.tablet });
