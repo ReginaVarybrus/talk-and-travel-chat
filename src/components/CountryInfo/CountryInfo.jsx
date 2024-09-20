@@ -46,9 +46,7 @@ const CountryInfo = ({
   const { sendEvent } = useWebSocket();
   const navigate = useNavigate();
 
-  const { responseData: dataUserChats } = useFetch(
-    ULRs.getPrivateChats(currentUserId, '')
-  );
+  const { responseData: dataUserChats } = useFetch(ULRs.getPrivateChats);
 
   const checkExistingPrivateChat = id => {
     const isExist = dataUserChats?.find(chat => chat.companion.id === id);
@@ -87,7 +85,7 @@ const CountryInfo = ({
 
   const handleLeaveGroup = () => {
     const dataEventToSend = {
-      authorId: currentUserId,
+      // authorId: currentUserId,
       chatId,
     };
     sendEvent(dataEventToSend, ULRs.leaveOutGroupChat);

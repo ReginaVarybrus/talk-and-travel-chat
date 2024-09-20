@@ -20,7 +20,9 @@ const MessageList = ({ messages, setIsUserTyping, setUserNameisTyping }) => {
       }
     });
   }, [messages, setIsUserTyping, setUserNameisTyping]);
+
   useEffect(scrollToBottom, [messages]);
+
   return (
     <MessageListStyled>
       {messages &&

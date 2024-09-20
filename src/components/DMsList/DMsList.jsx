@@ -1,10 +1,10 @@
-import { useSelector } from 'react-redux';
 import { useEffect, useState } from 'react';
 import { useOutletContext, useLocation } from 'react-router-dom';
 import { useMediaQuery } from 'react-responsive';
 import { device } from '@/constants/mediaQueries.js';
 import ULRs from '@/redux-store/constants';
-import { getUser } from '@/redux-store/selectors';
+// import { useSelector } from 'react-redux';
+// import { getUser } from '@/redux-store/selectors';
 import { useFetch } from '@/hooks/useFetch';
 import { dateStampConverter } from '@/components/utils/timeUtil.js';
 import { ScrollBar } from '@/components/SearchInput/SearchInputStyled.js';
@@ -24,7 +24,7 @@ import {
 const DMsList = () => {
   const isDesktop = useMediaQuery({ query: device.tablet });
   const [selectedChat, setSelectedChat] = useState(null);
-  const userId = useSelector(getUser)?.id;
+  // const userId = useSelector(getUser)?.id;
   const location = useLocation();
   const { privateChatId, companionObject } = location.state || {};
   const {
@@ -34,12 +34,10 @@ const DMsList = () => {
     setIsChatVisible,
   } = useOutletContext();
 
-  const { responseData: dataUserChats } = useFetch(
-    ULRs.getPrivateChats(userId, '')
-  );
+  const { responseData: dataUserChats } = useFetch(ULRs.getPrivateChats);
 
   const { responseData: dataChat } = useFetch(
-    selectedChat ? ULRs.getChatsMessages(selectedChat, '') : null
+    selectedChat ? ULRs.getChatsMessages(selectedChat) : null
   );
 
   useEffect(() => {

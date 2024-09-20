@@ -1,8 +1,8 @@
 import { useState, useEffect, useRef } from 'react';
-import { useSelector } from 'react-redux';
+// import { useSelector } from 'react-redux';
+// import { getUser } from '@/redux-store/selectors.js';
 import { routesPath } from '@/routes/routesConfig';
 import PropTypes from 'prop-types';
-import { getUser } from '@/redux-store/selectors.js';
 import { useFetch } from '@/hooks/useFetch.js';
 import ULRs from '@/redux-store/constants';
 import mapData from '@/data/countries.json';
@@ -29,13 +29,11 @@ const SearchInput = ({
   const [searchedValue, setSearchedValue] = useState('');
   const [showItem, setShowItem] = useState(false);
   const autoCompleteRef = useRef(null);
-  const userId = useSelector(getUser)?.id;
+  // const userId = useSelector(getUser)?.id;
   const { responseData: dataMainCountryChat } = useFetch(
-    selectedCountry ? ULRs.getMainCountryChatByName(selectedCountry, '') : null
+    selectedCountry ? ULRs.getMainCountryChatByName(selectedCountry) : null
   );
-  const { responseData: dataUserCountries } = useFetch(
-    ULRs.userCountries(userId, '')
-  );
+  const { responseData: dataUserCountries } = useFetch(ULRs.userCountries);
   const filterCountries = mapData.features.filter(name =>
     name.properties.ADMIN.toLowerCase().includes(searchedValue.toLowerCase())
   );

@@ -15,10 +15,10 @@ const RoomsList = () => {
   const [selectedCountry, setSelectedCountry] = useState(null);
   const userId = useSelector(getUser)?.id;
 
-  const { responseData: dataUserCountries } = useFetch(ULRs.userCountries, '');
+  const { responseData: dataUserCountries } = useFetch(ULRs.userCountries);
 
   const { responseData: dataMainCountryChat } = useFetch(
-    selectedCountry ? ULRs.getMainCountryChatByName(selectedCountry, '') : null
+    selectedCountry ? ULRs.getMainCountryChatByName(selectedCountry) : null
   );
 
   const {
