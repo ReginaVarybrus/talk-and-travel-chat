@@ -3,38 +3,47 @@ import PropTypes from 'prop-types';
 import Backdrop from '@mui/material/Backdrop';
 import Modal from '@mui/material/Modal';
 import Fade from '@mui/material/Fade';
-import { Outlet } from 'react-router-dom';
-import SearchInput from '../SearchInput/SearchInput';
-import ChatMap from '../ChatMap/ChatMap';
+import { Outlet, useOutletContext } from 'react-router-dom';
+import SearchInput from '@/components/SearchInput/SearchInput';
+import ChatMap from '@/components/ChatMap/ChatMap';
 import { SearchBarStyled, ButtonMapOpen, MapBox } from './SearchBarStyled';
 
 const SearchBar = ({
-  setCountryData,
-  subscriptionCountryRooms,
+  setChatData,
+  subscriptionRooms,
+  setSubscriptionRooms,
   setIsSubscribed,
   setIsShowJoinBtn,
+  setSelectedCompanion,
   setParticipantsAmount,
 }) => {
   const [openMap, setOpenMap] = useState(false);
   const handleOpen = () => setOpenMap(true);
   const handleClose = () => setOpenMap(false);
+  const context = useOutletContext();
+  const isChatVisible = context?.isChatVisible;
+  const setIsChatVisible = context?.setIsChatVisible;
 
   return (
-    <SearchBarStyled>
+    <SearchBarStyled $isChatVisible={isChatVisible}>
       <SearchInput
-        setCountryData={setCountryData}
-        subscriptionCountryRooms={subscriptionCountryRooms}
+        setChatData={setChatData}
         setIsSubscribed={setIsSubscribed}
         setIsShowJoinBtn={setIsShowJoinBtn}
+        setIsChatVisible={setIsChatVisible}
         setParticipantsAmount={setParticipantsAmount}
       />
       <ButtonMapOpen onClick={handleOpen}>Search by map</ButtonMapOpen>
       <div>
         <Outlet
           context={{
-            setCountryData,
-            subscriptionCountryRooms,
+            setChatData,
+            subscriptionRooms,
+            setSubscriptionRooms,
             setIsSubscribed,
+            setIsShowJoinBtn,
+            setSelectedCompanion,
+            setIsChatVisible,
             setParticipantsAmount,
           }}
         />
@@ -64,10 +73,12 @@ const SearchBar = ({
 };
 
 SearchBar.propTypes = {
-  setCountryData: PropTypes.func,
-  subscriptionCountryRooms: PropTypes.array,
+  setChatData: PropTypes.func,
+  subscriptionRooms: PropTypes.array,
+  setSubscriptionRooms: PropTypes.func,
   setIsSubscribed: PropTypes.func,
   setIsShowJoinBtn: PropTypes.func,
+  setSelectedCompanion: PropTypes.func,
 };
 
 export default SearchBar;

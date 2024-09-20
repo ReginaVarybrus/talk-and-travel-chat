@@ -1,7 +1,8 @@
-import { useState, useRef } from 'react';
+import { useRef, useState } from 'react';
 import { useSelector } from 'react-redux';
 import PropTypes from 'prop-types';
 import ULRs from '@/redux-store/constants';
+import { CHAT_TYPES } from '@/constants/chatTypes';
 import { getUser } from '@/redux-store/selectors.js';
 import { useWebSocket } from '@/hooks/useWebSocket.js';
 import BasicButton from '@/components/Buttons/BasicButton/BasicButton';
@@ -18,9 +19,9 @@ import {
 } from './MessageBarStyled';
 
 const MessageBar = ({
-  countryChatId,
-  country,
-  setSubscriptionCountryRooms,
+  chatId,
+  chatData,
+  setSubscriptionRooms,
   isShowJoinBtn,
   setIsShowJoinBtn,
   isUserTyping,
@@ -30,12 +31,13 @@ const MessageBar = ({
   const [message, setMessage] = useState('');
   const typingTimeoutRef = useRef(null);
   const userId = useSelector(getUser)?.id;
+
   const { stompClient, sendMessage, sendEvent } = useWebSocket();
   const isMessageNotEmpty = Boolean(message?.trim().length);
-
+  const isGroupChat = chatData?.chatType === CHAT_TYPES.GROUP;
   const dataEventToSend = {
     authorId: userId,
-    chatId: countryChatId,
+    chatId,
   };
 
   const handleStartTyping = () => {
@@ -74,7 +76,7 @@ const MessageBar = ({
 
     const dataMessageToSend = {
       content: message,
-      chatId: countryChatId,
+      chatId,
       senderId: userId,
     };
 
@@ -87,13 +89,13 @@ const MessageBar = ({
   const handleJoinClick = () => {
     sendEvent(dataEventToSend, ULRs.joinToGroupChat);
     setIsShowJoinBtn(false);
-    setSubscriptionCountryRooms(prevRooms => [...prevRooms, country.country]);
+    setSubscriptionRooms(prevRooms => [...prevRooms, chatData.country]);
     setParticipantsAmount(prevCount => prevCount + 1);
   };
 
   return (
     <MessageBarStyled>
-      {isShowJoinBtn ? (
+      {isShowJoinBtn && isGroupChat ? (
         <ButtonJoinWrapper>
           <BasicButton
             variant="contained"
@@ -134,8 +136,8 @@ const MessageBar = ({
 };
 
 MessageBar.propTypes = {
-  countryChatId: PropTypes.number,
-  country: PropTypes.shape({
+  chatId: PropTypes.number,
+  chatData: PropTypes.shape({
     chatType: PropTypes.oneOf(['GROUP', 'PRIVATE']),
     country: PropTypes.shape({
       flagCode: PropTypes.string,
@@ -148,7 +150,7 @@ MessageBar.propTypes = {
     name: PropTypes.string,
     usersCount: PropTypes.number,
   }),
-  setSubscriptionCountryRooms: PropTypes.func,
+  setSubscriptionRooms: PropTypes.func,
   isShowJoinBtn: PropTypes.bool,
   setIsShowJoinBtn: PropTypes.func,
   isUserTyping: PropTypes.bool,

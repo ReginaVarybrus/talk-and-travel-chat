@@ -26,6 +26,7 @@ import {
   // VectorPng,
   Message,
 } from './ProfileStyled';
+import TapBar from '../TapBar/TapBar';
 // import plus from '../../images/icons/plus.png';
 // import Icon from '../../images/sprite.svg';
 
@@ -213,6 +214,7 @@ const Profile = () => {
           </Forms>
         )}
       </Formik>
+      <TapBar />
     </Wrapper>
   );
 };
