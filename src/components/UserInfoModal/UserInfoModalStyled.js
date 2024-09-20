@@ -50,7 +50,7 @@ export const InfoIcon = styled(LuInfo)`
   margin-right: 12px;
 `;
 
-export const UserContactInfo = styled.div`
+export const UserContactInfoStyled = styled.div`
   display: flex;
   align-items: center;
   margin-bottom: 32px;
@@ -64,9 +64,8 @@ export const UserContactInfo = styled.div`
 `;
 
 export const ModalAvatar = styled.img`
-  width: 48px;
+  min-width: 48px;
   height: 48px;
-  margin-right: 16px;
   border-radius: 8px;
   @media ${device.tablet} {
     width: 100px;
@@ -78,9 +77,8 @@ export const LetterAvatarStyled = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  width: 48px;
+  min-width: 48px;
   height: 48px;
-  margin-right: 16px;
   border-radius: 8px;
   background: var(--color-grey-6);
   color: var(--white-color);
@@ -90,6 +88,14 @@ export const LetterAvatarStyled = styled.div`
     width: 100px;
     height: 100px;
     font-size: 36px;
+  }
+`;
+
+export const UserInfo = styled.div`
+  margin-left: 16px;
+
+  p {
+    word-break: break-all;
   }
 `;
 

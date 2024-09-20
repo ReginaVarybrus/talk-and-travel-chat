@@ -1,20 +1,19 @@
-/* eslint-disable react/forbid-prop-types */
 import { useState } from 'react';
 import { useSelector } from 'react-redux';
 import { getUser } from '@/redux-store/selectors';
 import ULRs from '@/redux-store/constants';
 import { axiosClient } from '@/services/api';
+import { MESSAGE_TYPES } from '@/constants/messageTypes.js';
 import PropTypes from 'prop-types';
-import UserInfoModal from '../UserInfoModal/UserInfoModal';
-import { timeStampConverter } from '../utils/timeUtil.js';
-import { MESSAGE_TYPES } from '../../constants/messageTypes.js';
+import UserInfoModal from '@/components/UserInfoModal/UserInfoModal';
+import { timeStampConverter } from '@/components/utils/timeUtil.js';
 
 import {
   MessageItemStyled,
   MessageContentStyled,
   LetterAvatarStyled,
   ContentMessage,
-  ContentJoin,
+  ContentJoinOrLeave,
   Time,
 } from './MessageItemStyled';
 
@@ -28,19 +27,32 @@ const MessageItem = ({
 }) => {
   const [open, setOpen] = useState(false);
   const [userInfo, setUserInfo] = useState({});
+  const [userChats, setUserChats] = useState([]);
   const currentUserId = useSelector(getUser)?.id;
   const time = timeStampConverter(date);
   const firstLetterOfName = userName.substr(0, 1).toUpperCase();
   const isCurrentUser = userId === currentUserId;
 
+  if ([MESSAGE_TYPES.START_TYPING, MESSAGE_TYPES.STOP_TYPING].includes(type)) {
+    return null;
+  }
+
   const messageTypeText = type === MESSAGE_TYPES.TEXT;
   const messageTypeJoin = type === MESSAGE_TYPES.JOIN;
+  const messageTypeLeave = type === MESSAGE_TYPES.LEAVE;
 
   const handleOpen = async () => {
+    if (isCurrentUser) {
+      return;
+    }
     try {
-      const response = await axiosClient.get(ULRs.userInfo(userId));
-      setUserInfo(response.data);
-      if (response.data.userName) {
+      const userInfoResponse = await axiosClient.get(ULRs.userInfo(userId));
+      setUserInfo(userInfoResponse.data);
+      const privateChatsResponse = await axiosClient.get(
+        ULRs.getPrivateChats(currentUserId, '')
+      );
+      setUserChats(privateChatsResponse.data);
+      if (userInfoResponse.data.userName) {
         setOpen(true);
       }
     } catch (error) {
@@ -53,7 +65,10 @@ const MessageItem = ({
   return (
     <MessageItemStyled $isShownAvatar={isShownAvatar}>
       {messageTypeText && userId && isShownAvatar && (
-        <LetterAvatarStyled onClick={handleOpen}>
+        <LetterAvatarStyled
+          $isCurrentUser={isCurrentUser}
+          onClick={!isCurrentUser ? handleOpen : undefined}
+        >
           {firstLetterOfName}
         </LetterAvatarStyled>
       )}
@@ -66,7 +81,9 @@ const MessageItem = ({
           <Time>{time || 'time'}</Time>
         </MessageContentStyled>
       )}
-      {messageTypeJoin && <ContentJoin>{content || `message`}</ContentJoin>}
+      {(messageTypeJoin || messageTypeLeave) && (
+        <ContentJoinOrLeave>{content || `message`}</ContentJoinOrLeave>
+      )}
       <UserInfoModal
         open={open}
         handleClose={handleClose}
@@ -74,6 +91,8 @@ const MessageItem = ({
         userName={userInfo?.userName}
         userEmail={userInfo?.userEmail}
         about={userInfo?.about}
+        id={userInfo?.id}
+        dataUserChats={userChats}
       />
     </MessageItemStyled>
   );

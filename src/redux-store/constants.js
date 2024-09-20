@@ -5,16 +5,19 @@ const ULRs = {
   currentUser: 'current',
   updateUser: 'users',
   userInfo: userId => `users/${userId}`,
-  userCountries: `v2/user/countries`,
-  getMainCountryChatByName: countryName =>
-    `v2/country/${countryName}/main-chat`,
+  getMainCountryChatByName: countryName => `chats/${countryName}/main`,
+  userCountries: userId => `countries/user/${userId}`,
   subscriptionToMessages: chatId => `/countries/${chatId}/messages`,
   subscriptionToUserErrors: userId => `/user/${userId}/errors`,
+  getChatsParticipants: chatId => `/chats/${chatId}/users`,
   lastReadMessage: chatId => `/chats/${chatId}/messages/last-read`,
   joinToGroupChat: '/chat/events.joinChat',
   leaveOutGroupChat: '/chat/events.leaveChat',
   startTyping: '/chat/events.startTyping',
   stopTyping: '/chat/events.stopTyping',
+  getPrivateChats: userId => `chats/user/${userId}/private`,
+  createPrivateChat: 'chats/private',
+  getChatsMessages: chatId => `chats/${chatId}`,
 };
 
 export default ULRs;

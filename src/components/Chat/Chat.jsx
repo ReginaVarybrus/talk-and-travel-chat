@@ -1,5 +1,8 @@
-import { useEffect } from 'react';
+import { useState, useEffect } from 'react';
+import { useOutletContext } from 'react-router-dom';
 import { useSelector } from 'react-redux';
+import PropTypes from 'prop-types';
+import { CHAT_TYPES } from '@/constants/chatTypes';
 import { getUser } from '@/redux-store/selectors.js';
 import { useWebSocket } from '@/hooks/useWebSocket.js';
 import ULRs from '@/redux-store/constants';
@@ -16,45 +19,69 @@ import {
 } from './ChatStyled';
 
 const Chat = ({
-  countryName,
-  participantsAmount,
-  countryChatId,
-  groupMessages,
-  country,
-  setCountryData,
-  setSubscriptionCountryRooms,
+  chatData,
+  setChatData,
+  setSubscriptionRooms,
   isSubscribed,
   isShowJoinBtn,
   setIsShowJoinBtn,
+  selectedCompanion,
+  setSelectedCompanion,
 }) => {
+  const [isUserTyping, setIsUserTyping] = useState(false);
+  const [userNameisTyping, setUserNameisTyping] = useState('');
   const userId = useSelector(getUser)?.id;
-  const { subscribeToMessages, subscribeToUserErrors } = useWebSocket();
+  const { id, name, messages, usersCount, chatType, country } = chatData;
+  const isPrivateChat = chatType === CHAT_TYPES.PRIVATE;
+
+  const {
+    subscribeToMessages,
+    subscribeToUserErrors,
+    unsubscribeFromMessages,
+  } = useWebSocket();
+
+  const context = useOutletContext();
+  const isChatVisible = context?.isChatVisible;
+  const setIsChatVisible = context?.setIsChatVisible;
 
   useEffect(() => {
-    if (isSubscribed) {
-      subscribeToMessages(
-        ULRs.subscriptionToMessages(countryChatId),
-        setCountryData
-      );
+    if (isSubscribed && id) {
+      subscribeToMessages(ULRs.subscriptionToMessages(id), setChatData);
+      if (!isPrivateChat && selectedCompanion) {
+        setSelectedCompanion(null);
+      }
 
-      subscribeToUserErrors(
-        ULRs.subscriptionToUserErrors(userId),
-        setCountryData
-      );
+      subscribeToUserErrors(ULRs.subscriptionToUserErrors(userId), setChatData);
+
+      return () => {
+        unsubscribeFromMessages();
+      };
     }
-  }, [countryChatId]);
+  }, [id, isSubscribed, setChatData]);
 
   return (
-    <ChatStyled>
-      {!countryName && <ChatFirstLoading />}
-
+    <ChatStyled $isChatVisible={isChatVisible}>
+      {!name && <ChatFirstLoading />}
       <ChatHeader
-        countryName={countryName}
-        participantsAmount={participantsAmount}
+        chatName={name}
+        participantsAmount={usersCount}
+        flagCode={country?.flagCode}
+        selectedCompanion={selectedCompanion}
+        isPrivateChat={isPrivateChat}
+        userNameisTyping={userNameisTyping}
+        isUserTyping={isUserTyping}
+        chatId={id}
+        setSubscriptionRooms={setSubscriptionRooms}
+        setIsShowJoinBtn={setIsShowJoinBtn}
+        setIsChatVisible={setIsChatVisible}
       />
       <MessageBlock>
-        {groupMessages?.length ? (
-          <MessageList groupMessages={groupMessages} />
+        {messages?.length ? (
+          <MessageList
+            messages={messages}
+            setIsUserTyping={setIsUserTyping}
+            setUserNameisTyping={setUserNameisTyping}
+          />
         ) : (
           <NoMassegesNotification>
             <Logo src={logo} alt="logo" width="200" height="160" />
@@ -63,14 +90,38 @@ const Chat = ({
         )}
       </MessageBlock>
       <MessageBar
-        countryChatId={countryChatId}
-        country={country}
-        setCountryData={setCountryData}
-        setSubscriptionCountryRooms={setSubscriptionCountryRooms}
+        chatId={id}
+        chatData={chatData}
+        setSubscriptionRooms={setSubscriptionRooms}
         isShowJoinBtn={isShowJoinBtn}
         setIsShowJoinBtn={setIsShowJoinBtn}
+        isUserTyping={isUserTyping}
+        setIsUserTyping={setIsUserTyping}
       />
     </ChatStyled>
   );
 };
+
+Chat.propTypes = {
+  messages: PropTypes.array,
+  chatData: PropTypes.shape({
+    chatType: PropTypes.oneOf(['GROUP', 'PRIVATE']),
+    country: PropTypes.shape({
+      flagCode: PropTypes.string,
+      name: PropTypes.string,
+    }),
+    creationDate: PropTypes.string,
+    description: PropTypes.string,
+    id: PropTypes.number,
+    messages: PropTypes.array,
+    name: PropTypes.string,
+    usersCount: PropTypes.number,
+  }),
+  setChatData: PropTypes.func,
+  setSubscriptionRooms: PropTypes.func,
+  isSubscribed: PropTypes.bool,
+  isShowJoinBtn: PropTypes.bool,
+  setIsShowJoinBtn: PropTypes.func,
+};
+
 export default Chat;
