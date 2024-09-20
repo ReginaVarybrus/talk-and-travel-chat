@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 import { device } from '@/constants/mediaQueries';
 
-export const LayoutStyled = styled.div`
+export const DesktopLayoutStyled = styled.div`
   display: grid;
   grid-template-columns: 90px 1fr;
   background-color: var(--outlet-background-color);

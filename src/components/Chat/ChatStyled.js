@@ -1,17 +1,21 @@
 import styled from 'styled-components';
+import { device } from '@/constants/mediaQueries';
 import Button from '@mui/material/Button';
 import { TextareaAutosize as BaseTextareaAutosize } from '@mui/material';
 
 export const ChatStyled = styled.div`
-  display: flex;
-  flex-direction: column;
+  display: ${({ $isChatVisible }) => ($isChatVisible ? 'flex' : 'none')};
   align-items: center;
+  flex-direction: column;
   width: 100%;
   height: 100vh;
   max-height: 100vh;
   background: var(--white-color);
   position: relative;
   overflow: hidden;
+  @media ${device.tablet} {
+    display: flex;
+  }
 `;
 
 export const NoMassegesNotification = styled.div`

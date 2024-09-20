@@ -9,7 +9,7 @@ import { ChatRouteStyled } from './ChatRouteStyled.js';
 
 const ChatRoute = () => {
   const [chatData, setChatData] = useState({});
-  const [subscriptionCountryRooms, setSubscriptionCountryRooms] = useState([]);
+  const [subscriptionRooms, setSubscriptionRooms] = useState([]);
   const [isSubscribed, setIsSubscribed] = useState(false);
   const [isShowJoinBtn, setIsShowJoinBtn] = useState(false);
   const userId = useSelector(getUser)?.id;
@@ -19,7 +19,7 @@ const ChatRoute = () => {
 
   useEffect(() => {
     if (dataUserCountries) {
-      setSubscriptionCountryRooms(dataUserCountries);
+      setSubscriptionRooms(dataUserCountries);
     }
   }, [dataUserCountries]);
   const [selectedCompanion, setSelectedCompanion] = useState(null);
@@ -27,21 +27,18 @@ const ChatRoute = () => {
   return (
     <ChatRouteStyled>
       <SearchBar
-        chatId={chatData?.chatId}
         setChatData={setChatData}
-        subscriptionRooms={subscriptionCountryRooms}
-        setSubscriptionRooms={setSubscriptionCountryRooms}
-        isSubscribed={isSubscribed}
+        subscriptionRooms={subscriptionRooms}
+        setSubscriptionRooms={setSubscriptionRooms}
         setIsSubscribed={setIsSubscribed}
         setIsShowJoinBtn={setIsShowJoinBtn}
-        selectedCompanion={selectedCompanion}
         setSelectedCompanion={setSelectedCompanion}
       />
 
       <Chat
         chatData={chatData}
         setChatData={setChatData}
-        setSubscriptionRooms={setSubscriptionCountryRooms}
+        setSubscriptionRooms={setSubscriptionRooms}
         isSubscribed={isSubscribed}
         isShowJoinBtn={isShowJoinBtn}
         setIsShowJoinBtn={setIsShowJoinBtn}

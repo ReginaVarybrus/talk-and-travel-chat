@@ -1,44 +1,102 @@
-import CountryInfo from '@/components/CountryInfo/CountryInfo';
+import { useState } from 'react';
 import PropTypes from 'prop-types';
 import { useSelector } from 'react-redux';
-import { useState } from 'react';
-import { getUser } from '@/redux-store/selectors';
-import { ChatHeaderStyled } from './ChatHeaderStyled';
+import { getUser } from '@/redux-store/selectors.js';
+import CountryInfo from '@/components/CountryInfo/CountryInfo';
+import {
+  ChatHeaderStyled,
+  MobileHeaderStyled,
+  DesktopHeaderStyled,
+  MobileHeaderContentStyled,
+  LetterAvatarStyled,
+  HeaderButton,
+  BackIcon,
+  FlagImg,
+  OpenCountryInfoIcon,
+} from './ChatHeaderStyled';
 
 const ChatHeader = ({
   chatName = 'Country name',
   participantsAmount = 0,
+  flagCode,
   selectedCompanion,
   isPrivateChat,
   isUserTyping,
   userNameisTyping,
   chatId,
-  isSubscribed,
   setSubscriptionRooms,
+  setIsShowJoinBtn,
+  setIsChatVisible,
 }) => {
   const [openModal, setOpenModal] = useState(false);
   const userName = useSelector(getUser)?.userName;
   const showUserIsTyping = isUserTyping && userNameisTyping !== userName;
+  const nameOfChat = isPrivateChat ? selectedCompanion.userName : chatName;
+  const firstLetterOfName = selectedCompanion?.userName
+    .substr(0, 1)
+    .toUpperCase();
+
+  const getMessage = () => {
+    if (showUserIsTyping) {
+      return `${userNameisTyping} is typing...`;
+    }
+
+    if (isPrivateChat) {
+      return '';
+    }
+
+    return `${participantsAmount} participants`;
+  };
 
   const handleOpen = () => {
     if (!isPrivateChat) {
       setOpenModal(true);
     }
   };
+
   const handleClose = () => {
     setOpenModal(false);
   };
-  return (
-    <>
-      <ChatHeaderStyled onClick={handleOpen}>
-        <h5>{isPrivateChat ? selectedCompanion.userName : chatName}</h5>
 
-        <p>
-          {showUserIsTyping
-            ? `${userNameisTyping} is typing...`
-            : !isPrivateChat && `${participantsAmount} participants`}
-        </p>
-      </ChatHeaderStyled>
+  const handleBackToSearchBar = () => {
+    setIsChatVisible(false);
+  };
+
+  return (
+    <ChatHeaderStyled>
+      <MobileHeaderStyled>
+        <HeaderButton onClick={handleBackToSearchBar}>
+          <BackIcon />
+        </HeaderButton>
+        <MobileHeaderContentStyled>
+          {isPrivateChat ? (
+            <LetterAvatarStyled>{firstLetterOfName}</LetterAvatarStyled>
+          ) : (
+            <FlagImg
+              loading="lazy"
+              width="36"
+              srcSet={`https://flagcdn.com/w40/${flagCode}.png 2x`}
+              src={`https://flagcdn.com/w20/${flagCode}.png`}
+              alt={`${flagCode} flag`}
+            />
+          )}
+
+          <div>
+            <h5>{nameOfChat}</h5>
+            <p>{getMessage()}</p>
+          </div>
+        </MobileHeaderContentStyled>
+        {!isPrivateChat && (
+          <HeaderButton onClick={handleOpen}>
+            <OpenCountryInfoIcon />
+          </HeaderButton>
+        )}
+      </MobileHeaderStyled>
+
+      <DesktopHeaderStyled onClick={handleOpen}>
+        <h5>{nameOfChat}</h5>
+        <p>{getMessage()}</p>
+      </DesktopHeaderStyled>
 
       <CountryInfo
         isOpen={openModal}
@@ -47,15 +105,16 @@ const ChatHeader = ({
         participantsAmount={participantsAmount || 0}
         chatId={chatId}
         setSubscriptionRooms={setSubscriptionRooms}
-        isSubscribed={isSubscribed}
+        setIsShowJoinBtn={setIsShowJoinBtn}
       />
-    </>
+    </ChatHeaderStyled>
   );
 };
 
 ChatHeader.propTypes = {
   chatName: PropTypes.string,
   participantsAmount: PropTypes.number,
+  flagCode: PropTypes.string,
   selectedCompanion: PropTypes.shape({
     id: PropTypes.number,
     userName: PropTypes.string,
@@ -64,9 +123,10 @@ ChatHeader.propTypes = {
   chatId: PropTypes.number,
   isPrivateChat: PropTypes.bool,
   setSubscriptionRooms: PropTypes.func,
-  isSubscribed: PropTypes.bool,
   isUserTyping: PropTypes.bool,
   userNameisTyping: PropTypes.string,
+  setIsShowJoinBtn: PropTypes.func,
+  setIsChatVisible: PropTypes.func,
 };
 
 export default ChatHeader;

@@ -18,7 +18,12 @@ import {
   Text,
 } from './SearchInputStyled';
 
-const SearchInput = ({ setChatData, setIsSubscribed, setIsShowJoinBtn }) => {
+const SearchInput = ({
+  setChatData,
+  setIsSubscribed,
+  setIsShowJoinBtn,
+  setIsChatVisible,
+}) => {
   const navigate = useNavigate();
   const [selectedCountry, setSelectedCountry] = useState(null);
   const [searchedValue, setSearchedValue] = useState('');
@@ -69,6 +74,7 @@ const SearchInput = ({ setChatData, setIsSubscribed, setIsShowJoinBtn }) => {
     setSearchedValue(countryName);
     setShowItem(false);
     navigate(routesPath.ROOMS);
+    setIsChatVisible(true);
     setSearchedValue('');
   };
 
@@ -114,7 +120,7 @@ const SearchInput = ({ setChatData, setIsSubscribed, setIsShowJoinBtn }) => {
                   >
                     <Flag
                       loading="lazy"
-                      width="32"
+                      width="48"
                       srcSet={`https://flagcdn.com/w40/${country.properties.code}.png 2x`}
                       src={`https://flagcdn.com/w20/${country.properties.code}.png`}
                       alt={`${country.properties.ADMIN} flag`}
@@ -135,6 +141,7 @@ SearchInput.propTypes = {
   setChatData: PropTypes.func,
   setIsSubscribed: PropTypes.func,
   setIsShowJoinBtn: PropTypes.func,
+  setIsChatVisible: PropTypes.func,
 };
 
 export default SearchInput;

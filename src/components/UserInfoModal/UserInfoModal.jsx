@@ -13,9 +13,10 @@ import {
   InfoModalStyled,
   ButtonClose,
   CloseIcon,
-  UserContactInfo,
+  UserContactInfoStyled,
   ModalAvatar,
   LetterAvatarStyled,
+  UserInfo,
   AboutUser,
   InfoIcon,
   ButtonBlock,
@@ -90,18 +91,18 @@ const UserInfoModal = ({
           <ButtonClose onClick={handleClose}>
             <CloseIcon />
           </ButtonClose>
-          <UserContactInfo>
+          <UserContactInfoStyled>
             {avatar ? (
               <ModalAvatar />
             ) : (
               <LetterAvatarStyled>{firstLetterOfName}</LetterAvatarStyled>
             )}
 
-            <div>
+            <UserInfo>
               <h5>{userName}</h5>
               <p>{userEmail}</p>
-            </div>
-          </UserContactInfo>
+            </UserInfo>
+          </UserContactInfoStyled>
           <hr />
           <AboutUser>
             <InfoIcon />

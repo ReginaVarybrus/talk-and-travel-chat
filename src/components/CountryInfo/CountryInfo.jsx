@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import { LuLogOut } from 'react-icons/lu';
 import { IoCloseOutline } from 'react-icons/io5';
 import { HiOutlineExclamationCircle } from 'react-icons/hi';
@@ -37,8 +38,9 @@ const CountryInfo = ({
   onClose,
   countryName,
   participantsAmount,
-  setSubscriptionCountryRooms,
+  setSubscriptionRooms,
   chatId,
+  setIsShowJoinBtn,
 }) => {
   const currentUserId = useSelector(getUser)?.id;
   const { sendEvent } = useWebSocket();
@@ -82,17 +84,20 @@ const CountryInfo = ({
     }
     onClose();
   };
+
   const handleLeaveGroup = () => {
     const dataEventToSend = {
       authorId: currentUserId,
       chatId,
     };
     sendEvent(dataEventToSend, ULRs.leaveOutGroupChat);
-    setSubscriptionCountryRooms(prevRooms =>
+    setSubscriptionRooms(prevRooms =>
       prevRooms.filter(room => room.name !== countryName)
     );
     onClose();
+    setIsShowJoinBtn(true);
   };
+
   const url = chatId && ULRs.getChatsParticipants(chatId);
   const { responseData: participants } = useFetch(url, '');
 
@@ -191,4 +196,15 @@ const CountryInfo = ({
     </Modal>
   );
 };
+
+CountryInfo.propTypes = {
+  isOpen: PropTypes.bool,
+  onClose: PropTypes.func,
+  countryName: PropTypes.string,
+  participantsAmount: PropTypes.number,
+  chatId: PropTypes.number,
+  setSubscriptionRooms: PropTypes.func,
+  setIsShowJoinBtn: PropTypes.func,
+};
+
 export default CountryInfo;

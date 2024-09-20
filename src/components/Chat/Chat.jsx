@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { useOutletContext } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import PropTypes from 'prop-types';
 import { CHAT_TYPES } from '@/constants/chatTypes';
@@ -30,7 +31,7 @@ const Chat = ({
   const [isUserTyping, setIsUserTyping] = useState(false);
   const [userNameisTyping, setUserNameisTyping] = useState('');
   const userId = useSelector(getUser)?.id;
-  const { id, name, messages, usersCount, chatType } = chatData;
+  const { id, name, messages, usersCount, chatType, country } = chatData;
   const isPrivateChat = chatType === CHAT_TYPES.PRIVATE;
 
   const {
@@ -38,6 +39,10 @@ const Chat = ({
     subscribeToUserErrors,
     unsubscribeFromMessages,
   } = useWebSocket();
+
+  const context = useOutletContext();
+  const isChatVisible = context?.isChatVisible;
+  const setIsChatVisible = context?.setIsChatVisible;
 
   useEffect(() => {
     if (isSubscribed && id) {
@@ -55,18 +60,20 @@ const Chat = ({
   }, [id, isSubscribed, setChatData]);
 
   return (
-    <ChatStyled>
+    <ChatStyled $isChatVisible={isChatVisible}>
       {!name && <ChatFirstLoading />}
       <ChatHeader
         chatName={name}
         participantsAmount={usersCount}
+        flagCode={country?.flagCode}
         selectedCompanion={selectedCompanion}
         isPrivateChat={isPrivateChat}
         userNameisTyping={userNameisTyping}
         isUserTyping={isUserTyping}
         chatId={id}
-        isSubscribed={isSubscribed}
         setSubscriptionRooms={setSubscriptionRooms}
+        setIsShowJoinBtn={setIsShowJoinBtn}
+        setIsChatVisible={setIsChatVisible}
       />
       <MessageBlock>
         {messages?.length ? (
@@ -85,7 +92,6 @@ const Chat = ({
       <MessageBar
         chatId={id}
         chatData={chatData}
-        setChatData={setChatData}
         setSubscriptionRooms={setSubscriptionRooms}
         isShowJoinBtn={isShowJoinBtn}
         setIsShowJoinBtn={setIsShowJoinBtn}

@@ -60,10 +60,14 @@ h1,h2,h3,h4,h5,h6,p{
 }
 
 h5 {
-  font-size: 18px;
+  font-size: 16px;
   font-weight: 600;
-  line-height: 21.6px;
+  line-height: 19.2px;
   color: var(--color-dark);
+  @media ${device.tablet} {
+    font-size: 18px;
+    line-height: 21.6px;
+  }
 }
 
 h6 {
@@ -80,11 +84,18 @@ p {
   @media ${device.tablet} {
     font-size: 16px;
   }
-  
 }
 
 svg{
   margin: 0;
   padding: 0;
 }
+
+// TapBar custom styles
+
+.css-gy4i07-MuiPaper-root {
+  height: 100px;
+  align-content: center;
+}
+  
 `;
