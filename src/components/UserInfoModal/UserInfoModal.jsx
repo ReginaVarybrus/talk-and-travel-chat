@@ -72,6 +72,7 @@ const UserInfoModal = ({
       console.error(error);
     }
   };
+
   return (
     <ModalWindowStyled
       aria-labelledby="transition-modal-title"

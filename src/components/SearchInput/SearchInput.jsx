@@ -1,6 +1,4 @@
 import { useState, useEffect, useRef } from 'react';
-// import { useSelector } from 'react-redux';
-// import { getUser } from '@/redux-store/selectors.js';
 import { routesPath } from '@/routes/routesConfig';
 import PropTypes from 'prop-types';
 import { useFetch } from '@/hooks/useFetch.js';
@@ -23,17 +21,17 @@ const SearchInput = ({
   setIsSubscribed,
   setIsShowJoinBtn,
   setIsChatVisible,
+  subscriptionRooms,
 }) => {
   const navigate = useNavigate();
   const [selectedCountry, setSelectedCountry] = useState(null);
   const [searchedValue, setSearchedValue] = useState('');
   const [showItem, setShowItem] = useState(false);
   const autoCompleteRef = useRef(null);
-  // const userId = useSelector(getUser)?.id;
   const { responseData: dataMainCountryChat } = useFetch(
     selectedCountry ? ULRs.getMainCountryChatByName(selectedCountry) : null
   );
-  const { responseData: dataUserCountries } = useFetch(ULRs.userCountries);
+
   const filterCountries = mapData.features.filter(name =>
     name.properties.ADMIN.toLowerCase().includes(searchedValue.toLowerCase())
   );
@@ -60,7 +58,7 @@ const SearchInput = ({
   const handleCountryClick = country => {
     const countryName = country.properties.ADMIN;
     setSelectedCountry(countryName);
-    const nameOfCountry = dataUserCountries.find(
+    const nameOfCountry = subscriptionRooms.find(
       item => item.name === countryName
     );
     if (nameOfCountry) {
@@ -140,6 +138,7 @@ SearchInput.propTypes = {
   setIsSubscribed: PropTypes.func,
   setIsShowJoinBtn: PropTypes.func,
   setIsChatVisible: PropTypes.func,
+  subscriptionRooms: PropTypes.array,
 };
 
 export default SearchInput;

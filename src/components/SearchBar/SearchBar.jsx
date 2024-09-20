@@ -11,7 +11,6 @@ import { SearchBarStyled, ButtonMapOpen, MapBox } from './SearchBarStyled';
 const SearchBar = ({
   setChatData,
   subscriptionRooms,
-  setSubscriptionRooms,
   setIsSubscribed,
   setIsShowJoinBtn,
   setSelectedCompanion,
@@ -30,6 +29,7 @@ const SearchBar = ({
         setIsSubscribed={setIsSubscribed}
         setIsShowJoinBtn={setIsShowJoinBtn}
         setIsChatVisible={setIsChatVisible}
+        subscriptionRooms={subscriptionRooms}
       />
       <ButtonMapOpen onClick={handleOpen}>Search by map</ButtonMapOpen>
       <div>
@@ -37,7 +37,6 @@ const SearchBar = ({
           context={{
             setChatData,
             subscriptionRooms,
-            setSubscriptionRooms,
             setIsSubscribed,
             setIsShowJoinBtn,
             setSelectedCompanion,
@@ -72,7 +71,6 @@ const SearchBar = ({
 SearchBar.propTypes = {
   setChatData: PropTypes.func,
   subscriptionRooms: PropTypes.array,
-  setSubscriptionRooms: PropTypes.func,
   setIsSubscribed: PropTypes.func,
   setIsShowJoinBtn: PropTypes.func,
   setSelectedCompanion: PropTypes.func,

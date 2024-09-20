@@ -66,7 +66,6 @@ const CountryInfo = ({
         });
       } else {
         const response = await axiosClient.post(ULRs.createPrivateChat, {
-          userId: currentUserId,
           companionId: id,
         });
         const privateChatId = response.data;
@@ -85,7 +84,6 @@ const CountryInfo = ({
 
   const handleLeaveGroup = () => {
     const dataEventToSend = {
-      // authorId: currentUserId,
       chatId,
     };
     sendEvent(dataEventToSend, ULRs.leaveOutGroupChat);

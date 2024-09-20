@@ -68,8 +68,8 @@ const Chat = ({
         flagCode={country?.flagCode}
         selectedCompanion={selectedCompanion}
         isPrivateChat={isPrivateChat}
-        userNameisTyping={userNameisTyping}
         isUserTyping={isUserTyping}
+        userNameisTyping={userNameisTyping}
         chatId={id}
         setSubscriptionRooms={setSubscriptionRooms}
         setIsShowJoinBtn={setIsShowJoinBtn}
@@ -103,7 +103,6 @@ const Chat = ({
 };
 
 Chat.propTypes = {
-  messages: PropTypes.array,
   chatData: PropTypes.shape({
     chatType: PropTypes.oneOf(['GROUP', 'PRIVATE']),
     country: PropTypes.shape({
@@ -122,6 +121,12 @@ Chat.propTypes = {
   isSubscribed: PropTypes.bool,
   isShowJoinBtn: PropTypes.bool,
   setIsShowJoinBtn: PropTypes.func,
+  selectedCompanion: PropTypes.shape({
+    id: PropTypes.number,
+    userName: PropTypes.string,
+    userEmail: PropTypes.string,
+  }),
+  setSelectedCompanion: PropTypes.func,
 };
 
 export default Chat;
