@@ -67,7 +67,10 @@ const InputField = ({ props, formik, disabled, nolabel, backgroundColor }) => {
         id={props.general}
         name={props.general}
         type={
-          showPassword && props.general === 'password' ? 'text' : props.type
+          showPassword &&
+          (props.general === 'password' || props.general === 'repeatPassword')
+            ? 'text'
+            : props.type
         }
         disabled={disabled}
         onChange={formik.handleChange}
@@ -77,7 +80,7 @@ const InputField = ({ props, formik, disabled, nolabel, backgroundColor }) => {
         $isSuccessColor={formik.touched[props.general]}
         $backgroundColor={backgroundColor}
       />
-      {props.general === 'password' && (
+      {(props.general === 'password' || props.general === 'repeatPassword') && (
         <IconContainer onClick={togglePassword}>
           {showPassword ? <TbEyeClosed /> : <TbEye />}
         </IconContainer>

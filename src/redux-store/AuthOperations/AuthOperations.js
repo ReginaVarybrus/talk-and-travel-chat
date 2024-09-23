@@ -33,7 +33,7 @@ export const logIn = createAsyncThunk(
     try {
       const response = await axiosClient.post(ULRs.login, userData);
       token.set(response.data.token);
-      console.log('from Login', response.data);
+      // console.log('from Login', response.data);
       dispatch(setUsers(response.data.userDto));
       return response.data;
     } catch (e) {
