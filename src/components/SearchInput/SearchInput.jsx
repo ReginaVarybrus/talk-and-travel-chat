@@ -1,5 +1,4 @@
 import { useState, useEffect, useRef } from 'react';
-import { useSelector } from 'react-redux';
 import { useMediaQuery } from 'react-responsive';
 import { device } from '@/constants/mediaQueries.js';
 import { routesPath } from '@/routes/routesConfig';
@@ -33,7 +32,7 @@ const SearchInput = ({
   const [searchedValue, setSearchedValue] = useState('');
   const [showItem, setShowItem] = useState(false);
   const autoCompleteRef = useRef(null);
-  const { responseData: dataMainCountryChat } = useFetch(
+  const { responseData } = useFetch(
     selectedCountry ? ULRs.getMainCountryChatByName(selectedCountry) : null
   );
 
@@ -42,12 +41,12 @@ const SearchInput = ({
   );
 
   useEffect(() => {
-    if (dataMainCountryChat) {
-      setChatData(dataMainCountryChat);
-      setParticipantsAmount(dataMainCountryChat.usersCount);
+    if (responseData) {
+      setChatData(responseData);
+      setParticipantsAmount(responseData.usersCount);
       setIsSubscribed(true);
     }
-  }, [dataMainCountryChat, setChatData]);
+  }, [responseData, setChatData]);
 
   const handleChange = event => {
     const { value } = event.target;

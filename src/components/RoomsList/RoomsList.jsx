@@ -4,9 +4,6 @@ import { useMediaQuery } from 'react-responsive';
 import { device } from '@/constants/mediaQueries.js';
 import { useFetch } from '@/hooks/useFetch.js';
 import ULRs from '@/redux-store/constants';
-import { useSelector } from 'react-redux';
-import { getUser } from '@/redux-store/selectors.js';
-
 import {
   Flag,
   ScrollBar,
@@ -34,6 +31,7 @@ const RoomsList = () => {
   useEffect(() => {
     if (responseData) {
       setChatData(responseData);
+      setParticipantsAmount(responseData.usersCount);
       setIsSubscribed(true);
     }
   }, [responseData, setChatData, setIsSubscribed]);
