@@ -46,9 +46,7 @@ const CountryInfo = ({
   const { sendEvent } = useWebSocket();
   const navigate = useNavigate();
 
-  const { responseData: dataUserChats } = useFetch(
-    ULRs.getPrivateChats(currentUserId, '')
-  );
+  const { responseData: dataUserChats } = useFetch(ULRs.getPrivateChats);
 
   const checkExistingPrivateChat = id => {
     const isExist = dataUserChats?.find(chat => chat.companion.id === id);
@@ -68,7 +66,6 @@ const CountryInfo = ({
         });
       } else {
         const response = await axiosClient.post(ULRs.createPrivateChat, {
-          userId: currentUserId,
           companionId: id,
         });
         const privateChatId = response.data;
@@ -87,7 +84,6 @@ const CountryInfo = ({
 
   const handleLeaveGroup = () => {
     const dataEventToSend = {
-      authorId: currentUserId,
       chatId,
     };
     sendEvent(dataEventToSend, ULRs.leaveOutGroupChat);

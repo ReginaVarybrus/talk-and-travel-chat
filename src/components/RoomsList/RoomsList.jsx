@@ -4,8 +4,6 @@ import { useMediaQuery } from 'react-responsive';
 import { device } from '@/constants/mediaQueries.js';
 import { useFetch } from '@/hooks/useFetch.js';
 import ULRs from '@/redux-store/constants';
-import { useSelector } from 'react-redux';
-import { getUser } from '@/redux-store/selectors.js';
 
 import { Flag, ScrollBar } from '@/components/SearchInput/SearchInputStyled.js';
 import { ListStyled, Text, Item, ListItems } from './RoomsListStyled';
@@ -13,37 +11,25 @@ import { ListStyled, Text, Item, ListItems } from './RoomsListStyled';
 const RoomsList = () => {
   const isDesktop = useMediaQuery({ query: device.tablet });
   const [selectedCountry, setSelectedCountry] = useState(null);
-  const userId = useSelector(getUser)?.id;
 
-  const { responseData: dataUserCountries } = useFetch(
-    ULRs.userCountries(userId, '')
-  );
-
-  const { responseData: dataMainCountryChat } = useFetch(
-    selectedCountry ? ULRs.getMainCountryChatByName(selectedCountry, '') : null
+  const { responseData } = useFetch(
+    selectedCountry ? ULRs.getMainCountryChatByName(selectedCountry) : null
   );
 
   const {
     setChatData,
+    subscriptionRooms,
     setIsSubscribed,
     setIsShowJoinBtn,
-    subscriptionRooms,
-    setSubscriptionRooms,
     setIsChatVisible,
   } = useOutletContext();
 
   useEffect(() => {
-    if (dataUserCountries && userId) {
-      setSubscriptionRooms(dataUserCountries);
-    }
-  }, [dataUserCountries, userId]);
-
-  useEffect(() => {
-    if (dataMainCountryChat) {
-      setChatData(dataMainCountryChat);
+    if (responseData) {
+      setChatData(responseData);
       setIsSubscribed(true);
     }
-  }, [dataMainCountryChat, setChatData, setIsSubscribed]);
+  }, [responseData, setChatData, setIsSubscribed]);
 
   const handleOpenCountryRoom = countryName => {
     setSelectedCountry(countryName);

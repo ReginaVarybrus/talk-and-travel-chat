@@ -1,9 +1,7 @@
 import { useRef, useState } from 'react';
-import { useSelector } from 'react-redux';
 import PropTypes from 'prop-types';
 import ULRs from '@/redux-store/constants';
 import { CHAT_TYPES } from '@/constants/chatTypes';
-import { getUser } from '@/redux-store/selectors.js';
 import { useWebSocket } from '@/hooks/useWebSocket.js';
 import BasicButton from '@/components/Buttons/BasicButton/BasicButton';
 import {
@@ -29,13 +27,12 @@ const MessageBar = ({
 }) => {
   const [message, setMessage] = useState('');
   const typingTimeoutRef = useRef(null);
-  const userId = useSelector(getUser)?.id;
 
   const { stompClient, sendMessage, sendEvent } = useWebSocket();
   const isMessageNotEmpty = Boolean(message?.trim().length);
   const isGroupChat = chatData?.chatType === CHAT_TYPES.GROUP;
+
   const dataEventToSend = {
-    authorId: userId,
     chatId,
   };
 
@@ -76,7 +73,6 @@ const MessageBar = ({
     const dataMessageToSend = {
       content: message,
       chatId,
-      senderId: userId,
     };
 
     sendMessage(dataMessageToSend);

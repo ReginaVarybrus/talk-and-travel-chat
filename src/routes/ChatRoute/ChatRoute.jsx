@@ -1,6 +1,4 @@
 import { useState, useEffect } from 'react';
-import { useSelector } from 'react-redux';
-import { getUser } from '@/redux-store/selectors.js';
 import { useFetch } from '@/hooks/useFetch.js';
 import ULRs from '@/redux-store/constants';
 import SearchBar from '@/components/SearchBar/SearchBar';
@@ -12,24 +10,20 @@ const ChatRoute = () => {
   const [subscriptionRooms, setSubscriptionRooms] = useState([]);
   const [isSubscribed, setIsSubscribed] = useState(false);
   const [isShowJoinBtn, setIsShowJoinBtn] = useState(false);
-  const userId = useSelector(getUser)?.id;
-  const { responseData: dataUserCountries } = useFetch(
-    ULRs.userCountries(userId, '')
-  );
+  const [selectedCompanion, setSelectedCompanion] = useState(null);
+  const { responseData } = useFetch(ULRs.userCountries);
 
   useEffect(() => {
-    if (dataUserCountries) {
-      setSubscriptionRooms(dataUserCountries);
+    if (responseData) {
+      setSubscriptionRooms(responseData);
     }
-  }, [dataUserCountries]);
-  const [selectedCompanion, setSelectedCompanion] = useState(null);
+  }, [responseData]);
 
   return (
     <ChatRouteStyled>
       <SearchBar
         setChatData={setChatData}
         subscriptionRooms={subscriptionRooms}
-        setSubscriptionRooms={setSubscriptionRooms}
         setIsSubscribed={setIsSubscribed}
         setIsShowJoinBtn={setIsShowJoinBtn}
         setSelectedCompanion={setSelectedCompanion}
