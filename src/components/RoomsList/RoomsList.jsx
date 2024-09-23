@@ -17,20 +17,14 @@ import { ListStyled, Text, ListItems } from './RoomsListStyled';
 const RoomsList = () => {
   const isDesktop = useMediaQuery({ query: device.tablet });
   const [selectedCountry, setSelectedCountry] = useState(null);
-  const userId = useSelector(getUser)?.id;
 
-  const { responseData: dataUserCountries } = useFetch(
-    ULRs.userCountries(userId, '')
-  );
-
-  const { responseData: dataMainCountryChat } = useFetch(
-    selectedCountry ? ULRs.getMainCountryChatByName(selectedCountry, '') : null
+  const { responseData } = useFetch(
+    selectedCountry ? ULRs.getMainCountryChatByName(selectedCountry) : null
   );
 
   const {
     setChatData,
     subscriptionRooms,
-    setSubscriptionRooms,
     setIsSubscribed,
     setIsShowJoinBtn,
     setIsChatVisible,
@@ -38,18 +32,11 @@ const RoomsList = () => {
   } = useOutletContext();
 
   useEffect(() => {
-    if (dataUserCountries && userId) {
-      setSubscriptionRooms(dataUserCountries);
-    }
-  }, [dataUserCountries, userId]);
-
-  useEffect(() => {
-    if (dataMainCountryChat) {
-      setChatData(dataMainCountryChat);
-      setParticipantsAmount(dataMainCountryChat.usersCount);
+    if (responseData) {
+      setChatData(responseData);
       setIsSubscribed(true);
     }
-  }, [dataMainCountryChat, setChatData, setIsSubscribed]);
+  }, [responseData, setChatData, setIsSubscribed]);
 
   const handleOpenCountryRoom = countryName => {
     setSelectedCountry(countryName);

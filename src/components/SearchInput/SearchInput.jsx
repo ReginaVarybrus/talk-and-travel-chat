@@ -4,7 +4,6 @@ import { useMediaQuery } from 'react-responsive';
 import { device } from '@/constants/mediaQueries.js';
 import { routesPath } from '@/routes/routesConfig';
 import PropTypes from 'prop-types';
-import { getUser } from '@/redux-store/selectors.js';
 import { useFetch } from '@/hooks/useFetch.js';
 import ULRs from '@/redux-store/constants';
 import mapData from '@/data/countries.json';
@@ -26,6 +25,7 @@ const SearchInput = ({
   setIsShowJoinBtn,
   setIsChatVisible,
   setParticipantsAmount,
+  subscriptionRooms,
 }) => {
   const isDesktop = useMediaQuery({ query: device.tablet });
   const navigate = useNavigate();
@@ -33,13 +33,10 @@ const SearchInput = ({
   const [searchedValue, setSearchedValue] = useState('');
   const [showItem, setShowItem] = useState(false);
   const autoCompleteRef = useRef(null);
-  const userId = useSelector(getUser)?.id;
   const { responseData: dataMainCountryChat } = useFetch(
-    selectedCountry ? ULRs.getMainCountryChatByName(selectedCountry, '') : null
+    selectedCountry ? ULRs.getMainCountryChatByName(selectedCountry) : null
   );
-  const { responseData: dataUserCountries } = useFetch(
-    ULRs.userCountries(userId, '')
-  );
+
   const filterCountries = mapData.features.filter(name =>
     name.properties.ADMIN.toLowerCase().includes(searchedValue.toLowerCase())
   );
@@ -67,7 +64,7 @@ const SearchInput = ({
   const handleCountryClick = country => {
     const countryName = country.properties.ADMIN;
     setSelectedCountry(countryName);
-    const nameOfCountry = dataUserCountries.find(
+    const nameOfCountry = subscriptionRooms.find(
       item => item.name === countryName
     );
     if (nameOfCountry) {
@@ -150,6 +147,7 @@ SearchInput.propTypes = {
   setIsShowJoinBtn: PropTypes.func,
   setIsChatVisible: PropTypes.func,
   setParticipantsAmount: PropTypes.func,
+  subscriptionRooms: PropTypes.array,
 };
 
 export default SearchInput;
