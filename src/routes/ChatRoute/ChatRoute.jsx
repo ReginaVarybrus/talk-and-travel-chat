@@ -10,6 +10,7 @@ const ChatRoute = () => {
   const [subscriptionRooms, setSubscriptionRooms] = useState([]);
   const [isSubscribed, setIsSubscribed] = useState(false);
   const [isShowJoinBtn, setIsShowJoinBtn] = useState(false);
+  const [participantsAmount, setParticipantsAmount] = useState(null);
   const [selectedCompanion, setSelectedCompanion] = useState(null);
   const { responseData } = useFetch(ULRs.userCountries);
 
@@ -27,6 +28,7 @@ const ChatRoute = () => {
         setIsSubscribed={setIsSubscribed}
         setIsShowJoinBtn={setIsShowJoinBtn}
         setSelectedCompanion={setSelectedCompanion}
+        setParticipantsAmount={setParticipantsAmount}
       />
 
       <Chat
@@ -38,6 +40,8 @@ const ChatRoute = () => {
         setIsShowJoinBtn={setIsShowJoinBtn}
         selectedCompanion={selectedCompanion}
         setSelectedCompanion={setSelectedCompanion}
+        participantsAmount={participantsAmount}
+        setParticipantsAmount={setParticipantsAmount}
       />
     </ChatRouteStyled>
   );

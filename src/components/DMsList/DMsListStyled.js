@@ -8,6 +8,7 @@ export const Item = styled.li`
   height: 72px;
   padding: 0 5%;
   background: var(--white-color);
+  cursor: pointer;
   &:hover {
     background: var(--color-blue-1);
   }

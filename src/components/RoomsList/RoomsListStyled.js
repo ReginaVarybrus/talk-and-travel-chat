@@ -25,20 +25,6 @@ export const ListItems = styled.ul`
   }
 `;
 
-export const Item = styled.li`
-  display: flex;
-  align-items: center;
-  height: 72px;
-  padding: 0 5%;
-  background: var(--white-color);
-  &:hover {
-    background: var(--color-blue-1);
-  }
-  @media ${device.tablet} {
-    padding: 0 16px;
-  }
-`;
-
 export const Flag = styled.img`
   width: 32px;
   height: 24px;

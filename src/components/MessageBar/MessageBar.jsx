@@ -24,6 +24,7 @@ const MessageBar = ({
   setIsShowJoinBtn,
   isUserTyping,
   setIsUserTyping,
+  setParticipantsAmount,
 }) => {
   const [message, setMessage] = useState('');
   const typingTimeoutRef = useRef(null);
@@ -85,6 +86,7 @@ const MessageBar = ({
     sendEvent(dataEventToSend, ULRs.joinToGroupChat);
     setIsShowJoinBtn(false);
     setSubscriptionRooms(prevRooms => [...prevRooms, chatData.country]);
+    setParticipantsAmount(prevCount => prevCount + 1);
   };
 
   return (
@@ -149,6 +151,7 @@ MessageBar.propTypes = {
   setIsShowJoinBtn: PropTypes.func,
   isUserTyping: PropTypes.bool,
   setIsUserTyping: PropTypes.func,
+  setParticipantsAmount: PropTypes.func,
 };
 
 export default MessageBar;

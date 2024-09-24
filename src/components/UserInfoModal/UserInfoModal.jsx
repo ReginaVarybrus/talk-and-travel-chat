@@ -4,8 +4,6 @@ import { SignUpBtn } from '@/components/RegisterForm/RegisterForm.styled';
 import PropTypes from 'prop-types';
 import ULRs from '@/redux-store/constants';
 import { axiosClient } from '@/services/api';
-// import { useSelector } from 'react-redux';
-// import { getUser } from '@/redux-store/selectors';
 import { useNavigate } from 'react-router-dom';
 import { routesPath } from '@/routes/routesConfig';
 import {
@@ -32,7 +30,6 @@ const UserInfoModal = ({
   id,
   dataUserChats,
 }) => {
-  // const userId = useSelector(getUser)?.id;
   const navigate = useNavigate();
 
   const firstLetterOfName = userName.substr(0, 1).toUpperCase();
@@ -57,7 +54,6 @@ const UserInfoModal = ({
         });
       } else {
         const response = await axiosClient.post(ULRs.createPrivateChat, {
-          // userId,
           companionId,
         });
         const privateChatId = response.data;
