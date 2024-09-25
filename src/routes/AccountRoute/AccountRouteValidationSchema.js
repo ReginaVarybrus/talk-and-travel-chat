@@ -38,7 +38,7 @@ export const formFields = {
     },
     about: {
         general: 'about',
-        type: 'text',
+        type: 'textarea',
         label: 'About',
         placeholder: '',
     },

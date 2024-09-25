@@ -2,6 +2,7 @@ import {
   InputFieldStyled,
   StyledLabel,
   StyledInput,
+  StyledTextarea,
   ErrorStyled,
   SuccessStyled,
   PasswordReapetLable,
@@ -21,12 +22,13 @@ styles are different then in Profile.
  {
     general: string,
     type: string,
+    label: string,
     placeholder: string,
   }
   to pass the data rendered for each input field.
 
 */
-const InputField = ({ props, formik, disabled, nolabel, backgroundColor }) => {
+const InputField = ({ props, formik, disabled, nolabel, backgroundcolor }) => {
   const [showPassword, setShowPassword] = useState(false);
 
   const togglePassword = () => {
@@ -55,31 +57,46 @@ const InputField = ({ props, formik, disabled, nolabel, backgroundColor }) => {
 
   return (
     <InputFieldStyled>
-      {nolabel ? (
+      {/* Render label conditionally based on nolabel */}
+      {nolabel && (
         <StyledLabel disabled={disabled} htmlFor={props.general}>
           {props.label}
         </StyledLabel>
-      ) : (
-        ''
       )}
-      <StyledInput
-        autoComplete="off"
-        id={props.general}
-        name={props.general}
-        type={
-          showPassword &&
-          (props.general === 'password' || props.general === 'repeatPassword')
-            ? 'text'
-            : props.type
-        }
-        disabled={disabled}
-        onChange={formik.handleChange}
-        value={formik.values[props.general] || ''}
-        placeholder={props.placeholder}
-        $isErrorColor={formik.errors[props.general]}
-        $isSuccessColor={formik.touched[props.general]}
-        $backgroundColor={backgroundColor}
-      />
+      {/* Conditionally render textarea or input basing on props.type */}
+      {props.type === 'textarea' ? (
+        <StyledTextarea
+          id={props.general}
+          name={props.general}
+          type={props.type}
+          disabled={disabled}
+          onChange={formik.handleChange}
+          value={formik.values[props.general] || ''}
+          placeholder={props.placeholder}
+          $isErrorColor={formik.errors[props.general]}
+          $isSuccessColor={formik.touched[props.general]}
+          $backgroundcolor={backgroundcolor}
+        />
+      ) : (
+        <StyledInput
+          autoComplete="off"
+          id={props.general}
+          name={props.general}
+          type={
+            showPassword &&
+            (props.general === 'password' || props.general === 'repeatPassword')
+              ? 'text'
+              : props.type
+          }
+          disabled={disabled}
+          onChange={formik.handleChange}
+          value={formik.values[props.general] || ''}
+          placeholder={props.placeholder}
+          $isErrorColor={formik.errors[props.general]}
+          $isSuccessColor={formik.touched[props.general]}
+          $backgroundcolor={backgroundcolor}
+        />
+      )}
       {(props.general === 'password' || props.general === 'repeatPassword') && (
         <IconContainer onClick={togglePassword}>
           {showPassword ? <TbEyeClosed /> : <TbEye />}
