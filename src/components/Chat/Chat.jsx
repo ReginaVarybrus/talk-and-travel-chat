@@ -34,6 +34,7 @@ const Chat = ({
   const userId = useSelector(getUser)?.id;
   const { id, name, usersCount, chatType, country } = chatData;
   const isPrivateChat = chatType === CHAT_TYPES.PRIVATE;
+  const [lastReadMessageId, setLastReadMessageId] = useState(null);
 
   const [messages, setMessages] = useState([]);
   const [page, setPage] = useState(0);
@@ -102,15 +103,50 @@ const Chat = ({
     }
   }, [id, isSubscribed, setChatData]);
 
-  const handleScroll = e => {
-    const top = e.target.scrollTop === 0;
+  const markAsRead = async (chatId, lastReadMessageId) => {
+    try {
+      const response = await axiosClient.patch(
+        `/chats/${chatId}/messages/last-read`,
+        {
+          lastReadMessageId,
+        }
+      );
+      console.log('Last read message updated successfully:', response.data);
+    } catch (error) {
+      console.error('Error updating last read message:', error);
+    }
+  };
 
-    if (top && hasMore) {
+  const handleScroll = e => {
+    const scrollTop = e.target.scrollTop;
+    const scrollHeight = e.target.scrollHeight;
+    const clientHeight = e.target.clientHeight;
+
+    const atBottom = scrollTop + clientHeight >= scrollHeight - 10;
+
+    if (atBottom) {
+      const lastMessageId = messages[messages.length - 1]?.id;
+      if (lastMessageId && lastMessageId !== lastReadMessageId) {
+        markAsRead(id, lastMessageId);
+        setLastReadMessageId(lastMessageId);
+      }
+    }
+
+    const atTop = scrollTop === 0;
+    if (atTop && hasMore) {
       const currentScrollHeight = e.target.scrollHeight;
       fetchMessages(page).then(() => {
         e.target.scrollTop = e.target.scrollHeight - currentScrollHeight;
       });
     }
+    // const top = e.target.scrollTop === 0;
+
+    // if (top && hasMore) {
+    //   const currentScrollHeight = e.target.scrollHeight;
+    //   fetchMessages(page).then(() => {
+    //     e.target.scrollTop = e.target.scrollHeight - currentScrollHeight;
+    //   });
+    // }
   };
 
   return (
