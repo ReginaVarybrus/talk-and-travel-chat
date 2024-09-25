@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useOutletContext } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import PropTypes from 'prop-types';
@@ -17,6 +17,7 @@ import {
   NoMassegesNotification,
   Logo,
 } from './ChatStyled';
+import { axiosClient } from '@/services/api';
 
 const Chat = ({
   chatData,
@@ -31,8 +32,14 @@ const Chat = ({
   const [isUserTyping, setIsUserTyping] = useState(false);
   const [userNameisTyping, setUserNameisTyping] = useState('');
   const userId = useSelector(getUser)?.id;
-  const { id, name, messages, usersCount, chatType, country } = chatData;
+  const { id, name, usersCount, chatType, country } = chatData;
   const isPrivateChat = chatType === CHAT_TYPES.PRIVATE;
+
+  const [messages, setMessages] = useState([]);
+  const [page, setPage] = useState(0);
+  const [hasMore, setHasMore] = useState(true);
+  const messagesEndRef = useRef(null);
+  const messageBlockRef = useRef(null);
 
   const {
     subscribeToMessages,
@@ -44,9 +51,45 @@ const Chat = ({
   const isChatVisible = context?.isChatVisible;
   const setIsChatVisible = context?.setIsChatVisible;
 
+  const fetchMessages = async (pageNumber = 0) => {
+    try {
+      const response = await axiosClient.get(`/chats/${id}/messages/read`, {
+        params: {
+          size: 20,
+          page: pageNumber,
+          sort: 'creationDate,desc',
+        },
+      });
+
+      const { content, page: pageData } = response.data;
+
+      setMessages(prevMessages => [...content, ...prevMessages]);
+      setPage(pageData.number + 1);
+      setHasMore(pageData.number + 1 < pageData.totalPages);
+    } catch (error) {
+      console.error('Error fetching messages:', error);
+    }
+  };
+
+  useEffect(() => {
+    if (id) {
+      setMessages([]);
+      setPage(0);
+      fetchMessages();
+    }
+  }, [id]);
+
+  useEffect(() => {
+    if (messagesEndRef.current && page === 1) {
+      messagesEndRef.current.scrollIntoView({ behavior: 'smooth' });
+    }
+  }, [messages]);
+
   useEffect(() => {
     if (isSubscribed && id) {
-      subscribeToMessages(ULRs.subscriptionToMessages(id), setChatData);
+      setMessages([]);
+      setPage(0);
+      subscribeToMessages(ULRs.subscriptionToMessages(id), setMessages);
       if (!isPrivateChat && selectedCompanion) {
         setSelectedCompanion(null);
       }
@@ -58,6 +101,17 @@ const Chat = ({
       };
     }
   }, [id, isSubscribed, setChatData]);
+
+  const handleScroll = e => {
+    const top = e.target.scrollTop === 0;
+
+    if (top && hasMore) {
+      const currentScrollHeight = e.target.scrollHeight;
+      fetchMessages(page).then(() => {
+        e.target.scrollTop = e.target.scrollHeight - currentScrollHeight;
+      });
+    }
+  };
 
   return (
     <ChatStyled $isChatVisible={isChatVisible}>
@@ -75,7 +129,7 @@ const Chat = ({
         setIsShowJoinBtn={setIsShowJoinBtn}
         setIsChatVisible={setIsChatVisible}
       />
-      <MessageBlock>
+      <MessageBlock onScroll={handleScroll} ref={messageBlockRef}>
         {messages?.length ? (
           <MessageList
             messages={messages}
@@ -88,6 +142,7 @@ const Chat = ({
             <p>There are no discussions yet. Be the first to start.</p>
           </NoMassegesNotification>
         )}
+        <div ref={messagesEndRef} />
       </MessageBlock>
       <MessageBar
         chatId={id}

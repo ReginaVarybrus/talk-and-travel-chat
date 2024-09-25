@@ -8,10 +8,10 @@ import { MessageListStyled } from './MessageListStyled.js';
 import DateSeparator from '../DateSeparator/DateSeparator.jsx';
 
 const MessageList = ({ messages, setIsUserTyping, setUserNameisTyping }) => {
-  const messagesEndRef = useRef(null);
-  const scrollToBottom = () => {
-    messagesEndRef.current.scrollIntoView({ behavior: 'smooth' });
-  };
+  // const messagesEndRef = useRef(null);
+  // const scrollToBottom = () => {
+  //   messagesEndRef.current.scrollIntoView({ behavior: 'smooth' });
+  // };
 
   useEffect(() => {
     messages?.forEach(message => {
@@ -24,7 +24,7 @@ const MessageList = ({ messages, setIsUserTyping, setUserNameisTyping }) => {
     });
   }, [messages, setIsUserTyping, setUserNameisTyping]);
 
-  useEffect(scrollToBottom, [messages]);
+  // useEffect(scrollToBottom, [messages]);
 
   const renderMessagesWithDateSeparator = () => {
     const sortedMessages = messages
@@ -80,7 +80,7 @@ const MessageList = ({ messages, setIsUserTyping, setUserNameisTyping }) => {
   return (
     <MessageListStyled>
       {renderMessagesWithDateSeparator()}
-      <div ref={messagesEndRef} />
+      {/* <div ref={messagesEndRef} /> */}
     </MessageListStyled>
   );
 };

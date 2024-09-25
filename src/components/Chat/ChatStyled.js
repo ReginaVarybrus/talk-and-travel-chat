@@ -35,6 +35,8 @@ export const Logo = styled.img`
 `;
 
 export const MessageBlock = styled.div`
+  // display: flex;
+  // flex-direction: column-reverse;
   flex: 1;
   overflow-y: auto;
   width: 100%;
