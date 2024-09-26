@@ -66,6 +66,7 @@ const InputField = ({ props, formik, disabled, nolabel, backgroundcolor }) => {
       {/* Conditionally render textarea or input basing on props.type */}
       {props.type === 'textarea' ? (
         <StyledTextarea
+          minRow={2}
           id={props.general}
           name={props.general}
           type={props.type}

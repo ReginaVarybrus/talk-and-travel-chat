@@ -15,12 +15,17 @@ import {
   AvatarBlock,
   Avatar,
   InputBlock,
+  ProfileForm,
+  TextAbout,
   EditButton,
 } from '@/routes/AccountRoute/AccountRouteStyled';
 
 import BasicButton from '@/components/Buttons/BasicButton/BasicButton';
 import InputField from '@/components/InputField/InputField';
-
+import {
+  StyledLabel,
+  InputFieldStyled,
+} from '@/components/InputField/InputFieldStyled';
 import {
   schema,
   formFields,
@@ -69,17 +74,19 @@ const AccountRoute = () => {
     setEditMode(!editMode);
   };
 
+  /* This const is to toggle the Profile form from edit to view 
+  mode and restore the form values. */
   const cancelEdit = () => {
     formik.setValues(user);
     setEditMode(false);
   };
 
   useEffect(() => {
-    console.log('Render', user);
+    // console.log('Render', user);
     formik.setValues(user);
   }, [user]);
 
-  console.log(formik.initialValues.about);
+  // console.log(formik.initialValues.about);
 
   return (
     <ProfileStyled>
@@ -101,7 +108,7 @@ const AccountRoute = () => {
           {loading ? (
             <Loader />
           ) : (
-            <form onSubmit={formik.handleSubmit} autoComplete="off">
+            <ProfileForm onSubmit={formik.handleSubmit} autoComplete="off">
               <InputField
                 key={user.userName}
                 props={formFields.userName}
@@ -118,14 +125,21 @@ const AccountRoute = () => {
                 nolabel="false"
                 backgroundcolor="var(--color-white)"
               />
-              <InputField
-                key={user.about}
-                props={formFields.about}
-                formik={formik}
-                disabled={!editMode}
-                nolabel="false"
-                backgroundcolor="var(--color-white)"
-              />
+              {editMode ? (
+                <InputField
+                  key={user.about}
+                  props={formFields.about}
+                  formik={formik}
+                  disabled={!editMode}
+                  nolabel="false"
+                  backgroundcolor="var(--color-white)"
+                />
+              ) : (
+                <InputFieldStyled>
+                  <StyledLabel htmlFor="about">About</StyledLabel>
+                  <TextAbout name="about">{formik.values.about}</TextAbout>
+                </InputFieldStyled>
+              )}
               {editMode && (
                 <>
                   <BasicButton
@@ -143,7 +157,7 @@ const AccountRoute = () => {
                   />
                 </>
               )}
-            </form>
+            </ProfileForm>
           )}
         </InputBlock>
         <EditButton

@@ -34,7 +34,8 @@ export const StyledLabel = styled.label`
 export const StyledInput = styled.input`
   box-sizing: border-box;
   width: 100%;
-  font-size: 14px;
+  font-size: 18px;
+  line-height: 21.6px;
   height: 56px;
   border-radius: 8px;
   border: 1px solid;
@@ -59,10 +60,14 @@ export const StyledTextarea = styled(TextareaAutosize)`
   box-sizing: border-box;
   width: 100%;
   resize: none;
-  font-size: 14px;
-  height: 56px !important;
+  font-family: "Roboto", sans-serif;
+  font-size: 18px;
+  line-height: 21.6px;
+  overflow: auto !important;
+  height: 56px;
   border-radius: 8px;
   border: 1px solid;
+  padding: 18px 16px;
   border-color: ${({ disabled }) => (disabled ? 'transparent' : getNotificationColor)};
 
   &:hover {
@@ -72,8 +77,6 @@ export const StyledTextarea = styled(TextareaAutosize)`
   &::placeholder {
     color: #49454f;
   }
-  padding-left: 16px;
-  padding-right: ${({ type }) => (type === 'password' ? '48px' : '16px')};
 
   @media screen and (min-width: 768px) {
     background-color: ${({ $backgroundcolor }) => $backgroundcolor || 'var(--color-grey-4)'};
