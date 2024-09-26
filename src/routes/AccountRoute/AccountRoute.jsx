@@ -18,6 +18,7 @@ import {
   ProfileForm,
   TextAbout,
   EditButton,
+  LogoutButton,
 } from '@/routes/AccountRoute/AccountRouteStyled';
 
 import BasicButton from '@/components/Buttons/BasicButton/BasicButton';
@@ -165,6 +166,7 @@ const AccountRoute = () => {
           $icon={editMode ? 'close' : 'edit'}
         />
       </ProfileContainer>
+      {!editMode && <LogoutButton>Log out</LogoutButton>}
     </ProfileStyled>
   );
 };
