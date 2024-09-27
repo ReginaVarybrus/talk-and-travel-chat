@@ -38,6 +38,7 @@ const CountryInfo = ({
   onClose,
   countryName,
   participantsAmount,
+  setParticipantsAmount,
   setSubscriptionRooms,
   chatId,
   setIsShowJoinBtn,
@@ -90,6 +91,7 @@ const CountryInfo = ({
     setSubscriptionRooms(prevRooms =>
       prevRooms.filter(room => room.name !== countryName)
     );
+    setParticipantsAmount(prevCount => (prevCount > 0 ? prevCount - 1 : 0));
     onClose();
     setIsShowJoinBtn(true);
   };

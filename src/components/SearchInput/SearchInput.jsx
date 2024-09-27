@@ -1,4 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
+import { useMediaQuery } from 'react-responsive';
+import { device } from '@/constants/mediaQueries.js';
 import { routesPath } from '@/routes/routesConfig';
 import PropTypes from 'prop-types';
 import { useFetch } from '@/hooks/useFetch.js';
@@ -21,14 +23,16 @@ const SearchInput = ({
   setIsSubscribed,
   setIsShowJoinBtn,
   setIsChatVisible,
+  setParticipantsAmount,
   subscriptionRooms,
 }) => {
+  const isDesktop = useMediaQuery({ query: device.tablet });
   const navigate = useNavigate();
   const [selectedCountry, setSelectedCountry] = useState(null);
   const [searchedValue, setSearchedValue] = useState('');
   const [showItem, setShowItem] = useState(false);
   const autoCompleteRef = useRef(null);
-  const { responseData: dataMainCountryChat } = useFetch(
+  const { responseData } = useFetch(
     selectedCountry ? ULRs.getMainCountryChatByName(selectedCountry) : null
   );
 
@@ -37,11 +41,12 @@ const SearchInput = ({
   );
 
   useEffect(() => {
-    if (dataMainCountryChat) {
-      setChatData(dataMainCountryChat);
+    if (responseData) {
+      setChatData(responseData);
+      setParticipantsAmount(responseData.usersCount);
       setIsSubscribed(true);
     }
-  }, [dataMainCountryChat, setChatData]);
+  }, [responseData, setChatData]);
 
   const handleChange = event => {
     const { value } = event.target;
@@ -70,7 +75,9 @@ const SearchInput = ({
     setSearchedValue(countryName);
     setShowItem(false);
     navigate(routesPath.ROOMS);
-    setIsChatVisible(true);
+    if (!isDesktop) {
+      setIsChatVisible(true);
+    }
     setSearchedValue('');
   };
 
@@ -138,6 +145,7 @@ SearchInput.propTypes = {
   setIsSubscribed: PropTypes.func,
   setIsShowJoinBtn: PropTypes.func,
   setIsChatVisible: PropTypes.func,
+  setParticipantsAmount: PropTypes.func,
   subscriptionRooms: PropTypes.array,
 };
 

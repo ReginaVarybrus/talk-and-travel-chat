@@ -14,6 +14,7 @@ const SearchBar = ({
   setIsSubscribed,
   setIsShowJoinBtn,
   setSelectedCompanion,
+  setParticipantsAmount,
 }) => {
   const [openMap, setOpenMap] = useState(false);
   const handleOpen = () => setOpenMap(true);
@@ -30,6 +31,7 @@ const SearchBar = ({
         setIsShowJoinBtn={setIsShowJoinBtn}
         setIsChatVisible={setIsChatVisible}
         subscriptionRooms={subscriptionRooms}
+        setParticipantsAmount={setParticipantsAmount}
       />
       <ButtonMapOpen onClick={handleOpen}>Search by map</ButtonMapOpen>
       <div>
@@ -41,6 +43,7 @@ const SearchBar = ({
             setIsShowJoinBtn,
             setSelectedCompanion,
             setIsChatVisible,
+            setParticipantsAmount,
           }}
         />
       </div>
@@ -74,6 +77,7 @@ SearchBar.propTypes = {
   setIsSubscribed: PropTypes.func,
   setIsShowJoinBtn: PropTypes.func,
   setSelectedCompanion: PropTypes.func,
+  setParticipantsAmount: PropTypes.func,
 };
 
 export default SearchBar;

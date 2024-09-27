@@ -17,7 +17,8 @@ import {
 
 const ChatHeader = ({
   chatName = 'Country name',
-  participantsAmount = 0,
+  participantsAmount,
+  setParticipantsAmount,
   flagCode,
   selectedCompanion,
   isPrivateChat,
@@ -103,6 +104,7 @@ const ChatHeader = ({
         onClose={handleClose}
         countryName={chatName}
         participantsAmount={participantsAmount || 0}
+        setParticipantsAmount={setParticipantsAmount}
         chatId={chatId}
         setSubscriptionRooms={setSubscriptionRooms}
         setIsShowJoinBtn={setIsShowJoinBtn}
@@ -114,6 +116,7 @@ const ChatHeader = ({
 ChatHeader.propTypes = {
   chatName: PropTypes.string,
   participantsAmount: PropTypes.number,
+  setParticipantsAmount: PropTypes.func,
   flagCode: PropTypes.string,
   selectedCompanion: PropTypes.shape({
     id: PropTypes.number,

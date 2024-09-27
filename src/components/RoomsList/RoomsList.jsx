@@ -4,9 +4,12 @@ import { useMediaQuery } from 'react-responsive';
 import { device } from '@/constants/mediaQueries.js';
 import { useFetch } from '@/hooks/useFetch.js';
 import ULRs from '@/redux-store/constants';
-
-import { Flag, ScrollBar } from '@/components/SearchInput/SearchInputStyled.js';
-import { ListStyled, Text, Item, ListItems } from './RoomsListStyled';
+import {
+  Flag,
+  ScrollBar,
+  Item,
+} from '@/components/SearchInput/SearchInputStyled.js';
+import { ListStyled, Text, ListItems } from './RoomsListStyled';
 
 const RoomsList = () => {
   const isDesktop = useMediaQuery({ query: device.tablet });
@@ -22,11 +25,13 @@ const RoomsList = () => {
     setIsSubscribed,
     setIsShowJoinBtn,
     setIsChatVisible,
+    setParticipantsAmount,
   } = useOutletContext();
 
   useEffect(() => {
     if (responseData) {
       setChatData(responseData);
+      setParticipantsAmount(responseData.usersCount);
       setIsSubscribed(true);
     }
   }, [responseData, setChatData, setIsSubscribed]);
