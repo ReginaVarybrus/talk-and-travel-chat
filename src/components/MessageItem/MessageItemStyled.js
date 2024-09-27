@@ -5,7 +5,11 @@ export const MessageItemStyled = styled.li`
   display: flex;
   align-items: end;
   margin-left: 32px;
-  margin-bottom: ${({ $isShownAvatar }) => ($isShownAvatar ? '24px' : '8px')};
+  margin-bottom: ${({ $isShownAvatar }) => ($isShownAvatar ? '16px' : '8px')};
+
+  @media ${device.tablet} {
+    margin-bottom: ${({ $isShownAvatar }) => ($isShownAvatar ? '24px' : '8px')};
+  }
 `;
 
 export const MessageContentStyled = styled.div`

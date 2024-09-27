@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react';
+import { useEffect } from 'react';
 import { isSameDay } from 'date-fns';
 
 import PropTypes from 'prop-types';
@@ -8,11 +8,6 @@ import { MessageListStyled } from './MessageListStyled.js';
 import DateSeparator from '../DateSeparator/DateSeparator.jsx';
 
 const MessageList = ({ messages, setIsUserTyping, setUserNameisTyping }) => {
-  // const messagesEndRef = useRef(null);
-  // const scrollToBottom = () => {
-  //   messagesEndRef.current.scrollIntoView({ behavior: 'smooth' });
-  // };
-
   useEffect(() => {
     messages?.forEach(message => {
       if (message.type === MESSAGE_TYPES.START_TYPING) {
@@ -23,8 +18,6 @@ const MessageList = ({ messages, setIsUserTyping, setUserNameisTyping }) => {
       }
     });
   }, [messages, setIsUserTyping, setUserNameisTyping]);
-
-  // useEffect(scrollToBottom, [messages]);
 
   const renderMessagesWithDateSeparator = () => {
     const sortedMessages = messages
@@ -48,18 +41,6 @@ const MessageList = ({ messages, setIsUserTyping, setUserNameisTyping }) => {
       const isShownAvatar =
         message.type === MESSAGE_TYPES.TEXT && isLastMessage;
 
-      if (
-        !message.content ||
-        typeof message.content !== 'string' ||
-        message.type !== MESSAGE_TYPES.TEXT
-      ) {
-        return null;
-      }
-
-      if (!message.user || !message.user.userName) {
-        return null;
-      }
-
       return (
         <div key={message.id || message.creationDate}>
           {showDateSeparator && <DateSeparator date={currentMessageDate} />}
@@ -78,10 +59,7 @@ const MessageList = ({ messages, setIsUserTyping, setUserNameisTyping }) => {
   };
 
   return (
-    <MessageListStyled>
-      {renderMessagesWithDateSeparator()}
-      {/* <div ref={messagesEndRef} /> */}
-    </MessageListStyled>
+    <MessageListStyled>{renderMessagesWithDateSeparator()}</MessageListStyled>
   );
 };
 

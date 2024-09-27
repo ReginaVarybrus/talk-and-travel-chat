@@ -1,11 +1,18 @@
 import { format } from 'date-fns';
 import PropTypes from 'prop-types';
+import {
+  SeparatorBoxStyled,
+  Line1,
+  Line2,
+  DateText,
+} from './DateSeparatorStyles';
 
 const DateSeparator = ({ date }) => (
-  <div style={{ textAlign: 'center', margin: '10px 0', color: '#888' }}>
-    <hr />
-    <span>{format(date, 'EEEE, MMMM d')}</span>
-  </div>
+  <SeparatorBoxStyled>
+    <Line1 />
+    <DateText>{format(date, 'EEEE, MMMM d')}</DateText>
+    <Line2 />
+  </SeparatorBoxStyled>
 );
 
 DateSeparator.propTypes = {
