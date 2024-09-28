@@ -6,6 +6,7 @@ import Loader from '@/components/Loader/Loader';
 import { routesPath } from '@/routes/routesConfig';
 import { getUser } from '@/redux-store/selectors';
 import { updateUser } from '@/redux-store/UserOperations/UserOperations';
+import { useWebSocket } from '@/hooks/useWebSocket.js';
 
 import {
   ProfileStyled,
@@ -18,25 +19,29 @@ import {
   ProfileForm,
   TextAbout,
   EditButton,
+  ChoiceButtonBlock,
   LogoutButton,
+  LogoutIcon,
 } from '@/routes/AccountRoute/AccountRouteStyled';
-
 import BasicButton from '@/components/Buttons/BasicButton/BasicButton';
 import InputField from '@/components/InputField/InputField';
 import {
   StyledLabel,
   InputFieldStyled,
 } from '@/components/InputField/InputFieldStyled';
+
 import {
   schema,
   formFields,
 } from '@/routes/AccountRoute/AccountRouteValidationSchema';
+import { logOut } from '@/redux-store/AuthOperations/AuthOperations';
 
 const AccountRoute = () => {
   // User details to display in Profile form are taken from Redux data.
   const user = useSelector(getUser);
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const { handleDeactivateStopmClient } = useWebSocket();
 
   const [editMode, setEditMode] = useState(false);
   // This {loading} is used to trigger display of <Loader/> while updateUser performig.
@@ -52,18 +57,15 @@ const AccountRoute = () => {
       setLoading(true);
       try {
         const resultAction = await dispatch(updateUser(values));
-        // console.log('Result Action:', resultAction);
         if (updateUser.fulfilled.match(resultAction)) {
-          // console.log('Update Successful:', resultAction.payload);
           navigate(routesPath.ACCOUNT);
           resetForm();
-          // console.log('we are here wtf?');
           setEditMode(false);
         } else {
-          // console.error('Update Failed:', resultAction.error);
+          console.error('Update Failed:', resultAction.error);
         }
       } catch (error) {
-        // console.error('Something went wrong:', error);
+        console.error('Something went wrong:', error);
       } finally {
         setLoading(false); // Set loading to false after the async action
       }
@@ -83,11 +85,20 @@ const AccountRoute = () => {
   };
 
   useEffect(() => {
-    // console.log('Render', user);
     formik.setValues(user);
   }, [user]);
 
-  // console.log(formik.initialValues.about);
+  const handleLogOut = () => {
+    dispatch(logOut())
+      .then(() => {
+        navigate(routesPath.MAIN);
+      })
+      .catch(error => {
+        console.error('Logout failed:', error.message);
+      });
+
+    handleDeactivateStopmClient();
+  };
 
   return (
     <ProfileStyled>
@@ -142,21 +153,21 @@ const AccountRoute = () => {
                 </InputFieldStyled>
               )}
               {editMode && (
-                <>
+                <ChoiceButtonBlock>
                   <BasicButton
-                    sx={{ marginRight: '16px' }}
+                    sx={{ margin: '0' }}
                     variant="outlined"
                     text="Cancel"
                     handleClick={cancelEdit}
                   />
                   <BasicButton
-                    sx={{ marginRight: '16px' }}
+                    sx={{ margin: '0' }}
                     handleClick={formik.handleSubmit}
                     type="submit"
                     text="Update"
                     variant="contained"
                   />
-                </>
+                </ChoiceButtonBlock>
               )}
             </ProfileForm>
           )}
@@ -166,7 +177,12 @@ const AccountRoute = () => {
           $icon={editMode ? 'close' : 'edit'}
         />
       </ProfileContainer>
-      {!editMode && <LogoutButton>Log out</LogoutButton>}
+      {!editMode && (
+        <LogoutButton onClick={handleLogOut}>
+          <LogoutIcon />
+          Log out
+        </LogoutButton>
+      )}
     </ProfileStyled>
   );
 };

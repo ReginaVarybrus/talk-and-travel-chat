@@ -40,6 +40,7 @@ export const StyledInput = styled.input`
   border-radius: 8px;
   border: 1px solid;
   border-color: ${({ disabled }) => (disabled ? 'transparent' : getNotificationColor)};
+  background-color: var(--white-color);
 
   &:hover {
     border: 1px solid ${({ disabled }) => (disabled ? 'transparent' : '#111')};;
@@ -60,7 +61,7 @@ export const StyledTextarea = styled(TextareaAutosize)`
   box-sizing: border-box;
   width: 100%;
   resize: none;
-  font-family: "Roboto", sans-serif;
+  font-family: Roboto;
   font-size: 18px;
   line-height: 21.6px;
   overflow: auto !important;

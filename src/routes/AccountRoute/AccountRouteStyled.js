@@ -1,14 +1,15 @@
 import styled from 'styled-components';
-import PencilIcon from '@/images/icons/pencil_edit_icon.svg'
-import CloseIcon from '@/images/icons/cross_close_icon.svg'
-import BasicButton from '@/components/Buttons/BasicButton/BasicButton';
+import PencilIcon from '@/images/icons/pencil_edit_icon.svg';
+import CloseIcon from '@/images/icons/cross_close_icon.svg';
 import Button from '@mui/material/Button';
-
+import { LuLogOut } from 'react-icons/lu';
 
 export const ProfileStyled = styled.section`
 background-color: var(--color-grey-3);
+height: 100%;
 
 @media (max-width: 767px) {
+    height: 100vh;
     padding: 16px 24px 0 24px;
 }
 `;
@@ -78,12 +79,13 @@ height: 64px;
 }
 `;
 
-export const ChangeAvatar = styled(BasicButton)`
+export const ChangeAvatar = styled(Button)`
 padding-top: 8px;
 color: var(--color-brand-blue);
 width: 120px;
 
 @media (max-width: 767px) {
+padding: 8px 16px;
 }
 `
 
@@ -128,22 +130,50 @@ border: none;
 outline: none;
 cursor: pointer;
 
-@media (min-width: 768px) {
-}
-`;
-
-export const LogoutButton = styled.button`
-margin-top: 24px;
-width: 100%;
-height: 48px;
-padding: 12px 0;
-border-radius: 8px;
-border: 1px solid var(--white-color);
-background-color: var(--white-color);
-cursor: pointer;
-color: var(--color-system-error);
-
-@media (min-width: 768px) {
-display: none;
+@media (max-width: 768px) {
+margin: 14.5px 14.5px 0 0;
 }
 `
+
+export const ChoiceButtonBlock = styled.div`
+display: grid;
+gap: 16px;
+grid-template-columns: 92px 92px auto;
+
+
+@media (max-width: 768px) {
+display: grid;
+gap: 19px;
+grid-template-columns: 1fr 1fr;
+padding-bottom: 12px;
+}
+`
+
+export const LogoutButton = styled(Button)`
+&& {
+    margin-top: 24px;
+    width: 100%;
+    height: 48px;
+    padding: 12px 0;
+    border-radius: 8px;
+    background-color: var(--white-color);
+    cursor: pointer;
+    color: var(--color-system-error);
+    text-transform: none;
+    font-size: 14px;
+    line-height: 19.6px;
+
+
+    @media (min-width: 768px) {
+        display: none;
+    }
+}
+`
+
+export const LogoutIcon = styled(LuLogOut)`
+width: 24px;
+height: 24px;
+margin: 12px 12px 12px 0;
+`
+
+
