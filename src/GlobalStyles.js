@@ -3,8 +3,6 @@ import { device } from '@/constants/mediaQueries';
 import 'simplebar-react/dist/simplebar.min.css';
 
 export const GlobalStyles = createGlobalStyle`
-/* !!!Add styles after layout approval!!! */
-
 :root {
   --color-success: #33d844;
   --color-error: #d83333;

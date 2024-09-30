@@ -4,7 +4,7 @@ import swal from 'sweetalert';
 
 import { token, axiosClient } from '@/services/api';
 import { clearUser, setUsers } from '@/redux-store/slices/userSlice';
-import ULRs from '@/redux-store/constants';
+import ULRs from '@/constants/constants';
 
 export const register = createAsyncThunk(
   'auth/register',

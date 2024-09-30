@@ -1,10 +1,15 @@
 import { useRef, useEffect } from 'react';
 import { useStompClient } from 'react-stomp-hooks';
+// import { useSelector } from 'react-redux';
+// import { getUser } from '@/redux-store/selectors.js';
+// import ULRs from '@/constants/constants';
 
 export const useWebSocket = () => {
   const stompClient = useStompClient();
   const messagesSubscription = useRef(null);
   const isSubscribedToErrors = useRef(false);
+  // const isSubscribedToUsersStatuses = useRef(false);
+  // const userId = useSelector(getUser)?.id;
 
   const subscribeToMessages = (endpoint, setCountryData) => {
     if (stompClient && stompClient.connected && !messagesSubscription.current) {
@@ -55,6 +60,16 @@ export const useWebSocket = () => {
     }
   };
 
+  const subscribeToUsersStatuses = endpoint => {
+    if (stompClient && stompClient.connected) {
+      stompClient.subscribe(endpoint, response => {
+        const receivedStatuses = JSON.parse(response.body);
+        console.log('received online statuses', receivedStatuses);
+      });
+      // isSubscribedToUsersStatuses.current = true;
+    }
+  };
+
   const sendMessage = message => {
     if (stompClient && stompClient.connected) {
       stompClient.publish({
@@ -79,12 +94,36 @@ export const useWebSocket = () => {
     }
   };
 
+  // const handleOnlineStatus = isOnline => {
+  //   const dataOnlineStatus = { userId, isOnline };
+  //   sendEvent(dataOnlineStatus, ULRs.updateOnlineStatus);
+  // };
+
   const handleDeactivateStopmClient = () => {
     if (stompClient && stompClient.connected) {
       stompClient.deactivate();
       console.log('Stomp client deactivated on logout');
     }
   };
+
+  // useEffect(() => {
+  //   if (stompClient) {
+  //     if (!stompClient.connected) {
+  //       stompClient.activate();
+  //       console.log('Stomp client activated');
+  //     } else {
+  //       // handleOnlineStatus(true);
+  //       console.log('send online status true');
+  //     }
+  //   }
+  //   return () => {
+  //     if (stompClient && stompClient.connected) {
+  //       // handleOnlineStatus(false);
+  //       stompClient.deactivate();
+  //       console.log('send online status false');
+  //     }
+  //   };
+  // }, [stompClient]);
 
   useEffect(() => {
     if (stompClient && !stompClient.connected) {
@@ -103,6 +142,7 @@ export const useWebSocket = () => {
     subscribeToMessages,
     unsubscribeFromMessages,
     subscribeToUserErrors,
+    subscribeToUsersStatuses,
     sendMessage,
     sendEvent,
     handleDeactivateStopmClient,

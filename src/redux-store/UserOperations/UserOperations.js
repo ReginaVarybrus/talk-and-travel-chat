@@ -1,7 +1,7 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 
 import { token, axiosClient } from '@/services/api';
-import ULRs from '../constants';
+import ULRs from '@/constants/constants';
 
 export const fetchCurrentUser = createAsyncThunk(
   'auth/refresh',

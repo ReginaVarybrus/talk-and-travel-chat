@@ -2,10 +2,10 @@ import { useState, useEffect } from 'react';
 import { useOutletContext } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import PropTypes from 'prop-types';
+import ULRs from '@/constants/constants';
 import { CHAT_TYPES } from '@/constants/chatTypes';
 import { getUser } from '@/redux-store/selectors.js';
 import { useWebSocket } from '@/hooks/useWebSocket.js';
-import ULRs from '@/redux-store/constants';
 import logo from '@/images/logo.svg';
 import ChatHeader from '@/components/ChatHeader/ChatHeader';
 import MessageList from '@/components/MessageList/MessageList';
@@ -29,6 +29,7 @@ const Chat = ({
   setSelectedCompanion,
   participantsAmount,
   setParticipantsAmount,
+  listOfOnlineUsers,
 }) => {
   const [isUserTyping, setIsUserTyping] = useState(false);
   const [userNameisTyping, setUserNameisTyping] = useState('');
@@ -84,6 +85,7 @@ const Chat = ({
             messages={messages}
             setIsUserTyping={setIsUserTyping}
             setUserNameisTyping={setUserNameisTyping}
+            listOfOnlineUsers={listOfOnlineUsers}
           />
         ) : (
           <NoMassegesNotification>

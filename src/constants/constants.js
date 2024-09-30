@@ -16,9 +16,12 @@ const ULRs = {
   leaveOutGroupChat: '/chat/events.leaveChat',
   startTyping: '/chat/events.startTyping',
   stopTyping: '/chat/events.stopTyping',
+  updateOnlineStatus: '/auth-user/events.updateOnlineStatus',
   getPrivateChats: 'v2/user/private-chats',
   createPrivateChat: 'chats/private',
   getChatsMessages: chatId => `chats/${chatId}`,
+  usersOnlineStatus: '/users/onlineStatus',
+  getUsersOnlineStatusPath: 'v2/users/online',
 };
 
 export default ULRs;

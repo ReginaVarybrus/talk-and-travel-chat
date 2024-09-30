@@ -1,8 +1,11 @@
 import { useState, useEffect } from 'react';
 import { useFetch } from '@/hooks/useFetch.js';
-import ULRs from '@/redux-store/constants';
+import ULRs from '@/constants/constants';
 import SearchBar from '@/components/SearchBar/SearchBar';
 import Chat from '@/components/Chat/Chat';
+import { axiosClient } from '@/services/api';
+
+import { useWebSocket } from '@/hooks/useWebSocket.js';
 import { ChatRouteStyled } from './ChatRouteStyled.js';
 
 const ChatRoute = () => {
@@ -12,13 +15,38 @@ const ChatRoute = () => {
   const [isShowJoinBtn, setIsShowJoinBtn] = useState(false);
   const [participantsAmount, setParticipantsAmount] = useState(null);
   const [selectedCompanion, setSelectedCompanion] = useState(null);
+  const [listOfOnlineUsers, setListOfOnlineUsers] = useState(new Map());
   const { responseData } = useFetch(ULRs.userCountries);
+  const { subscribeToUsersStatuses } = useWebSocket();
 
   useEffect(() => {
     if (responseData) {
       setSubscriptionRooms(responseData);
     }
+
+    subscribeToUsersStatuses(ULRs.usersOnlineStatus);
   }, [responseData]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await axiosClient.get(ULRs.getUsersOnlineStatusPath);
+
+        console.log('Received data:', response.data);
+        const mapData = new Map();
+
+        Object.entries(response.data).forEach(([id, value]) => {
+          mapData.set(id, value);
+        });
+
+        setListOfOnlineUsers(mapData);
+      } catch (error) {
+        console.error('Error fetching data:', error);
+      }
+    };
+
+    fetchData();
+  }, []);
 
   return (
     <ChatRouteStyled>
@@ -29,6 +57,7 @@ const ChatRoute = () => {
         setIsShowJoinBtn={setIsShowJoinBtn}
         setSelectedCompanion={setSelectedCompanion}
         setParticipantsAmount={setParticipantsAmount}
+        listOfOnlineUsers={listOfOnlineUsers}
       />
 
       <Chat
@@ -42,6 +71,7 @@ const ChatRoute = () => {
         setSelectedCompanion={setSelectedCompanion}
         participantsAmount={participantsAmount}
         setParticipantsAmount={setParticipantsAmount}
+        listOfOnlineUsers={listOfOnlineUsers}
       />
     </ChatRouteStyled>
   );

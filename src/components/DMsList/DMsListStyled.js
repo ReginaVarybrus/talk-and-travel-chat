@@ -23,6 +23,7 @@ export const ChatNameStyled = styled.div`
 `;
 
 export const Avatar = styled.div`
+  position: relative;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -34,6 +35,28 @@ export const Avatar = styled.div`
   background: var(--color-grey-6);
   color: var(--white-color);
   margin-right: 12px;
+`;
+
+export const BadgeStyled = styled.div`
+  position: absolute;
+  bottom: -2px;
+  right: -2px;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: var(--white-color);
+
+  &:after {
+    position: absolute;
+    content: '';
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: rgba(114, 207, 123, 1);
+  }
 `;
 
 export const ChatName = styled.div`

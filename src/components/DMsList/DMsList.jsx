@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { useOutletContext, useLocation } from 'react-router-dom';
 import { useMediaQuery } from 'react-responsive';
 import { device } from '@/constants/mediaQueries.js';
-import ULRs from '@/redux-store/constants';
+import ULRs from '@/constants/constants';
 import { useFetch } from '@/hooks/useFetch';
 import { dateStampConverter } from '@/components/utils/timeUtil.js';
 import { ScrollBar } from '@/components/SearchInput/SearchInputStyled.js';
@@ -17,6 +17,7 @@ import {
   Avatar,
   ChatName,
   MessageDay,
+  BadgeStyled,
 } from './DMsListStyled';
 
 const DMsList = () => {
@@ -29,6 +30,7 @@ const DMsList = () => {
     setIsSubscribed,
     setSelectedCompanion,
     setIsChatVisible,
+    listOfOnlineUsers,
   } = useOutletContext();
 
   const { responseData: dataUserChats } = useFetch(ULRs.getPrivateChats);
@@ -65,9 +67,8 @@ const DMsList = () => {
         <ListItems>
           <ScrollBar>
             {dataUserChats.map(({ chat, companion, lastReadMessageId }) => {
-              const firstLetterOfName = companion.userName
-                .substr(0, 1)
-                .toUpperCase();
+              const isOnline =
+                listOfOnlineUsers.get(companion.id.toString()) === true;
 
               return (
                 <Item
@@ -75,7 +76,10 @@ const DMsList = () => {
                   onClick={() => handleOpenChat(chat.id, companion)}
                 >
                   <ChatNameStyled>
-                    <Avatar>{firstLetterOfName}</Avatar>
+                    <Avatar>
+                      {companion.userName[0].toUpperCase()}
+                      {isOnline && <BadgeStyled />}
+                    </Avatar>
                     <ChatName>
                       <h6>{companion.userName}</h6>
                       <p>{lastReadMessageId}</p>

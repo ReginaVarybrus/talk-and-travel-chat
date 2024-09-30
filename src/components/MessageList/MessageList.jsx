@@ -4,7 +4,12 @@ import MessageItem from '@/components/MessageItem/MessageItem';
 import { MESSAGE_TYPES } from '@/constants/messageTypes.js';
 import { MessageListStyled } from './MessageListStyled.js';
 
-const MessageList = ({ messages, setIsUserTyping, setUserNameisTyping }) => {
+const MessageList = ({
+  messages,
+  setIsUserTyping,
+  setUserNameisTyping,
+  listOfOnlineUsers,
+}) => {
   const messagesEndRef = useRef(null);
   const scrollToBottom = () => {
     messagesEndRef.current.scrollIntoView({ behavior: 'smooth' });
@@ -34,6 +39,9 @@ const MessageList = ({ messages, setIsUserTyping, setUserNameisTyping }) => {
           const isShownAvatar =
             message.type === MESSAGE_TYPES.TEXT && isLastMessage;
 
+          const isOnline =
+            listOfOnlineUsers.get(message.user.id.toString()) === true;
+
           return (
             <MessageItem
               key={message.id || message.creationDate}
@@ -43,6 +51,7 @@ const MessageList = ({ messages, setIsUserTyping, setUserNameisTyping }) => {
               date={message.creationDate}
               type={message.type}
               isShownAvatar={isShownAvatar}
+              isOnline={isOnline}
             />
           );
         })}
