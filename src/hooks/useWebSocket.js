@@ -6,11 +6,11 @@ export const useWebSocket = () => {
   const messagesSubscription = useRef(null);
   const isSubscribedToErrors = useRef(false);
 
-  const subscribeToMessages = (endpoint, setMessages) => {
+  const subscribeToMessages = (endpoint, handleNewMessage) => {
     if (stompClient && stompClient.connected && !messagesSubscription.current) {
       const subscription = stompClient.subscribe(endpoint, response => {
         const receivedMessage = JSON.parse(response.body);
-        setMessages(prevMessages => [...prevMessages, receivedMessage]);
+        handleNewMessage(receivedMessage);
       });
       messagesSubscription.current = subscription;
       return subscription;

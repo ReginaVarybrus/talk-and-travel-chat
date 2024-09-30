@@ -9,6 +9,7 @@ import ULRs from '@/redux-store/constants';
 import logo from '@/images/logo.svg';
 import ChatHeader from '@/components/ChatHeader/ChatHeader';
 import MessageList from '@/components/MessageList/MessageList';
+import { axiosClient } from '@/services/api';
 import MessageBar from '@/components/MessageBar/MessageBar';
 import ChatFirstLoading from '@/components/ChatFirstLoading/ChatFirstLoading';
 import {
@@ -16,8 +17,8 @@ import {
   MessageBlock,
   NoMassegesNotification,
   Logo,
+  NewMessagesNotification,
 } from './ChatStyled';
-import { axiosClient } from '@/services/api';
 
 const Chat = ({
   chatData,
@@ -37,10 +38,19 @@ const Chat = ({
   const { id, name, chatType, country } = chatData;
   const isPrivateChat = chatType === CHAT_TYPES.PRIVATE;
   const [lastReadMessageId, setLastReadMessageId] = useState(null);
+  const [hasUnreadMessages, setHasUnreadMessages] = useState(false);
+  const [unreadMessages, setUnreadMessages] = useState([]);
+  const [showNewMessagesIndicator, setShowNewMessagesIndicator] =
+    useState(false);
 
   const [messages, setMessages] = useState([]);
   const [page, setPage] = useState(0);
+  const [unreadPage, setUnreadPage] = useState(0);
+
   const [hasMore, setHasMore] = useState(true);
+  const [hasMoreUnread, setHasMoreUnread] = useState(true);
+
+  const previousChatIdRef = useRef(null);
   const messagesEndRef = useRef(null);
   const messageBlockRef = useRef(null);
 
@@ -54,6 +64,18 @@ const Chat = ({
   const isChatVisible = context?.isChatVisible;
   const setIsChatVisible = context?.setIsChatVisible;
 
+  const markAsRead = async (chatId, readMessageId) => {
+    try {
+      await axiosClient.patch(`/chats/${chatId}/messages/last-read`, {
+        lastReadMessageId: readMessageId,
+      });
+      // console.log('Last read message id:', readMessageId);
+      // console.log('Last read message chatid:', chatId);
+    } catch (error) {
+      console.error('Error updating last read message:', error);
+    }
+  };
+  const isFetching = useRef(false);
   const fetchMessages = async (pageNumber = 0) => {
     try {
       const response = await axiosClient.get(`/chats/${id}/messages/read`, {
@@ -69,30 +91,118 @@ const Chat = ({
       setMessages(prevMessages => [...content, ...prevMessages]);
       setPage(pageData.number + 1);
       setHasMore(pageData.number + 1 < pageData.totalPages);
+      return content;
     } catch (error) {
       console.error('Error fetching messages:', error);
     }
   };
+  const fetchUnreadMessages = async (pageNumber = 0) => {
+    try {
+      const response = await axiosClient.get(`/chats/${id}/messages/unread`, {
+        params: {
+          size: 1000,
+          page: pageNumber,
+          sort: 'creationDate,desc',
+        },
+      });
+      const unreadMessagesPage = response.data.content;
+
+      if (unreadMessagesPage.length > 0) {
+        setUnreadMessages(prevMessages => [
+          ...prevMessages,
+          ...unreadMessagesPage,
+        ]);
+        setHasUnreadMessages(true);
+        setShowNewMessagesIndicator(true);
+      }
+      const { totalPages } = response.data.page;
+      setHasMoreUnread(pageNumber + 1 < totalPages);
+      return unreadMessagesPage;
+    } catch (error) {
+      console.error('Error fetching unread messages:', error);
+    }
+  };
+
+  const fetchChatMessages = async () => {
+    if (isFetching.current) return;
+    isFetching.current = true;
+    try {
+      const readMessages = await fetchMessages();
+      const fetchedUnreadMessages = await fetchUnreadMessages();
+
+      const allMessages = [...fetchedUnreadMessages, ...readMessages].sort(
+        (a, b) => new Date(a.creationDate) - new Date(b.creationDate)
+      );
+      setMessages(allMessages);
+
+      if (allMessages.length > 0) {
+        const lastMessageId = allMessages[allMessages.length - 1]?.id;
+        if (lastMessageId) {
+          setLastReadMessageId(lastMessageId);
+        }
+      }
+      if (fetchedUnreadMessages.length > 0) {
+        setUnreadMessages(fetchedUnreadMessages); // Сохраняем непрочитанные, но не показываем их
+        setShowNewMessagesIndicator(true); // Показываем баннер для непрочитанных сообщений
+      }
+
+      // isFetching.current = false;
+    } catch (error) {
+      console.error('Error fetching messages:', error);
+    } finally {
+      isFetching.current = false;
+    }
+  };
+  const [hasScrolledToEnd, setHasScrolledToEnd] = useState(false);
 
   useEffect(() => {
+    let didUnmount = false;
+
     if (id) {
+      const currentChatId = previousChatIdRef.current;
+
+      setHasScrolledToEnd(false);
       setMessages([]);
+      setUnreadMessages([]);
       setPage(0);
-      fetchMessages();
+      setUnreadPage(0);
+      setHasUnreadMessages(false);
+      setShowNewMessagesIndicator(false);
+
+      if (
+        currentChatId &&
+        lastReadMessageId &&
+        currentChatId !== id &&
+        !didUnmount
+      ) {
+        markAsRead(currentChatId, lastReadMessageId);
+      }
+      fetchChatMessages();
+
+      previousChatIdRef.current = id;
     }
+    return () => {
+      didUnmount = true;
+      if (previousChatIdRef.current && lastReadMessageId && !didUnmount) {
+        markAsRead(previousChatIdRef.current, lastReadMessageId);
+      }
+    };
   }, [id]);
 
   useEffect(() => {
-    if (messagesEndRef.current && page === 1) {
+    if (messagesEndRef.current && page === 1 && !hasScrolledToEnd) {
       messagesEndRef.current.scrollIntoView({ behavior: 'smooth' });
+      setHasScrolledToEnd(true);
     }
-  }, [messages]);
+  }, [messages, page, hasScrolledToEnd]);
 
   useEffect(() => {
     if (isSubscribed && id) {
-      setMessages([]);
-      setPage(0);
-      subscribeToMessages(ULRs.subscriptionToMessages(id), setMessages);
+      subscribeToMessages(ULRs.subscriptionToMessages(id), newMessage => {
+        setMessages(prevMessages => [...prevMessages, newMessage]);
+        setShowNewMessagesIndicator(true);
+      });
+
       if (!isPrivateChat && selectedCompanion) {
         setSelectedCompanion(null);
       }
@@ -105,19 +215,13 @@ const Chat = ({
     }
   }, [id, isSubscribed, setChatData]);
 
-  const markAsRead = async (chatId, lastReadMessageId) => {
-    try {
-      const response = await axiosClient.patch(
-        `/chats/${chatId}/messages/last-read`,
-        {
-          lastReadMessageId,
-        }
-      );
-      console.log('Last read message updated successfully:', response.data);
-    } catch (error) {
-      console.error('Error updating last read message:', error);
-    }
-  };
+  // useEffect(() => {
+  //   if (hasUnreadMessages) {
+  //     setMessages(prevMessages => [...prevMessages, ...unreadMessages]);
+  //     setHasUnreadMessages(false);
+  //     setShowNewMessagesIndicator(false);
+  //   }
+  // }, [hasUnreadMessages, unreadMessages]);
 
   const handleScroll = e => {
     const scrollTop = e.target.scrollTop;
@@ -125,32 +229,32 @@ const Chat = ({
     const clientHeight = e.target.clientHeight;
 
     const atBottom = scrollTop + clientHeight >= scrollHeight - 10;
-
-    if (atBottom) {
-      const lastMessageId = messages[messages.length - 1]?.id;
-      if (lastMessageId && lastMessageId !== lastReadMessageId) {
-        markAsRead(id, lastMessageId);
-        setLastReadMessageId(lastMessageId);
-      }
-    }
-
     const atTop = scrollTop === 0;
-    if (atTop && hasMore) {
+
+    // if (atBottom && hasMoreUnread && !isFetching.current) {
+    //   fetchUnreadMessages(unreadPage).then(newUnreadMessages => {
+    //     setMessages(prevMessages => [...prevMessages, ...newUnreadMessages]);
+    //     setUnreadPage(prevPage => prevPage + 1);
+    //   });
+    // }
+    // console.log('unreadMessages', unreadMessages.length);
+
+    if (atBottom && unreadMessages.length > 0) {
+      setMessages(prevMessages => [...prevMessages, ...unreadMessages]);
+      setUnreadMessages([]);
+      setShowNewMessagesIndicator(false);
+    }
+    if (atTop && hasMore && !isFetching.current) {
       const currentScrollHeight = e.target.scrollHeight;
       fetchMessages(page).then(() => {
         e.target.scrollTop = e.target.scrollHeight - currentScrollHeight;
       });
     }
-    // const top = e.target.scrollTop === 0;
-
-    // if (top && hasMore) {
-    //   const currentScrollHeight = e.target.scrollHeight;
-    //   fetchMessages(page).then(() => {
-    //     e.target.scrollTop = e.target.scrollHeight - currentScrollHeight;
-    //   });
-    // }
+    if (atBottom) {
+      setShowNewMessagesIndicator(false);
+    }
+    // setShowNewMessagesIndicator(false);
   };
-
   return (
     <ChatStyled $isChatVisible={isChatVisible}>
       {!name && <ChatFirstLoading />}
@@ -170,11 +274,18 @@ const Chat = ({
       />
       <MessageBlock onScroll={handleScroll} ref={messageBlockRef}>
         {messages?.length ? (
-          <MessageList
-            messages={messages}
-            setIsUserTyping={setIsUserTyping}
-            setUserNameisTyping={setUserNameisTyping}
-          />
+          <>
+            <MessageList
+              messages={messages}
+              setIsUserTyping={setIsUserTyping}
+              setUserNameisTyping={setUserNameisTyping}
+            />
+            {showNewMessagesIndicator && (
+              <NewMessagesNotification>
+                <span>{unreadMessages.length} new messages</span>
+              </NewMessagesNotification>
+            )}
+          </>
         ) : (
           <NoMassegesNotification>
             <Logo src={logo} alt="logo" width="200" height="160" />
@@ -183,6 +294,7 @@ const Chat = ({
         )}
         <div ref={messagesEndRef} />
       </MessageBlock>
+
       <MessageBar
         chatId={id}
         chatData={chatData}

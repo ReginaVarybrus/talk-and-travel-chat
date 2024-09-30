@@ -42,6 +42,7 @@ export const MessageBlock = styled.div`
   width: 100%;
   background: var(--color-grey-3);
   transition: height 0.3s ease;
+  position: relative;
 `;
 
 export const MessageBarWrapper = styled.footer`
@@ -123,4 +124,15 @@ export const ButtonSendMessage = styled.button`
     props.$isInputNotEmpty
       ? '1px solid var(--color-brand-blue)'
       : '1px solid var(--color-grey-6)'};
+`;
+
+export const NewMessagesNotification = styled.div`
+  position: absolute;
+  bottom: 16px;
+
+  font-size: 12px;
+  background-color: var(--color-blue-5);
+  color: var(--white-color);
+  padding: 4px 8px;
+  border-radius: 20px;
 `;

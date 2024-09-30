@@ -42,10 +42,10 @@ const MessageList = ({ messages, setIsUserTyping, setUserNameisTyping }) => {
         message.type === MESSAGE_TYPES.TEXT && isLastMessage;
 
       return (
-        <div key={message.id || message.creationDate}>
+        <div key={message.id}>
           {showDateSeparator && <DateSeparator date={currentMessageDate} />}
           <MessageItem
-            key={message.id || message.creationDate}
+            key={message.id}
             content={message.content}
             userId={message.user?.id}
             userName={message.user?.userName}
