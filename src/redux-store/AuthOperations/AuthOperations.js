@@ -8,7 +8,8 @@ import ULRs from '@/redux-store/constants';
 
 export const register = createAsyncThunk(
   'auth/register',
-  async (userData, { dispatch }) => {
+  async (userData, { dispatch }) =>
+  {
     try {
       const response = await axiosClient.post(ULRs.register, userData);
       dispatch(setUsers(response.data));
@@ -27,11 +28,13 @@ export const register = createAsyncThunk(
 
 export const logIn = createAsyncThunk(
   'auth/login',
-  async (userData, { dispatch }) => {
+  async (userData, { dispatch }) =>
+  {
     try {
       const response = await axiosClient.post(ULRs.login, userData);
       token.set(response.data.token);
-      dispatch(setUsers(response.data));
+      // console.log('from Login', response.data);
+      dispatch(setUsers(response.data.userDto));
       return response.data;
     } catch (e) {
       if (e.response.status === 400 || e.response.status === 401) {
@@ -47,7 +50,8 @@ export const logIn = createAsyncThunk(
 
 export const logOut = createAsyncThunk(
   'auth/logOut',
-  async (arg, { dispatch }) => {
+  async (arg, { dispatch }) =>
+  {
     try {
       await axiosClient.post(ULRs.logout);
       token.unset();
