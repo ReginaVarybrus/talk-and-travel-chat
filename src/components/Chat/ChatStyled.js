@@ -128,10 +128,41 @@ export const ButtonSendMessage = styled.button`
 export const NewMessagesNotification = styled.div`
   position: absolute;
   bottom: 130px;
-
   font-size: 12px;
   background-color: var(--color-blue-5);
   color: var(--white-color);
   padding: 4px 8px;
   border-radius: 20px;
+  display: flex;
+  flex-direction: row;
+  gap: 6px;
+  align-items: center;
+  justify-content: center;
+
+  button {
+    border: none;
+    background-color: transparent;
+    width: 16px;
+    height: 16px;
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 0;
+    svg {
+      color: var(--white-color);
+      width: 16px;
+      height: 16px;
+      transition: color 0.3s;
+    }
+
+    &:hover svg {
+      color: var(--color-blue-3);
+    }
+  }
+  .divider {
+    width: 1px;
+    height: 16px;
+    background-color: var(--color-blue-2);
+  }
 `;

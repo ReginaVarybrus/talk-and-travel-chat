@@ -7,6 +7,8 @@ import { getUser } from '@/redux-store/selectors.js';
 import { useWebSocket } from '@/hooks/useWebSocket.js';
 import ULRs from '@/redux-store/constants';
 import logo from '@/images/logo.svg';
+import { IoIosArrowDown } from 'react-icons/io';
+import { IoClose } from 'react-icons/io5';
 import ChatHeader from '@/components/ChatHeader/ChatHeader';
 import MessageList from '@/components/MessageList/MessageList';
 import { axiosClient } from '@/services/api';
@@ -40,6 +42,7 @@ const Chat = ({
   const [lastReadMessageId, setLastReadMessageId] = useState(null);
   const [hasUnreadMessages, setHasUnreadMessages] = useState(false);
   const [unreadMessages, setUnreadMessages] = useState([]);
+
   const [showNewMessagesIndicator, setShowNewMessagesIndicator] =
     useState(false);
 
@@ -302,7 +305,23 @@ const Chat = ({
       </MessageBlock>
       {showNewMessagesIndicator && (
         <NewMessagesNotification>
+          <button
+            type="button"
+            onClick={scrollToBottom}
+            aria-label="Scroll to bottom"
+          >
+            <IoIosArrowDown />
+          </button>
           <span>{unreadMessages.length} new messages</span>
+          <div className="divider" />
+
+          <button
+            type="button"
+            onClick={() => setShowNewMessagesIndicator(false)}
+            aria-label="Close notification"
+          >
+            <IoClose />
+          </button>
         </NewMessagesNotification>
       )}
       <MessageBar
