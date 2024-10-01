@@ -12,7 +12,7 @@ export const BasicButtonLayout = styled(Button)`
     text-align: center;
     padding: 12px 24px;
     border-radius: 8px;
-    border: 1px 0px 0px 0px;
+    border-top: 1px;
     opacity: 0px;
 
     ${(props) =>
