@@ -7,10 +7,12 @@ import { LuLogOut } from 'react-icons/lu';
 export const ProfileStyled = styled.section`
 background-color: var(--color-grey-3);
 height: 100%;
+border-left: 1px solid var(--color-grey-6);
 
 @media (max-width: 767px) {
     height: 100vh;
     padding: 16px 24px 0 24px;
+    border-left: none;
 }
 `;
 
@@ -37,7 +39,6 @@ background-color: var(--white-color);
 display: grid;
 grid-template-columns: 1fr 1fr 1fr;
 grid-template-areas: "avatar form edit";
-
 margin: 32px;
 border-radius: 16px;
 padding: 32px;
@@ -45,12 +46,11 @@ min-height: 320px;
 box-sizing: border-box;
 
 @media (max-width: 767px) {
-grid-template-columns: 1fr auto;
+    grid-template-columns: 1fr auto;
     grid-template-areas:
-      "avatar edit" 
-      "form form"
-      "logout logout";
-
+        "avatar edit" 
+        "form form"
+        "logout logout";
     margin: 0;
     padding: 0;
     width: 100%;
@@ -62,8 +62,8 @@ text-align: center;
 grid-area: avatar;
 
 @media (max-width: 767px) {
-display: flex;
-margin: 12px 12px 24px 12px;
+    display: flex;
+    margin: 12px 12px 24px 12px;
 }
 `
 
@@ -74,8 +74,8 @@ border-radius: 8px;
 background-color: var(--color-grey-12);
 
 @media (max-width: 767px) {
-width: 64px;
-height: 64px;
+    width: 64px;
+    height: 64px;
 }
 `;
 
@@ -85,7 +85,7 @@ color: var(--color-brand-blue);
 width: 120px;
 
 @media (max-width: 767px) {
-padding: 8px 16px;
+    padding: 8px 16px;
 }
 `
 
@@ -95,15 +95,15 @@ margin: 0px 48px;
 min-width: 605px;
 
 @media (max-width: 767px) {
-margin: 0px 12px;
-min-width: 200px;
+    margin: 0px 12px;
+    min-width: 200px;
 }   
 `;
 
 export const ProfileForm = styled.form`
 @media (max-width: 767px) {
-display: flex;
-flex-direction: column;
+    display: flex;
+    flex-direction: column;
 }
 `
 export const TextAbout = styled.p`
@@ -131,7 +131,7 @@ outline: none;
 cursor: pointer;
 
 @media (max-width: 768px) {
-margin: 14.5px 14.5px 0 0;
+    margin: 14.5px 14.5px 0 0;
 }
 `
 
@@ -140,12 +140,11 @@ display: grid;
 gap: 16px;
 grid-template-columns: 92px 92px auto;
 
-
 @media (max-width: 768px) {
-display: grid;
-gap: 19px;
-grid-template-columns: 1fr 1fr;
-padding-bottom: 12px;
+    display: grid;
+    gap: 19px;
+    grid-template-columns: 1fr 1fr;
+    padding-bottom: 12px;
 }
 `
 

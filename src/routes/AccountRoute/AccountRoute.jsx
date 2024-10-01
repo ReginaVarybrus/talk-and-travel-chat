@@ -53,7 +53,6 @@ const AccountRoute = () => {
     validateOnChange: false,
     enableReinitialize: true,
     onSubmit: async (values, { resetForm }) => {
-      // console.log('SUBMIT', values);
       setLoading(true);
       try {
         const resultAction = await dispatch(updateUser(values));
@@ -96,7 +95,6 @@ const AccountRoute = () => {
       .catch(error => {
         console.error('Logout failed:', error.message);
       });
-
     handleDeactivateStopmClient();
   };
 
