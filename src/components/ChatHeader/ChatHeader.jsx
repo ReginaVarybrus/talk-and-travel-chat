@@ -8,6 +8,7 @@ import {
   MobileHeaderStyled,
   DesktopHeaderStyled,
   MobileHeaderContentStyled,
+  LetterAvatarStyled,
   HeaderButton,
   BackIcon,
   FlagImg,
@@ -15,19 +16,45 @@ import {
 } from './ChatHeaderStyled';
 
 const ChatHeader = ({
-  countryName = 'Country Name',
-  participantsAmount = 0,
-  countryChatId,
-  countryFlagCode,
-  setSubscriptionCountryRooms,
-  isSubscribed,
+  chatName = 'Country name',
+  participantsAmount,
+  setParticipantsAmount,
+  flagCode,
+  selectedCompanion,
+  isPrivateChat,
   isUserTyping,
   userNameisTyping,
+  chatId,
+  setSubscriptionRooms,
+  setIsShowJoinBtn,
   setIsChatVisible,
 }) => {
   const [openModal, setOpenModal] = useState(false);
   const userName = useSelector(getUser)?.userName;
-  const handleOpen = () => setOpenModal(true);
+  const showUserIsTyping = isUserTyping && userNameisTyping !== userName;
+  const nameOfChat = isPrivateChat ? selectedCompanion.userName : chatName;
+  const firstLetterOfName = selectedCompanion?.userName
+    .substr(0, 1)
+    .toUpperCase();
+
+  const getMessage = () => {
+    if (showUserIsTyping) {
+      return `${userNameisTyping} is typing...`;
+    }
+
+    if (isPrivateChat) {
+      return '';
+    }
+
+    return `${participantsAmount} participants`;
+  };
+
+  const handleOpen = () => {
+    if (!isPrivateChat) {
+      setOpenModal(true);
+    }
+  };
+
   const handleClose = () => {
     setOpenModal(false);
   };
@@ -35,7 +62,9 @@ const ChatHeader = ({
     setIsChatVisible(false);
   };
 
-  const showUserIsTyping = isUserTyping && userNameisTyping !== userName;
+  const handleBackToSearchBar = () => {
+    setIsChatVisible(false);
+  };
 
   return (
     <ChatHeaderStyled>
@@ -44,58 +73,66 @@ const ChatHeader = ({
           <BackIcon />
         </HeaderButton>
         <MobileHeaderContentStyled>
-          <FlagImg
-            loading="lazy"
-            width="36"
-            srcSet={`https://flagcdn.com/w40/${countryFlagCode}.png 2x`}
-            src={`https://flagcdn.com/w20/${countryFlagCode}.png`}
-            alt={`${countryFlagCode} flag`}
-          />
+          {isPrivateChat ? (
+            <LetterAvatarStyled>{firstLetterOfName}</LetterAvatarStyled>
+          ) : (
+            <FlagImg
+              loading="lazy"
+              width="36"
+              srcSet={`https://flagcdn.com/w40/${flagCode}.png 2x`}
+              src={`https://flagcdn.com/w20/${flagCode}.png`}
+              alt={`${flagCode} flag`}
+            />
+          )}
+
           <div>
-            <h5>{countryName}</h5>
-            <p>
-              {showUserIsTyping
-                ? `${userNameisTyping} is typing...`
-                : `${participantsAmount} participants`}
-            </p>
+            <h5>{nameOfChat}</h5>
+            <p>{getMessage()}</p>
           </div>
         </MobileHeaderContentStyled>
-        <HeaderButton onClick={handleOpen}>
-          <OpenCountryInfoIcon />
-        </HeaderButton>
+        {!isPrivateChat && (
+          <HeaderButton onClick={handleOpen}>
+            <OpenCountryInfoIcon />
+          </HeaderButton>
+        )}
       </MobileHeaderStyled>
 
       <DesktopHeaderStyled onClick={handleOpen}>
-        <h5>{countryName}</h5>
-        <p>
-          {showUserIsTyping
-            ? `${userNameisTyping} is typing...`
-            : `${participantsAmount} participants`}
-        </p>
+        <h5>{nameOfChat}</h5>
+        <p>{getMessage()}</p>
       </DesktopHeaderStyled>
 
       <CountryInfo
         isOpen={openModal}
         onClose={handleClose}
-        countryName={countryName}
-        participantsAmount={participantsAmount}
-        countryChatId={countryChatId}
-        setSubscriptionCountryRooms={setSubscriptionCountryRooms}
-        isSubscribed={isSubscribed}
+        countryName={chatName}
+        participantsAmount={participantsAmount || 0}
+        setParticipantsAmount={setParticipantsAmount}
+        chatId={chatId}
+        setSubscriptionRooms={setSubscriptionRooms}
+        setIsShowJoinBtn={setIsShowJoinBtn}
       />
     </ChatHeaderStyled>
   );
 };
 
 ChatHeader.propTypes = {
-  countryName: PropTypes.string,
+  chatName: PropTypes.string,
   participantsAmount: PropTypes.number,
-  countryChatId: PropTypes.number,
-  countryFlagCode: PropTypes.string,
-  setSubscriptionCountryRooms: PropTypes.func,
-  isSubscribed: PropTypes.bool,
+  setParticipantsAmount: PropTypes.func,
+  flagCode: PropTypes.string,
+  selectedCompanion: PropTypes.shape({
+    id: PropTypes.number,
+    userName: PropTypes.string,
+    userEmail: PropTypes.string,
+  }),
+  chatId: PropTypes.number,
+  isPrivateChat: PropTypes.bool,
+  setSubscriptionRooms: PropTypes.func,
   isUserTyping: PropTypes.bool,
   userNameisTyping: PropTypes.string,
+  setIsShowJoinBtn: PropTypes.func,
+  setIsChatVisible: PropTypes.func,
 };
 
 export default ChatHeader;

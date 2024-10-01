@@ -49,7 +49,7 @@ export const ButtonMapOpen = styled.button`
     background: var(--color-blue-1);
   }
 
-  @media ${device.laptop} {
+  @media ${device.tablet} {
     width: 100%;
   }
 `;

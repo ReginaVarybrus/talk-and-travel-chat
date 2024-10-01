@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import { LuLogOut } from 'react-icons/lu';
 import { IoCloseOutline } from 'react-icons/io5';
 import { HiOutlineExclamationCircle } from 'react-icons/hi';
@@ -6,9 +7,12 @@ import Modal from '@mui/material/Modal';
 import { useFetch } from '@/hooks/useFetch.js';
 import ULRs from '@/redux-store/constants';
 import mapData from '@/data/countries.json';
+import { useNavigate } from 'react-router-dom';
 import { useWebSocket } from '@/hooks/useWebSocket.js';
 import { useSelector } from 'react-redux';
 import { getUser } from '@/redux-store/selectors.js';
+import { routesPath } from '@/routes/routesConfig.jsx';
+import { axiosClient } from '@/services/api.js';
 
 import {
   BoxStyled,
@@ -34,27 +38,68 @@ const CountryInfo = ({
   onClose,
   countryName,
   participantsAmount,
-  setSubscriptionCountryRooms,
-  countryChatId,
+  setParticipantsAmount,
+  setSubscriptionRooms,
+  chatId,
+  setIsShowJoinBtn,
 }) => {
-  const userId = useSelector(getUser)?.id;
+  const currentUserId = useSelector(getUser)?.id;
   const { sendEvent } = useWebSocket();
+  const navigate = useNavigate();
+
+  const { responseData: dataUserChats } = useFetch(ULRs.getPrivateChats);
+
+  const checkExistingPrivateChat = id => {
+    const isExist = dataUserChats?.find(chat => chat.companion.id === id);
+    return isExist && isExist.chat.id;
+  };
+
+  const handleCreatePrivateChat = async (id, userName, userEmail) => {
+    try {
+      const existingChatId = checkExistingPrivateChat(id);
+
+      if (existingChatId) {
+        navigate(routesPath.DMS, {
+          state: {
+            privateChatId: existingChatId,
+            companionObject: { id, userName, userEmail },
+          },
+        });
+      } else {
+        const response = await axiosClient.post(ULRs.createPrivateChat, {
+          companionId: id,
+        });
+        const privateChatId = response.data;
+        navigate(routesPath.DMS, {
+          state: {
+            privateChatId,
+            companionObject: { id, userName, userEmail },
+          },
+        });
+      }
+    } catch (error) {
+      console.error('Error creating or navigating to private chat:', error);
+    }
+    onClose();
+  };
 
   const handleLeaveGroup = () => {
     const dataEventToSend = {
-      authorId: userId,
-      chatId: countryChatId,
+      chatId,
     };
     sendEvent(dataEventToSend, ULRs.leaveOutGroupChat);
-    setSubscriptionCountryRooms(prevRooms =>
+    setSubscriptionRooms(prevRooms =>
       prevRooms.filter(room => room.name !== countryName)
     );
+    setParticipantsAmount(prevCount => (prevCount > 0 ? prevCount - 1 : 0));
     onClose();
+    setIsShowJoinBtn(true);
   };
-  const url = countryChatId && ULRs.getChatsParticipants(countryChatId);
+
+  const url = chatId && ULRs.getChatsParticipants(chatId);
   const { responseData: participants } = useFetch(url, '');
 
-  if (!countryName) {
+  if (!isOpen || !countryName || !chatId) {
     return null;
   }
 
@@ -65,6 +110,7 @@ const CountryInfo = ({
 
   const hasParticipants =
     Array.isArray(participants) && participants.length > 0;
+
   return (
     <Modal
       aria-labelledby="country-info-title"
@@ -115,9 +161,19 @@ const CountryInfo = ({
                     <h5>{user.userName}</h5>
                     <p>{user.userEmail}</p>
                   </UserContactInfo>
-                  <SendMessageBtn>
-                    <FaRegMessage />
-                  </SendMessageBtn>
+                  {user.id !== currentUserId && (
+                    <SendMessageBtn
+                      onClick={() =>
+                        handleCreatePrivateChat(
+                          user.id,
+                          user.userName,
+                          user.userEmail
+                        )
+                      }
+                    >
+                      <FaRegMessage />
+                    </SendMessageBtn>
+                  )}
                 </Item>
               ))}
             </ContactsList>
@@ -138,4 +194,15 @@ const CountryInfo = ({
     </Modal>
   );
 };
+
+CountryInfo.propTypes = {
+  isOpen: PropTypes.bool,
+  onClose: PropTypes.func,
+  countryName: PropTypes.string,
+  participantsAmount: PropTypes.number,
+  chatId: PropTypes.number,
+  setSubscriptionRooms: PropTypes.func,
+  setIsShowJoinBtn: PropTypes.func,
+};
+
 export default CountryInfo;

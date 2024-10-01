@@ -1,5 +1,6 @@
-import { useState, useRef } from 'react';
+import { useRef } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
+import PropTypes from 'prop-types';
 import { routesPath } from '@/routes/routesConfig';
 import BottomNavigation from '@mui/material/BottomNavigation';
 import CssBaseline from '@mui/material/CssBaseline';
@@ -11,9 +12,23 @@ import { TapBarStyled, TapBarButton, MoreIcon } from './TapBarStyled.js';
 const TapBar = ({ isChatVisible }) => {
   const location = useLocation();
   const currentPage = location.pathname;
-  const [value, setValue] = useState(1);
   const ref = useRef(null);
   const navigate = useNavigate();
+
+  const getValueByRoute = route => {
+    switch (route) {
+      case routesPath.DMS:
+        return 0;
+      case routesPath.ROOMS:
+        return 1;
+      case routesPath.ACCOUNT:
+        return 2;
+      default:
+        return 1;
+    }
+  };
+
+  const value = getValueByRoute(currentPage);
 
   const handleProfileOpen = () => {
     navigate(routesPath.ACCOUNT);
@@ -34,13 +49,7 @@ const TapBar = ({ isChatVisible }) => {
         sx={{ position: 'fixed', bottom: 0, left: 0, right: 0 }}
         elevation={3}
       >
-        <BottomNavigation
-          showLabels
-          value={value}
-          onChange={(event, newValue) => {
-            setValue(newValue);
-          }}
-        >
+        <BottomNavigation showLabels value={value}>
           <TapBarButton
             label="DMs"
             icon={<DMsIcon />}
@@ -66,6 +75,10 @@ const TapBar = ({ isChatVisible }) => {
       </Paper>
     </TapBarStyled>
   );
+};
+
+TapBar.propTypes = {
+  isChatVisible: PropTypes.bool,
 };
 
 export default TapBar;

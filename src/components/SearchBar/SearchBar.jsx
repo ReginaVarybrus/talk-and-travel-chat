@@ -9,10 +9,12 @@ import ChatMap from '@/components/ChatMap/ChatMap';
 import { SearchBarStyled, ButtonMapOpen, MapBox } from './SearchBarStyled';
 
 const SearchBar = ({
-  setCountryData,
-  subscriptionCountryRooms,
+  setChatData,
+  subscriptionRooms,
   setIsSubscribed,
   setIsShowJoinBtn,
+  setSelectedCompanion,
+  setParticipantsAmount,
 }) => {
   const [openMap, setOpenMap] = useState(false);
   const handleOpen = () => setOpenMap(true);
@@ -24,20 +26,24 @@ const SearchBar = ({
   return (
     <SearchBarStyled $isChatVisible={isChatVisible}>
       <SearchInput
-        setCountryData={setCountryData}
-        subscriptionCountryRooms={subscriptionCountryRooms}
+        setChatData={setChatData}
         setIsSubscribed={setIsSubscribed}
         setIsShowJoinBtn={setIsShowJoinBtn}
         setIsChatVisible={setIsChatVisible}
+        subscriptionRooms={subscriptionRooms}
+        setParticipantsAmount={setParticipantsAmount}
       />
       <ButtonMapOpen onClick={handleOpen}>Search by map</ButtonMapOpen>
       <div>
         <Outlet
           context={{
-            setCountryData,
-            subscriptionCountryRooms,
+            setChatData,
+            subscriptionRooms,
             setIsSubscribed,
+            setIsShowJoinBtn,
+            setSelectedCompanion,
             setIsChatVisible,
+            setParticipantsAmount,
           }}
         />
       </div>
@@ -66,10 +72,12 @@ const SearchBar = ({
 };
 
 SearchBar.propTypes = {
-  setCountryData: PropTypes.func,
-  subscriptionCountryRooms: PropTypes.array,
+  setChatData: PropTypes.func,
+  subscriptionRooms: PropTypes.array,
   setIsSubscribed: PropTypes.func,
   setIsShowJoinBtn: PropTypes.func,
+  setSelectedCompanion: PropTypes.func,
+  setParticipantsAmount: PropTypes.func,
 };
 
 export default SearchBar;

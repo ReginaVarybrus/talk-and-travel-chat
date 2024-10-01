@@ -47,7 +47,27 @@ export const MobileHeaderContentStyled = styled.div`
     overflow: hidden;
     text-wrap: nowrap;
     text-overflow: ellipsis;
+    @media ${device.mobileM} {
+      width: 190px;
+    }
+    @media ${device.mobileL} {
+      width: 244px;
+    }
   }
+`;
+
+export const LetterAvatarStyled = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 36px;
+  height: 36px;
+  margin-right: 12px;
+  border-radius: 4px;
+  font-weight: 600;
+  font-size: 16px;
+  background: var(--color-grey-6);
+  color: var(--white-color);
 `;
 
 export const DesktopHeaderStyled = styled.div`
