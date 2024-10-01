@@ -32,7 +32,6 @@ Object.keys(formFields).forEach(key => {
 const LoginForm = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  // const { connect } = useWebSocket();
 
   const redirect = () => {
     navigate(routesPath.REGISTER);
@@ -45,7 +44,6 @@ const LoginForm = () => {
     onSubmit: async (values, { resetForm }) => {
       await dispatch(logIn(values));
       navigate(routesPath.ROOMS);
-      // connect();
       resetForm();
     },
   });

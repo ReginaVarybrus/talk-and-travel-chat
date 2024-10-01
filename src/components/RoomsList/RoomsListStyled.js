@@ -23,9 +23,6 @@ export const ListItems = styled.ul`
   @media ${device.laptop} {
     width: 298px;
   }
-  @media ${device.tablet} {
-    padding: 0 16px;
-  }
 `;
 
 export const Flag = styled.img`

@@ -1,21 +1,17 @@
 import { useRef, useEffect } from 'react';
 import { useStompClient } from 'react-stomp-hooks';
 
-export const useWebSocket = () =>
-{
+export const useWebSocket = () => {
   const stompClient = useStompClient();
   const messagesSubscription = useRef(null);
   const isSubscribedToErrors = useRef(false);
 
-  const subscribeToMessages = (endpoint, setCountryData) =>
-  {
+  const subscribeToMessages = (endpoint, setCountryData) => {
     if (stompClient && stompClient.connected && !messagesSubscription.current) {
-      const subscription = stompClient.subscribe(endpoint, response =>
-      {
+      const subscription = stompClient.subscribe(endpoint, response => {
         const receivedMessage = JSON.parse(response.body);
 
-        setCountryData(prevChatData =>
-        {
+        setCountryData(prevChatData => {
           const updatedMessages = [
             ...(prevChatData.messages || []),
             receivedMessage,
@@ -31,8 +27,7 @@ export const useWebSocket = () =>
     }
   };
 
-  const unsubscribeFromMessages = () =>
-  {
+  const unsubscribeFromMessages = () => {
     const subscription = messagesSubscription.current;
 
     if (stompClient && stompClient.connected && subscription) {
@@ -41,14 +36,11 @@ export const useWebSocket = () =>
     }
   };
 
-  const subscribeToUserErrors = (endpoint, setCountryData) =>
-  {
+  const subscribeToUserErrors = (endpoint, setCountryData) => {
     if (stompClient && stompClient.connected && !isSubscribedToErrors.current) {
-      stompClient.subscribe(endpoint, response =>
-      {
+      stompClient.subscribe(endpoint, response => {
         const receivedError = JSON.parse(response.body);
-        setCountryData(prevCountryData =>
-        {
+        setCountryData(prevCountryData => {
           const updatedError = [
             ...(prevCountryData.events || []),
             receivedError,
@@ -63,8 +55,7 @@ export const useWebSocket = () =>
     }
   };
 
-  const sendMessage = message =>
-  {
+  const sendMessage = message => {
     if (stompClient && stompClient.connected) {
       stompClient.publish({
         destination: `/chat/messages`,
@@ -77,8 +68,7 @@ export const useWebSocket = () =>
     }
   };
 
-  const sendEvent = (message, endpoint) =>
-  {
+  const sendEvent = (message, endpoint) => {
     if (stompClient && stompClient.connected) {
       stompClient.publish({
         destination: endpoint,
@@ -89,22 +79,19 @@ export const useWebSocket = () =>
     }
   };
 
-  const handleDeactivateStopmClient = () =>
-  {
+  const handleDeactivateStopmClient = () => {
     if (stompClient && stompClient.connected) {
       stompClient.deactivate();
       console.log('Stomp client deactivated on logout');
     }
   };
 
-  useEffect(() =>
-  {
+  useEffect(() => {
     if (stompClient && !stompClient.connected) {
       stompClient.activate();
       console.log('Stomp client activated');
     }
-    return () =>
-    {
+    return () => {
       if (stompClient && stompClient.connected) {
         stompClient.deactivate();
       }

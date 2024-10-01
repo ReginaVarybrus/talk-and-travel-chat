@@ -58,9 +58,6 @@ const ChatHeader = ({
   const handleClose = () => {
     setOpenModal(false);
   };
-  const handleBackToSearchBar = () => {
-    setIsChatVisible(false);
-  };
 
   const handleBackToSearchBar = () => {
     setIsChatVisible(false);

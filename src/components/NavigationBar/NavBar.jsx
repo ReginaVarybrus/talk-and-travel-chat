@@ -38,6 +38,7 @@ const NavBar = props => {
         />
         <BasicButton
           variant="contained"
+          color="primary"
           text="Get started — it’s free"
           handleClick={handleRegisterOpen}
         />

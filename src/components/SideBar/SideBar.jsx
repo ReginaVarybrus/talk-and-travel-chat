@@ -23,7 +23,6 @@ const SideBar = () => {
   const location = useLocation();
   const { handleDeactivateStopmClient } = useWebSocket();
   const currentPage = location.pathname;
-  // const { disconnect } = useWebSocket();
 
   const handleProfileOpen = () => {
     navigate(routesPath.ACCOUNT);
