@@ -42,7 +42,6 @@ export const MessageBlock = styled.div`
   width: 100%;
   background: var(--color-grey-3);
   transition: height 0.3s ease;
-  position: relative;
 `;
 
 export const MessageBarWrapper = styled.footer`
@@ -128,7 +127,7 @@ export const ButtonSendMessage = styled.button`
 
 export const NewMessagesNotification = styled.div`
   position: absolute;
-  bottom: 16px;
+  bottom: 130px;
 
   font-size: 12px;
   background-color: var(--color-blue-5);

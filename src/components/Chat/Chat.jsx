@@ -49,6 +49,7 @@ const Chat = ({
 
   const [hasMore, setHasMore] = useState(true);
   const [hasMoreUnread, setHasMoreUnread] = useState(true);
+  const [isNewMessage, setIsNewMessage] = useState(false);
 
   const previousChatIdRef = useRef(null);
   const messagesEndRef = useRef(null);
@@ -142,8 +143,8 @@ const Chat = ({
         }
       }
       if (fetchedUnreadMessages.length > 0) {
-        setUnreadMessages(fetchedUnreadMessages); // Сохраняем непрочитанные, но не показываем их
-        setShowNewMessagesIndicator(true); // Показываем баннер для непрочитанных сообщений
+        setUnreadMessages(fetchedUnreadMessages);
+        setShowNewMessagesIndicator(true);
       }
 
       // isFetching.current = false;
@@ -200,7 +201,8 @@ const Chat = ({
     if (isSubscribed && id) {
       subscribeToMessages(ULRs.subscriptionToMessages(id), newMessage => {
         setMessages(prevMessages => [...prevMessages, newMessage]);
-        setShowNewMessagesIndicator(true);
+        // setShowNewMessagesIndicator(true);
+        setIsNewMessage(true);
       });
 
       if (!isPrivateChat && selectedCompanion) {
@@ -223,6 +225,19 @@ const Chat = ({
   //   }
   // }, [hasUnreadMessages, unreadMessages]);
 
+  const scrollToBottom = () => {
+    if (messagesEndRef.current) {
+      messagesEndRef.current.scrollIntoView({ behavior: 'smooth' });
+    }
+  };
+
+  useEffect(() => {
+    if (isNewMessage) {
+      scrollToBottom();
+      setIsNewMessage(false); // Сбрасываем флаг после прокрутки
+    }
+  }, [messages, isNewMessage]);
+
   const handleScroll = e => {
     const scrollTop = e.target.scrollTop;
     const scrollHeight = e.target.scrollHeight;
@@ -240,7 +255,6 @@ const Chat = ({
     // console.log('unreadMessages', unreadMessages.length);
 
     if (atBottom && unreadMessages.length > 0) {
-      setMessages(prevMessages => [...prevMessages, ...unreadMessages]);
       setUnreadMessages([]);
       setShowNewMessagesIndicator(false);
     }
@@ -253,7 +267,6 @@ const Chat = ({
     if (atBottom) {
       setShowNewMessagesIndicator(false);
     }
-    // setShowNewMessagesIndicator(false);
   };
   return (
     <ChatStyled $isChatVisible={isChatVisible}>
@@ -274,18 +287,11 @@ const Chat = ({
       />
       <MessageBlock onScroll={handleScroll} ref={messageBlockRef}>
         {messages?.length ? (
-          <>
-            <MessageList
-              messages={messages}
-              setIsUserTyping={setIsUserTyping}
-              setUserNameisTyping={setUserNameisTyping}
-            />
-            {showNewMessagesIndicator && (
-              <NewMessagesNotification>
-                <span>{unreadMessages.length} new messages</span>
-              </NewMessagesNotification>
-            )}
-          </>
+          <MessageList
+            messages={messages}
+            setIsUserTyping={setIsUserTyping}
+            setUserNameisTyping={setUserNameisTyping}
+          />
         ) : (
           <NoMassegesNotification>
             <Logo src={logo} alt="logo" width="200" height="160" />
@@ -294,7 +300,11 @@ const Chat = ({
         )}
         <div ref={messagesEndRef} />
       </MessageBlock>
-
+      {showNewMessagesIndicator && (
+        <NewMessagesNotification>
+          <span>{unreadMessages.length} new messages</span>
+        </NewMessagesNotification>
+      )}
       <MessageBar
         chatId={id}
         chatData={chatData}
@@ -304,6 +314,7 @@ const Chat = ({
         isUserTyping={isUserTyping}
         setIsUserTyping={setIsUserTyping}
         setParticipantsAmount={setParticipantsAmount}
+        scrollToBottom={scrollToBottom}
       />
     </ChatStyled>
   );

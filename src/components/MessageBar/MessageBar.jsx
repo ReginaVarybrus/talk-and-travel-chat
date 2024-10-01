@@ -25,6 +25,7 @@ const MessageBar = ({
   isUserTyping,
   setIsUserTyping,
   setParticipantsAmount,
+  scrollToBottom,
 }) => {
   const [message, setMessage] = useState('');
   const typingTimeoutRef = useRef(null);
@@ -80,6 +81,8 @@ const MessageBar = ({
     setMessage('');
     handleStopTyping();
     clearTimeout(typingTimeoutRef.current);
+
+    scrollToBottom();
   };
 
   const handleJoinClick = () => {
