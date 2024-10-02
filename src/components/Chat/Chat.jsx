@@ -14,6 +14,7 @@ import MessageList from '@/components/MessageList/MessageList';
 import { axiosClient } from '@/services/api';
 import MessageBar from '@/components/MessageBar/MessageBar';
 import ChatFirstLoading from '@/components/ChatFirstLoading/ChatFirstLoading';
+import Loader from '../Loader/Loader';
 import {
   ChatStyled,
   MessageBlock,
@@ -42,6 +43,7 @@ const Chat = ({
   const [lastReadMessageId, setLastReadMessageId] = useState(null);
   const [hasUnreadMessages, setHasUnreadMessages] = useState(false);
   const [unreadMessages, setUnreadMessages] = useState([]);
+  const [isFetchingMore, setIsFetchingMore] = useState(false);
 
   const [showNewMessagesIndicator, setShowNewMessagesIndicator] =
     useState(false);
@@ -80,7 +82,9 @@ const Chat = ({
     }
   };
   const isFetching = useRef(false);
+
   const fetchMessages = async (pageNumber = 0) => {
+    setIsFetchingMore(true);
     try {
       const response = await axiosClient.get(`/chats/${id}/messages/read`, {
         params: {
@@ -98,6 +102,8 @@ const Chat = ({
       return content;
     } catch (error) {
       console.error('Error fetching messages:', error);
+    } finally {
+      setIsFetchingMore(false);
     }
   };
   const fetchUnreadMessages = async (pageNumber = 0) => {
@@ -289,6 +295,7 @@ const Chat = ({
         setIsChatVisible={setIsChatVisible}
       />
       <MessageBlock onScroll={handleScroll} ref={messageBlockRef}>
+        {isFetchingMore && <Loader size={50} />}
         {messages?.length ? (
           <MessageList
             messages={messages}
