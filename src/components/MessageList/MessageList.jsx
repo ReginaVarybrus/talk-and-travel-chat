@@ -29,10 +29,16 @@ const MessageList = ({ messages, setIsUserTyping, setUserNameisTyping }) => {
       const previousMessageDate =
         index > 0 ? new Date(sortedMessages[index - 1].creationDate) : null;
 
+      const isDisplayableMessage =
+        message.type === MESSAGE_TYPES.TEXT ||
+        message.type === MESSAGE_TYPES.JOIN ||
+        message.type === MESSAGE_TYPES.LEAVE;
+
       const showDateSeparator =
-        index === 0 ||
-        (previousMessageDate &&
-          !isSameDay(currentMessageDate, previousMessageDate));
+        isDisplayableMessage &&
+        (index === 0 ||
+          (previousMessageDate &&
+            !isSameDay(currentMessageDate, previousMessageDate)));
 
       const nextUserMessage = sortedMessages[index + 1];
       const isLastMessage =
@@ -42,10 +48,10 @@ const MessageList = ({ messages, setIsUserTyping, setUserNameisTyping }) => {
         message.type === MESSAGE_TYPES.TEXT && isLastMessage;
 
       return (
-        <div key={message.id}>
+        <div key={message.id || message.creationDate}>
           {showDateSeparator && <DateSeparator date={currentMessageDate} />}
           <MessageItem
-            key={message.id}
+            key={message.id || message.creationDate}
             content={message.content}
             userId={message.user?.id}
             userName={message.user?.userName}
