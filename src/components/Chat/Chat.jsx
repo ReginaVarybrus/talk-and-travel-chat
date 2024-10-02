@@ -14,7 +14,7 @@ import MessageList from '@/components/MessageList/MessageList';
 import { axiosClient } from '@/services/api';
 import MessageBar from '@/components/MessageBar/MessageBar';
 import ChatFirstLoading from '@/components/ChatFirstLoading/ChatFirstLoading';
-import Loader from '../Loader/Loader';
+import Loader from '@/components/Loader/Loader';
 import {
   ChatStyled,
   MessageBlock,
@@ -28,6 +28,7 @@ const Chat = ({
   setChatData,
   setSubscriptionRooms,
   isSubscribed,
+  setIsSubscribed,
   isShowJoinBtn,
   setIsShowJoinBtn,
   selectedCompanion,
@@ -83,6 +84,30 @@ const Chat = ({
   };
   const isFetching = useRef(false);
 
+  const fetchPublicMessages = async (pageNumber = 0) => {
+    setIsFetchingMore(true);
+    try {
+      const response = await axiosClient.get(`/chats/${id}/messages`, {
+        params: {
+          size: 20,
+          page: pageNumber,
+          sort: 'creationDate,desc',
+        },
+      });
+
+      const { content, page: pageData } = response.data;
+
+      setMessages(prevMessages => [...content, ...prevMessages]);
+      setPage(pageData.number + 1);
+      setHasMore(pageData.number + 1 < pageData.totalPages);
+      return content;
+    } catch (error) {
+      console.error('Error fetching messages:', error);
+    } finally {
+      setIsFetchingMore(false);
+    }
+  };
+
   const fetchMessages = async (pageNumber = 0) => {
     setIsFetchingMore(true);
     try {
@@ -106,6 +131,7 @@ const Chat = ({
       setIsFetchingMore(false);
     }
   };
+
   const fetchUnreadMessages = async (pageNumber = 0) => {
     try {
       const response = await axiosClient.get(`/chats/${id}/messages/unread`, {
@@ -137,26 +163,28 @@ const Chat = ({
     if (isFetching.current) return;
     isFetching.current = true;
     try {
-      const readMessages = await fetchMessages();
-      const fetchedUnreadMessages = await fetchUnreadMessages();
+      if (!isShowJoinBtn) {
+        const readMessages = await fetchMessages();
+        const fetchedUnreadMessages = await fetchUnreadMessages();
 
-      const allMessages = [...fetchedUnreadMessages, ...readMessages].sort(
-        (a, b) => new Date(a.creationDate) - new Date(b.creationDate)
-      );
-      setMessages(allMessages);
+        const allMessages = [...fetchedUnreadMessages, ...readMessages].sort(
+          (a, b) => new Date(a.creationDate) - new Date(b.creationDate)
+        );
+        setMessages(allMessages);
 
-      if (allMessages.length > 0) {
-        const lastMessageId = allMessages[allMessages.length - 1]?.id;
-        if (lastMessageId) {
-          setLastReadMessageId(lastMessageId);
+        if (allMessages.length > 0) {
+          const lastMessageId = allMessages[allMessages.length - 1]?.id;
+          if (lastMessageId) {
+            setLastReadMessageId(lastMessageId);
+          }
         }
+        if (fetchedUnreadMessages.length > 0) {
+          setUnreadMessages(fetchedUnreadMessages);
+          setShowNewMessagesIndicator(true);
+        }
+      } else {
+        await fetchPublicMessages();
       }
-      if (fetchedUnreadMessages.length > 0) {
-        setUnreadMessages(fetchedUnreadMessages);
-        setShowNewMessagesIndicator(true);
-      }
-
-      // isFetching.current = false;
     } catch (error) {
       console.error('Error fetching messages:', error);
     } finally {
@@ -226,14 +254,6 @@ const Chat = ({
     }
   }, [id, isSubscribed, setChatData]);
 
-  // useEffect(() => {
-  //   if (hasUnreadMessages) {
-  //     setMessages(prevMessages => [...prevMessages, ...unreadMessages]);
-  //     setHasUnreadMessages(false);
-  //     setShowNewMessagesIndicator(false);
-  //   }
-  // }, [hasUnreadMessages, unreadMessages]);
-
   const scrollToBottom = () => {
     if (messagesEndRef.current) {
       messagesEndRef.current.scrollIntoView({ behavior: 'smooth' });
@@ -245,7 +265,7 @@ const Chat = ({
       scrollToBottom();
       setIsNewMessage(false); // Сбрасываем флаг после прокрутки
     }
-  }, [messages, isNewMessage]);
+  }, [isNewMessage]);
 
   const handleScroll = e => {
     const scrollTop = e.target.scrollTop;
@@ -255,24 +275,25 @@ const Chat = ({
     const atBottom = scrollTop + clientHeight >= scrollHeight - 10;
     const atTop = scrollTop === 0;
 
-    // if (atBottom && hasMoreUnread && !isFetching.current) {
-    //   fetchUnreadMessages(unreadPage).then(newUnreadMessages => {
-    //     setMessages(prevMessages => [...prevMessages, ...newUnreadMessages]);
-    //     setUnreadPage(prevPage => prevPage + 1);
-    //   });
-    // }
-    // console.log('unreadMessages', unreadMessages.length);
-
     if (atBottom && unreadMessages.length > 0) {
       setUnreadMessages([]);
       setShowNewMessagesIndicator(false);
     }
-    if (atTop && hasMore && !isFetching.current) {
+
+    if (!isShowJoinBtn) {
+      if (atTop && hasMore && !isFetching.current) {
+        const currentScrollHeight = e.target.scrollHeight;
+        fetchMessages(page).then(() => {
+          e.target.scrollTop = e.target.scrollHeight - currentScrollHeight;
+        });
+      }
+    } else if (atTop && hasMore && !isFetching.current) {
       const currentScrollHeight = e.target.scrollHeight;
-      fetchMessages(page).then(() => {
+      fetchPublicMessages(page).then(() => {
         e.target.scrollTop = e.target.scrollHeight - currentScrollHeight;
       });
     }
+
     if (atBottom) {
       setShowNewMessagesIndicator(false);
     }
@@ -337,6 +358,7 @@ const Chat = ({
         setSubscriptionRooms={setSubscriptionRooms}
         isShowJoinBtn={isShowJoinBtn}
         setIsShowJoinBtn={setIsShowJoinBtn}
+        setIsSubscribed={setIsSubscribed}
         isUserTyping={isUserTyping}
         setIsUserTyping={setIsUserTyping}
         setParticipantsAmount={setParticipantsAmount}
