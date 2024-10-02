@@ -1,21 +1,21 @@
 import { useState, useEffect, useRef } from 'react';
 import { useOutletContext } from 'react-router-dom';
 import { useSelector } from 'react-redux';
+import { IoIosArrowDown } from 'react-icons/io';
+import { axiosClient } from '@/services/api';
+import { IoClose } from 'react-icons/io5';
 import PropTypes from 'prop-types';
 import { CHAT_TYPES } from '@/constants/chatTypes';
+import { MESSAGE_TYPES } from '@/constants/messageTypes';
 import { getUser } from '@/redux-store/selectors.js';
 import { useWebSocket } from '@/hooks/useWebSocket.js';
 import ULRs from '@/redux-store/constants';
 import logo from '@/images/logo.svg';
-import { IoIosArrowDown } from 'react-icons/io';
-import { IoClose } from 'react-icons/io5';
 import ChatHeader from '@/components/ChatHeader/ChatHeader';
 import MessageList from '@/components/MessageList/MessageList';
-import { axiosClient } from '@/services/api';
 import MessageBar from '@/components/MessageBar/MessageBar';
 import ChatFirstLoading from '@/components/ChatFirstLoading/ChatFirstLoading';
 import Loader from '@/components/Loader/Loader';
-import { MESSAGE_TYPES } from '@/constants/messageTypes';
 import {
   ChatStyled,
   MessageBlock,
@@ -37,30 +37,29 @@ const Chat = ({
   participantsAmount,
   setParticipantsAmount,
 }) => {
-  const [isUserTyping, setIsUserTyping] = useState(false);
-  const [userNameisTyping, setUserNameisTyping] = useState('');
   const userId = useSelector(getUser)?.id;
   const { id, name, chatType, country } = chatData;
   const isPrivateChat = chatType === CHAT_TYPES.PRIVATE;
+  const [isUserTyping, setIsUserTyping] = useState(false);
+  const [userNameisTyping, setUserNameisTyping] = useState('');
+  const [messages, setMessages] = useState([]);
+  const [page, setPage] = useState(0);
+  const [unreadPage, setUnreadPage] = useState(0);
+  const [hasMore, setHasMore] = useState(true);
+  const [hasMoreUnread, setHasMoreUnread] = useState(true);
+  const [isNewMessage, setIsNewMessage] = useState(false);
   const [lastReadMessageId, setLastReadMessageId] = useState(null);
   const [hasUnreadMessages, setHasUnreadMessages] = useState(false);
   const [unreadMessages, setUnreadMessages] = useState([]);
   const [isFetchingMore, setIsFetchingMore] = useState(false);
-
+  const [hasScrolledToEnd, setHasScrolledToEnd] = useState(false);
   const [showNewMessagesIndicator, setShowNewMessagesIndicator] =
     useState(false);
-
-  const [messages, setMessages] = useState([]);
-  const [page, setPage] = useState(0);
-  const [unreadPage, setUnreadPage] = useState(0);
-
-  const [hasMore, setHasMore] = useState(true);
-  const [hasMoreUnread, setHasMoreUnread] = useState(true);
-  const [isNewMessage, setIsNewMessage] = useState(false);
 
   const previousChatIdRef = useRef(null);
   const messagesEndRef = useRef(null);
   const messageBlockRef = useRef(null);
+  const isFetching = useRef(false);
 
   const {
     subscribeToMessages,
@@ -86,7 +85,6 @@ const Chat = ({
       console.error('Error updating last read message:', error);
     }
   };
-  const isFetching = useRef(false);
 
   const fetchPublicMessages = async (pageNumber = 0) => {
     setIsFetchingMore(true);
@@ -196,7 +194,6 @@ const Chat = ({
       isFetching.current = false;
     }
   };
-  const [hasScrolledToEnd, setHasScrolledToEnd] = useState(false);
 
   useEffect(() => {
     let didUnmount = false;
@@ -279,10 +276,7 @@ const Chat = ({
   }, [isNewMessage, messages]);
 
   const handleScroll = e => {
-    const scrollTop = e.target.scrollTop;
-    const scrollHeight = e.target.scrollHeight;
-    const clientHeight = e.target.clientHeight;
-
+    const { scrollHeight, clientHeight, scrollTop } = e.target;
     const atBottom = scrollTop + clientHeight >= scrollHeight - 10;
     const atTop = scrollTop === 0;
 

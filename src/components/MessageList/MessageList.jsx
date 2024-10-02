@@ -1,11 +1,10 @@
 import { useEffect } from 'react';
 import { isSameDay } from 'date-fns';
-
 import PropTypes from 'prop-types';
 import MessageItem from '@/components/MessageItem/MessageItem';
 import { MESSAGE_TYPES } from '@/constants/messageTypes.js';
+import DateSeparator from '@/components/DateSeparator/DateSeparator.jsx';
 import { MessageListStyled } from './MessageListStyled.js';
-import DateSeparator from '../DateSeparator/DateSeparator.jsx';
 
 const MessageList = ({ messages, setIsUserTyping, setUserNameisTyping }) => {
   useEffect(() => {
