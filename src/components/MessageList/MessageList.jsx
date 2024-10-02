@@ -40,9 +40,16 @@ const MessageList = ({ messages, setIsUserTyping, setUserNameisTyping }) => {
           (previousMessageDate &&
             !isSameDay(currentMessageDate, previousMessageDate)));
 
-      const nextUserMessage = sortedMessages[index + 1];
+      let nextUserMessage = null;
+      for (let i = index + 1; i < sortedMessages.length; i++) {
+        if (sortedMessages[i].type === MESSAGE_TYPES.TEXT) {
+          nextUserMessage = sortedMessages[i];
+          break;
+        }
+      }
+
       const isLastMessage =
-        !nextUserMessage || message.user?.id !== nextUserMessage.user?.id;
+        !nextUserMessage || nextUserMessage.user?.id !== message.user?.id;
 
       const isShownAvatar =
         message.type === MESSAGE_TYPES.TEXT && isLastMessage;

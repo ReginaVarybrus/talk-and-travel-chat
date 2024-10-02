@@ -71,11 +71,16 @@ const Chat = ({
   const isChatVisible = context?.isChatVisible;
   const setIsChatVisible = context?.setIsChatVisible;
 
-  const markAsRead = async (chatId, readMessageId) => {
+  const markAsRead = async chatId => {
     try {
-      await axiosClient.patch(`/chats/${chatId}/messages/last-read`, {
-        lastReadMessageId: readMessageId,
-      });
+      if (messages.length > 0) {
+        const lastMessageId = messages[messages.length - 1]?.id;
+        if (lastMessageId) {
+          await axiosClient.patch(`/chats/${chatId}/messages/last-read`, {
+            lastReadMessageId: lastMessageId,
+          });
+        }
+      }
       // console.log('Last read message id:', readMessageId);
       // console.log('Last read message chatid:', chatId);
     } catch (error) {
@@ -144,6 +149,7 @@ const Chat = ({
       const unreadMessagesPage = response.data.content;
 
       if (unreadMessagesPage.length > 0) {
+        setMessages(prevMessages => [...unreadMessagesPage, ...prevMessages]);
         setUnreadMessages(prevMessages => [
           ...prevMessages,
           ...unreadMessagesPage,
@@ -158,7 +164,7 @@ const Chat = ({
       console.error('Error fetching unread messages:', error);
     }
   };
-
+  console.log('messages', messages);
   const fetchChatMessages = async () => {
     if (isFetching.current) return;
     isFetching.current = true;
@@ -213,7 +219,7 @@ const Chat = ({
         currentChatId !== id &&
         !didUnmount
       ) {
-        markAsRead(currentChatId, lastReadMessageId);
+        markAsRead(currentChatId);
       }
       fetchChatMessages();
 
@@ -222,7 +228,7 @@ const Chat = ({
     return () => {
       didUnmount = true;
       if (previousChatIdRef.current && lastReadMessageId && !didUnmount) {
-        markAsRead(previousChatIdRef.current, lastReadMessageId);
+        markAsRead(previousChatIdRef.current);
       }
     };
   }, [id]);
@@ -263,7 +269,7 @@ const Chat = ({
   useEffect(() => {
     if (isNewMessage) {
       scrollToBottom();
-      setIsNewMessage(false); // Сбрасываем флаг после прокрутки
+      setIsNewMessage(false);
     }
   }, [isNewMessage]);
 
