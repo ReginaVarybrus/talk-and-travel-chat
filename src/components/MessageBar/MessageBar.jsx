@@ -83,6 +83,7 @@ const MessageBar = ({
     clearTimeout(typingTimeoutRef.current);
     scrollToBottom();
   };
+
   const handleJoinClick = () => {
     sendEvent(dataEventToSend, ULRs.joinToGroupChat);
     setIsShowJoinBtn(false);

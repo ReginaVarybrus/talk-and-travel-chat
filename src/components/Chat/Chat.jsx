@@ -15,6 +15,7 @@ import { axiosClient } from '@/services/api';
 import MessageBar from '@/components/MessageBar/MessageBar';
 import ChatFirstLoading from '@/components/ChatFirstLoading/ChatFirstLoading';
 import Loader from '@/components/Loader/Loader';
+import { MESSAGE_TYPES } from '@/constants/messageTypes';
 import {
   ChatStyled,
   MessageBlock,
@@ -81,8 +82,6 @@ const Chat = ({
           });
         }
       }
-      // console.log('Last read message id:', readMessageId);
-      // console.log('Last read message chatid:', chatId);
     } catch (error) {
       console.error('Error updating last read message:', error);
     }
@@ -164,7 +163,7 @@ const Chat = ({
       console.error('Error fetching unread messages:', error);
     }
   };
-  console.log('messages', messages);
+
   const fetchChatMessages = async () => {
     if (isFetching.current) return;
     isFetching.current = true;
@@ -244,7 +243,10 @@ const Chat = ({
     if (isSubscribed && id) {
       subscribeToMessages(ULRs.subscriptionToMessages(id), newMessage => {
         setMessages(prevMessages => [...prevMessages, newMessage]);
-        // setShowNewMessagesIndicator(true);
+
+        if (newMessage.type === MESSAGE_TYPES.TEXT) {
+          setShowNewMessagesIndicator(true);
+        }
         setIsNewMessage(true);
       });
 
@@ -267,11 +269,14 @@ const Chat = ({
   };
 
   useEffect(() => {
-    if (isNewMessage) {
+    if (
+      isNewMessage &&
+      messages[messages.length - 1].type === MESSAGE_TYPES.TEXT
+    ) {
       scrollToBottom();
       setIsNewMessage(false);
     }
-  }, [isNewMessage]);
+  }, [isNewMessage, messages]);
 
   const handleScroll = e => {
     const scrollTop = e.target.scrollTop;
@@ -346,7 +351,9 @@ const Chat = ({
           >
             <IoIosArrowDown />
           </button>
-          <span>{unreadMessages.length} new messages</span>
+          <span>
+            {unreadMessages.length > 0 && unreadMessages.length} new messages
+          </span>
           <div className="divider" />
 
           <button
@@ -369,6 +376,7 @@ const Chat = ({
         setIsUserTyping={setIsUserTyping}
         setParticipantsAmount={setParticipantsAmount}
         scrollToBottom={scrollToBottom}
+        setShowNewMessagesIndicator={setShowNewMessagesIndicator}
       />
     </ChatStyled>
   );
