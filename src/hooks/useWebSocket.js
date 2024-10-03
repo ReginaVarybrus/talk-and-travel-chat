@@ -1,15 +1,12 @@
 import { useRef, useEffect } from 'react';
 import { useStompClient } from 'react-stomp-hooks';
-// import { useSelector } from 'react-redux';
-// import { getUser } from '@/redux-store/selectors.js';
-// import ULRs from '@/constants/constants';
+import ULRs from '@/constants/constants';
 
 export const useWebSocket = () => {
   const stompClient = useStompClient();
   const messagesSubscription = useRef(null);
   const isSubscribedToErrors = useRef(false);
-  // const isSubscribedToUsersStatuses = useRef(false);
-  // const userId = useSelector(getUser)?.id;
+  const isSubscribedToUsersStatuses = useRef(false);
 
   const subscribeToMessages = (endpoint, setCountryData) => {
     if (stompClient && stompClient.connected && !messagesSubscription.current) {
@@ -61,12 +58,20 @@ export const useWebSocket = () => {
   };
 
   const subscribeToUsersStatuses = endpoint => {
-    if (stompClient && stompClient.connected) {
+    if (
+      stompClient &&
+      stompClient.connected &&
+      !isSubscribedToUsersStatuses.current
+    ) {
       stompClient.subscribe(endpoint, response => {
-        const receivedStatuses = JSON.parse(response.body);
+        const receivedStatuses = JSON.parse(response);
         console.log('received online statuses', receivedStatuses);
       });
-      // isSubscribedToUsersStatuses.current = true;
+      isSubscribedToUsersStatuses.current = true;
+    } else {
+      console.log(
+        'Subscription failed: Stomp client is not connected or already subscribed.'
+      );
     }
   };
 
@@ -94,11 +99,6 @@ export const useWebSocket = () => {
     }
   };
 
-  // const handleOnlineStatus = isOnline => {
-  //   const dataOnlineStatus = { userId, isOnline };
-  //   sendEvent(dataOnlineStatus, ULRs.updateOnlineStatus);
-  // };
-
   const handleDeactivateStopmClient = () => {
     if (stompClient && stompClient.connected) {
       stompClient.deactivate();
@@ -106,30 +106,19 @@ export const useWebSocket = () => {
     }
   };
 
-  // useEffect(() => {
-  //   if (stompClient) {
-  //     if (!stompClient.connected) {
-  //       stompClient.activate();
-  //       console.log('Stomp client activated');
-  //     } else {
-  //       // handleOnlineStatus(true);
-  //       console.log('send online status true');
-  //     }
-  //   }
-  //   return () => {
-  //     if (stompClient && stompClient.connected) {
-  //       // handleOnlineStatus(false);
-  //       stompClient.deactivate();
-  //       console.log('send online status false');
-  //     }
-  //   };
-  // }, [stompClient]);
-
   useEffect(() => {
     if (stompClient && !stompClient.connected) {
       stompClient.activate();
       console.log('Stomp client activated');
     }
+
+    if (stompClient && stompClient.connected) {
+      console.log('Stomp client is connected, subscribing...');
+      subscribeToUsersStatuses(ULRs.usersOnlineStatus);
+    } else {
+      console.log('Waiting for Stomp client to connect...');
+    }
+
     return () => {
       if (stompClient && stompClient.connected) {
         stompClient.deactivate();

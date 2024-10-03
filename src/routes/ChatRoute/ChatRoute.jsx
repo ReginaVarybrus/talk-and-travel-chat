@@ -23,9 +23,11 @@ const ChatRoute = () => {
     if (responseData) {
       setSubscriptionRooms(responseData);
     }
-
-    subscribeToUsersStatuses(ULRs.usersOnlineStatus);
   }, [responseData]);
+
+  useEffect(() => {
+    subscribeToUsersStatuses(ULRs.usersOnlineStatus);
+  }, []);
 
   useEffect(() => {
     const fetchData = async () => {
