@@ -1,15 +1,16 @@
 import { createSlice } from '@reduxjs/toolkit';
-import {
+import
+{
   fetchCurrentUser,
   updateUser,
-} from '../UserOperations/UserOperations.js';
+} from '@/redux-store/UserOperations/UserOperations';
 
 const initialState = {
   id: null,
   userName: '',
   userEmail: '',
-  password: null,
   avatar: null,
+  about: ''
 };
 
 const handlePending = state => ({
@@ -29,7 +30,7 @@ export const userSlice = createSlice({
   reducers: {
     setUsers: (state, action) => ({
       ...state,
-      ...action.payload.userDto,
+      ...action.payload,
     }),
     clearUser: state => ({ ...state, ...initialState }),
   },
@@ -44,10 +45,14 @@ export const userSlice = createSlice({
         isRefresh: false,
       }))
 
-      .addCase(updateUser.fulfilled, (state, action) => ({
+      .addCase(updateUser.pending, handlePending)
+      .addCase(updateUser.rejected, handleRejected)
+      .addCase(updateUser.fulfilled, (state, action) =>
+      ({
         ...state,
-        userDto: { ...state.userDto, ...action.payload },
-      })),
+        ...action.payload,
+      })
+      ),
 });
 
 export const { setUsers, clearUser } = userSlice.actions;
