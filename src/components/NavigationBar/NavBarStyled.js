@@ -1,6 +1,5 @@
 import styled from 'styled-components';
-import { Box } from '@mui/material';
-import SmallLogo from '@/images/small_logo.svg';
+import SmallLogo from '@/images/iconComponents/SmallLogo';
 
 export const NavBarLayout = styled.nav`
   ${(props) =>
@@ -20,12 +19,11 @@ export const NavBarLayout = styled.nav`
   border-bottom: 1px solid var(--color-blue-1);
 `;
 
-export const StyledSmallLogo = styled(Box)`
-  width: 48px;
-  height: 48px;
-  background-image: url(${SmallLogo});
-  background-repeat: no-repeat;
-  background-size: contain;
+export const StyledSmallLogo = styled(SmallLogo).attrs((props) => ({
+  width: props.width || '48px',
+  height: props.height || '48px',
+  fill: props.fillColor || 'currentColor',
+}))`
   padding-right: 32px;
 `;
 
