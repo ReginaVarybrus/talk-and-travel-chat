@@ -76,7 +76,7 @@ const Chat = ({
       if (messages.length > 0) {
         const lastMessageId = messages[messages.length - 1]?.id;
         if (lastMessageId) {
-          await axiosClient.patch(`/chats/${chatId}/messages/last-read`, {
+          await axiosClient.patch(ULRs.lastReadMessage(chatId), {
             lastReadMessageId: lastMessageId,
           });
         }
@@ -89,7 +89,7 @@ const Chat = ({
   const fetchPublicMessages = async (pageNumber = 0) => {
     setIsFetchingMore(true);
     try {
-      const response = await axiosClient.get(`/chats/${id}/messages`, {
+      const response = await axiosClient.get(ULRs.getMessages(id), {
         params: {
           size: 20,
           page: pageNumber,
@@ -110,10 +110,10 @@ const Chat = ({
     }
   };
 
-  const fetchMessages = async (pageNumber = 0) => {
+  const fetchReadMessages = async (pageNumber = 0) => {
     setIsFetchingMore(true);
     try {
-      const response = await axiosClient.get(`/chats/${id}/messages/read`, {
+      const response = await axiosClient.get(ULRs.getReadMessages(id), {
         params: {
           size: 20,
           page: pageNumber,
@@ -136,7 +136,7 @@ const Chat = ({
 
   const fetchUnreadMessages = async (pageNumber = 0) => {
     try {
-      const response = await axiosClient.get(`/chats/${id}/messages/unread`, {
+      const response = await axiosClient.get(ULRs.getUnreadMessages(id), {
         params: {
           size: 1000,
           page: pageNumber,
@@ -167,7 +167,7 @@ const Chat = ({
     isFetching.current = true;
     try {
       if (!isShowJoinBtn) {
-        const readMessages = await fetchMessages();
+        const readMessages = await fetchReadMessages();
         const fetchedUnreadMessages = await fetchUnreadMessages();
 
         const allMessages = [...fetchedUnreadMessages, ...readMessages].sort(
@@ -288,7 +288,7 @@ const Chat = ({
     if (!isShowJoinBtn) {
       if (atTop && hasMore && !isFetching.current) {
         const currentScrollHeight = e.target.scrollHeight;
-        fetchMessages(page).then(() => {
+        fetchReadMessages(page).then(() => {
           e.target.scrollTop = e.target.scrollHeight - currentScrollHeight;
         });
       }

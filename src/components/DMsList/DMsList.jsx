@@ -34,7 +34,7 @@ const DMsList = () => {
   const { responseData: dataUserChats } = useFetch(ULRs.getPrivateChats);
 
   const { responseData: dataChat } = useFetch(
-    selectedChat ? ULRs.getChatsMessages(selectedChat) : null
+    selectedChat ? ULRs.getChat(selectedChat) : null
   );
 
   useEffect(() => {
