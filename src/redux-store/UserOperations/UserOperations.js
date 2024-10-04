@@ -3,8 +3,6 @@ import swal from 'sweetalert';
 
 import { axiosClient } from '@/services/api';
 import { setUsers } from '@/redux-store/slices/userSlice';
-
-import { token, axiosClient } from '@/services/api';
 import ULRs from '@/constants/constants';
 
 export const fetchCurrentUser = createAsyncThunk(

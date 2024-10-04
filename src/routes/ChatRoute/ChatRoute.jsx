@@ -17,7 +17,11 @@ const ChatRoute = () => {
   const [selectedCompanion, setSelectedCompanion] = useState(null);
   const [listOfOnlineUsers, setListOfOnlineUsers] = useState(new Map());
   const { responseData } = useFetch(ULRs.userCountries);
-  const { subscribeToUsersStatuses } = useWebSocket();
+  const {
+    stompClient,
+    subscribeToUsersStatuses,
+    unsubscribeFromUsersStatuses,
+  } = useWebSocket();
 
   useEffect(() => {
     if (responseData) {
@@ -26,8 +30,19 @@ const ChatRoute = () => {
   }, [responseData]);
 
   useEffect(() => {
-    subscribeToUsersStatuses(ULRs.usersOnlineStatus);
-  }, []);
+    if (stompClient?.connected) {
+      const subscription = subscribeToUsersStatuses(
+        ULRs.usersOnlineStatus,
+        setListOfOnlineUsers
+      );
+
+      return () => {
+        if (subscription) {
+          unsubscribeFromUsersStatuses();
+        }
+      };
+    }
+  }, [stompClient]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -35,13 +50,14 @@ const ChatRoute = () => {
         const response = await axiosClient.get(ULRs.getUsersOnlineStatusPath);
 
         console.log('Received data:', response.data);
-        const mapData = new Map();
 
-        Object.entries(response.data).forEach(([id, value]) => {
-          mapData.set(id, value);
+        setListOfOnlineUsers(prevStatus => {
+          const updatedList = new Map(prevStatus);
+          Object.entries(response.data).forEach(([id, value]) => {
+            updatedList.set(id, value);
+          });
+          return updatedList;
         });
-
-        setListOfOnlineUsers(mapData);
       } catch (error) {
         console.error('Error fetching data:', error);
       }

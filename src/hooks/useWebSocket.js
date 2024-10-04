@@ -1,15 +1,14 @@
 import { useRef, useEffect } from 'react';
 import { useStompClient } from 'react-stomp-hooks';
-import ULRs from '@/constants/constants';
 
 export const useWebSocket = () => {
   const stompClient = useStompClient();
   const messagesSubscription = useRef(null);
   const isSubscribedToErrors = useRef(false);
-  const isSubscribedToUsersStatuses = useRef(false);
+  const statusesSubscription = useRef(null);
 
   const subscribeToMessages = (endpoint, setCountryData) => {
-    if (stompClient && stompClient.connected && !messagesSubscription.current) {
+    if (stompClient?.connected && !messagesSubscription.current) {
       const subscription = stompClient.subscribe(endpoint, response => {
         const receivedMessage = JSON.parse(response.body);
 
@@ -32,14 +31,14 @@ export const useWebSocket = () => {
   const unsubscribeFromMessages = () => {
     const subscription = messagesSubscription.current;
 
-    if (stompClient && stompClient.connected && subscription) {
+    if (stompClient?.connected && subscription) {
       subscription.unsubscribe();
       messagesSubscription.current = null;
     }
   };
 
   const subscribeToUserErrors = (endpoint, setCountryData) => {
-    if (stompClient && stompClient.connected && !isSubscribedToErrors.current) {
+    if (stompClient?.connected && !isSubscribedToErrors.current) {
       stompClient.subscribe(endpoint, response => {
         const receivedError = JSON.parse(response.body);
         setCountryData(prevCountryData => {
@@ -57,26 +56,36 @@ export const useWebSocket = () => {
     }
   };
 
-  const subscribeToUsersStatuses = endpoint => {
-    if (
-      stompClient &&
-      stompClient.connected &&
-      !isSubscribedToUsersStatuses.current
-    ) {
-      stompClient.subscribe(endpoint, response => {
-        const receivedStatuses = JSON.parse(response);
-        console.log('received online statuses', receivedStatuses);
+  const subscribeToUsersStatuses = (endpoint, setUserStatus) => {
+    if (stompClient?.connected && !statusesSubscription.current) {
+      const subscription = stompClient.subscribe(endpoint, response => {
+        const receivedStatus = JSON.parse(response.body);
+        setUserStatus(prevMap => {
+          const updatedMap = new Map(prevMap);
+          updatedMap.set(
+            receivedStatus.userId.toString(),
+            receivedStatus.isOnline
+          );
+          return updatedMap;
+        });
       });
-      isSubscribedToUsersStatuses.current = true;
-    } else {
-      console.log(
-        'Subscription failed: Stomp client is not connected or already subscribed.'
-      );
+
+      statusesSubscription.current = subscription;
+      return subscription;
+    }
+  };
+
+  const unsubscribeFromUsersStatuses = () => {
+    const subscription = statusesSubscription.current;
+
+    if (stompClient?.connected && subscription) {
+      subscription.unsubscribe();
+      statusesSubscription.current = null;
     }
   };
 
   const sendMessage = message => {
-    if (stompClient && stompClient.connected) {
+    if (stompClient?.connected) {
       stompClient.publish({
         destination: `/chat/messages`,
         body: JSON.stringify(message),
@@ -89,7 +98,7 @@ export const useWebSocket = () => {
   };
 
   const sendEvent = (message, endpoint) => {
-    if (stompClient && stompClient.connected) {
+    if (stompClient?.connected) {
       stompClient.publish({
         destination: endpoint,
         body: JSON.stringify(message),
@@ -100,7 +109,7 @@ export const useWebSocket = () => {
   };
 
   const handleDeactivateStopmClient = () => {
-    if (stompClient && stompClient.connected) {
+    if (stompClient?.connected) {
       stompClient.deactivate();
       console.log('Stomp client deactivated on logout');
     }
@@ -112,15 +121,8 @@ export const useWebSocket = () => {
       console.log('Stomp client activated');
     }
 
-    if (stompClient && stompClient.connected) {
-      console.log('Stomp client is connected, subscribing...');
-      subscribeToUsersStatuses(ULRs.usersOnlineStatus);
-    } else {
-      console.log('Waiting for Stomp client to connect...');
-    }
-
     return () => {
-      if (stompClient && stompClient.connected) {
+      if (stompClient?.connected) {
         stompClient.deactivate();
       }
     };
@@ -132,6 +134,7 @@ export const useWebSocket = () => {
     unsubscribeFromMessages,
     subscribeToUserErrors,
     subscribeToUsersStatuses,
+    unsubscribeFromUsersStatuses,
     sendMessage,
     sendEvent,
     handleDeactivateStopmClient,
