@@ -7,21 +7,11 @@ export const useWebSocket = () => {
   const isSubscribedToErrors = useRef(false);
   const statusesSubscription = useRef(null);
 
-  const subscribeToMessages = (endpoint, setCountryData) => {
+  const subscribeToMessages = (endpoint, handleNewMessage) => {
     if (stompClient?.connected && !messagesSubscription.current) {
       const subscription = stompClient.subscribe(endpoint, response => {
         const receivedMessage = JSON.parse(response.body);
-
-        setCountryData(prevChatData => {
-          const updatedMessages = [
-            ...(prevChatData.messages || []),
-            receivedMessage,
-          ];
-          return {
-            ...prevChatData,
-            messages: updatedMessages,
-          };
-        });
+        handleNewMessage(receivedMessage);
       });
       messagesSubscription.current = subscription;
       return subscription;
