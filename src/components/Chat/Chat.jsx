@@ -78,6 +78,7 @@ const Chat = ({
         setSubscriptionRooms={setSubscriptionRooms}
         setIsShowJoinBtn={setIsShowJoinBtn}
         setIsChatVisible={setIsChatVisible}
+        listOfOnlineUsers={listOfOnlineUsers}
       />
       <MessageBlock>
         {messages?.length ? (
