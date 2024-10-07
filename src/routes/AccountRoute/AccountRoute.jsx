@@ -89,7 +89,6 @@ const AccountRoute = () => {
   /* On-fligth validation of ABOUT field to prevent user
   from typing any symbols above maximum lenght set in scheme  */
   const handleChange = e => {
-    //  remove: console.log(`about field text has ${e.target.value.length} symbols`);
     if (e.target.value.length <= ABOUT_MAX_CHAR_LIMIT) {
       formik.handleChange(e);
     }
