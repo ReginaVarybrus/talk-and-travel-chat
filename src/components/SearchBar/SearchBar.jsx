@@ -15,6 +15,7 @@ const SearchBar = ({
   setIsShowJoinBtn,
   setSelectedCompanion,
   setParticipantsAmount,
+  listOfOnlineUsers,
 }) => {
   const [openMap, setOpenMap] = useState(false);
   const handleOpen = () => setOpenMap(true);
@@ -44,6 +45,7 @@ const SearchBar = ({
             setSelectedCompanion,
             setIsChatVisible,
             setParticipantsAmount,
+            listOfOnlineUsers,
           }}
         />
       </div>

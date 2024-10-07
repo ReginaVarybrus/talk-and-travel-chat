@@ -1,6 +1,7 @@
 import { Outlet } from 'react-router-dom';
+import SideBar from '@/components/SideBar/SideBar';
+
 import { DesktopLayoutStyled } from './DesktopLayoutStyled';
-import SideBar from '../SideBar/SideBar';
 
 const DesktopLayout = () => (
   <DesktopLayoutStyled>
@@ -8,5 +9,4 @@ const DesktopLayout = () => (
     <Outlet />
   </DesktopLayoutStyled>
 );
-
 export default DesktopLayout;

@@ -6,7 +6,12 @@ import { MESSAGE_TYPES } from '@/constants/messageTypes.js';
 import DateSeparator from '@/components/DateSeparator/DateSeparator.jsx';
 import { MessageListStyled } from './MessageListStyled.js';
 
-const MessageList = ({ messages, setIsUserTyping, setUserNameisTyping }) => {
+const MessageList = ({
+  messages,
+  setIsUserTyping,
+  setUserNameisTyping,
+  listOfOnlineUsers,
+}) => {
   useEffect(() => {
     messages?.forEach(message => {
       if (message.type === MESSAGE_TYPES.START_TYPING) {
@@ -53,6 +58,9 @@ const MessageList = ({ messages, setIsUserTyping, setUserNameisTyping }) => {
       const isShownAvatar =
         message.type === MESSAGE_TYPES.TEXT && isLastMessage;
 
+      const isOnline =
+        listOfOnlineUsers.get(message.user.id.toString()) === true;
+
       return (
         <div key={message.id || message.creationDate}>
           {showDateSeparator && <DateSeparator date={currentMessageDate} />}
@@ -64,6 +72,7 @@ const MessageList = ({ messages, setIsUserTyping, setUserNameisTyping }) => {
             date={message.creationDate}
             type={message.type}
             isShownAvatar={isShownAvatar}
+            isOnline={isOnline}
           />
         </div>
       );

@@ -5,11 +5,11 @@ import { IoIosArrowDown } from 'react-icons/io';
 import { axiosClient } from '@/services/api';
 import { IoClose } from 'react-icons/io5';
 import PropTypes from 'prop-types';
+import ULRs from '@/constants/constants';
 import { CHAT_TYPES } from '@/constants/chatTypes';
 import { MESSAGE_TYPES } from '@/constants/messageTypes';
 import { getUser } from '@/redux-store/selectors.js';
 import { useWebSocket } from '@/hooks/useWebSocket.js';
-import ULRs from '@/redux-store/constants';
 import logo from '@/images/logo.svg';
 import ChatHeader from '@/components/ChatHeader/ChatHeader';
 import MessageList from '@/components/MessageList/MessageList';
@@ -36,6 +36,7 @@ const Chat = ({
   setSelectedCompanion,
   participantsAmount,
   setParticipantsAmount,
+  listOfOnlineUsers,
 }) => {
   const userId = useSelector(getUser)?.id;
   const { id, name, chatType, country } = chatData;
@@ -319,6 +320,7 @@ const Chat = ({
         setSubscriptionRooms={setSubscriptionRooms}
         setIsShowJoinBtn={setIsShowJoinBtn}
         setIsChatVisible={setIsChatVisible}
+        listOfOnlineUsers={listOfOnlineUsers}
       />
       <MessageBlock onScroll={handleScroll} ref={messageBlockRef}>
         {isFetchingMore && <Loader size={50} />}
@@ -326,7 +328,9 @@ const Chat = ({
           <MessageList
             messages={messages}
             setIsUserTyping={setIsUserTyping}
+            userNameisTyping={userNameisTyping}
             setUserNameisTyping={setUserNameisTyping}
+            listOfOnlineUsers={listOfOnlineUsers}
           />
         ) : (
           <NoMassegesNotification>
