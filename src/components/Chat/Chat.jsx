@@ -328,6 +328,7 @@ const Chat = ({
           <MessageList
             messages={messages}
             setIsUserTyping={setIsUserTyping}
+            userNameisTyping={userNameisTyping}
             setUserNameisTyping={setUserNameisTyping}
             listOfOnlineUsers={listOfOnlineUsers}
           />

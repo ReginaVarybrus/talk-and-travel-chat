@@ -28,7 +28,7 @@ const MessageBar = ({
   scrollToBottom,
 }) => {
   const [message, setMessage] = useState('');
-  const typingTimeoutRef = useRef(null);
+  const typingStopTimeoutRef = useRef(null);
 
   const { stompClient, sendMessage, sendEvent } = useWebSocket();
   const isMessageNotEmpty = Boolean(message?.trim().length);
@@ -55,11 +55,11 @@ const MessageBar = ({
 
     handleStartTyping();
 
-    if (typingTimeoutRef.current) {
-      clearTimeout(typingTimeoutRef.current);
+    if (typingStopTimeoutRef.current) {
+      clearTimeout(typingStopTimeoutRef.current);
     }
 
-    typingTimeoutRef.current = setTimeout(() => {
+    typingStopTimeoutRef.current = setTimeout(() => {
       handleStopTyping();
     }, 1500);
   };
@@ -80,7 +80,7 @@ const MessageBar = ({
     sendMessage(dataMessageToSend);
     setMessage('');
     handleStopTyping();
-    clearTimeout(typingTimeoutRef.current);
+    clearTimeout(typingStopTimeoutRef.current);
     scrollToBottom();
   };
 
