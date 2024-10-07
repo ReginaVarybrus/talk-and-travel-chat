@@ -33,6 +33,8 @@ export const GlobalStyles = createGlobalStyle`
   --color-blue-8: #1a4b95;
   --color-blue-9: #153c78;
   --color-blue-10: #11305e;
+
+  --color-badge: #72CF7B;
 }
 
 body {

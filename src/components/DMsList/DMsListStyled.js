@@ -55,7 +55,7 @@ export const BadgeStyled = styled.div`
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    background: rgba(114, 207, 123, 1);
+    background: var(--color-badge);
   }
 `;
 
