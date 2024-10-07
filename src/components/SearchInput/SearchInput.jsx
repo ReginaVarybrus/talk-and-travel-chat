@@ -1,8 +1,12 @@
 import { useState, useEffect, useRef } from 'react';
+import { useMediaQuery } from 'react-responsive';
+import { device } from '@/constants/mediaQueries.js';
+import { routesPath } from '@/routes/routesConfig';
 import PropTypes from 'prop-types';
 import { useFetch } from '@/hooks/useFetch.js';
-import ULRs from '@/redux-store/constants';
+import ULRs from '@/constants/constants';
 import mapData from '@/data/countries.json';
+import { useNavigate } from 'react-router-dom';
 import {
   AutocompleteInputStyled,
   AutocompleteInput,
@@ -15,17 +19,21 @@ import {
 } from './SearchInputStyled';
 
 const SearchInput = ({
-  setCountryData,
-  subscriptionCountryRooms,
+  setChatData,
   setIsSubscribed,
   setIsShowJoinBtn,
+  setIsChatVisible,
+  setParticipantsAmount,
+  subscriptionRooms,
 }) => {
+  const isDesktop = useMediaQuery({ query: device.tablet });
+  const navigate = useNavigate();
   const [selectedCountry, setSelectedCountry] = useState(null);
   const [searchedValue, setSearchedValue] = useState('');
   const [showItem, setShowItem] = useState(false);
   const autoCompleteRef = useRef(null);
-  const { responseData: dataMainCountryChat } = useFetch(
-    selectedCountry ? ULRs.getMainCountryChatByName(selectedCountry, '') : null
+  const { responseData } = useFetch(
+    selectedCountry ? ULRs.getMainCountryChatByName(selectedCountry) : null
   );
 
   const filterCountries = mapData.features.filter(name =>
@@ -33,11 +41,12 @@ const SearchInput = ({
   );
 
   useEffect(() => {
-    if (dataMainCountryChat) {
-      setCountryData(dataMainCountryChat);
+    if (responseData) {
+      setChatData(responseData);
+      setParticipantsAmount(responseData.usersCount);
       setIsSubscribed(true);
     }
-  }, [dataMainCountryChat]);
+  }, [responseData, setChatData]);
 
   const handleChange = event => {
     const { value } = event.target;
@@ -54,8 +63,7 @@ const SearchInput = ({
   const handleCountryClick = country => {
     const countryName = country.properties.ADMIN;
     setSelectedCountry(countryName);
-
-    const nameOfCountry = subscriptionCountryRooms.find(
+    const nameOfCountry = subscriptionRooms.find(
       item => item.name === countryName
     );
     if (nameOfCountry) {
@@ -66,6 +74,10 @@ const SearchInput = ({
 
     setSearchedValue(countryName);
     setShowItem(false);
+    navigate(routesPath.ROOMS);
+    if (!isDesktop) {
+      setIsChatVisible(true);
+    }
     setSearchedValue('');
   };
 
@@ -111,7 +123,7 @@ const SearchInput = ({
                   >
                     <Flag
                       loading="lazy"
-                      width="32"
+                      width="48"
                       srcSet={`https://flagcdn.com/w40/${country.properties.code}.png 2x`}
                       src={`https://flagcdn.com/w20/${country.properties.code}.png`}
                       alt={`${country.properties.ADMIN} flag`}
@@ -129,10 +141,12 @@ const SearchInput = ({
 };
 
 SearchInput.propTypes = {
-  setCountryData: PropTypes.func,
-  subscriptionCountryRooms: PropTypes.array,
+  setChatData: PropTypes.func,
   setIsSubscribed: PropTypes.func,
   setIsShowJoinBtn: PropTypes.func,
+  setIsChatVisible: PropTypes.func,
+  setParticipantsAmount: PropTypes.func,
+  subscriptionRooms: PropTypes.array,
 };
 
 export default SearchInput;

@@ -2,14 +2,19 @@ import Backdrop from '@mui/material/Backdrop';
 import Fade from '@mui/material/Fade';
 import { SignUpBtn } from '@/components/RegisterForm/RegisterForm.styled';
 import PropTypes from 'prop-types';
+import ULRs from '@/constants/constants';
+import { axiosClient } from '@/services/api';
+import { useNavigate } from 'react-router-dom';
+import { routesPath } from '@/routes/routesConfig';
 import {
   ModalWindowStyled,
   InfoModalStyled,
   ButtonClose,
   CloseIcon,
-  UserContactInfo,
+  UserContactInfoStyled,
   ModalAvatar,
   LetterAvatarStyled,
+  UserInfo,
   AboutUser,
   InfoIcon,
   ButtonBlock,
@@ -22,8 +27,47 @@ const UserInfoModal = ({
   userName = 'User name',
   userEmail = 'email@gmail.com',
   about,
+  id,
+  dataUserChats,
 }) => {
+  const navigate = useNavigate();
+
   const firstLetterOfName = userName.substr(0, 1).toUpperCase();
+
+  const checkExistingPrivateChat = companionId => {
+    const isExist = dataUserChats?.find(
+      chat => chat.companion.id === companionId
+    );
+    return isExist ? isExist.chat.id : null;
+  };
+
+  const handleCreatePrivateChat = async companionId => {
+    try {
+      const existingChatId = checkExistingPrivateChat(companionId);
+
+      if (existingChatId) {
+        navigate(routesPath.DMS, {
+          state: {
+            privateChatId: existingChatId,
+            companionObject: { id: companionId, userName, userEmail },
+          },
+        });
+      } else {
+        const response = await axiosClient.post(ULRs.createPrivateChat, {
+          companionId,
+        });
+        const privateChatId = response.data;
+        navigate(routesPath.DMS, {
+          state: {
+            privateChatId,
+            companionObject: { id: companionId, userName, userEmail },
+          },
+        });
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
   return (
     <ModalWindowStyled
@@ -44,18 +88,18 @@ const UserInfoModal = ({
           <ButtonClose onClick={handleClose}>
             <CloseIcon />
           </ButtonClose>
-          <UserContactInfo>
+          <UserContactInfoStyled>
             {avatar ? (
               <ModalAvatar />
             ) : (
               <LetterAvatarStyled>{firstLetterOfName}</LetterAvatarStyled>
             )}
 
-            <div>
+            <UserInfo>
               <h5>{userName}</h5>
               <p>{userEmail}</p>
-            </div>
-          </UserContactInfo>
+            </UserInfo>
+          </UserContactInfoStyled>
           <hr />
           <AboutUser>
             <InfoIcon />
@@ -66,7 +110,9 @@ const UserInfoModal = ({
           </AboutUser>
           <hr />
           <ButtonBlock>
-            <SignUpBtn onClick={() => {}}>Message</SignUpBtn>
+            <SignUpBtn onClick={() => handleCreatePrivateChat(id)}>
+              Message
+            </SignUpBtn>
           </ButtonBlock>
         </InfoModalStyled>
       </Fade>

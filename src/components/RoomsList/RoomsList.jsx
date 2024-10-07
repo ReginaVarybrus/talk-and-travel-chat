@@ -1,43 +1,62 @@
 import { useState, useEffect } from 'react';
 import { useOutletContext } from 'react-router-dom';
+import { useMediaQuery } from 'react-responsive';
+import { device } from '@/constants/mediaQueries.js';
 import { useFetch } from '@/hooks/useFetch.js';
-import ULRs from '@/redux-store/constants';
-import { Flag, ScrollBar } from '../SearchInput/SearchInputStyled.js';
-import { ListStyled, Text, Item, ListItems } from './RoomsListStyled';
+import ULRs from '@/constants/constants';
+import {
+  Flag,
+  ScrollBar,
+  Item,
+} from '@/components/SearchInput/SearchInputStyled.js';
+import { ListStyled, Text, ListItems } from './RoomsListStyled';
 
 const RoomsList = () => {
+  const isDesktop = useMediaQuery({ query: device.tablet });
   const [selectedCountry, setSelectedCountry] = useState(null);
-  const { responseData: dataMainCountryChat } = useFetch(
-    selectedCountry ? ULRs.getMainCountryChatByName(selectedCountry, '') : null
+
+  const { responseData } = useFetch(
+    selectedCountry ? ULRs.getMainCountryChatByName(selectedCountry) : null
   );
 
-  const { setCountryData, subscriptionCountryRooms, setIsSubscribed } =
-    useOutletContext();
+  const {
+    setChatData,
+    subscriptionRooms,
+    setIsSubscribed,
+    setIsShowJoinBtn,
+    setIsChatVisible,
+    setParticipantsAmount,
+  } = useOutletContext();
 
   useEffect(() => {
-    if (dataMainCountryChat) {
-      setCountryData(dataMainCountryChat);
+    if (responseData) {
+      setChatData(responseData);
+      setParticipantsAmount(responseData.usersCount);
       setIsSubscribed(true);
     }
-  }, [dataMainCountryChat]);
+  }, [responseData, setChatData, setIsSubscribed]);
 
   const handleOpenCountryRoom = countryName => {
     setSelectedCountry(countryName);
+    setIsShowJoinBtn(false);
+    if (!isDesktop) {
+      setIsChatVisible(true);
+    }
   };
 
   return (
     <ListStyled>
-      {subscriptionCountryRooms.length ? (
+      {subscriptionRooms.length ? (
         <ListItems>
           <ScrollBar>
-            {subscriptionCountryRooms.map(room => (
+            {subscriptionRooms.map(room => (
               <Item
                 key={room.flagCode}
                 onClick={() => handleOpenCountryRoom(room.name)}
               >
                 <Flag
                   loading="lazy"
-                  width="32"
+                  width="48"
                   srcSet={`https://flagcdn.com/w40/${room.flagCode}.png 2x`}
                   src={`https://flagcdn.com/w20/${room.flagCode}.png`}
                   alt={`${room.flagCode} flag`}

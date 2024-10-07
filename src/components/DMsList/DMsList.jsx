@@ -1,32 +1,97 @@
-import SimpleBar from 'simplebar-react';
-import avatarImage from '@/images/Avatar.png';
-import { Item, Avatar, ChatName, MessageDay } from './DMsListStyled';
-import { ListStyled, Text, ListItems } from '../RoomsList/RoomsListStyled.js';
-import 'simplebar-react/dist/simplebar.min.css';
+import { useEffect, useState } from 'react';
+import { useOutletContext, useLocation } from 'react-router-dom';
+import { useMediaQuery } from 'react-responsive';
+import { device } from '@/constants/mediaQueries.js';
+import ULRs from '@/constants/constants';
+import { useFetch } from '@/hooks/useFetch';
+import { dateStampConverter } from '@/components/utils/timeUtil.js';
+import { ScrollBar } from '@/components/SearchInput/SearchInputStyled.js';
+import {
+  ListStyled,
+  Text,
+  ListItems,
+} from '@/components/RoomsList/RoomsListStyled.js';
+import {
+  Item,
+  ChatNameStyled,
+  Avatar,
+  ChatName,
+  MessageDay,
+  BadgeStyled,
+} from './DMsListStyled';
 
 const DMsList = () => {
-  const chats = ['Anya', 'Vasya'];
+  const isDesktop = useMediaQuery({ query: device.tablet });
+  const [selectedChat, setSelectedChat] = useState(null);
+  const location = useLocation();
+  const { privateChatId, companionObject } = location.state || {};
+  const {
+    setChatData,
+    setIsSubscribed,
+    setSelectedCompanion,
+    setIsChatVisible,
+    listOfOnlineUsers,
+  } = useOutletContext();
+
+  const { responseData: dataUserChats } = useFetch(ULRs.getPrivateChats);
+
+  const { responseData: dataChat } = useFetch(
+    selectedChat ? ULRs.getChat(selectedChat) : null
+  );
+
+  useEffect(() => {
+    if (privateChatId) {
+      setSelectedChat(privateChatId);
+      setSelectedCompanion(companionObject);
+    }
+  }, [privateChatId]);
+
+  useEffect(() => {
+    if (dataChat) {
+      setChatData(dataChat);
+      setIsSubscribed(true);
+    }
+  }, [setChatData, dataChat, setIsSubscribed]);
+
+  const handleOpenChat = (chatId, companion) => {
+    setSelectedChat(chatId);
+    setSelectedCompanion(companion);
+    if (!isDesktop) {
+      setIsChatVisible(true);
+    }
+  };
 
   return (
     <ListStyled>
-      {chats?.length ? (
+      {dataUserChats?.length ? (
         <ListItems>
-          <SimpleBar style={{ maxHeight: 570 }}>
-            {chats.map(name => (
-              <Item key={name}>
-                <Avatar>
-                  <img src={avatarImage} alt="avatar" />
-                </Avatar>
-                <ChatName>
-                  <h6>{name}</h6>
-                  <p>It is trash</p>
-                </ChatName>
-                <MessageDay>
-                  <p>Thu</p>
-                </MessageDay>
-              </Item>
-            ))}
-          </SimpleBar>
+          <ScrollBar>
+            {dataUserChats.map(({ chat, companion, lastReadMessageId }) => {
+              const isOnline =
+                listOfOnlineUsers.get(companion.id.toString()) === true;
+
+              return (
+                <Item
+                  key={chat.id}
+                  onClick={() => handleOpenChat(chat.id, companion)}
+                >
+                  <ChatNameStyled>
+                    <Avatar>
+                      {companion.userName[0].toUpperCase()}
+                      {isOnline && <BadgeStyled />}
+                    </Avatar>
+                    <ChatName>
+                      <h6>{companion.userName}</h6>
+                      <p>{lastReadMessageId}</p>
+                    </ChatName>
+                  </ChatNameStyled>
+                  <MessageDay>
+                    <p>{dateStampConverter(chat.creationDate)}</p>
+                  </MessageDay>
+                </Item>
+              );
+            })}
+          </ScrollBar>
         </ListItems>
       ) : (
         <Text>

@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 import Button from '@mui/material/Button';
-
+import buttonVariants from '@/components/Buttons/BasicButton/BasicButtonTypes';
 
 export const BasicButtonLayout = styled(Button)`
 && {
@@ -11,24 +11,44 @@ export const BasicButtonLayout = styled(Button)`
     line-height: 19.6px;
     text-align: center;
     padding: 12px 24px;
+    border-radius: 8px;
+    border-top: 1px;
+    opacity: 0px;
 
     ${(props) =>
-    props.variant === 'outlined'
-      ? `
+  {
+    if (props.variant === buttonVariants.CONTAINED) {
+      return `
+          border: none;
+          color: var(--white-color);
+          background-color: var(--color-brand-blue);
+          &:hover {
+            background-color: var(--color-blue-5);
+          }
+        `;
+    }
+    if (props.variant === buttonVariants.OUTLINED) {
+      return `
           border: 1px solid var(--color-brand-blue);
           background-color: var(--white-color);
           color: var(--color-grey-8);
           &:hover {
             background-color: var(--color-blue-1);
           }
-        `
-      : `
+        `;
+    }
+    if (props.variant === buttonVariants.TRANSPARENT) {
+      return `
           border: none;
-          background-color: var(--color-brand-blue);
+          background-color: var(--white-color);
+          color: var(--color-brand-blue);
+          font-weight: 400;
           &:hover {
-            background-color: var(--color-blue-5);
+            background-color: var(--white-color);
+            font-weight: 700;
           }
-        `
-  };
+        `;
+    }
+  }}
   }
 `;

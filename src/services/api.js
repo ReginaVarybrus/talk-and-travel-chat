@@ -1,4 +1,4 @@
-import ULRs from '@/redux-store/constants';
+import ULRs from '@/constants/constants';
 import axios from 'axios';
 
 const urlToOmit = [ULRs.login, ULRs.register, ULRs.logout];
