@@ -41,28 +41,27 @@ const Chat = ({
   const userId = useSelector(getUser)?.id;
   const { id, name, chatType, country } = chatData;
   const isPrivateChat = chatType === CHAT_TYPES.PRIVATE;
+
   const [isUserTyping, setIsUserTyping] = useState(false);
   const [userNameisTyping, setUserNameisTyping] = useState('');
+
   const [messages, setMessages] = useState([]);
   const [page, setPage] = useState(0);
   const [unreadPage, setUnreadPage] = useState(0);
   const [hasMore, setHasMore] = useState(true);
   const [hasMoreUnread, setHasMoreUnread] = useState(true);
   const [unreadCount, setUnreadCount] = useState(0);
-
-  const [lastReadMessageId, setLastReadMessageId] = useState(null);
-  const [hasUnreadMessages, setHasUnreadMessages] = useState(false);
   const [unreadMessages, setUnreadMessages] = useState([]);
   const [isFetchingMore, setIsFetchingMore] = useState(false);
   const [hasScrolledToEnd, setHasScrolledToEnd] = useState(false);
   const [showNewMessagesIndicator, setShowNewMessagesIndicator] =
     useState(false);
 
-  // const previousChatIdRef = useRef(null);
   const messagesEndRef = useRef(null);
   const messageBlockRef = useRef(null);
   const isFetching = useRef(false);
   const unreadMessageRef = useRef(null);
+
   const {
     subscribeToMessages,
     subscribeToUserErrors,
@@ -101,7 +100,7 @@ const Chat = ({
       setHasMore(pageData.number + 1 < pageData.totalPages);
       return content;
     } catch (error) {
-      console.error('Error fetching messages:', error);
+      console.error('Error fetching messages:', error.message);
     } finally {
       setIsFetchingMore(false);
     }
@@ -148,14 +147,14 @@ const Chat = ({
           ...prevMessages,
           ...unreadMessagesPage,
         ]);
-        setHasUnreadMessages(true);
+
         setShowNewMessagesIndicator(true);
       }
       const { totalPages } = response.data.page;
       setHasMoreUnread(pageNumber + 1 < totalPages);
       return unreadMessagesPage;
     } catch (error) {
-      console.error('Error fetching unread messages:', error);
+      console.error('Error fetching unread messages:', error.message);
     }
   };
 
@@ -172,12 +171,6 @@ const Chat = ({
         );
         setMessages(allMessages);
 
-        if (allMessages.length > 0) {
-          const lastMessageId = allMessages[allMessages.length - 1]?.id;
-          if (lastMessageId) {
-            setLastReadMessageId(lastMessageId);
-          }
-        }
         if (fetchedUnreadMessages.length > 0) {
           setUnreadMessages(fetchedUnreadMessages);
           setShowNewMessagesIndicator(true);
@@ -208,22 +201,13 @@ const Chat = ({
       setUnreadMessages([]);
       setPage(0);
       setUnreadPage(0);
-      setHasUnreadMessages(false);
       setShowNewMessagesIndicator(false);
-
       fetchChatMessages();
-
-      // previousChatIdRef.current = id;
     }
   }, [id]);
 
   const scrollToBottom = () => {
-    console.log('Scrolling to bottom...');
     if (messageBlockRef.current) {
-      console.log(
-        'Message block height:',
-        messageBlockRef.current.scrollHeight
-      );
       messageBlockRef.current.scrollTo({
         top: messageBlockRef.current.scrollHeight,
         behavior: 'smooth',
@@ -308,23 +292,18 @@ const Chat = ({
       const observer = new IntersectionObserver(
         entries => {
           entries.forEach(entry => {
-            if (
-              entry.isIntersecting &&
-              !entry.target.classList.contains('read')
-            ) {
+            if (entry.isIntersecting) {
               const visibleMessageId = parseInt(
                 entry.target.dataset.messageId,
                 10
               );
-
-              markAsRead(visibleMessageId);
-
-              entry.target.classList.add('read');
-              setUnreadCount(prev => Math.max(prev - 1, 0));
-
-              setUnreadMessages(prevUnread =>
-                prevUnread.filter(msg => msg.id !== visibleMessageId)
-              );
+              if (unreadMessages.some(msg => msg.id === visibleMessageId)) {
+                markAsRead(visibleMessageId);
+                setUnreadCount(prev => Math.max(prev - 1, 0));
+                setUnreadMessages(prevUnread =>
+                  prevUnread.filter(msg => msg.id !== visibleMessageId)
+                );
+              }
             }
           });
         },
@@ -338,14 +317,13 @@ const Chat = ({
         const messageElement = document.querySelector(
           `[data-message-id='${message.id}']`
         );
-        // console.log('Observing message element:', messageElement);
+
         if (messageElement) {
           observer.observe(messageElement);
         }
       });
 
       return () => {
-        // console.log('Clearing IntersectionObserver');
         unreadMessages.forEach(message => {
           const messageElement = document.querySelector(
             `[data-message-id='${message.id}']`
