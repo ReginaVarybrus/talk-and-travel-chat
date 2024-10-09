@@ -49,7 +49,7 @@ const Chat = ({
   const [hasMore, setHasMore] = useState(true);
   const [hasMoreUnread, setHasMoreUnread] = useState(true);
   const [unreadCount, setUnreadCount] = useState(0);
-  const [isNewMessage, setIsNewMessage] = useState(false);
+
   const [lastReadMessageId, setLastReadMessageId] = useState(null);
   const [hasUnreadMessages, setHasUnreadMessages] = useState(false);
   const [unreadMessages, setUnreadMessages] = useState([]);
@@ -58,7 +58,7 @@ const Chat = ({
   const [showNewMessagesIndicator, setShowNewMessagesIndicator] =
     useState(false);
 
-  const previousChatIdRef = useRef(null);
+  // const previousChatIdRef = useRef(null);
   const messagesEndRef = useRef(null);
   const messageBlockRef = useRef(null);
   const isFetching = useRef(false);
@@ -183,26 +183,6 @@ const Chat = ({
           setShowNewMessagesIndicator(true);
           setUnreadCount(fetchUnreadMessages.length);
         }
-        // setTimeout(() => {
-        //   if (messageBlockRef.current && readMessages.length > 0) {
-        //     const lastReadMessageIndex = readMessages.length - 1;
-        //     const lastReadMessageElement = document.querySelector(
-        //       `[data-message-id='${readMessages[lastReadMessageIndex].id}']`
-        //     );
-        //     console.log(
-        //       'Scrolling to last read message element:',
-        //       lastReadMessageElement
-        //     );
-
-        //     // if (lastReadMessageElement) {
-        //     //   // Прокручиваем так, чтобы последние прочитанные сообщения были внизу
-        //     //   lastReadMessageElement.scrollIntoView({
-        //     //     behavior: 'auto',
-        //     //     block: 'end',
-        //     //   });
-        //     // }
-        //   }
-        // }, 0);
       } else {
         await fetchPublicMessages();
       }
@@ -220,12 +200,9 @@ const Chat = ({
       setShowNewMessagesIndicator(false);
     }
   }, [unreadMessages]);
+
   useEffect(() => {
-    let didUnmount = false;
-
     if (id) {
-      const currentChatId = previousChatIdRef.current;
-
       setHasScrolledToEnd(false);
       setMessages([]);
       setUnreadMessages([]);
@@ -234,25 +211,25 @@ const Chat = ({
       setHasUnreadMessages(false);
       setShowNewMessagesIndicator(false);
 
-      // if (
-      //   currentChatId &&
-      //   lastReadMessageId &&
-      //   currentChatId !== id &&
-      //   !didUnmount
-      // ) {
-      //   markAsRead(currentChatId);
-      // }
       fetchChatMessages();
 
-      previousChatIdRef.current = id;
+      // previousChatIdRef.current = id;
     }
-    // return () => {
-    //   didUnmount = true;
-    //   if (previousChatIdRef.current && lastReadMessageId && !didUnmount) {
-    //     markAsRead(previousChatIdRef.current);
-    //   }
-    // };
   }, [id]);
+
+  const scrollToBottom = () => {
+    console.log('Scrolling to bottom...');
+    if (messageBlockRef.current) {
+      console.log(
+        'Message block height:',
+        messageBlockRef.current.scrollHeight
+      );
+      messageBlockRef.current.scrollTo({
+        top: messageBlockRef.current.scrollHeight,
+        behavior: 'smooth',
+      });
+    }
+  };
 
   useEffect(() => {
     if (messagesEndRef.current && page === 1 && !hasScrolledToEnd) {
@@ -265,11 +242,25 @@ const Chat = ({
     if (isSubscribed && id) {
       subscribeToMessages(ULRs.subscriptionToMessages(id), newMessage => {
         setMessages(prevMessages => [...prevMessages, newMessage]);
-
-        if (newMessage.type === MESSAGE_TYPES.TEXT) {
-          setShowNewMessagesIndicator(true);
+        if (newMessage.user.id !== userId) {
+          setShowNewMessagesIndicator(false);
         }
-        setIsNewMessage(true);
+        if (newMessage.type === MESSAGE_TYPES.TEXT && messageBlockRef.current) {
+          const isAtBottom =
+            messageBlockRef.current.scrollTop +
+              messageBlockRef.current.clientHeight >=
+            messageBlockRef.current.scrollHeight - 10;
+
+          if (isAtBottom) {
+            setTimeout(() => {
+              scrollToBottom();
+            }, 100);
+            markAsRead(newMessage.id);
+          } else {
+            setUnreadMessages(prev => [...prev, newMessage]);
+            setShowNewMessagesIndicator(true);
+          }
+        }
       });
 
       if (!isPrivateChat && selectedCompanion) {
@@ -284,25 +275,9 @@ const Chat = ({
     }
   }, [id, isSubscribed, setChatData]);
 
-  const scrollToBottom = () => {
-    if (messagesEndRef.current) {
-      messagesEndRef.current.scrollIntoView({ behavior: 'smooth' });
-    }
-  };
-
-  useEffect(() => {
-    if (
-      isNewMessage &&
-      messages[messages.length - 1].type === MESSAGE_TYPES.TEXT
-    ) {
-      scrollToBottom();
-      setIsNewMessage(false);
-    }
-  }, [isNewMessage, messages]);
-
   const handleScroll = e => {
     const { scrollHeight, clientHeight, scrollTop } = e.target;
-    const atBottom = scrollTop + clientHeight >= scrollHeight - 10;
+    const atBottom = scrollTop + clientHeight >= scrollHeight - 50;
     const atTop = scrollTop === 0;
 
     if (atBottom && unreadMessages.length > 0) {
@@ -330,7 +305,6 @@ const Chat = ({
   };
   useEffect(() => {
     if (id && unreadMessages.length > 0) {
-      console.log('Setting up IntersectionObserver for unread messages');
       const observer = new IntersectionObserver(
         entries => {
           entries.forEach(entry => {
@@ -342,13 +316,12 @@ const Chat = ({
                 entry.target.dataset.messageId,
                 10
               );
-              console.log(`Marking message ${visibleMessageId} as read`);
-              markAsRead(visibleMessageId); // Патч-запрос для последнего увиденного сообщения
 
-              entry.target.classList.add('read'); // Добавляем класс для сообщения, чтобы больше не отправлять запрос для этого сообщения
-              setUnreadCount(prev => Math.max(prev - 1, 0)); // Обновляем индикатор
+              markAsRead(visibleMessageId);
 
-              // Удаляем сообщение из списка непрочитанных
+              entry.target.classList.add('read');
+              setUnreadCount(prev => Math.max(prev - 1, 0));
+
               setUnreadMessages(prevUnread =>
                 prevUnread.filter(msg => msg.id !== visibleMessageId)
               );
@@ -365,14 +338,14 @@ const Chat = ({
         const messageElement = document.querySelector(
           `[data-message-id='${message.id}']`
         );
-        console.log('Observing message element:', messageElement);
+        // console.log('Observing message element:', messageElement);
         if (messageElement) {
           observer.observe(messageElement);
         }
       });
 
       return () => {
-        console.log('Clearing IntersectionObserver');
+        // console.log('Clearing IntersectionObserver');
         unreadMessages.forEach(message => {
           const messageElement = document.querySelector(
             `[data-message-id='${message.id}']`

@@ -81,7 +81,10 @@ const MessageBar = ({
     setMessage('');
     handleStopTyping();
     clearTimeout(typingStopTimeoutRef.current);
-    scrollToBottom();
+
+    setTimeout(() => {
+      scrollToBottom();
+    }, 100);
   };
 
   const handleJoinClick = () => {
