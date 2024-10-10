@@ -261,7 +261,7 @@ const Chat = ({
 
   const handleScroll = e => {
     const { scrollHeight, clientHeight, scrollTop } = e.target;
-    const atBottom = scrollTop + clientHeight >= scrollHeight - 50;
+    const atBottom = scrollTop + clientHeight >= scrollHeight - 10;
     const atTop = scrollTop === 0;
 
     if (atBottom && unreadMessages.length > 0) {
