@@ -26,7 +26,11 @@ const NavBar = props => {
   return (
     <NavBarLayout $navBarType={$navBarType} $isvisible={isvisible}>
       <MainPageNavLeft>
-        <StyledSmallLogo />
+        <StyledSmallLogo
+          width="48px"
+          height="48px"
+          fillColor="var(--color-brand-blue)"
+        />
         <AnchorLink href="#about">About chat</AnchorLink>
         <AnchorLink href="#benefits">Benefits</AnchorLink>
       </MainPageNavLeft>

@@ -1,45 +1,51 @@
 import { useState } from 'react';
+import PropTypes from 'prop-types';
 import Backdrop from '@mui/material/Backdrop';
 import Modal from '@mui/material/Modal';
 import Fade from '@mui/material/Fade';
-
-import { Outlet } from 'react-router-dom';
+import { Outlet, useOutletContext } from 'react-router-dom';
+import SearchInput from '@/components/SearchInput/SearchInput';
+import ChatMap from '@/components/ChatMap/ChatMap';
 import { SearchBarStyled, ButtonMapOpen, MapBox } from './SearchBarStyled';
-import SearchInput from '../SearchInput/SearchInput';
-import ChatMap from '../ChatMap/ChatMap';
 
 const SearchBar = ({
-  countryChatId,
-  setCountryData,
-  subscriptionCountryRooms,
-  setSubscriptionCountryRooms,
-  isSubscribed,
+  setChatData,
+  subscriptionRooms,
   setIsSubscribed,
   setIsShowJoinBtn,
+  setSelectedCompanion,
+  setParticipantsAmount,
+  listOfOnlineUsers,
 }) => {
   const [openMap, setOpenMap] = useState(false);
   const handleOpen = () => setOpenMap(true);
   const handleClose = () => setOpenMap(false);
+  const context = useOutletContext();
+  const isChatVisible = context?.isChatVisible;
+  const setIsChatVisible = context?.setIsChatVisible;
 
   return (
-    <SearchBarStyled>
+    <SearchBarStyled $isChatVisible={isChatVisible}>
       <SearchInput
-        countryChatId={countryChatId}
-        setCountryData={setCountryData}
-        isSubscribed={isSubscribed}
+        setChatData={setChatData}
         setIsSubscribed={setIsSubscribed}
         setIsShowJoinBtn={setIsShowJoinBtn}
+        setIsChatVisible={setIsChatVisible}
+        subscriptionRooms={subscriptionRooms}
+        setParticipantsAmount={setParticipantsAmount}
       />
       <ButtonMapOpen onClick={handleOpen}>Search by map</ButtonMapOpen>
       <div>
         <Outlet
           context={{
-            countryChatId,
-            setCountryData,
-            subscriptionCountryRooms,
-            setSubscriptionCountryRooms,
-            isSubscribed,
+            setChatData,
+            subscriptionRooms,
             setIsSubscribed,
+            setIsShowJoinBtn,
+            setSelectedCompanion,
+            setIsChatVisible,
+            setParticipantsAmount,
+            listOfOnlineUsers,
           }}
         />
       </div>
@@ -65,6 +71,15 @@ const SearchBar = ({
       </Modal>
     </SearchBarStyled>
   );
+};
+
+SearchBar.propTypes = {
+  setChatData: PropTypes.func,
+  subscriptionRooms: PropTypes.array,
+  setIsSubscribed: PropTypes.func,
+  setIsShowJoinBtn: PropTypes.func,
+  setSelectedCompanion: PropTypes.func,
+  setParticipantsAmount: PropTypes.func,
 };
 
 export default SearchBar;

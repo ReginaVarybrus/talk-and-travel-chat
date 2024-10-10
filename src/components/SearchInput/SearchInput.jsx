@@ -1,9 +1,12 @@
 import { useState, useEffect, useRef } from 'react';
-import { useSelector } from 'react-redux';
-import { getUser } from '@/redux-store/selectors.js';
+import { useMediaQuery } from 'react-responsive';
+import { device } from '@/constants/mediaQueries.js';
+import { routesPath } from '@/routes/routesConfig';
+import PropTypes from 'prop-types';
 import { useFetch } from '@/hooks/useFetch.js';
-import ULRs from '@/redux-store/constants';
+import ULRs from '@/constants/constants';
 import mapData from '@/data/countries.json';
+import { useNavigate } from 'react-router-dom';
 import {
   AutocompleteInputStyled,
   AutocompleteInput,
@@ -15,17 +18,22 @@ import {
   Text,
 } from './SearchInputStyled';
 
-const SearchInput = ({ setCountryData, setIsSubscribed, setIsShowJoinBtn }) => {
+const SearchInput = ({
+  setChatData,
+  setIsSubscribed,
+  setIsShowJoinBtn,
+  setIsChatVisible,
+  setParticipantsAmount,
+  subscriptionRooms,
+}) => {
+  const isDesktop = useMediaQuery({ query: device.tablet });
+  const navigate = useNavigate();
   const [selectedCountry, setSelectedCountry] = useState(null);
   const [searchedValue, setSearchedValue] = useState('');
   const [showItem, setShowItem] = useState(false);
   const autoCompleteRef = useRef(null);
-  const userId = useSelector(getUser)?.id;
-  const { responseData: dataUserCountries } = useFetch(
-    ULRs.userCountries(userId, '')
-  );
-  const { responseData: dataMainCountryChat } = useFetch(
-    selectedCountry ? ULRs.getMainCountryChatByName(selectedCountry, '') : null
+  const { responseData } = useFetch(
+    selectedCountry ? ULRs.getMainCountryChatByName(selectedCountry) : null
   );
 
   const filterCountries = mapData.features.filter(name =>
@@ -33,11 +41,12 @@ const SearchInput = ({ setCountryData, setIsSubscribed, setIsShowJoinBtn }) => {
   );
 
   useEffect(() => {
-    if (dataMainCountryChat) {
-      setCountryData(dataMainCountryChat);
+    if (responseData) {
+      setChatData(responseData);
+      setParticipantsAmount(responseData.usersCount);
       setIsSubscribed(true);
     }
-  }, [dataMainCountryChat]);
+  }, [responseData, setChatData]);
 
   const handleChange = event => {
     const { value } = event.target;
@@ -54,8 +63,7 @@ const SearchInput = ({ setCountryData, setIsSubscribed, setIsShowJoinBtn }) => {
   const handleCountryClick = country => {
     const countryName = country.properties.ADMIN;
     setSelectedCountry(countryName);
-
-    const nameOfCountry = dataUserCountries.find(
+    const nameOfCountry = subscriptionRooms.find(
       item => item.name === countryName
     );
     if (nameOfCountry) {
@@ -66,6 +74,10 @@ const SearchInput = ({ setCountryData, setIsSubscribed, setIsShowJoinBtn }) => {
 
     setSearchedValue(countryName);
     setShowItem(false);
+    navigate(routesPath.ROOMS);
+    if (!isDesktop) {
+      setIsChatVisible(true);
+    }
     setSearchedValue('');
   };
 
@@ -106,12 +118,12 @@ const SearchInput = ({ setCountryData, setIsSubscribed, setIsShowJoinBtn }) => {
               <>
                 {filterCountries.map(country => (
                   <Item
-                    key={country.id}
+                    key={country.properties.ADMIN}
                     onClick={() => handleCountryClick(country)}
                   >
                     <Flag
                       loading="lazy"
-                      width="32"
+                      width="48"
                       srcSet={`https://flagcdn.com/w40/${country.properties.code}.png 2x`}
                       src={`https://flagcdn.com/w20/${country.properties.code}.png`}
                       alt={`${country.properties.ADMIN} flag`}
@@ -126,6 +138,15 @@ const SearchInput = ({ setCountryData, setIsSubscribed, setIsShowJoinBtn }) => {
       )}
     </AutocompleteInputStyled>
   );
+};
+
+SearchInput.propTypes = {
+  setChatData: PropTypes.func,
+  setIsSubscribed: PropTypes.func,
+  setIsShowJoinBtn: PropTypes.func,
+  setIsChatVisible: PropTypes.func,
+  setParticipantsAmount: PropTypes.func,
+  subscriptionRooms: PropTypes.array,
 };
 
 export default SearchInput;

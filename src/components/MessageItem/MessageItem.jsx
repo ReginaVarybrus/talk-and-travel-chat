@@ -1,16 +1,22 @@
-/* eslint-disable react/forbid-prop-types */
+import { useState } from 'react';
 import { useSelector } from 'react-redux';
 import { getUser } from '@/redux-store/selectors';
+import ULRs from '@/constants/constants';
+import { axiosClient } from '@/services/api';
+import { MESSAGE_TYPES } from '@/constants/messageTypes.js';
 import PropTypes from 'prop-types';
-import { timeStampConverter } from '../utils/timeUtil.js';
+import UserInfoModal from '@/components/UserInfoModal/UserInfoModal';
+import { timeStampConverter } from '@/components/utils/timeUtil.js';
+
 import {
   MessageItemStyled,
-  MessageContent,
-  Avatar,
+  MessageContentStyled,
+  LetterAvatarStyled,
   ContentMessage,
-  ContentJoin,
+  ContentJoinOrLeave,
   Time,
-} from './MessageItemStyles.js';
+  Badge,
+} from './MessageItemStyled';
 
 const MessageItem = ({
   content,
@@ -19,27 +25,76 @@ const MessageItem = ({
   date,
   type,
   isShownAvatar,
+  isOnline,
 }) => {
+  const [open, setOpen] = useState(false);
+  const [userInfo, setUserInfo] = useState({});
+  const [userChats, setUserChats] = useState([]);
   const currentUserId = useSelector(getUser)?.id;
   const time = timeStampConverter(date);
-  const firstLetterOfName = userName.substr(0, 1).toUpperCase();
   const isCurrentUser = userId === currentUserId;
+
+  if ([MESSAGE_TYPES.START_TYPING, MESSAGE_TYPES.STOP_TYPING].includes(type)) {
+    return null;
+  }
+
+  const messageTypeText = type === MESSAGE_TYPES.TEXT;
+  const messageTypeJoin = type === MESSAGE_TYPES.JOIN;
+  const messageTypeLeave = type === MESSAGE_TYPES.LEAVE;
+
+  const handleOpen = async () => {
+    if (isCurrentUser) {
+      return;
+    }
+    try {
+      const userInfoResponse = await axiosClient.get(ULRs.userInfo(userId));
+      setUserInfo(userInfoResponse.data);
+      const privateChatsResponse = await axiosClient.get(ULRs.getPrivateChats);
+      setUserChats(privateChatsResponse.data);
+      if (userInfoResponse.data.userName) {
+        setOpen(true);
+      }
+    } catch (error) {
+      console.error('Error fetching user info:', error);
+    }
+  };
+
+  const handleClose = () => setOpen(false);
 
   return (
     <MessageItemStyled $isShownAvatar={isShownAvatar}>
-      {type === 'TEXT' && userId && isShownAvatar && (
-        <Avatar>{firstLetterOfName}</Avatar>
+      {messageTypeText && userId && isShownAvatar && (
+        <LetterAvatarStyled
+          $isCurrentUser={isCurrentUser}
+          onClick={!isCurrentUser ? handleOpen : undefined}
+        >
+          {userName[0].toUpperCase()}
+          {isOnline && <Badge />}
+        </LetterAvatarStyled>
       )}
-      {type === 'TEXT' && (
-        <MessageContent
+
+      {messageTypeText && (
+        <MessageContentStyled
           $backgroundMessage={isCurrentUser}
           $isShownAvatar={isShownAvatar}
         >
           <ContentMessage>{content || `message`}</ContentMessage>
           <Time>{time || 'time'}</Time>
-        </MessageContent>
+        </MessageContentStyled>
       )}
-      {type === 'JOIN' && <ContentJoin>{content || `message`}</ContentJoin>}
+      {(messageTypeJoin || messageTypeLeave) && (
+        <ContentJoinOrLeave>{content || `message`}</ContentJoinOrLeave>
+      )}
+      <UserInfoModal
+        open={open}
+        handleClose={handleClose}
+        avatar={userInfo?.avatar}
+        userName={userInfo?.userName}
+        userEmail={userInfo?.userEmail}
+        about={userInfo?.about}
+        id={userInfo?.id}
+        dataUserChats={userChats}
+      />
     </MessageItemStyled>
   );
 };
