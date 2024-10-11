@@ -2,6 +2,7 @@ import { useState, useEffect, useRef } from 'react';
 import { useOutletContext } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { IoIosArrowDown } from 'react-icons/io';
+import debounce from 'lodash/debounce';
 import { axiosClient } from '@/services/api';
 import { IoClose } from 'react-icons/io5';
 import PropTypes from 'prop-types';
@@ -56,12 +57,13 @@ const Chat = ({
   const [hasScrolledToEnd, setHasScrolledToEnd] = useState(false);
   const [showNewMessagesIndicator, setShowNewMessagesIndicator] =
     useState(false);
+  const [isAutoScrolling, setIsAutoScrolling] = useState(false);
+  const [isFirstLoad, setIsFirstLoad] = useState(true);
 
   const messagesEndRef = useRef(null);
   const messageBlockRef = useRef(null);
   const isFetching = useRef(false);
   const unreadMessageRef = useRef(null);
-  const topMessageRef = useRef(null);
   const isFetchingRead = useRef(false);
   const isFetchingUnread = useRef(false);
 
@@ -173,10 +175,8 @@ const Chat = ({
 
     try {
       if (!isShowJoinBtn) {
-        const [readMessages, fetchedUnreadMessages] = await Promise.all([
-          fetchReadMessages(),
-          fetchUnreadMessages(),
-        ]);
+        const readMessages = await fetchReadMessages();
+        const fetchedUnreadMessages = await fetchUnreadMessages();
         console.log('Read messages:', readMessages);
         console.log('Unread messages:', fetchedUnreadMessages);
         const allMessages = [...fetchedUnreadMessages, ...readMessages].sort(
@@ -219,19 +219,31 @@ const Chat = ({
 
   const scrollToBottom = () => {
     if (messageBlockRef.current) {
+      setIsAutoScrolling(true);
       messageBlockRef.current.scrollTo({
         top: messageBlockRef.current.scrollHeight,
         behavior: 'smooth',
       });
+      setTimeout(() => {
+        setIsAutoScrolling(false);
+      }, 300);
     }
   };
-
   useEffect(() => {
-    if (messagesEndRef.current && page === 1 && !hasScrolledToEnd) {
-      messagesEndRef.current.scrollIntoView({ behavior: 'smooth' });
-      setHasScrolledToEnd(true);
+    if (messages.length > 0 && !hasScrolledToEnd) {
+      // Открываем чат сразу внизу
+      scrollToBottom();
+      setHasScrolledToEnd(true); // После скролла отмечаем, что прокрутили
     }
-  }, [messages, page, hasScrolledToEnd]);
+  }, [messages, hasScrolledToEnd]);
+
+  // useEffect(() => {
+  //   if (page === 1 && !hasScrolledToEnd && unreadMessageRef.current) {
+  //     unreadMessageRef.current.scrollIntoView({ behavior: 'smooth' });
+  //     setHasScrolledToEnd(true);
+  //     setIsFirstLoad(false);
+  //   }
+  // }, [messages, page, hasScrolledToEnd]);
 
   useEffect(() => {
     if (isSubscribed && id) {
@@ -269,64 +281,52 @@ const Chat = ({
       };
     }
   }, [id, isSubscribed, setChatData]);
+  console.log('messages:', messages);
 
-  // const handleScroll = e => {
-  //   const { scrollHeight, clientHeight, scrollTop } = e.target;
-  //   const atBottom = scrollTop + clientHeight >= scrollHeight - 10;
-  //   const atTop = scrollTop === 0;
+  const handleScroll = e => {
+    const { scrollHeight, clientHeight, scrollTop } = e.target;
+    const atBottom = scrollTop + clientHeight >= scrollHeight - 10;
+    const atTop = scrollTop === 0;
 
-  //   const nearTop = scrollTop < 300;
+    const nearTop = scrollTop < 200;
 
-  //   if (atBottom && unreadMessages.length > 0) {
-  //     setUnreadMessages([]);
-  //     setShowNewMessagesIndicator(false);
-  //   }
+    if (isAutoScrolling) return;
 
-  //   if (!isShowJoinBtn) {
-  //     if (nearTop && hasMore && !isFetching.current) {
-  //       const currentScrollHeight = e.target.scrollHeight;
-  //       fetchReadMessages(page).then(() => {
-  //         e.target.scrollTop = e.target.scrollHeight - currentScrollHeight;
-  //       });
-  //     }
-  //   } else if (nearTop && hasMore && !isFetching.current) {
-  //     const currentScrollHeight = e.target.scrollHeight;
-  //     fetchPublicMessages(page).then(() => {
-  //       e.target.scrollTop = e.target.scrollHeight - currentScrollHeight;
-  //     });
-  //   }
-
-  //   if (atBottom) {
-  //     setShowNewMessagesIndicator(false);
-  //   }
-  // };
-
-  useEffect(() => {
-    if (!hasMore || !messages.length) return;
-
-    const observer = new IntersectionObserver(
-      entries => {
-        if (entries[0].isIntersecting && hasMore && !isFetching.current) {
-          const currentScrollHeight = messageBlockRef.current.scrollHeight;
-          fetchReadMessages(page).then(() => {
-            messageBlockRef.current.scrollTop =
-              messageBlockRef.current.scrollHeight - currentScrollHeight;
-          });
-        }
-      },
-      { root: messageBlockRef.current, threshold: 0.5 }
-    );
-
-    if (topMessageRef.current) {
-      observer.observe(topMessageRef.current);
+    if (atBottom && unreadMessages.length > 0) {
+      setUnreadMessages([]);
+      setShowNewMessagesIndicator(false);
     }
 
-    return () => {
-      if (topMessageRef.current) {
-        observer.unobserve(topMessageRef.current);
+    if (!isShowJoinBtn) {
+      if (nearTop && hasMore && !isFetching.current) {
+        isFetching.current = true;
+        const currentScrollHeight = e.target.scrollHeight;
+
+        fetchReadMessages(page)
+          .then(() => {
+            e.target.scrollTop = e.target.scrollHeight - currentScrollHeight;
+          })
+          .finally(() => {
+            isFetching.current = false;
+          });
       }
-    };
-  }, [topMessageRef.current, hasMore, page, messages]);
+    } else if (nearTop && hasMore && !isFetching.current) {
+      isFetching.current = true;
+
+      const currentScrollHeight = e.target.scrollHeight;
+      fetchPublicMessages(page)
+        .then(() => {
+          e.target.scrollTop = e.target.scrollHeight - currentScrollHeight;
+        })
+        .finally(() => {
+          isFetching.current = false;
+        });
+    }
+
+    if (atBottom) {
+      setShowNewMessagesIndicator(false);
+    }
+  };
 
   useEffect(() => {
     if (id && unreadMessages.length > 0) {
@@ -394,7 +394,7 @@ const Chat = ({
         setIsChatVisible={setIsChatVisible}
         listOfOnlineUsers={listOfOnlineUsers}
       />
-      <MessageBlock ref={messageBlockRef}>
+      <MessageBlock ref={messageBlockRef} onScroll={handleScroll}>
         {isFetchingMore && <Loader size={50} />}
         {messages?.length ? (
           <MessageList
@@ -404,7 +404,6 @@ const Chat = ({
             setUserNameisTyping={setUserNameisTyping}
             listOfOnlineUsers={listOfOnlineUsers}
             lastReadMessageRef={unreadMessageRef}
-            topMessageRef={topMessageRef}
           />
         ) : (
           <NoMassegesNotification>

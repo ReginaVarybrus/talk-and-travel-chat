@@ -12,7 +12,6 @@ const MessageList = ({
   setUserNameisTyping,
   listOfOnlineUsers,
   lastReadMessageRef,
-  topMessageRef,
 }) => {
   useEffect(() => {
     messages?.forEach(message => {
@@ -64,8 +63,6 @@ const MessageList = ({
         listOfOnlineUsers.get(message.user.id.toString()) === true;
 
       const isLastReadMessage = index === sortedMessages.length - 1;
-
-      const isRefMessage = index === 3;
       return (
         <div
           key={message.id || message.creationDate}
@@ -82,7 +79,6 @@ const MessageList = ({
             type={message.type}
             isShownAvatar={isShownAvatar}
             isOnline={isOnline}
-            ref={isRefMessage ? topMessageRef : null}
           />
         </div>
       );
