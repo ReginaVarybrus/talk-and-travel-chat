@@ -7,7 +7,9 @@ import viteTsconfigPaths from 'vite-tsconfig-paths';
 import path from 'path';
 
 export default defineConfig({
-  base: process.env.NODE_ENV === 'production' ? '/talk-and-travel-chat/' : '/',
+  // base: process.env.NODE_ENV === 'production' ? '/talk-and-travel-chat/' : '/',
+  base: '/talk-and-travel-chat/',
+
   plugins: [
     react({
       babel: {
