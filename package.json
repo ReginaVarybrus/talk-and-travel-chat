@@ -41,7 +41,8 @@
   "scripts": {
     "start": "vite",
     "predeploy": "npm run build",
-    "deploy": "npm run build && copy 404.html dist\\ && gh-pages -d dist",
+    "deploy": "gh-pages -d dist",
+
     "build": "vite build",
     "preview": "vite preview",
     "lint:js": "eslint 'src/**/*.{js,jsx}'",
