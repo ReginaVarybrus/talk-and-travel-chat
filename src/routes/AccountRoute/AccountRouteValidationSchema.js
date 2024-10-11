@@ -1,5 +1,7 @@
 import * as yup from 'yup';
 
+export const ABOUT_MAX_CHAR_LIMIT = 200;
+
 export const schema = yup.object().shape({
     userName: yup
         .string()
@@ -20,7 +22,7 @@ export const schema = yup.object().shape({
         .required('the field is empty'),
     about: yup
         .string()
-        .max(200, 'test should be less then 200 symbols')
+        .max(ABOUT_MAX_CHAR_LIMIT, `this field should be less then ${ABOUT_MAX_CHAR_LIMIT} symbols`)
 });
 
 export const formFields = {

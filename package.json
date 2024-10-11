@@ -41,7 +41,8 @@
   "scripts": {
     "start": "vite",
     "predeploy": "npm run build",
-    "deploy": "gh-pages -d build",
+    "deploy": "gh-pages -d dist",
+
     "build": "vite build",
     "preview": "vite preview",
     "lint:js": "eslint 'src/**/*.{js,jsx}'",
