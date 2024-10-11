@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { forwardRef, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { getUser } from '@/redux-store/selectors';
 import ULRs from '@/constants/constants';
@@ -18,86 +18,88 @@ import {
   Badge,
 } from './MessageItemStyled';
 
-const MessageItem = ({
-  content,
-  userId,
-  userName,
-  date,
-  type,
-  isShownAvatar,
-  isOnline,
-}) => {
-  const [open, setOpen] = useState(false);
-  const [userInfo, setUserInfo] = useState({});
-  const [userChats, setUserChats] = useState([]);
-  const currentUserId = useSelector(getUser)?.id;
-  const time = timeStampConverter(date);
-  const isCurrentUser = userId === currentUserId;
+const MessageItem = forwardRef(
+  ({ content, userId, userName, date, type, isShownAvatar, isOnline }, ref) => {
+    const [open, setOpen] = useState(false);
+    const [userInfo, setUserInfo] = useState({});
+    const [userChats, setUserChats] = useState([]);
+    const currentUserId = useSelector(getUser)?.id;
+    const time = timeStampConverter(date);
+    const isCurrentUser = userId === currentUserId;
 
-  if ([MESSAGE_TYPES.START_TYPING, MESSAGE_TYPES.STOP_TYPING].includes(type)) {
-    return null;
-  }
-
-  const messageTypeText = type === MESSAGE_TYPES.TEXT;
-  const messageTypeJoin = type === MESSAGE_TYPES.JOIN;
-  const messageTypeLeave = type === MESSAGE_TYPES.LEAVE;
-
-  const handleOpen = async () => {
-    if (isCurrentUser) {
-      return;
+    if (
+      [MESSAGE_TYPES.START_TYPING, MESSAGE_TYPES.STOP_TYPING].includes(type)
+    ) {
+      return null;
     }
-    try {
-      const userInfoResponse = await axiosClient.get(ULRs.userInfo(userId));
-      setUserInfo(userInfoResponse.data);
-      const privateChatsResponse = await axiosClient.get(ULRs.getPrivateChats);
-      setUserChats(privateChatsResponse.data);
-      if (userInfoResponse.data.userName) {
-        setOpen(true);
+
+    const messageTypeText = type === MESSAGE_TYPES.TEXT;
+    const messageTypeJoin = type === MESSAGE_TYPES.JOIN;
+    const messageTypeLeave = type === MESSAGE_TYPES.LEAVE;
+
+    const handleOpen = async () => {
+      if (isCurrentUser) {
+        return;
       }
-    } catch (error) {
-      console.error('Error fetching user info:', error);
-    }
-  };
+      try {
+        const userInfoResponse = await axiosClient.get(ULRs.userInfo(userId));
+        setUserInfo(userInfoResponse.data);
+        const privateChatsResponse = await axiosClient.get(
+          ULRs.getPrivateChats
+        );
+        setUserChats(privateChatsResponse.data);
+        if (userInfoResponse.data.userName) {
+          setOpen(true);
+        }
+      } catch (error) {
+        console.error('Error fetching user info:', error);
+      }
+    };
 
-  const handleClose = () => setOpen(false);
+    const handleClose = () => setOpen(false);
 
-  return (
-    <MessageItemStyled $isShownAvatar={isShownAvatar}>
-      {messageTypeText && userId && isShownAvatar && (
-        <LetterAvatarStyled
-          $isCurrentUser={isCurrentUser}
-          onClick={!isCurrentUser ? handleOpen : undefined}
-        >
-          {userName[0].toUpperCase()}
-          {isOnline && <Badge />}
-        </LetterAvatarStyled>
-      )}
+    return (
+      <div ref={ref}>
+        <MessageItemStyled $isShownAvatar={isShownAvatar}>
+          {messageTypeText && userId && isShownAvatar && (
+            <LetterAvatarStyled
+              $isCurrentUser={isCurrentUser}
+              onClick={!isCurrentUser ? handleOpen : undefined}
+            >
+              {userName[0].toUpperCase()}
+              {isOnline && <Badge />}
+            </LetterAvatarStyled>
+          )}
 
-      {messageTypeText && (
-        <MessageContentStyled
-          $backgroundMessage={isCurrentUser}
-          $isShownAvatar={isShownAvatar}
-        >
-          <ContentMessage>{content || `message`}</ContentMessage>
-          <Time>{time || 'time'}</Time>
-        </MessageContentStyled>
-      )}
-      {(messageTypeJoin || messageTypeLeave) && (
-        <ContentJoinOrLeave>{content || `message`}</ContentJoinOrLeave>
-      )}
-      <UserInfoModal
-        open={open}
-        handleClose={handleClose}
-        avatar={userInfo?.avatar}
-        userName={userInfo?.userName}
-        userEmail={userInfo?.userEmail}
-        about={userInfo?.about}
-        id={userInfo?.id}
-        dataUserChats={userChats}
-      />
-    </MessageItemStyled>
-  );
-};
+          {messageTypeText && (
+            <MessageContentStyled
+              $backgroundMessage={isCurrentUser}
+              $isShownAvatar={isShownAvatar}
+            >
+              <ContentMessage>{content || `message`}</ContentMessage>
+              <Time>{time || 'time'}</Time>
+            </MessageContentStyled>
+          )}
+          {(messageTypeJoin || messageTypeLeave) && (
+            <ContentJoinOrLeave>{content || `message`}</ContentJoinOrLeave>
+          )}
+          <UserInfoModal
+            open={open}
+            handleClose={handleClose}
+            avatar={userInfo?.avatar}
+            userName={userInfo?.userName}
+            userEmail={userInfo?.userEmail}
+            about={userInfo?.about}
+            id={userInfo?.id}
+            dataUserChats={userChats}
+          />
+        </MessageItemStyled>
+      </div>
+    );
+  }
+);
+
+MessageItem.displayName = 'MessageItem';
 
 MessageItem.propTypes = {
   content: PropTypes.string,
