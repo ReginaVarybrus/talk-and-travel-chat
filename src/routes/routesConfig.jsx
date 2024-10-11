@@ -2,17 +2,17 @@ import { lazy } from 'react';
 import PrivateRoute from '@/routes/PrivateRoute';
 import { createBrowserRouter } from 'react-router-dom';
 
-const ROOT = import.meta.env.BASE_URL;
+const ROOT = '/talk-and-travel-chat/';
 
 export const routesPath = {
   MAIN: ROOT,
-  LOGIN: `/login`,
-  REGISTER: `/register`,
-  APP: `/app`,
-  CHAT: `/app/chat/`,
-  ROOMS: `/app/chat/rooms-chat/`,
-  DMS: `/app/chat/dms-chat/`,
-  ACCOUNT: `/app/account/`,
+  LOGIN: `${ROOT}login`,
+  REGISTER: `${ROOT}register`,
+  APP: `${ROOT}app`,
+  CHAT: `${ROOT}app/chat/`,
+  ROOMS: `${ROOT}app/chat/rooms-chat/`,
+  DMS: `${ROOT}app/chat/dms-chat/`,
+  ACCOUNT: `${ROOT}app/account/`,
 };
 
 const importComponent = {
@@ -27,67 +27,70 @@ const importComponent = {
   ERROR_COMPONENT: lazy(() => import('@/routes/Page404/Page404')),
 };
 
-export const router = createBrowserRouter([
-  {
-    path: routesPath.MAIN,
-    Component: importComponent.MAIN,
-    errorElement: importComponent.ERROR_COMPONENT,
-  },
-  {
-    path: routesPath.LOGIN,
-    Component: importComponent.LOGIN,
-  },
-  {
-    path: routesPath.REGISTER,
-    Component: importComponent.REGISTER,
-  },
-  {
-    path: routesPath.APP,
-    element: (
-      <PrivateRoute
-        component={importComponent.LAYOUT}
-        redirectTo={routesPath.LOGIN}
-      />
-    ),
-    children: [
-      {
-        path: routesPath.CHAT,
-        element: (
-          <PrivateRoute
-            component={importComponent.CHAT}
-            redirectTo={routesPath.LOGIN}
-          />
-        ),
-        children: [
-          {
-            path: routesPath.ROOMS,
-            element: (
-              <PrivateRoute
-                component={importComponent.ROOMS}
-                redirectTo={routesPath.LOGIN}
-              />
-            ),
-          },
-          {
-            path: routesPath.DMS,
-            element: (
-              <PrivateRoute
-                component={importComponent.DMS}
-                redirectTo={routesPath.LOGIN}
-              />
-            ),
-          },
-        ],
-      },
-      {
-        path: routesPath.ACCOUNT,
-        element: (
-          <PrivateRoute
-            component={importComponent.ACCOUNT}
-            redirectTo={routesPath.LOGIN}
-          />
-        ),
-      },
-    ],
-  },
-]);
+export const router = createBrowserRouter(
+  [
+    {
+      path: routesPath.MAIN,
+      Component: importComponent.MAIN,
+      errorElement: importComponent.ERROR_COMPONENT,
+    },
+    {
+      path: routesPath.LOGIN,
+      Component: importComponent.LOGIN,
+    },
+    {
+      path: routesPath.REGISTER,
+      Component: importComponent.REGISTER,
+    },
+    {
+      path: routesPath.APP,
+      element: (
+        <PrivateRoute
+          component={importComponent.LAYOUT}
+          redirectTo={routesPath.LOGIN}
+        />
+      ),
+      children: [
+        {
+          path: routesPath.CHAT,
+          element: (
+            <PrivateRoute
+              component={importComponent.CHAT}
+              redirectTo={routesPath.LOGIN}
+            />
+          ),
+          children: [
+            {
+              path: routesPath.ROOMS,
+              element: (
+                <PrivateRoute
+                  component={importComponent.ROOMS}
+                  redirectTo={routesPath.LOGIN}
+                />
+              ),
+            },
+            {
+              path: routesPath.DMS,
+              element: (
+                <PrivateRoute
+                  component={importComponent.DMS}
+                  redirectTo={routesPath.LOGIN}
+                />
+              ),
+            },
+          ],
+        },
+        {
+          path: routesPath.ACCOUNT,
+          element: (
+            <PrivateRoute
+              component={importComponent.ACCOUNT}
+              redirectTo={routesPath.LOGIN}
+            />
+          ),
+        },
+      ],
+    },
+  ],
+  { basename: '/talk-and-travel-chat' }
+);
