@@ -1,0 +1,1 @@
+const a=e=>{const t=new Date(e),n=t.getMinutes().toString().padStart(2,"0");return`${t.getHours().toString().padStart(2,"0")}:${n}`},s=e=>{const t=new Date(e),n=t.getDate(),o=t.getMonth().toString().padStart(2,"0"),r=t.getFullYear();return`${n}.${o}.${r}`};export{s as d,a as t};
