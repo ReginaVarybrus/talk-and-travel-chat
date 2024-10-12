@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useSelector } from 'react-redux';
 import { getUser } from '@/redux-store/selectors';
-import ULRs from '@/redux-store/constants';
+import ULRs from '@/constants/constants';
 import { axiosClient } from '@/services/api';
 import { MESSAGE_TYPES } from '@/constants/messageTypes.js';
 import PropTypes from 'prop-types';
@@ -15,6 +15,7 @@ import {
   ContentMessage,
   ContentJoinOrLeave,
   Time,
+  Badge,
 } from './MessageItemStyled';
 
 const MessageItem = ({
@@ -24,13 +25,13 @@ const MessageItem = ({
   date,
   type,
   isShownAvatar,
+  isOnline,
 }) => {
   const [open, setOpen] = useState(false);
   const [userInfo, setUserInfo] = useState({});
   const [userChats, setUserChats] = useState([]);
   const currentUserId = useSelector(getUser)?.id;
   const time = timeStampConverter(date);
-  const firstLetterOfName = userName.substr(0, 1).toUpperCase();
   const isCurrentUser = userId === currentUserId;
 
   if ([MESSAGE_TYPES.START_TYPING, MESSAGE_TYPES.STOP_TYPING].includes(type)) {
@@ -67,9 +68,11 @@ const MessageItem = ({
           $isCurrentUser={isCurrentUser}
           onClick={!isCurrentUser ? handleOpen : undefined}
         >
-          {firstLetterOfName}
+          {userName[0].toUpperCase()}
+          {isOnline && <Badge />}
         </LetterAvatarStyled>
       )}
+
       {messageTypeText && (
         <MessageContentStyled
           $backgroundMessage={isCurrentUser}

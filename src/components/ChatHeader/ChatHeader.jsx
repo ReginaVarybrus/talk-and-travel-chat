@@ -28,11 +28,15 @@ const ChatHeader = ({
   setSubscriptionRooms,
   setIsShowJoinBtn,
   setIsChatVisible,
+  listOfOnlineUsers,
 }) => {
   const [openModal, setOpenModal] = useState(false);
   const userName = useSelector(getUser)?.userName;
-  const showUserIsTyping = isUserTyping && userNameisTyping !== userName;
+  const showUserIsTyping = userNameisTyping !== userName && isUserTyping;
   const nameOfChat = isPrivateChat ? selectedCompanion.userName : chatName;
+  const isOnline =
+    isPrivateChat &&
+    listOfOnlineUsers.get(selectedCompanion.id.toString()) === true;
   const firstLetterOfName = selectedCompanion?.userName
     .substr(0, 1)
     .toUpperCase();
@@ -40,6 +44,10 @@ const ChatHeader = ({
   const getMessage = () => {
     if (showUserIsTyping) {
       return `${userNameisTyping} is typing...`;
+    }
+
+    if (isPrivateChat && isOnline) {
+      return 'online';
     }
 
     if (isPrivateChat) {

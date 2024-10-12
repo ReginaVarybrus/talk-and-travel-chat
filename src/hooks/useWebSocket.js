@@ -5,22 +5,13 @@ export const useWebSocket = () => {
   const stompClient = useStompClient();
   const messagesSubscription = useRef(null);
   const isSubscribedToErrors = useRef(false);
+  const statusesSubscription = useRef(null);
 
-  const subscribeToMessages = (endpoint, setCountryData) => {
-    if (stompClient && stompClient.connected && !messagesSubscription.current) {
+  const subscribeToMessages = (endpoint, handleNewMessage) => {
+    if (stompClient?.connected && !messagesSubscription.current) {
       const subscription = stompClient.subscribe(endpoint, response => {
         const receivedMessage = JSON.parse(response.body);
-
-        setCountryData(prevChatData => {
-          const updatedMessages = [
-            ...(prevChatData.messages || []),
-            receivedMessage,
-          ];
-          return {
-            ...prevChatData,
-            messages: updatedMessages,
-          };
-        });
+        handleNewMessage(receivedMessage);
       });
       messagesSubscription.current = subscription;
       return subscription;
@@ -30,14 +21,14 @@ export const useWebSocket = () => {
   const unsubscribeFromMessages = () => {
     const subscription = messagesSubscription.current;
 
-    if (stompClient && stompClient.connected && subscription) {
+    if (stompClient?.connected && subscription) {
       subscription.unsubscribe();
       messagesSubscription.current = null;
     }
   };
 
   const subscribeToUserErrors = (endpoint, setCountryData) => {
-    if (stompClient && stompClient.connected && !isSubscribedToErrors.current) {
+    if (stompClient?.connected && !isSubscribedToErrors.current) {
       stompClient.subscribe(endpoint, response => {
         const receivedError = JSON.parse(response.body);
         setCountryData(prevCountryData => {
@@ -55,8 +46,36 @@ export const useWebSocket = () => {
     }
   };
 
+  const subscribeToUsersStatuses = (endpoint, setUserStatus) => {
+    if (stompClient?.connected && !statusesSubscription.current) {
+      const subscription = stompClient.subscribe(endpoint, response => {
+        const receivedStatus = JSON.parse(response.body);
+        setUserStatus(prevMap => {
+          const updatedMap = new Map(prevMap);
+          updatedMap.set(
+            receivedStatus.userId.toString(),
+            receivedStatus.isOnline
+          );
+          return updatedMap;
+        });
+      });
+
+      statusesSubscription.current = subscription;
+      return subscription;
+    }
+  };
+
+  const unsubscribeFromUsersStatuses = () => {
+    const subscription = statusesSubscription.current;
+
+    if (stompClient?.connected && subscription) {
+      subscription.unsubscribe();
+      statusesSubscription.current = null;
+    }
+  };
+
   const sendMessage = message => {
-    if (stompClient && stompClient.connected) {
+    if (stompClient?.connected) {
       stompClient.publish({
         destination: `/chat/messages`,
         body: JSON.stringify(message),
@@ -69,7 +88,7 @@ export const useWebSocket = () => {
   };
 
   const sendEvent = (message, endpoint) => {
-    if (stompClient && stompClient.connected) {
+    if (stompClient?.connected) {
       stompClient.publish({
         destination: endpoint,
         body: JSON.stringify(message),
@@ -80,7 +99,7 @@ export const useWebSocket = () => {
   };
 
   const handleDeactivateStopmClient = () => {
-    if (stompClient && stompClient.connected) {
+    if (stompClient?.connected) {
       stompClient.deactivate();
       console.log('Stomp client deactivated on logout');
     }
@@ -91,8 +110,9 @@ export const useWebSocket = () => {
       stompClient.activate();
       console.log('Stomp client activated');
     }
+
     return () => {
-      if (stompClient && stompClient.connected) {
+      if (stompClient?.connected) {
         stompClient.deactivate();
       }
     };
@@ -103,6 +123,8 @@ export const useWebSocket = () => {
     subscribeToMessages,
     unsubscribeFromMessages,
     subscribeToUserErrors,
+    subscribeToUsersStatuses,
+    unsubscribeFromUsersStatuses,
     sendMessage,
     sendEvent,
     handleDeactivateStopmClient,

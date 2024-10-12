@@ -1,6 +1,6 @@
 import { useRef, useState } from 'react';
 import PropTypes from 'prop-types';
-import ULRs from '@/redux-store/constants';
+import ULRs from '@/constants/constants';
 import { CHAT_TYPES } from '@/constants/chatTypes';
 import { useWebSocket } from '@/hooks/useWebSocket.js';
 import BasicButton from '@/components/Buttons/BasicButton/BasicButton';
@@ -25,9 +25,10 @@ const MessageBar = ({
   isUserTyping,
   setIsUserTyping,
   setParticipantsAmount,
+  scrollToBottom,
 }) => {
   const [message, setMessage] = useState('');
-  const typingTimeoutRef = useRef(null);
+  const typingStopTimeoutRef = useRef(null);
 
   const { stompClient, sendMessage, sendEvent } = useWebSocket();
   const isMessageNotEmpty = Boolean(message?.trim().length);
@@ -54,11 +55,11 @@ const MessageBar = ({
 
     handleStartTyping();
 
-    if (typingTimeoutRef.current) {
-      clearTimeout(typingTimeoutRef.current);
+    if (typingStopTimeoutRef.current) {
+      clearTimeout(typingStopTimeoutRef.current);
     }
 
-    typingTimeoutRef.current = setTimeout(() => {
+    typingStopTimeoutRef.current = setTimeout(() => {
       handleStopTyping();
     }, 1500);
   };
@@ -79,7 +80,8 @@ const MessageBar = ({
     sendMessage(dataMessageToSend);
     setMessage('');
     handleStopTyping();
-    clearTimeout(typingTimeoutRef.current);
+    clearTimeout(typingStopTimeoutRef.current);
+    scrollToBottom();
   };
 
   const handleJoinClick = () => {

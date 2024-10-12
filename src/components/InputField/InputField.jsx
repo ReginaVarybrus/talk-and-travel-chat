@@ -28,7 +28,15 @@ styles are different then in Profile.
   to pass the data rendered for each input field.
 
 */
-const InputField = ({ props, formik, disabled, nolabel, backgroundcolor }) => {
+const InputField = ({
+  props,
+  formik,
+  disabled,
+  nolabel,
+  backgroundcolor,
+  maxLength,
+  onChange,
+}) => {
   const [showPassword, setShowPassword] = useState(false);
 
   const togglePassword = () => {
@@ -70,9 +78,10 @@ const InputField = ({ props, formik, disabled, nolabel, backgroundcolor }) => {
           name={props.general}
           type={props.type}
           disabled={disabled}
-          onChange={formik.handleChange}
+          onChange={onChange || formik.handleChange}
           value={formik.values[props.general] || ''}
           placeholder={props.placeholder}
+          maxLength={maxLength}
           $isErrorColor={formik.errors[props.general]}
           $isSuccessColor={formik.touched[props.general]}
           $backgroundcolor={backgroundcolor}

@@ -2,7 +2,7 @@ import Backdrop from '@mui/material/Backdrop';
 import Fade from '@mui/material/Fade';
 import { SignUpBtn } from '@/components/RegisterForm/RegisterForm.styled';
 import PropTypes from 'prop-types';
-import ULRs from '@/redux-store/constants';
+import ULRs from '@/constants/constants';
 import { axiosClient } from '@/services/api';
 import { useNavigate } from 'react-router-dom';
 import { routesPath } from '@/routes/routesConfig';

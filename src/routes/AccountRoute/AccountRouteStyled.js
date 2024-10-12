@@ -1,16 +1,13 @@
 import styled from 'styled-components';
-import PencilIcon from '@/images/icons/pencil_edit_icon.svg';
-import CloseIcon from '@/images/icons/cross_close_icon.svg';
 import Button from '@mui/material/Button';
-import { LuLogOut } from 'react-icons/lu';
+import { LuLogOut, LuPencil, LuX } from 'react-icons/lu';
 
 export const ProfileStyled = styled.section`
 background-color: var(--color-grey-3);
-height: 100%;
+height: 100vh;
 border-left: 1px solid var(--color-grey-6);
 
 @media (max-width: 767px) {
-    height: 100vh;
     padding: 16px 24px 0 24px;
     border-left: none;
 }
@@ -34,10 +31,10 @@ line-height: 28.8px;
 `;
 
 export const ProfileContainer = styled.div`
-width: 1045px;
+max-width: 1045px;
 background-color: var(--white-color);
 display: grid;
-grid-template-columns: 1fr 1fr 1fr;
+grid-template-columns: auto 2fr auto;
 grid-template-areas: "avatar form edit";
 margin: 32px;
 border-radius: 16px;
@@ -92,7 +89,7 @@ width: 120px;
 export const InputBlock = styled.div`
 grid-area: form;
 margin: 0px 48px;
-min-width: 605px;
+min-width: 300px;
 
 @media (max-width: 767px) {
     margin: 0px 12px;
@@ -118,13 +115,22 @@ text-align: left;
 border: 1px solid;
 border-color: transparent;
 `
+
+export const EditPencilIcon = styled(LuPencil)`
+width: 18px;
+height: 18px;
+color: var(--color-grey-9);
+`
+export const CloseIcon = styled(LuX)`
+width: 20px;
+height: 20px;
+color: var(--color-grey-9);
+`
+
 export const EditButton = styled.button`
 grid-area: edit;
 width: 18px;
 height: 18px;
-background-image: url(${props => props.$icon === 'edit' ? PencilIcon : CloseIcon});
-background-position: center;
-background-size: contain;
 background-color: var(--white-color);
 border: none;
 outline: none;
