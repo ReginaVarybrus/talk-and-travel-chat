@@ -131,11 +131,11 @@ ChatHeader.propTypes = {
     userName: PropTypes.string,
     userEmail: PropTypes.string,
   }),
-  chatId: PropTypes.number,
   isPrivateChat: PropTypes.bool,
-  setSubscriptionRooms: PropTypes.func,
   isUserTyping: PropTypes.bool,
   userNameisTyping: PropTypes.string,
+  chatId: PropTypes.number,
+  setSubscriptionRooms: PropTypes.func,
   setIsShowJoinBtn: PropTypes.func,
   setIsChatVisible: PropTypes.func,
 };

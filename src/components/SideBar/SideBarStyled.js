@@ -34,6 +34,7 @@ export const ButtonsFrame = styled.div`
 `;
 
 export const Text = styled.p`
+  text-align: center;
   line-height: 20px;
   letter-spacing: -0.011em;
   color: var(--color-grey-9);

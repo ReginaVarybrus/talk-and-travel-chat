@@ -20,3 +20,7 @@ export const Logo = styled.img`
   margin-bottom: 16px;
   stroke: var(--color-brand-blue);
 `;
+
+export const Text = styled.p`
+  text-align: center;
+`;

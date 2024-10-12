@@ -3,32 +3,43 @@ import { useStompClient } from 'react-stomp-hooks';
 
 export const useWebSocket = () => {
   const stompClient = useStompClient();
-  const messagesSubscription = useRef(null);
-  const isSubscribedToErrors = useRef(false);
-  const statusesSubscription = useRef(null);
+  const subscriptions = useRef({
+    messages: null,
+    errors: false,
+    statuses: null,
+  });
 
-  const subscribeToMessages = (endpoint, handleNewMessage) => {
-    if (stompClient?.connected && !messagesSubscription.current) {
+  // Function for checking StompClient connection
+  const isClientConnected = () => stompClient?.connected;
+
+  // General function for subscribing
+  const subscribe = (endpoint, callback, type) => {
+    if (isClientConnected() && !subscriptions.current[type]) {
       const subscription = stompClient.subscribe(endpoint, response => {
-        const receivedMessage = JSON.parse(response.body);
-        handleNewMessage(receivedMessage);
+        const parsedData = JSON.parse(response.body);
+        callback(parsedData);
       });
-      messagesSubscription.current = subscription;
+      subscriptions.current[type] = subscription;
       return subscription;
     }
   };
 
-  const unsubscribeFromMessages = () => {
-    const subscription = messagesSubscription.current;
-
-    if (stompClient?.connected && subscription) {
+  // General function for unsubscribing
+  const unsubscribe = type => {
+    const subscription = subscriptions.current[type];
+    if (isClientConnected() && subscription) {
       subscription.unsubscribe();
-      messagesSubscription.current = null;
+      subscriptions.current[type] = null;
     }
   };
 
+  const subscribeToMessages = (endpoint, handleNewMessage) =>
+    subscribe(endpoint, handleNewMessage, 'messages');
+
+  const unsubscribeFromMessages = () => unsubscribe('messages');
+
   const subscribeToUserErrors = (endpoint, setCountryData) => {
-    if (stompClient?.connected && !isSubscribedToErrors.current) {
+    if (isClientConnected() && !subscriptions.current.errors) {
       stompClient.subscribe(endpoint, response => {
         const receivedError = JSON.parse(response.body);
         setCountryData(prevCountryData => {
@@ -42,14 +53,14 @@ export const useWebSocket = () => {
           };
         });
       });
-      isSubscribedToErrors.current = true;
+      subscriptions.current.errors = true;
     }
   };
 
-  const subscribeToUsersStatuses = (endpoint, setUserStatus) => {
-    if (stompClient?.connected && !statusesSubscription.current) {
-      const subscription = stompClient.subscribe(endpoint, response => {
-        const receivedStatus = JSON.parse(response.body);
+  const subscribeToUsersStatuses = (endpoint, setUserStatus) =>
+    subscribe(
+      endpoint,
+      receivedStatus => {
         setUserStatus(prevMap => {
           const updatedMap = new Map(prevMap);
           updatedMap.set(
@@ -58,64 +69,46 @@ export const useWebSocket = () => {
           );
           return updatedMap;
         });
-      });
+      },
+      'statuses'
+    );
 
-      statusesSubscription.current = subscription;
-      return subscription;
-    }
-  };
-
-  const unsubscribeFromUsersStatuses = () => {
-    const subscription = statusesSubscription.current;
-
-    if (stompClient?.connected && subscription) {
-      subscription.unsubscribe();
-      statusesSubscription.current = null;
-    }
-  };
+  const unsubscribeFromUsersStatuses = () => unsubscribe('statuses');
 
   const sendMessage = message => {
-    if (stompClient?.connected) {
+    if (isClientConnected()) {
       stompClient.publish({
         destination: `/chat/messages`,
         body: JSON.stringify(message),
       });
     } else {
       console.error(
-        'MESSAGE.Stomp client is not connected or no current room.'
+        'MESSAGE.Stomp client is not connected or no current chat.'
       );
     }
   };
 
   const sendEvent = (message, endpoint) => {
-    if (stompClient?.connected) {
+    if (isClientConnected()) {
       stompClient.publish({
         destination: endpoint,
         body: JSON.stringify(message),
       });
     } else {
-      console.error('EVENT.Stomp client is not connected or no current room.');
+      console.error('EVENT.Stomp client is not connected or no current chat.');
     }
   };
 
   const handleDeactivateStopmClient = () => {
-    if (stompClient?.connected) {
+    if (isClientConnected()) {
       stompClient.deactivate();
-      console.log('Stomp client deactivated on logout');
     }
   };
 
   useEffect(() => {
-    if (stompClient && !stompClient.connected) {
+    if (stompClient && !isClientConnected()) {
       stompClient.activate();
-      console.log('Stomp client activated');
     }
-
-    return () => {
-      if (stompClient?.connected) {
-        stompClient.deactivate();
-      }
-    };
   }, [stompClient]);
 
   return {

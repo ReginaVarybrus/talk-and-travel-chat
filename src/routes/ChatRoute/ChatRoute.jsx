@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { useOutletContext } from 'react-router-dom';
 import { useFetch } from '@/hooks/useFetch.js';
 import ULRs from '@/constants/constants';
 import SearchBar from '@/components/SearchBar/SearchBar';
@@ -22,6 +23,10 @@ const ChatRoute = () => {
     subscribeToUsersStatuses,
     unsubscribeFromUsersStatuses,
   } = useWebSocket();
+
+  const context = useOutletContext();
+  const isChatVisible = context?.isChatVisible;
+  const setIsChatVisible = context?.setIsChatVisible;
 
   useEffect(() => {
     if (responseData) {
@@ -76,6 +81,8 @@ const ChatRoute = () => {
         setSelectedCompanion={setSelectedCompanion}
         setParticipantsAmount={setParticipantsAmount}
         listOfOnlineUsers={listOfOnlineUsers}
+        isChatVisible={isChatVisible}
+        setIsChatVisible={setIsChatVisible}
       />
 
       <Chat
@@ -90,6 +97,8 @@ const ChatRoute = () => {
         participantsAmount={participantsAmount}
         setParticipantsAmount={setParticipantsAmount}
         listOfOnlineUsers={listOfOnlineUsers}
+        isChatVisible={isChatVisible}
+        setIsChatVisible={setIsChatVisible}
       />
     </ChatRouteStyled>
   );
