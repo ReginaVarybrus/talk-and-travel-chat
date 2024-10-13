@@ -58,7 +58,6 @@ const Chat = ({
   const [showNewMessagesIndicator, setShowNewMessagesIndicator] =
     useState(false);
   const [isAutoScrolling, setIsAutoScrolling] = useState(false);
-  const [isFirstLoad, setIsFirstLoad] = useState(true);
 
   const messagesEndRef = useRef(null);
   const messageBlockRef = useRef(null);
@@ -177,8 +176,6 @@ const Chat = ({
       if (!isShowJoinBtn) {
         const readMessages = await fetchReadMessages();
         const fetchedUnreadMessages = await fetchUnreadMessages();
-        console.log('Read messages:', readMessages);
-        console.log('Unread messages:', fetchedUnreadMessages);
         const allMessages = [...fetchedUnreadMessages, ...readMessages].sort(
           (a, b) => new Date(a.creationDate) - new Date(b.creationDate)
         );
@@ -231,19 +228,10 @@ const Chat = ({
   };
   useEffect(() => {
     if (messages.length > 0 && !hasScrolledToEnd) {
-      // Открываем чат сразу внизу
       scrollToBottom();
-      setHasScrolledToEnd(true); // После скролла отмечаем, что прокрутили
+      setHasScrolledToEnd(true);
     }
   }, [messages, hasScrolledToEnd]);
-
-  // useEffect(() => {
-  //   if (page === 1 && !hasScrolledToEnd && unreadMessageRef.current) {
-  //     unreadMessageRef.current.scrollIntoView({ behavior: 'smooth' });
-  //     setHasScrolledToEnd(true);
-  //     setIsFirstLoad(false);
-  //   }
-  // }, [messages, page, hasScrolledToEnd]);
 
   useEffect(() => {
     if (isSubscribed && id) {
@@ -281,15 +269,13 @@ const Chat = ({
       };
     }
   }, [id, isSubscribed, setChatData]);
-  console.log('messages:', messages);
 
-  const handleScroll = e => {
+  const handleScroll = debounce(e => {
     const { scrollHeight, clientHeight, scrollTop } = e.target;
     const atBottom = scrollTop + clientHeight >= scrollHeight - 10;
-    const atTop = scrollTop === 0;
-
     const nearTop = scrollTop < 200;
 
+    if (isFetching.current) return;
     if (isAutoScrolling) return;
 
     if (atBottom && unreadMessages.length > 0) {
@@ -314,6 +300,7 @@ const Chat = ({
       isFetching.current = true;
 
       const currentScrollHeight = e.target.scrollHeight;
+
       fetchPublicMessages(page)
         .then(() => {
           e.target.scrollTop = e.target.scrollHeight - currentScrollHeight;
@@ -326,7 +313,7 @@ const Chat = ({
     if (atBottom) {
       setShowNewMessagesIndicator(false);
     }
-  };
+  }, 300);
 
   useEffect(() => {
     if (id && unreadMessages.length > 0) {

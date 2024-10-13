@@ -84,7 +84,7 @@ const MessageBar = ({
 
     setTimeout(() => {
       scrollToBottom();
-    }, 100);
+    }, 500);
   };
 
   const handleJoinClick = () => {
