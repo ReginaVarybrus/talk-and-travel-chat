@@ -43,7 +43,7 @@ const LoginForm = () => {
     validateOnChange: false,
     onSubmit: async (values, { resetForm }) => {
       await dispatch(logIn(values));
-      navigate(routesPath.ROOMS);
+      navigate(routesPath.CHAT);
       resetForm();
     },
   });

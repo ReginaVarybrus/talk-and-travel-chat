@@ -56,6 +56,8 @@ export const logOut = createAsyncThunk(
       await axiosClient.post(ULRs.logout);
       token.unset();
       dispatch(clearUser());
+      console.log('logout ended');
+
     } catch (error) {
       throw new Error(error.message);
     }

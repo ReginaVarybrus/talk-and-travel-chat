@@ -11,14 +11,17 @@ const axiosClient = axios.create({
 });
 
 axiosClient.interceptors.request.use(
-  config => {
+  config =>
+  {
     const authData = JSON.parse(localStorage.getItem('persist:auth'));
     const token = authData ? authData?.token?.replace(/"/g, '') : null;
     const isAuthUrl = urlToOmit.includes(config.url);
 
     if (!isAuthUrl && token) {
       config.headers.Authorization = `Bearer ${token}`;
+      console.log('we are adding token', config.url, 'and the token is:', token);
     }
+    console.log('we are NOT adding token', config.url);
 
     return config;
   },
@@ -26,10 +29,12 @@ axiosClient.interceptors.request.use(
 );
 
 const token = {
-  set(tokenValue) {
+  set(tokenValue)
+  {
     axiosClient.defaults.headers.common.Authorization = `Bearer ${tokenValue}`;
   },
-  unset() {
+  unset()
+  {
     delete axiosClient.defaults.headers.common.Authorization;
   },
 };

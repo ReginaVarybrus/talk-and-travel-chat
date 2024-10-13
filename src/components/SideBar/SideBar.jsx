@@ -36,16 +36,16 @@ const SideBar = () => {
     navigate(routesPath.DMS);
   };
 
-  const handleLogOut = () => {
-    dispatch(logOut())
-      .then(() => {
-        navigate(routesPath.MAIN);
-      })
-      .catch(error => {
-        console.error('Logout failed:', error.message);
-      });
-
-    handleDeactivateStopmClient();
+  const handleLogOut = async () => {
+    try {
+      await dispatch(logOut());
+      console.log('logout dispatched');
+      handleDeactivateStopmClient();
+      console.log('moving to main');
+      // navigate(routesPath.MAIN);
+    } catch (error) {
+      console.error('Logout failed:', error.message);
+    }
   };
 
   return (
