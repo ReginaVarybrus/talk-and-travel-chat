@@ -1,7 +1,7 @@
 import ULRs from '@/constants/constants';
 import axios from 'axios';
 
-const urlToOmit = [ULRs.login, ULRs.register, ULRs.logout];
+const urlToOmit = [ULRs.login, ULRs.register];
 
 const axiosClient = axios.create({
   baseURL: `${import.meta.env.VITE_APP_API_URL}/api/`,
@@ -19,10 +19,9 @@ axiosClient.interceptors.request.use(
 
     if (!isAuthUrl && token) {
       config.headers.Authorization = `Bearer ${token}`;
-      console.log('we are adding token', config.url, 'and the token is:', token);
+      return config;
     }
-    console.log('we are NOT adding token', config.url);
-
+    delete config.headers.Authorization;
     return config;
   },
   error => Promise.reject(error)
