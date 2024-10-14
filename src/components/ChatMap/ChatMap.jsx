@@ -41,8 +41,8 @@ const ChatMap = ({ closeMap }) => {
     layer.on({
       click: e => {
         const data = {
-          name: e.target.feature.properties.ADMIN,
-          flagCode: e.target.feature.properties.code,
+          name: e.target.properties.admin,
+          flagCode: e.target.properties.code,
         };
         setSelectedCountry(data.name);
       },
@@ -68,7 +68,7 @@ const ChatMap = ({ closeMap }) => {
       <MapWrapper zoom={2.3} center={[40, 0]}>
         <GeoJSON
           style={countryStyle}
-          data={mapData.features}
+          data={mapData}
           onEachFeature={onEachCountry}
         />
         <ShowCountry>

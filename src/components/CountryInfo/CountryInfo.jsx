@@ -103,9 +103,9 @@ const CountryInfo = ({
     return null;
   }
 
-  const countryData = mapData.features.find(
+  const countryData = mapData.find(
     country =>
-      country.properties.ADMIN.toLowerCase() === countryName.toLowerCase()
+      country.properties.admin.toLowerCase() === countryName.toLowerCase()
   );
 
   const hasParticipants =
@@ -128,7 +128,7 @@ const CountryInfo = ({
             loading="lazy"
             srcSet={`https://flagcdn.com/w40/${countryData.properties.code}.png 2x`}
             src={`https://flagcdn.com/w20/${countryData.properties.code}.png`}
-            alt={`${countryData.properties.ADMIN} flag`}
+            alt={`${countryData.properties.admin} flag`}
           />
           <InfoBoxStyled>
             <h5>{countryName}</h5>
