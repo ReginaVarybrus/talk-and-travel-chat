@@ -23,8 +23,8 @@ const SearchInput = ({
   setIsSubscribed,
   setIsShowJoinBtn,
   setIsChatVisible,
-  setParticipantsAmount,
   subscriptionRooms,
+  setParticipantsAmount,
 }) => {
   const isDesktop = useMediaQuery({ query: device.tablet });
   const navigate = useNavigate();
@@ -147,8 +147,8 @@ SearchInput.propTypes = {
   setIsSubscribed: PropTypes.func,
   setIsShowJoinBtn: PropTypes.func,
   setIsChatVisible: PropTypes.func,
-  setParticipantsAmount: PropTypes.func,
   subscriptionRooms: PropTypes.array,
+  setParticipantsAmount: PropTypes.func,
 };
 
 export default SearchInput;

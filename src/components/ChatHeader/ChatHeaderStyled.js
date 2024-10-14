@@ -18,11 +18,14 @@ export const ChatHeaderStyled = styled.header`
 `;
 
 export const MobileHeaderStyled = styled.div`
+  position: sticky;
+  top: 0;
   display: flex;
   justify-content: center;
   min-height: 67px;
   align-items: center;
   padding: 0 24px;
+  z-index: 1000;
 
   p {
     font-size: 14px;

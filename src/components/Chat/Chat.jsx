@@ -1,5 +1,4 @@
 import { useState, useEffect, useRef } from 'react';
-import { useOutletContext } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { IoIosArrowDown } from 'react-icons/io';
 import debounce from 'lodash/debounce';
@@ -30,7 +29,6 @@ const Chat = ({
   setChatData,
   setSubscriptionRooms,
   isSubscribed,
-  setIsSubscribed,
   isShowJoinBtn,
   setIsShowJoinBtn,
   selectedCompanion,
@@ -38,6 +36,8 @@ const Chat = ({
   participantsAmount,
   setParticipantsAmount,
   listOfOnlineUsers,
+  isChatVisible,
+  setIsChatVisible,
 }) => {
   const userId = useSelector(getUser)?.id;
   const { id, name, chatType, country } = chatData;
@@ -71,10 +71,6 @@ const Chat = ({
     subscribeToUserErrors,
     unsubscribeFromMessages,
   } = useWebSocket();
-
-  const context = useOutletContext();
-  const isChatVisible = context?.isChatVisible;
-  const setIsChatVisible = context?.setIsChatVisible;
 
   const markAsRead = async messageId => {
     try {
@@ -387,7 +383,6 @@ const Chat = ({
           <MessageList
             messages={messages}
             setIsUserTyping={setIsUserTyping}
-            userNameisTyping={userNameisTyping}
             setUserNameisTyping={setUserNameisTyping}
             listOfOnlineUsers={listOfOnlineUsers}
             lastReadMessageRef={unreadMessageRef}
@@ -427,7 +422,6 @@ const Chat = ({
         setSubscriptionRooms={setSubscriptionRooms}
         isShowJoinBtn={isShowJoinBtn}
         setIsShowJoinBtn={setIsShowJoinBtn}
-        setIsSubscribed={setIsSubscribed}
         isUserTyping={isUserTyping}
         setIsUserTyping={setIsUserTyping}
         setParticipantsAmount={setParticipantsAmount}
@@ -465,6 +459,8 @@ Chat.propTypes = {
   setSelectedCompanion: PropTypes.func,
   participantsAmount: PropTypes.number,
   setParticipantsAmount: PropTypes.func,
+  isChatVisible: PropTypes.bool,
+  setIsChatVisible: PropTypes.func,
 };
 
 export default Chat;
