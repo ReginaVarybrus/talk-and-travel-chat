@@ -62,24 +62,43 @@ export const BadgeStyled = styled.div`
 export const ChatName = styled.div`
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
+  justify-content: center;
+  gap: 8px;
   width: 116px;
   height: 50px;
+  h6 {
+    font-size: 18px;
+    font-weight: 400;
+    width: 100px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
   & > p {
     color: var(--color-grey-9);
+    font-size: 14px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
   @media ${device.laptop} {
     width: 156px;
   }
 `;
 
-export const MessageDay = styled.div`
+export const NameAndDayBox = styled.div`
   display: flex;
-  align-items: flex-start;
-  justify-content: flex-end;
-  width: 40px;
-  height: 50px;
+  width: 208px;
+  justify-content: space-between;
+`;
+export const MessageDay = styled.div`
+  // display: flex;
+  // align-items: flex-start;
+  // justify-content: flex-end;
+  // width: 40px;
+  // height: 50px;
   & > p {
+    font-size: 14px;
     color: var(--color-grey-9);
   }
 `;
