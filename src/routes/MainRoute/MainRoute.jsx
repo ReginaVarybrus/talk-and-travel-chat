@@ -62,7 +62,7 @@ const bubbleData = [
   {
     marginbottom: '0',
     left: '0',
-    text: 'Connect anytime, from your laptop or phone',
+    text: 'Connect anytime, from your laptop or phone.',
   },
 ];
 

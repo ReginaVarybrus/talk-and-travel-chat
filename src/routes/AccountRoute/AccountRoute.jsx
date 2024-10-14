@@ -18,6 +18,8 @@ import {
   InputBlock,
   ProfileForm,
   TextAbout,
+  EditPencilIcon,
+  CloseIcon,
   EditButton,
   ChoiceButtonBlock,
   LogoutButton,
@@ -31,6 +33,7 @@ import {
 } from '@/components/InputField/InputFieldStyled';
 
 import {
+  ABOUT_MAX_CHAR_LIMIT,
   schema,
   formFields,
 } from '@/routes/AccountRoute/AccountRouteValidationSchema';
@@ -81,6 +84,14 @@ const AccountRoute = () => {
   const cancelEdit = () => {
     formik.setValues(user);
     setEditMode(false);
+  };
+
+  /* On-fligth validation of ABOUT field to prevent user
+  from typing any symbols above maximum lenght set in scheme  */
+  const handleChange = e => {
+    if (e.target.value.length <= ABOUT_MAX_CHAR_LIMIT) {
+      formik.handleChange(e);
+    }
   };
 
   useEffect(() => {
@@ -143,6 +154,8 @@ const AccountRoute = () => {
                   disabled={!editMode}
                   nolabel="false"
                   backgroundcolor="var(--color-white)"
+                  onChange={handleChange}
+                  maxLength={ABOUT_MAX_CHAR_LIMIT}
                 />
               ) : (
                 <InputFieldStyled>
@@ -170,10 +183,9 @@ const AccountRoute = () => {
             </ProfileForm>
           )}
         </InputBlock>
-        <EditButton
-          onClick={editMode ? cancelEdit : toggleEditMode}
-          $icon={editMode ? 'close' : 'edit'}
-        />
+        <EditButton onClick={editMode ? cancelEdit : toggleEditMode}>
+          {editMode ? <CloseIcon /> : <EditPencilIcon />}
+        </EditButton>
       </ProfileContainer>
       {!editMode && (
         <LogoutButton onClick={handleLogOut}>
