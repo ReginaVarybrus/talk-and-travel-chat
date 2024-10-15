@@ -12,6 +12,7 @@ import {
   ListItems,
   UnreadMessagesCount,
   ChatNameBox,
+  ChatName,
 } from './RoomsListStyled';
 
 const RoomsList = () => {
@@ -66,10 +67,14 @@ const RoomsList = () => {
                     src={`https://flagcdn.com/w20/${room.country.flagCode}.png`}
                     alt={`${room.country.flagCode} flag`}
                   />
-                  <p>{room.name}</p>
+                  <ChatName $isActive={room.name === selectedCountry}>
+                    {room.name}
+                  </ChatName>
                 </ChatNameBox>
                 {room.unreadMessagesCount > 0 && (
-                  <UnreadMessagesCount>
+                  <UnreadMessagesCount
+                    $isActive={room.name === selectedCountry}
+                  >
                     {room.unreadMessagesCount}
                   </UnreadMessagesCount>
                 )}

@@ -20,6 +20,7 @@ import {
   NameAndDayBox,
   MessageAndCountBox,
   UnreadMessagesCount,
+  CompanionName,
 } from './DMsListStyled';
 
 const DMsList = () => {
@@ -40,7 +41,7 @@ const DMsList = () => {
   const { responseData: dataChat } = useFetch(
     selectedChat ? ULRs.getChat(selectedChat) : null
   );
-
+  console.log('selectedChat', selectedChat);
   useEffect(() => {
     if (privateChatId) {
       setSelectedChat(privateChatId);
@@ -76,7 +77,7 @@ const DMsList = () => {
                 <Item
                   key={chat.id}
                   onClick={() => handleOpenChat(chat.id, companion)}
-                  $isActive={chat.id === selectedChat.id}
+                  $isActive={selectedChat && chat.id === selectedChat}
                 >
                   <ChatNameStyled>
                     <Avatar>
@@ -85,7 +86,11 @@ const DMsList = () => {
                     </Avatar>
                     <ChatName>
                       <NameAndDayBox>
-                        <h6>{companion.userName}</h6>
+                        <CompanionName
+                          $isActive={selectedChat && chat.id === selectedChat}
+                        >
+                          {companion.userName}
+                        </CompanionName>
                         <p>
                           {lastMessage &&
                             dateStampConverter(lastMessage.creationDate)}
@@ -94,7 +99,9 @@ const DMsList = () => {
                       <MessageAndCountBox>
                         <p>{lastMessage && lastMessage.content}</p>
                         {chat.unreadMessagesCount > 0 && (
-                          <UnreadMessagesCount>
+                          <UnreadMessagesCount
+                            $isActive={selectedChat && chat.id === selectedChat}
+                          >
                             {chat.unreadMessagesCount}
                           </UnreadMessagesCount>
                         )}

@@ -13,6 +13,8 @@ export const UnreadMessagesCount = styled.div`
   justify-content: center;
   align-items: center;
   flex-shrink: 0;
+  background: ${({ $isActive }) =>
+    $isActive ? 'var(--white-color)' : 'var(--color-blue-1)'};
 
   @media ${device.tablet} {
     width: 30px;
@@ -70,14 +72,15 @@ export const ListItems = styled.ul`
 export const ChatNameBox = styled.div`
   display: flex;
   align-items: center;
-  p {
-    font-size: 18px;
-    font-weight: ${({ $isActive }) => ($isActive ? '600' : '400')};
-  }
 `;
 
 export const Flag = styled.img`
   width: 32px;
   height: 24px;
   padding-right: 12px;
+`;
+
+export const ChatName = styled.p`
+  font-size: 18px;
+  font-weight: ${({ $isActive }) => ($isActive ? '600' : '400')};
 `;

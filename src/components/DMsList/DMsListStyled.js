@@ -2,7 +2,6 @@ import styled from 'styled-components';
 import { device } from '@/constants/mediaQueries';
 
 export const UnreadMessagesCount = styled.div`
-  background: var(--color-blue-1);
   border-radius: 50px;
   color: var(--color-dark);
   font-size: 12px;
@@ -13,6 +12,8 @@ export const UnreadMessagesCount = styled.div`
   justify-content: center;
   align-items: center;
   flex-shrink: 0;
+  background: ${({ $isActive }) =>
+    $isActive ? 'var(--color-blue-1)' : 'var(--white-color)'};
 
   @media ${device.tablet} {
     width: 30px;
@@ -102,16 +103,6 @@ export const NameAndDayBox = styled.div`
   justify-content: space-between;
   align-items: center;
 
-  h6 {
-    flex-grow: 1;
-    margin-right: 8px;
-    font-size: 18px;
-    font-weight: ${({ $isActive }) => ($isActive ? '600' : '400')};
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-  }
-
   p {
     font-size: 14px;
     font-weight: 400;
@@ -119,6 +110,16 @@ export const NameAndDayBox = styled.div`
     color: var(--color-grey-9);
     white-space: nowrap;
   }
+`;
+
+export const CompanionName = styled.h6`
+  flex-grow: 1;
+  margin-right: 8px;
+  font-size: 18px;
+  font-weight: ${({ $isActive }) => ($isActive ? '600' : '400')};
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 `;
 
 export const MessageAndCountBox = styled.div`
