@@ -1,8 +1,7 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import PropTypes from 'prop-types';
-import { useSelector } from 'react-redux';
-import { getUser } from '@/redux-store/selectors';
-import { useWebSocket } from '@/hooks/useWebSocket.js';
+import { useFetch } from '@/hooks/useFetch.js';
+import ULRs from '@/constants/constants';
 import { GeoJSON } from 'react-leaflet';
 import mapData from '@/data/countries.json';
 import BasicButton from '@/components/Buttons/BasicButton/BasicButton';
@@ -10,8 +9,8 @@ import 'leaflet/dist/leaflet.css';
 
 import {
   ChatMapStyled,
-  MapWrapper,
-  ShowCountry,
+  MapStyled,
+  ShowCountryStyled,
   CountryName,
 } from './ChatMapStyled';
 
@@ -34,23 +33,19 @@ const countryStyle = {
   weight: 1,
 };
 
-const ChatMap = ({ openMap, closeMap, onCountryRoomDataReceived }) => {
+const ChatMap = ({
+  openMap,
+  closeMap,
+  setChatData,
+  setParticipantsAmount,
+  setIsSubscribed,
+  subscriptionRooms,
+  setIsShowJoinBtn,
+}) => {
   const [selectedCountry, setSelectedCountry] = useState(null);
-  const [countryFlagCode, setCountryFlagCode] = useState(null);
-  const userId = useSelector(getUser)?.id;
-
-  const { stompClient, subscribeToCountryRoom, openCountryRoom } =
-    useWebSocket();
-
-  useEffect(() => {
-    if (stompClient && selectedCountry) {
-      subscribeToCountryRoom(
-        userId,
-        selectedCountry,
-        onCountryRoomDataReceived
-      );
-    }
-  }, [stompClient, selectedCountry]);
+  const { responseData } = useFetch(
+    selectedCountry ? ULRs.getMainCountryChatByName(selectedCountry) : null
+  );
 
   const onEachCountry = (country, layer) => {
     const colorIndex = Math.floor(Math.random() * color.length);
@@ -59,11 +54,9 @@ const ChatMap = ({ openMap, closeMap, onCountryRoomDataReceived }) => {
     layer.on({
       click: e => {
         const data = {
-          name: e.target.properties.admin,
-          flagCode: e.target.properties.code,
+          name: e.target.feature.properties.admin,
         };
         setSelectedCountry(data.name);
-        setCountryFlagCode(data.flagCode);
       },
       mouseover: e => {
         e.target.setStyle({
@@ -78,28 +71,35 @@ const ChatMap = ({ openMap, closeMap, onCountryRoomDataReceived }) => {
     });
   };
 
-  const handleJoinClick = () => {
-    const dataToSend = {
-      selectedCountry,
-      countryFlagCode,
-      userId,
-    };
-    console.log('map data to send', dataToSend);
-    console.log('country data received in map', onCountryRoomDataReceived);
-    openCountryRoom(dataToSend);
+  const handleOpenClick = () => {
+    const nameOfCountry = subscriptionRooms.find(
+      item => item.name === selectedCountry
+    );
+    if (nameOfCountry) {
+      setIsShowJoinBtn(false);
+    } else {
+      setIsShowJoinBtn(true);
+    }
+
+    if (responseData) {
+      setChatData(responseData);
+      setParticipantsAmount(responseData.usersCount);
+      setIsSubscribed(true);
+    }
+
     closeMap();
   };
 
   return (
     <ChatMapStyled>
-      <MapWrapper zoom={2.3} center={[40, 0]} inert={!openMap}>
+      <MapStyled zoom={2.3} center={[40, 0]} inert={!openMap}>
         <GeoJSON
           style={countryStyle}
           data={mapData}
           onEachFeature={onEachCountry}
         />
         {selectedCountry && (
-          <ShowCountry>
+          <ShowCountryStyled>
             <CountryName>{selectedCountry}</CountryName>
             <BasicButton
               variant="contained"
@@ -107,12 +107,12 @@ const ChatMap = ({ openMap, closeMap, onCountryRoomDataReceived }) => {
               sx={{
                 marginTop: '12px',
               }}
-              text="Join"
-              handleClick={handleJoinClick}
+              text="Open chat"
+              handleClick={handleOpenClick}
             />
-          </ShowCountry>
+          </ShowCountryStyled>
         )}
-      </MapWrapper>
+      </MapStyled>
     </ChatMapStyled>
   );
 };
@@ -120,6 +120,11 @@ const ChatMap = ({ openMap, closeMap, onCountryRoomDataReceived }) => {
 ChatMap.propTypes = {
   openMap: PropTypes.bool,
   closeMap: PropTypes.func,
+  setChatData: PropTypes.func,
+  setParticipantsAmount: PropTypes.func,
+  setIsSubscribed: PropTypes.func,
+  subscriptionRooms: PropTypes.array,
+  setIsShowJoinBtn: PropTypes.func,
 };
 
 export default ChatMap;

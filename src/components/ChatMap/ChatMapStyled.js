@@ -9,12 +9,12 @@ export const ChatMapStyled = styled.div`
   justify-content: center;
 `;
 
-export const MapWrapper = styled(MapContainer)`
+export const MapStyled = styled(MapContainer)`
   width: 90vw;
   height: 90vh;
 `;
 
-export const ShowCountry = styled.div`
+export const ShowCountryStyled = styled.div`
   display: flex;
   flex-direction: column;
   position: absolute;
@@ -27,6 +27,7 @@ export const ShowCountry = styled.div`
   background: var(--color-blue-1);
   border-radius: 16px;
   border: 1px solid var(--color-blue-4);
+  z-index: 410;
   @media ${device.tablet} {
     width: 220px;
   }

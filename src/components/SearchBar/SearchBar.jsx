@@ -67,7 +67,11 @@ const SearchBar = ({
             <ChatMap
               openMap={openMap}
               closeMap={handleClose}
-              onCountryRoomDataReceived={onCountryRoomDataReceived}
+              setChatData={setChatData}
+              setParticipantsAmount={setParticipantsAmount}
+              setIsSubscribed={setIsSubscribed}
+              subscriptionRooms={subscriptionRooms}
+              setIsShowJoinBtn={setIsShowJoinBtn}
             />
           </MapBox>
         </Fade>
