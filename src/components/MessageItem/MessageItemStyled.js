@@ -50,6 +50,7 @@ export const ContentMessage = styled.p`
   text-align: start;
   font-size: 14px;
   word-break: break-all;
+  white-space: pre-wrap;
   color: var(--color-dark);
 
   @media ${device.tablet} {

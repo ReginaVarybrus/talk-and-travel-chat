@@ -67,13 +67,15 @@ const MessageBar = ({
   const handleSubmit = e => {
     e.preventDefault();
 
-    if (!stompClient) {
-      console.error('Cannot send message: WebSocket not connected');
+    if (!stompClient || !isMessageNotEmpty) {
+      console.error(
+        'Cannot send message: WebSocket not connected or message is empty'
+      );
       return;
     }
 
     const dataMessageToSend = {
-      content: message,
+      content: message.trim(),
       chatId,
     };
 
@@ -118,7 +120,11 @@ const MessageBar = ({
             aria-label="empty textarea"
             placeholder="Type here"
             value={message}
-            onKeyUp={e => e.key === 'Enter' && handleSubmit(e)}
+            onKeyUp={e => {
+              if (e.key === 'Enter' && !e.shiftKey && isMessageNotEmpty) {
+                handleSubmit(e);
+              }
+            }}
             onChange={handleChange}
             maxLength="1000"
           />
