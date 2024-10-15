@@ -8,6 +8,5 @@ export default function PrivateRoute({
   redirectTo = routesPath.MAIN,
 }) {
   const isLoggedIn = useSelector(getIsLoggedIn);
-  console.log(isLoggedIn, redirectTo);
   return !isLoggedIn ? <Navigate to={redirectTo} /> : <Component />;
 }

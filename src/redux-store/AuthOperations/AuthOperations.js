@@ -6,6 +6,7 @@ import { token, axiosClient } from '@/services/api';
 import { clearUser, setUsers } from '@/redux-store/slices/userSlice';
 import ULRs from '@/constants/constants';
 
+
 export const register = createAsyncThunk(
   'auth/register',
   async (userData, { dispatch }) =>
@@ -32,7 +33,6 @@ export const logIn = createAsyncThunk(
   {
     try {
       const response = await axiosClient.post(ULRs.login, userData);
-      console.log('from Login', response.data);
       token.set(response.data.token);
       dispatch(setUsers(response.data.userDto));
       return response.data;
@@ -56,7 +56,6 @@ export const logOut = createAsyncThunk(
       await axiosClient.post(ULRs.logout);
       token.unset();
       dispatch(clearUser());
-      console.log('logout ended');
     } catch (error) {
       throw new Error(error.message);
     }

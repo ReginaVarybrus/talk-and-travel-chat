@@ -2,8 +2,9 @@ import { useNavigate, useLocation } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { routesPath } from '@/routes/routesConfig';
 import { getUser } from '@/redux-store/selectors';
-import { useWebSocket } from '@/hooks/useWebSocket.js';
 import { logOut } from '@/redux-store/AuthOperations/AuthOperations';
+import { useWebSocket } from '@/hooks/useWebSocket';
+
 import {
   SideBarStyled,
   ButtonsFrame,
@@ -21,8 +22,8 @@ const SideBar = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const location = useLocation();
-  const { handleDeactivateStopmClient } = useWebSocket();
   const currentPage = location.pathname;
+  const { handleDeactivateStopmClient } = useWebSocket();
 
   const handleProfileOpen = () => {
     navigate(routesPath.ACCOUNT);
@@ -38,11 +39,8 @@ const SideBar = () => {
 
   const handleLogOut = async () => {
     try {
-      await dispatch(logOut());
-      console.log('logout dispatched');
       handleDeactivateStopmClient();
-      console.log('moving to main');
-      // navigate(routesPath.MAIN);
+      await dispatch(logOut());
     } catch (error) {
       console.error('Logout failed:', error.message);
     }

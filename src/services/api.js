@@ -1,8 +1,5 @@
 import ULRs from '@/constants/constants';
 import axios from 'axios';
-import { useSelector } from 'react-redux';
-import { getToken } from '@/redux-store/selectors.js';
-
 
 const urlToOmit = [ULRs.login, ULRs.register];
 
@@ -16,19 +13,20 @@ const axiosClient = axios.create({
 axiosClient.interceptors.request.use(
   config =>
   {
-    const token = useSelector(getToken);
-    console.log(token, 'token set in api', token);
-
+    let authData;
+    try {
+      // Get token from local storage and check if it
+      authData = JSON.parse(localStorage.getItem('persist:auth'));
+    } catch (e) {
+      console.error('Error parsing auth data from local storage', e);
+      authData = null;
+    }
+    const token = authData ? authData?.token?.replace(/"/g, '') : null;
     const isAuthUrl = urlToOmit.includes(config.url);
-
     if (!isAuthUrl && token) {
-      console.log('we are adding', token);
-
       config.headers.Authorization = `Bearer ${token}`;
       return config;
     }
-    console.log('we are not adding', token);
-
     delete config.headers.Authorization;
     return config;
   },
