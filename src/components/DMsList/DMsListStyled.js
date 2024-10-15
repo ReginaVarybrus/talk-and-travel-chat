@@ -1,16 +1,41 @@
 import styled from 'styled-components';
 import { device } from '@/constants/mediaQueries';
 
+export const UnreadMessagesCount = styled.div`
+  background: var(--color-blue-1);
+  border-radius: 50px;
+  color: var(--color-dark);
+  font-size: 12px;
+  font-weight: 500;
+  width: 23px;
+  height: 17px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-shrink: 0;
+
+  @media ${device.tablet} {
+    width: 30px;
+    color: var(--color-grey-9);
+  }
+`;
+
 export const Item = styled.li`
   display: flex;
   align-items: center;
   justify-content: space-between;
+  width: 100%;
   height: 72px;
   padding: 0 5%;
   background: var(--white-color);
   cursor: pointer;
+
   &:hover {
     background: var(--color-blue-1);
+
+    & ${UnreadMessagesCount} {
+      background: var(--white-color);
+    }
   }
   @media ${device.tablet} {
     padding: 0 16px;
@@ -20,6 +45,8 @@ export const Item = styled.li`
 export const ChatNameStyled = styled.div`
   display: flex;
   align-items: center;
+  justify-content: space-between;
+  width: 100%;
 `;
 
 export const Avatar = styled.div`
@@ -62,24 +89,48 @@ export const BadgeStyled = styled.div`
 export const ChatName = styled.div`
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
-  width: 116px;
+  justify-content: center;
+  gap: 8px;
+  width: calc(100% - 58px);
   height: 50px;
-  & > p {
-    color: var(--color-grey-9);
+`;
+
+export const NameAndDayBox = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  h6 {
+    flex-grow: 1;
+    margin-right: 8px;
+    font-size: 18px;
+    font-weight: 400;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
-  @media ${device.laptop} {
-    width: 156px;
+
+  p {
+    font-size: 14px;
+    font-weight: 400;
+    flex-shrink: 0;
+    color: var(--color-grey-9);
+    white-space: nowrap;
   }
 `;
 
-export const MessageDay = styled.div`
+export const MessageAndCountBox = styled.div`
   display: flex;
-  align-items: flex-start;
-  justify-content: flex-end;
-  width: 40px;
-  height: 50px;
-  & > p {
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  gap: 8px;
+  p {
     color: var(--color-grey-9);
+    font-size: 14px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    flex-grow: 1;
   }
 `;

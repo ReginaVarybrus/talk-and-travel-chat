@@ -16,8 +16,10 @@ import {
   ChatNameStyled,
   Avatar,
   ChatName,
-  MessageDay,
   BadgeStyled,
+  NameAndDayBox,
+  MessageAndCountBox,
+  UnreadMessagesCount,
 } from './DMsListStyled';
 
 const DMsList = () => {
@@ -66,7 +68,7 @@ const DMsList = () => {
       {dataUserChats?.length ? (
         <ListItems>
           <ScrollBar>
-            {dataUserChats.map(({ chat, companion, lastReadMessageId }) => {
+            {dataUserChats.map(({ chat, companion, lastMessage }) => {
               const isOnline =
                 listOfOnlineUsers.get(companion.id.toString()) === true;
 
@@ -81,13 +83,23 @@ const DMsList = () => {
                       {isOnline && <BadgeStyled />}
                     </Avatar>
                     <ChatName>
-                      <h6>{companion.userName}</h6>
-                      <p>{lastReadMessageId}</p>
+                      <NameAndDayBox>
+                        <h6>{companion.userName}</h6>
+                        <p>
+                          {lastMessage &&
+                            dateStampConverter(lastMessage.creationDate)}
+                        </p>
+                      </NameAndDayBox>
+                      <MessageAndCountBox>
+                        <p>{lastMessage && lastMessage.content}</p>
+                        {chat.unreadMessagesCount > 0 && (
+                          <UnreadMessagesCount>
+                            {chat.unreadMessagesCount}
+                          </UnreadMessagesCount>
+                        )}
+                      </MessageAndCountBox>
                     </ChatName>
                   </ChatNameStyled>
-                  <MessageDay>
-                    <p>{dateStampConverter(chat.creationDate)}</p>
-                  </MessageDay>
                 </Item>
               );
             })}
