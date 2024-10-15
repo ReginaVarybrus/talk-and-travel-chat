@@ -42,9 +42,13 @@ const LoginForm = () => {
     validationSchema: schema,
     validateOnChange: false,
     onSubmit: async (values, { resetForm }) => {
-      await dispatch(logIn(values));
-      navigate(routesPath.CHAT);
-      resetForm();
+      try {
+        await dispatch(logIn(values)).unwrap();
+        navigate(routesPath.CHAT);
+        resetForm();
+      } catch (error) {
+        console.error('Login failed:', error);
+      }
     },
   });
 
