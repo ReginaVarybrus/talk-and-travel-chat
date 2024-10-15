@@ -23,8 +23,8 @@ const SearchInput = ({
   setIsSubscribed,
   setIsShowJoinBtn,
   setIsChatVisible,
-  setParticipantsAmount,
   subscriptionRooms,
+  setParticipantsAmount,
 }) => {
   const isDesktop = useMediaQuery({ query: device.tablet });
   const navigate = useNavigate();
@@ -36,8 +36,8 @@ const SearchInput = ({
     selectedCountry ? ULRs.getMainCountryChatByName(selectedCountry) : null
   );
 
-  const filterCountries = mapData.features.filter(name =>
-    name.properties.ADMIN.toLowerCase().includes(searchedValue.toLowerCase())
+  const filterCountries = mapData.filter(name =>
+    name.properties.admin.toLowerCase().includes(searchedValue.toLowerCase())
   );
 
   useEffect(() => {
@@ -46,11 +46,13 @@ const SearchInput = ({
       setParticipantsAmount(responseData.usersCount);
       setIsSubscribed(true);
     }
+    console.log(mapData);
   }, [responseData, setChatData]);
 
   const handleChange = event => {
     const { value } = event.target;
     setSearchedValue(value);
+
     if (event.target.value !== '') {
       event.target.style.border = '1px solid var(--color-blue-4)';
     } else {
@@ -61,7 +63,7 @@ const SearchInput = ({
   const handleClick = () => setShowItem(!showItem);
 
   const handleCountryClick = country => {
-    const countryName = country.properties.ADMIN;
+    const countryName = country.properties.admin;
     setSelectedCountry(countryName);
     const nameOfCountry = subscriptionRooms.find(
       item => item.name === countryName
@@ -118,17 +120,17 @@ const SearchInput = ({
               <>
                 {filterCountries.map(country => (
                   <Item
-                    key={country.properties.ADMIN}
+                    key={country.properties.admin}
                     onClick={() => handleCountryClick(country)}
                   >
                     <Flag
                       loading="lazy"
                       width="48"
-                      srcSet={`https://flagcdn.com/w40/${country.properties.code}.png 2x`}
-                      src={`https://flagcdn.com/w20/${country.properties.code}.png`}
-                      alt={`${country.properties.ADMIN} flag`}
+                      srcSet={`https://flagcdn.com/w40/${country.properties.code.toLowerCase()}.png 2x`}
+                      src={`https://flagcdn.com/w20/${country.properties.code.toLowerCase()}.png`}
+                      alt={`${country.properties.admin} flag`}
                     />
-                    <p>{country.properties.ADMIN}</p>
+                    <p>{country.properties.admin}</p>
                   </Item>
                 ))}
               </>
@@ -145,8 +147,8 @@ SearchInput.propTypes = {
   setIsSubscribed: PropTypes.func,
   setIsShowJoinBtn: PropTypes.func,
   setIsChatVisible: PropTypes.func,
-  setParticipantsAmount: PropTypes.func,
   subscriptionRooms: PropTypes.array,
+  setParticipantsAmount: PropTypes.func,
 };
 
 export default SearchInput;
