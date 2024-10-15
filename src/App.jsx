@@ -1,7 +1,7 @@
 import React, { Suspense } from 'react';
-
 import { Provider } from 'react-redux';
 import { PersistGate } from 'redux-persist/integration/react';
+import WebSocketProvider from '@/providers/WebSocketProvider';
 import { RouterProvider } from 'react-router-dom';
 
 import Loader from '@/components/Loader/Loader';
@@ -15,7 +15,9 @@ const App = () => (
       <Provider store={store}>
         <PersistGate loading={null} persistor={persistor}>
           <GlobalStyles />
-          <RouterProvider router={router} />
+          <WebSocketProvider>
+            <RouterProvider router={router} />
+          </WebSocketProvider>
         </PersistGate>
       </Provider>
     </Suspense>

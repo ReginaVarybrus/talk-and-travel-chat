@@ -1,68 +1,62 @@
 import { useState, useEffect } from 'react';
-import { useSelector } from 'react-redux';
 import { useOutletContext } from 'react-router-dom';
+import { useMediaQuery } from 'react-responsive';
+import { device } from '@/constants/mediaQueries.js';
 import { useFetch } from '@/hooks/useFetch.js';
-import { useWebSocket } from '@/hooks/useWebSocket.js';
-import ULRs from '@/redux-store/constants';
-import { getUser } from '@/redux-store/selectors.js';
-import { ListStyled, Text, Item, ListItems } from './RoomsListStyled';
-import { Flag, ScrollBar } from '../SearchInput/SearchInputStyled.js';
+import ULRs from '@/constants/constants';
+import {
+  Flag,
+  ScrollBar,
+  Item,
+} from '@/components/SearchInput/SearchInputStyled.js';
+import { ListStyled, Text, ListItems } from './RoomsListStyled';
 
 const RoomsList = () => {
+  const isDesktop = useMediaQuery({ query: device.tablet });
   const [selectedCountry, setSelectedCountry] = useState(null);
-  const userId = useSelector(getUser)?.id;
-  const { stompClient, subscribeToCountryRoom, openCountryRoom } =
-    useWebSocket();
-  const { responseData } = useFetch(ULRs.userCountries(userId, ''));
-  const context = useOutletContext();
+
+  const { responseData } = useFetch(
+    selectedCountry ? ULRs.getMainCountryChatByName(selectedCountry) : null
+  );
+
   const {
-    onCountryRoomDataReceived,
-    subscriptionCountryRooms,
-    setSubscriptionCountryRooms,
-  } = context;
+    setChatData,
+    subscriptionRooms,
+    setIsSubscribed,
+    setIsShowJoinBtn,
+    setIsChatVisible,
+    setParticipantsAmount,
+  } = useOutletContext();
 
   useEffect(() => {
-    if (responseData && userId) {
-      setSubscriptionCountryRooms(responseData);
-    } else {
-      console.log('responseData & userID', responseData, userId);
+    if (responseData) {
+      setChatData(responseData);
+      setParticipantsAmount(responseData.usersCount);
+      setIsSubscribed(true);
     }
-  }, [responseData, userId]);
-
-  useEffect(() => {
-    if (stompClient && selectedCountry) {
-      const countryRoom = subscriptionCountryRooms.find(
-        room => room.name === selectedCountry
-      );
-      const dataToSend = {
-        countryName: countryRoom?.name,
-        flagCode: countryRoom?.flagCode,
-        userId,
-      };
-
-      subscribeToCountryRoom(
-        userId,
-        selectedCountry,
-        onCountryRoomDataReceived
-      );
-      openCountryRoom(dataToSend);
-    }
-  }, [stompClient, selectedCountry]);
+  }, [responseData, setChatData, setIsSubscribed]);
 
   const handleOpenCountryRoom = countryName => {
     setSelectedCountry(countryName);
+    setIsShowJoinBtn(false);
+    if (!isDesktop) {
+      setIsChatVisible(true);
+    }
   };
 
   return (
     <ListStyled>
-      {subscriptionCountryRooms.length ? (
+      {subscriptionRooms.length ? (
         <ListItems>
           <ScrollBar>
-            {subscriptionCountryRooms.map((room, id) => (
-              <Item key={id} onClick={() => handleOpenCountryRoom(room.name)}>
+            {subscriptionRooms.map(room => (
+              <Item
+                key={room.flagCode}
+                onClick={() => handleOpenCountryRoom(room.name)}
+              >
                 <Flag
                   loading="lazy"
-                  width="32"
+                  width="48"
                   srcSet={`https://flagcdn.com/w40/${room.flagCode}.png 2x`}
                   src={`https://flagcdn.com/w20/${room.flagCode}.png`}
                   alt={`${room.flagCode} flag`}

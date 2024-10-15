@@ -3,12 +3,11 @@ import { device } from '@/constants/mediaQueries';
 import 'simplebar-react/dist/simplebar.min.css';
 
 export const GlobalStyles = createGlobalStyle`
-/* !!!Add styles after layout approval!!! */
-
 :root {
   --color-success: #33d844;
   --color-error: #d83333;
   --color-info: #569aff;
+  --color-system-error: #F55151;
 
   --white-color: #ffffff;
   --color-grey-2: #fdfdfd;
@@ -34,6 +33,8 @@ export const GlobalStyles = createGlobalStyle`
   --color-blue-8: #1a4b95;
   --color-blue-9: #153c78;
   --color-blue-10: #11305e;
+
+  --color-badge: #72CF7B;
 }
 
 body {
@@ -70,9 +71,14 @@ h3 {
 }
 
 h5 {
-  font-size: 18px;
+  font-size: 16px;
   font-weight: 600;
-  line-height: 21.6px;
+  line-height: 19.2px;
+  color: var(--color-dark);
+  @media ${device.tablet} {
+    font-size: 18px;
+    line-height: 21.6px;
+  }
 }
 
 h6 {
@@ -93,6 +99,14 @@ svg{
   margin: 0;
   padding: 0;
 }
+
+// TapBar custom styles
+
+.css-gy4i07-MuiPaper-root {
+  height: 100px;
+  align-content: center;
+}
+  
 
 // MapStyles
 

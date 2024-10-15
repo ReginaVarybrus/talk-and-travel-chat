@@ -1,8 +1,12 @@
 import { useState, useEffect, useRef } from 'react';
-import { useSelector } from 'react-redux';
-import { getUser } from '@/redux-store/selectors';
-import { useWebSocket } from '@/hooks/useWebSocket.js';
+import { useMediaQuery } from 'react-responsive';
+import { device } from '@/constants/mediaQueries.js';
+import { routesPath } from '@/routes/routesConfig';
+import PropTypes from 'prop-types';
+import { useFetch } from '@/hooks/useFetch.js';
+import ULRs from '@/constants/constants';
 import mapData from '@/data/countries.json';
+import { useNavigate } from 'react-router-dom';
 import {
   AutocompleteInputStyled,
   AutocompleteInput,
@@ -14,33 +18,41 @@ import {
   Text,
 } from './SearchInputStyled';
 
-const SearchInput = ({ onCountryRoomDataReceived }) => {
+const SearchInput = ({
+  setChatData,
+  setIsSubscribed,
+  setIsShowJoinBtn,
+  setIsChatVisible,
+  subscriptionRooms,
+  setParticipantsAmount,
+}) => {
+  const isDesktop = useMediaQuery({ query: device.tablet });
+  const navigate = useNavigate();
+  const [selectedCountry, setSelectedCountry] = useState(null);
   const [searchedValue, setSearchedValue] = useState('');
   const [showItem, setShowItem] = useState(false);
-  const [selectedCountry, setSelectedCountry] = useState(null);
   const autoCompleteRef = useRef(null);
-  const userId = useSelector(getUser)?.id;
+  const { responseData } = useFetch(
+    selectedCountry ? ULRs.getMainCountryChatByName(selectedCountry) : null
+  );
 
-  const { stompClient, subscribeToCountryRoom, openCountryRoom } =
-    useWebSocket();
+  const filterCountries = mapData.filter(name =>
+    name.properties.admin.toLowerCase().includes(searchedValue.toLowerCase())
+  );
 
   useEffect(() => {
-    if (stompClient && selectedCountry) {
-      subscribeToCountryRoom(
-        userId,
-        selectedCountry,
-        onCountryRoomDataReceived
-      );
+    if (responseData) {
+      setChatData(responseData);
+      setParticipantsAmount(responseData.usersCount);
+      setIsSubscribed(true);
     }
-  }, [stompClient, selectedCountry]);
-
-  const filterCountries = mapData.features.filter(name =>
-    name.properties.ADMIN.toLowerCase().includes(searchedValue.toLowerCase())
-  );
+    console.log(mapData);
+  }, [responseData, setChatData]);
 
   const handleChange = event => {
     const { value } = event.target;
     setSearchedValue(value);
+
     if (event.target.value !== '') {
       event.target.style.border = '1px solid var(--color-blue-4)';
     } else {
@@ -51,21 +63,23 @@ const SearchInput = ({ onCountryRoomDataReceived }) => {
   const handleClick = () => setShowItem(!showItem);
 
   const handleCountryClick = country => {
-    const countryName = country.properties.ADMIN;
-    const flagCode = country.properties.code;
+    const countryName = country.properties.admin;
     setSelectedCountry(countryName);
-
-    const dataToSend = {
-      countryName,
-      flagCode,
-      userId,
-    };
+    const nameOfCountry = subscriptionRooms.find(
+      item => item.name === countryName
+    );
+    if (nameOfCountry) {
+      setIsShowJoinBtn(false);
+    } else {
+      setIsShowJoinBtn(true);
+    }
 
     setSearchedValue(countryName);
     setShowItem(false);
-
-    openCountryRoom(dataToSend);
-
+    navigate(routesPath.ROOMS);
+    if (!isDesktop) {
+      setIsChatVisible(true);
+    }
     setSearchedValue('');
   };
 
@@ -104,16 +118,19 @@ const SearchInput = ({ onCountryRoomDataReceived }) => {
               </Text>
             ) : (
               <>
-                {filterCountries.map((country, id) => (
-                  <Item key={id} onClick={() => handleCountryClick(country)}>
+                {filterCountries.map(country => (
+                  <Item
+                    key={country.properties.admin}
+                    onClick={() => handleCountryClick(country)}
+                  >
                     <Flag
                       loading="lazy"
-                      width="32"
-                      srcSet={`https://flagcdn.com/w40/${country.properties.code}.png 2x`}
-                      src={`https://flagcdn.com/w20/${country.properties.code}.png`}
-                      alt={`${country.properties.ADMIN} flag`}
+                      width="48"
+                      srcSet={`https://flagcdn.com/w40/${country.properties.code.toLowerCase()}.png 2x`}
+                      src={`https://flagcdn.com/w20/${country.properties.code.toLowerCase()}.png`}
+                      alt={`${country.properties.admin} flag`}
                     />
-                    <p>{country.properties.ADMIN}</p>
+                    <p>{country.properties.admin}</p>
                   </Item>
                 ))}
               </>
@@ -123,6 +140,15 @@ const SearchInput = ({ onCountryRoomDataReceived }) => {
       )}
     </AutocompleteInputStyled>
   );
+};
+
+SearchInput.propTypes = {
+  setChatData: PropTypes.func,
+  setIsSubscribed: PropTypes.func,
+  setIsShowJoinBtn: PropTypes.func,
+  setIsChatVisible: PropTypes.func,
+  subscriptionRooms: PropTypes.array,
+  setParticipantsAmount: PropTypes.func,
 };
 
 export default SearchInput;

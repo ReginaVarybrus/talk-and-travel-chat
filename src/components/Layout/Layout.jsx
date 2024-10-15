@@ -1,15 +1,24 @@
+import { useState } from 'react';
 import { Outlet } from 'react-router-dom';
-import WebSocketProvider from '@/providers/WebSocketProvider';
+import SideBar from '@/components/SideBar/SideBar';
+import TapBar from '@/components/TapBar/TapBar';
 import { LayoutStyled } from './LayoutStyled';
-import SideBar from '../SideBar/SideBar';
 
-const Layout = () => (
-  <WebSocketProvider>
+const Layout = () => {
+  const [isChatVisible, setIsChatVisible] = useState(false);
+
+  return (
     <LayoutStyled>
       <SideBar />
-      <Outlet />
+      <Outlet
+        context={{
+          isChatVisible,
+          setIsChatVisible,
+        }}
+      />
+      <TapBar isChatVisible={isChatVisible} />
     </LayoutStyled>
-  </WebSocketProvider>
-);
+  );
+};
 
 export default Layout;

@@ -1,12 +1,9 @@
-import { useState, useEffect } from 'react';
-import { useSelector } from 'react-redux';
-import { getUser } from '@/redux-store/selectors.js';
+import { useRef, useState } from 'react';
+import PropTypes from 'prop-types';
+import ULRs from '@/constants/constants';
+import { CHAT_TYPES } from '@/constants/chatTypes';
 import { useWebSocket } from '@/hooks/useWebSocket.js';
-import { axiosClient } from '@/services/api';
-import ULRs from '@/redux-store/constants';
 import BasicButton from '@/components/Buttons/BasicButton/BasicButton';
-// eslint-disable-next-line import/no-extraneous-dependencies
-import { useSubscription } from 'react-stomp-hooks';
 import {
   MessageBarStyled,
   ButtonJoinWrapper,
@@ -20,32 +17,52 @@ import {
 } from './MessageBarStyled';
 
 const MessageBar = ({
-  countryName,
-  country,
-  isSubscribed,
-  setCountryData,
-  setSubscriptionCountryRooms,
+  chatId,
+  chatData,
+  setSubscriptionRooms,
+  isShowJoinBtn,
+  setIsShowJoinBtn,
+  isUserTyping,
+  setIsUserTyping,
+  setParticipantsAmount,
+  scrollToBottom,
 }) => {
   const [message, setMessage] = useState('');
-  const [isShowJoinBtn, setIsShowJoinBtn] = useState(!isSubscribed);
-  const userId = useSelector(getUser)?.id;
-  const { stompClient, subscribeToGroupMessages, sendMessage } = useWebSocket();
+  const typingStopTimeoutRef = useRef(null);
 
+  const { stompClient, sendMessage, sendEvent } = useWebSocket();
   const isMessageNotEmpty = Boolean(message?.trim().length);
+  const isGroupChat = chatData?.chatType === CHAT_TYPES.GROUP;
 
-  const handleChange = ({ target: { value } }) => setMessage(value);
+  const dataEventToSend = {
+    chatId,
+  };
 
-  useEffect(() => {
-    if (isSubscribed) {
-      setIsShowJoinBtn(false);
-    } else {
-      setIsShowJoinBtn(true);
+  const handleStartTyping = () => {
+    if (!isUserTyping) {
+      setIsUserTyping(true);
+      sendEvent(dataEventToSend, ULRs.startTyping);
     }
-  }, [isSubscribed]);
+  };
 
-  useSubscription(ULRs.subscriptionToGroupMessages(countryName), response => {
-    subscribeToGroupMessages(response, setCountryData);
-  });
+  const handleStopTyping = () => {
+    setIsUserTyping(false);
+    sendEvent(dataEventToSend, ULRs.stopTyping);
+  };
+
+  const handleChange = ({ target: { value } }) => {
+    setMessage(value);
+
+    handleStartTyping();
+
+    if (typingStopTimeoutRef.current) {
+      clearTimeout(typingStopTimeoutRef.current);
+    }
+
+    typingStopTimeoutRef.current = setTimeout(() => {
+      handleStopTyping();
+    }, 1500);
+  };
 
   const handleSubmit = e => {
     e.preventDefault();
@@ -55,41 +72,31 @@ const MessageBar = ({
       return;
     }
 
-    const dataToSend = {
+    const dataMessageToSend = {
       content: message,
-      countryId: country?.id,
-      senderId: userId,
+      chatId,
     };
 
-    sendMessage(dataToSend);
-
+    sendMessage(dataMessageToSend);
     setMessage('');
+    handleStopTyping();
+    clearTimeout(typingStopTimeoutRef.current);
+
+    setTimeout(() => {
+      scrollToBottom();
+    }, 500);
   };
 
-  const handleJoinClick = async () => {
-    try {
-      const response = await axiosClient.post(
-        ULRs.joinToCountryRoom(countryName),
-        userId
-      );
-
-      console.log('Join data:', response);
-
-      if (response.status === 200) {
-        setIsShowJoinBtn(false);
-      }
-
-      isSubscribed = true;
-
-      setSubscriptionCountryRooms(prevRooms => [...prevRooms, country]);
-    } catch (error) {
-      console.error('Error fetching country rooms:', error);
-    }
+  const handleJoinClick = () => {
+    sendEvent(dataEventToSend, ULRs.joinToGroupChat);
+    setIsShowJoinBtn(false);
+    setSubscriptionRooms(prevRooms => [...prevRooms, chatData.country]);
+    setParticipantsAmount(prevCount => prevCount + 1);
   };
 
   return (
     <MessageBarStyled>
-      {isShowJoinBtn ? (
+      {isShowJoinBtn && isGroupChat ? (
         <ButtonJoinWrapper>
           <BasicButton
             variant="contained"
@@ -119,6 +126,7 @@ const MessageBar = ({
             type="submit"
             value="Send"
             $isMessageNotEmpty={isMessageNotEmpty}
+            disabled={!isMessageNotEmpty}
           >
             <SendIcon />
           </ButtonSendMessage>
@@ -126,6 +134,29 @@ const MessageBar = ({
       )}
     </MessageBarStyled>
   );
+};
+
+MessageBar.propTypes = {
+  chatId: PropTypes.number,
+  chatData: PropTypes.shape({
+    chatType: PropTypes.oneOf(['GROUP', 'PRIVATE']),
+    country: PropTypes.shape({
+      flagCode: PropTypes.string,
+      name: PropTypes.string,
+    }),
+    creationDate: PropTypes.string,
+    description: PropTypes.string,
+    id: PropTypes.number,
+    messages: PropTypes.array,
+    name: PropTypes.string,
+    usersCount: PropTypes.number,
+  }),
+  setSubscriptionRooms: PropTypes.func,
+  isShowJoinBtn: PropTypes.bool,
+  setIsShowJoinBtn: PropTypes.func,
+  isUserTyping: PropTypes.bool,
+  setIsUserTyping: PropTypes.func,
+  setParticipantsAmount: PropTypes.func,
 };
 
 export default MessageBar;

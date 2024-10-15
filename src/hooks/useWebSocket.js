@@ -1,92 +1,125 @@
 import { useRef, useEffect } from 'react';
-// eslint-disable-next-line import/no-extraneous-dependencies
 import { useStompClient } from 'react-stomp-hooks';
 
 export const useWebSocket = () => {
-  const subscriptionRoom = useRef(null);
-  const onDataReceivedRef = useRef(null);
   const stompClient = useStompClient();
+  const subscriptions = useRef({
+    messages: null,
+    errors: false,
+    statuses: null,
+  });
 
-  const subscribeToCountryRoom = (
-    userId,
-    countryName,
-    onCountryRoomDataReceived
-  ) => {
-    if (stompClient && stompClient.connected) {
-      if (subscriptionRoom.current) {
-        subscriptionRoom.current.unsubscribe();
-      }
+  // Function for checking StompClient connection
+  const isClientConnected = () => stompClient?.connected;
 
-      subscriptionRoom.current = stompClient.subscribe(
-        `/countries/${countryName}/user/${userId}`,
-        response => {
-          const data = JSON.parse(response.body);
-          onCountryRoomDataReceived(data);
-        }
-      );
-
-      onDataReceivedRef.current = onCountryRoomDataReceived;
-    }
-  };
-
-  const subscribeToGroupMessages = (response, setCountryData) => {
-    const receivedMessage = JSON.parse(response.body);
-
-    setCountryData(prevCountryData => {
-      const updatedGroupMessages = [
-        ...(prevCountryData.country.groupMessages || []),
-        receivedMessage,
-      ];
-      return {
-        ...prevCountryData,
-        country: {
-          ...prevCountryData.country,
-          groupMessages: updatedGroupMessages,
-        },
-      };
-    });
-  };
-
-  const openCountryRoom = countryData => {
-    if (stompClient && stompClient.connected) {
-      stompClient.publish({
-        destination: `/chat/countries/open`,
-        body: JSON.stringify(countryData),
+  // General function for subscribing
+  const subscribe = (endpoint, callback, type) => {
+    if (isClientConnected() && !subscriptions.current[type]) {
+      const subscription = stompClient.subscribe(endpoint, response => {
+        const parsedData = JSON.parse(response.body);
+        callback(parsedData);
       });
-    } else {
-      console.error('OPEN. Stomp client is not connected.');
+      subscriptions.current[type] = subscription;
+      return subscription;
     }
   };
+
+  // General function for unsubscribing
+  const unsubscribe = type => {
+    const subscription = subscriptions.current[type];
+    if (isClientConnected() && subscription) {
+      subscription.unsubscribe();
+      subscriptions.current[type] = null;
+    }
+  };
+
+  const subscribeToMessages = (endpoint, handleNewMessage) =>
+    subscribe(endpoint, handleNewMessage, 'messages');
+
+  const unsubscribeFromMessages = () => unsubscribe('messages');
+
+  const subscribeToUserErrors = (endpoint, setCountryData) => {
+    if (isClientConnected() && !subscriptions.current.errors) {
+      stompClient.subscribe(endpoint, response => {
+        const receivedError = JSON.parse(response.body);
+        setCountryData(prevCountryData => {
+          const updatedError = [
+            ...(prevCountryData.events || []),
+            receivedError,
+          ];
+          return {
+            ...prevCountryData,
+            events: updatedError,
+          };
+        });
+      });
+      subscriptions.current.errors = true;
+    }
+  };
+
+  const subscribeToUsersStatuses = (endpoint, setUserStatus) =>
+    subscribe(
+      endpoint,
+      receivedStatus => {
+        setUserStatus(prevMap => {
+          const updatedMap = new Map(prevMap);
+          updatedMap.set(
+            receivedStatus.userId.toString(),
+            receivedStatus.isOnline
+          );
+          return updatedMap;
+        });
+      },
+      'statuses'
+    );
+
+  const unsubscribeFromUsersStatuses = () => unsubscribe('statuses');
 
   const sendMessage = message => {
-    if (stompClient && stompClient.connected) {
+    if (isClientConnected()) {
       stompClient.publish({
-        destination: `/chat/group-messages`,
+        destination: `/chat/messages`,
         body: JSON.stringify(message),
       });
     } else {
       console.error(
-        'MESSAGE.Stomp client is not connected or no current room.'
+        'MESSAGE.Stomp client is not connected or no current chat.'
       );
     }
   };
 
+  const sendEvent = (message, endpoint) => {
+    if (isClientConnected()) {
+      stompClient.publish({
+        destination: endpoint,
+        body: JSON.stringify(message),
+      });
+    } else {
+      console.error('EVENT.Stomp client is not connected or no current chat.');
+    }
+  };
+
+  const handleDeactivateStopmClient = () => {
+    if (isClientConnected()) {
+      stompClient.deactivate();
+    }
+  };
+
   useEffect(() => {
-    if (stompClient && !stompClient.connected) {
+    if (stompClient && !isClientConnected()) {
       stompClient.activate();
     }
-    return () => {
-      if (stompClient && stompClient.connected) {
-        stompClient.deactivate();
-      }
-    };
   }, [stompClient]);
 
   return {
     stompClient,
-    subscribeToCountryRoom,
-    subscribeToGroupMessages,
-    openCountryRoom,
+    subscribeToMessages,
+    unsubscribeFromMessages,
+    subscribeToUserErrors,
+    subscribeToUsersStatuses,
+    unsubscribeFromUsersStatuses,
     sendMessage,
+    sendEvent,
+    handleDeactivateStopmClient,
   };
 };
