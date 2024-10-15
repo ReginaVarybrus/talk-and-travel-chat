@@ -27,8 +27,10 @@ export const Item = styled.li`
   width: 100%;
   height: 72px;
   padding: 0 5%;
-  background: var(--white-color);
+  background: ${({ $isActive }) =>
+    $isActive ? 'var(--color-blue-1)' : 'var(--white-color)'};
   cursor: pointer;
+  transition: all 0.3s ease;
 
   &:hover {
     background: var(--color-blue-1);
@@ -104,7 +106,7 @@ export const NameAndDayBox = styled.div`
     flex-grow: 1;
     margin-right: 8px;
     font-size: 18px;
-    font-weight: 400;
+    font-weight: ${({ $isActive }) => ($isActive ? '600' : '400')};
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;

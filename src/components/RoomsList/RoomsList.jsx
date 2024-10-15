@@ -4,12 +4,15 @@ import { useMediaQuery } from 'react-responsive';
 import { device } from '@/constants/mediaQueries.js';
 import { useFetch } from '@/hooks/useFetch.js';
 import ULRs from '@/constants/constants';
+import { Flag, ScrollBar } from '@/components/SearchInput/SearchInputStyled.js';
 import {
-  Flag,
-  ScrollBar,
+  ListStyled,
   Item,
-} from '@/components/SearchInput/SearchInputStyled.js';
-import { ListStyled, Text, ListItems } from './RoomsListStyled';
+  Text,
+  ListItems,
+  UnreadMessagesCount,
+  ChatNameBox,
+} from './RoomsListStyled';
 
 const RoomsList = () => {
   const isDesktop = useMediaQuery({ query: device.tablet });
@@ -51,17 +54,25 @@ const RoomsList = () => {
           <ScrollBar>
             {subscriptionRooms.map(room => (
               <Item
-                key={room.flagCode}
+                key={room.country.flagCode}
                 onClick={() => handleOpenCountryRoom(room.name)}
+                $isActive={room.name === selectedCountry}
               >
-                <Flag
-                  loading="lazy"
-                  width="48"
-                  srcSet={`https://flagcdn.com/w40/${room.flagCode}.png 2x`}
-                  src={`https://flagcdn.com/w20/${room.flagCode}.png`}
-                  alt={`${room.flagCode} flag`}
-                />
-                <p>{room.name}</p>
+                <ChatNameBox>
+                  <Flag
+                    loading="lazy"
+                    width="48"
+                    srcSet={`https://flagcdn.com/w40/${room.country.flagCode}.png 2x`}
+                    src={`https://flagcdn.com/w20/${room.country.flagCode}.png`}
+                    alt={`${room.country.flagCode} flag`}
+                  />
+                  <p>{room.name}</p>
+                </ChatNameBox>
+                {room.unreadMessagesCount > 0 && (
+                  <UnreadMessagesCount>
+                    {room.unreadMessagesCount}
+                  </UnreadMessagesCount>
+                )}
               </Item>
             ))}
           </ScrollBar>

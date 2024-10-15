@@ -76,6 +76,7 @@ const DMsList = () => {
                 <Item
                   key={chat.id}
                   onClick={() => handleOpenChat(chat.id, companion)}
+                  $isActive={chat.id === selectedChat.id}
                 >
                   <ChatNameStyled>
                     <Avatar>
