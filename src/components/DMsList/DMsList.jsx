@@ -17,7 +17,6 @@ import {
   ChatNameStyled,
   Avatar,
   ChatName,
-  MessageDay,
   BadgeStyled,
   NameAndDayBox,
 } from './DMsListStyled';
@@ -95,12 +94,10 @@ const DMsList = () => {
                       <ChatName>
                         <NameAndDayBox>
                           <h6>{companion.userName}</h6>
-                          <MessageDay>
-                            <p>
-                              {lastMessage &&
-                                formatDate(lastMessage.creationDate)}
-                            </p>
-                          </MessageDay>
+                          <p>
+                            {lastMessage &&
+                              formatDate(lastMessage.creationDate)}
+                          </p>
                         </NameAndDayBox>
                         <p>{lastMessage && lastMessage.content}</p>
                       </ChatName>

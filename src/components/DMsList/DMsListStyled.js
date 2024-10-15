@@ -5,10 +5,12 @@ export const Item = styled.li`
   display: flex;
   align-items: center;
   justify-content: space-between;
+  width: 100%;
   height: 72px;
   padding: 0 5%;
   background: var(--white-color);
   cursor: pointer;
+
   &:hover {
     background: var(--color-blue-1);
   }
@@ -20,6 +22,8 @@ export const Item = styled.li`
 export const ChatNameStyled = styled.div`
   display: flex;
   align-items: center;
+  justify-content: space-between;
+  width: 100%;
 `;
 
 export const Avatar = styled.div`
@@ -64,41 +68,38 @@ export const ChatName = styled.div`
   flex-direction: column;
   justify-content: center;
   gap: 8px;
-  width: 116px;
+  width: calc(100% - 58px);
   height: 50px;
-  h6 {
-    font-size: 18px;
-    font-weight: 400;
-    width: 100px;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-  }
+
   & > p {
     color: var(--color-grey-9);
     font-size: 14px;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
-  }
-  @media ${device.laptop} {
-    width: 156px;
   }
 `;
 
 export const NameAndDayBox = styled.div`
   display: flex;
-  width: 208px;
   justify-content: space-between;
-`;
-export const MessageDay = styled.div`
-  // display: flex;
-  // align-items: flex-start;
-  // justify-content: flex-end;
-  // width: 40px;
-  // height: 50px;
-  & > p {
+  align-items: center;
+
+  h6 {
+    flex-grow: 1;
+    margin-right: 8px;
+    font-size: 18px;
+    font-weight: 400;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  p {
     font-size: 14px;
+    font-weight: 400;
+    flex-shrink: 0;
     color: var(--color-grey-9);
+    white-space: nowrap;
   }
 `;
