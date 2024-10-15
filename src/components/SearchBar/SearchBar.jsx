@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import Backdrop from '@mui/material/Backdrop';
 import Modal from '@mui/material/Modal';
 import Fade from '@mui/material/Fade';
-import { Outlet, useOutletContext } from 'react-router-dom';
+import { Outlet } from 'react-router-dom';
 import SearchInput from '@/components/SearchInput/SearchInput';
 import ChatMap from '@/components/ChatMap/ChatMap';
 import { SearchBarStyled, ButtonMapOpen, MapBox } from './SearchBarStyled';
@@ -16,13 +16,12 @@ const SearchBar = ({
   setSelectedCompanion,
   setParticipantsAmount,
   listOfOnlineUsers,
+  isChatVisible,
+  setIsChatVisible,
 }) => {
   const [openMap, setOpenMap] = useState(false);
   const handleOpen = () => setOpenMap(true);
   const handleClose = () => setOpenMap(false);
-  const context = useOutletContext();
-  const isChatVisible = context?.isChatVisible;
-  const setIsChatVisible = context?.setIsChatVisible;
 
   return (
     <SearchBarStyled $isChatVisible={isChatVisible}>
@@ -80,6 +79,8 @@ SearchBar.propTypes = {
   setIsShowJoinBtn: PropTypes.func,
   setSelectedCompanion: PropTypes.func,
   setParticipantsAmount: PropTypes.func,
+  isChatVisible: PropTypes.bool,
+  setIsChatVisible: PropTypes.func,
 };
 
 export default SearchBar;
