@@ -72,6 +72,7 @@ const SearchBar = ({
               setIsSubscribed={setIsSubscribed}
               subscriptionRooms={subscriptionRooms}
               setIsShowJoinBtn={setIsShowJoinBtn}
+              setIsChatVisible={setIsChatVisible}
             />
           </MapBox>
         </Fade>

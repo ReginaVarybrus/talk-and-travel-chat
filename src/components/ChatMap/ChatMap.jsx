@@ -1,4 +1,6 @@
 import { useState } from 'react';
+import { useMediaQuery } from 'react-responsive';
+import { device } from '@/constants/mediaQueries.js';
 import PropTypes from 'prop-types';
 import { useFetch } from '@/hooks/useFetch.js';
 import ULRs from '@/constants/constants';
@@ -41,7 +43,9 @@ const ChatMap = ({
   setIsSubscribed,
   subscriptionRooms,
   setIsShowJoinBtn,
+  setIsChatVisible,
 }) => {
+  const isDesktop = useMediaQuery({ query: device.tablet });
   const [selectedCountry, setSelectedCountry] = useState(null);
   const { responseData } = useFetch(
     selectedCountry ? ULRs.getMainCountryChatByName(selectedCountry) : null
@@ -85,6 +89,9 @@ const ChatMap = ({
       setChatData(responseData);
       setParticipantsAmount(responseData.usersCount);
       setIsSubscribed(true);
+    }
+    if (!isDesktop) {
+      setIsChatVisible(true);
     }
 
     closeMap();
