@@ -116,6 +116,7 @@ const ChatHeader = ({
         chatId={chatId}
         setSubscriptionRooms={setSubscriptionRooms}
         setIsShowJoinBtn={setIsShowJoinBtn}
+        setIsChatVisible={setIsChatVisible}
       />
     </ChatHeaderStyled>
   );
