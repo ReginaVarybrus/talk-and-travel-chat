@@ -58,6 +58,16 @@ li{
 h1,h2,h3,h4,h5,h6,p{
   margin: 0;
   padding: 0;
+  color: var(--color-dark);
+}
+
+h3 {
+  font-size: 20px;
+  font-weight: 600;
+  line-height: 28.8px;
+  @media ${device.tablet} {
+    font-size: 24px;
+  }
 }
 
 h5 {
@@ -76,8 +86,6 @@ h6 {
   font-weight: 700;
   line-height: 19px;
 } 
-
-
 
 p {
   font-size: 14px;
@@ -99,4 +107,40 @@ svg{
   align-content: center;
 }
   
+
+// MapStyles
+
+.leaflet-container {
+  position: relative;
+  background: #ffffff;
+  border-radius: 32px;
+  box-shadow: -1px 1px 3px 1px rgba(0, 0, 0, 0.15);
+}
+
+.leaflet-control-zoom {
+  visibility: hidden;
+}
+
+.leaflet-bar {
+  display: flex;
+}
+
+.leaflet-touch .leaflet-bar a {
+  width: 40px;
+  height: 40px;
+  line-height: 40px;
+}
+
+.leaflet-bar a:first-child {
+  border-right: 1px solid var(--color-grey-5);
+  border-bottom: none;
+}
+
+.leaflet-left .leaflet-control {
+  margin-left: 0;
+}
+
+.leaflet-top .leaflet-control {
+  margin-top: 0;
+}
 `;
