@@ -6,6 +6,7 @@ import { token, axiosClient } from '@/services/api';
 import { clearUser, setUsers } from '@/redux-store/slices/userSlice';
 import ULRs from '@/constants/constants';
 
+
 export const register = createAsyncThunk(
   'auth/register',
   async (userData, { dispatch }) =>
@@ -33,7 +34,6 @@ export const logIn = createAsyncThunk(
     try {
       const response = await axiosClient.post(ULRs.login, userData);
       token.set(response.data.token);
-      // console.log('from Login', response.data);
       dispatch(setUsers(response.data.userDto));
       return response.data;
     } catch (e) {

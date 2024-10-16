@@ -98,15 +98,13 @@ const AccountRoute = () => {
     formik.setValues(user);
   }, [user]);
 
-  const handleLogOut = () => {
-    dispatch(logOut())
-      .then(() => {
-        navigate(routesPath.MAIN);
-      })
-      .catch(error => {
-        console.error('Logout failed:', error.message);
-      });
-    handleDeactivateStopmClient();
+  const handleLogOut = async () => {
+    try {
+      handleDeactivateStopmClient();
+      await dispatch(logOut());
+    } catch (error) {
+      console.error('Logout failed:', error.message);
+    }
   };
 
   return (
