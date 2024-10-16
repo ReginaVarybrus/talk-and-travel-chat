@@ -7,17 +7,16 @@ export const UnreadMessagesCount = styled.div`
   color: var(--color-dark);
   font-size: 12px;
   font-weight: 500;
-  width: 23px;
   height: 17px;
   display: flex;
   justify-content: center;
   align-items: center;
+  padding: 4px 8px;
   flex-shrink: 0;
   background: ${({ $isActive }) =>
     $isActive ? 'var(--white-color)' : 'var(--color-blue-1)'};
 
   @media ${device.tablet} {
-    width: 30px;
     color: var(--color-grey-9);
   }
 `;

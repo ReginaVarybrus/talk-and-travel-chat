@@ -11,6 +11,7 @@ import {
   Text,
   ListItems,
 } from '@/components/RoomsList/RoomsListStyled.js';
+import { useChatContext } from '@/providers/ChatProvider';
 import {
   Item,
   ChatNameStyled,
@@ -36,12 +37,12 @@ const DMsList = () => {
     listOfOnlineUsers,
   } = useOutletContext();
 
-  const { responseData: dataUserChats } = useFetch(ULRs.getPrivateChats);
+  const { dataUserChats } = useChatContext();
 
   const { responseData: dataChat } = useFetch(
     selectedChat ? ULRs.getChat(selectedChat) : null
   );
-  console.log('selectedChat', selectedChat);
+
   useEffect(() => {
     if (privateChatId) {
       setSelectedChat(privateChatId);

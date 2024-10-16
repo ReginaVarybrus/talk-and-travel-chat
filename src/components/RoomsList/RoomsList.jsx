@@ -5,6 +5,7 @@ import { device } from '@/constants/mediaQueries.js';
 import { useFetch } from '@/hooks/useFetch.js';
 import ULRs from '@/constants/constants';
 import { Flag, ScrollBar } from '@/components/SearchInput/SearchInputStyled.js';
+import { useChatContext } from '@/providers/ChatProvider';
 import {
   ListStyled,
   Item,
@@ -25,12 +26,12 @@ const RoomsList = () => {
 
   const {
     setChatData,
-    subscriptionRooms,
     setIsSubscribed,
     setIsShowJoinBtn,
     setIsChatVisible,
     setParticipantsAmount,
   } = useOutletContext();
+  const { subscriptionRooms } = useChatContext();
 
   useEffect(() => {
     if (responseData) {
