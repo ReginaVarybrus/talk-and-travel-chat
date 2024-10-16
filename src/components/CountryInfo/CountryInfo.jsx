@@ -44,7 +44,7 @@ const CountryInfo = ({
   setIsShowJoinBtn,
 }) => {
   const currentUserId = useSelector(getUser)?.id;
-  const { sendEvent } = useWebSocket();
+  const { sendMessageOrEvent } = useWebSocket();
   const navigate = useNavigate();
 
   const { responseData: dataUserChats } = useFetch(ULRs.getPrivateChats);
@@ -87,7 +87,7 @@ const CountryInfo = ({
     const dataEventToSend = {
       chatId,
     };
-    sendEvent(dataEventToSend, ULRs.leaveOutGroupChat);
+    sendMessageOrEvent(dataEventToSend, ULRs.leaveOutGroupChat);
     setSubscriptionRooms(prevRooms =>
       prevRooms.filter(room => room.name !== countryName)
     );
