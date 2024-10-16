@@ -30,7 +30,7 @@ const MessageBar = ({
   const [message, setMessage] = useState('');
   const typingStopTimeoutRef = useRef(null);
 
-  const { stompClient, sendMessage, sendEvent } = useWebSocket();
+  const { stompClient, sendMessageOrEvent } = useWebSocket();
   const isMessageNotEmpty = Boolean(message?.trim().length);
   const isGroupChat = chatData?.chatType === CHAT_TYPES.GROUP;
 
@@ -41,13 +41,13 @@ const MessageBar = ({
   const handleStartTyping = () => {
     if (!isUserTyping) {
       setIsUserTyping(true);
-      sendEvent(dataEventToSend, ULRs.startTyping);
+      sendMessageOrEvent(dataEventToSend, ULRs.startTyping);
     }
   };
 
   const handleStopTyping = () => {
     setIsUserTyping(false);
-    sendEvent(dataEventToSend, ULRs.stopTyping);
+    sendMessageOrEvent(dataEventToSend, ULRs.stopTyping);
   };
 
   const handleChange = ({ target: { value } }) => {
@@ -77,7 +77,7 @@ const MessageBar = ({
       chatId,
     };
 
-    sendMessage(dataMessageToSend);
+    sendMessageOrEvent(dataMessageToSend, ULRs.sendMessage);
     setMessage('');
     handleStopTyping();
     clearTimeout(typingStopTimeoutRef.current);
@@ -88,7 +88,7 @@ const MessageBar = ({
   };
 
   const handleJoinClick = () => {
-    sendEvent(dataEventToSend, ULRs.joinToGroupChat);
+    sendMessageOrEvent(dataEventToSend, ULRs.joinToGroupChat);
     setIsShowJoinBtn(false);
     setSubscriptionRooms(prevRooms => [...prevRooms, chatData.country]);
     setParticipantsAmount(prevCount => prevCount + 1);
