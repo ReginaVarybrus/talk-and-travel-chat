@@ -12,9 +12,11 @@ export const register = createAsyncThunk(
   async (userData, { dispatch }) =>
   {
     try {
+      console.log('Registration started');
       const response = await axiosClient.post(ULRs.register, userData);
-      dispatch(setUsers(response.data));
       token.set(response.data.token);
+      dispatch(setUsers(response.data));
+      console.log('after dispatch');
       swal(
         'Success!',
         'Letter with verification sent on your email',
@@ -32,9 +34,11 @@ export const logIn = createAsyncThunk(
   async (userData, { dispatch }) =>
   {
     try {
+      console.log('Login started');
       const response = await axiosClient.post(ULRs.login, userData);
       token.set(response.data.token);
       dispatch(setUsers(response.data.userDto));
+      console.log('after dispatch');
       return response.data;
     } catch (e) {
       if (e.response.status === 400 || e.response.status === 401) {

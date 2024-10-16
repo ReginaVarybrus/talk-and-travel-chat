@@ -52,7 +52,12 @@ export const router = createBrowserRouter([
     children: [
       {
         path: routesPath.CHAT,
-        Component: importComponent.CHAT,
+        element: (
+          <PrivateRoute
+            component={importComponent.CHAT}
+            redirectTo={routesPath.MAIN}
+          />
+        ),
         children: [
           {
             path: routesPath.ROOMS,

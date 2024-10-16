@@ -36,10 +36,15 @@ const RegisterForm = () => {
     initialValues,
     validationSchema: schema,
     validateOnChange: false,
-    onSubmit: (values, { resetForm }) => {
-      dispatch(register(values));
-      navigate(routesPath.CHAT);
-      resetForm();
+    onSubmit: async (values, { resetForm }) => {
+      try {
+        console.log('Form submited');
+        await dispatch(register(values));
+        navigate(routesPath.CHAT);
+        resetForm();
+      } catch (error) {
+        console.error('Registration failed:', error);
+      }
     },
   });
 

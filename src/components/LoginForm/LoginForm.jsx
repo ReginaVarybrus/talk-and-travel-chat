@@ -43,6 +43,7 @@ const LoginForm = () => {
     validateOnChange: false,
     onSubmit: async (values, { resetForm }) => {
       try {
+        console.log('Form submited');
         await dispatch(logIn(values)).unwrap();
         navigate(routesPath.CHAT);
         resetForm();
