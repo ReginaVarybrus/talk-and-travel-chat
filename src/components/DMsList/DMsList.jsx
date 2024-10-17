@@ -12,6 +12,7 @@ import {
   Text,
   ListItems,
 } from '@/components/RoomsList/RoomsListStyled.js';
+import { useChatContext } from '@/providers/ChatProvider';
 import {
   Item,
   ChatNameStyled,
@@ -19,6 +20,9 @@ import {
   ChatName,
   BadgeStyled,
   NameAndDayBox,
+  MessageAndCountBox,
+  UnreadMessagesCount,
+  CompanionName,
 } from './DMsListStyled';
 
 const DMsList = () => {
@@ -34,7 +38,7 @@ const DMsList = () => {
     listOfOnlineUsers,
   } = useOutletContext();
 
-  const { responseData: dataUserChats } = useFetch(ULRs.getPrivateChats);
+  const { dataUserChats } = useChatContext();
 
   const { responseData: dataChat } = useFetch(
     selectedChat ? ULRs.getChat(selectedChat) : null
@@ -85,6 +89,7 @@ const DMsList = () => {
                   <Item
                     key={chat.id}
                     onClick={() => handleOpenChat(chat.id, companion)}
+                    $isActive={selectedChat && chat.id === selectedChat}
                   >
                     <ChatNameStyled>
                       <Avatar>
@@ -93,13 +98,28 @@ const DMsList = () => {
                       </Avatar>
                       <ChatName>
                         <NameAndDayBox>
-                          <h6>{companion.userName}</h6>
+                          <CompanionName
+                            $isActive={selectedChat && chat.id === selectedChat}
+                          >
+                            {companion.userName}
+                          </CompanionName>
                           <p>
                             {lastMessage &&
                               formatDate(lastMessage.creationDate)}
                           </p>
                         </NameAndDayBox>
-                        <p>{lastMessage && lastMessage.content}</p>
+                        <MessageAndCountBox>
+                          <p>{lastMessage && lastMessage.content}</p>
+                          {chat.unreadMessagesCount > 0 && (
+                            <UnreadMessagesCount
+                              $isActive={
+                                selectedChat && chat.id === selectedChat
+                              }
+                            >
+                              {chat.unreadMessagesCount}
+                            </UnreadMessagesCount>
+                          )}
+                        </MessageAndCountBox>
                       </ChatName>
                     </ChatNameStyled>
                   </Item>
