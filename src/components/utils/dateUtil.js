@@ -13,7 +13,7 @@ export const formatDate = dateString => {
   }
 
   if (isThisWeek(messageDate)) {
-    return format(messageDate, 'EEEE', { locale: enUS });
+    return format(messageDate, 'EEE', { locale: enUS });
   }
 
   return format(messageDate, 'dd.MM.yyyy');
