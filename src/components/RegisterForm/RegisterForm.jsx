@@ -39,7 +39,6 @@ const RegisterForm = () => {
     validateOnChange: false,
     onSubmit: async (values, { resetForm }) => {
       try {
-        console.log('Form submited');
         await dispatch(register(values));
         await persistor.flush();
         navigate(routesPath.ROOMS);

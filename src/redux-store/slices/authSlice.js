@@ -32,14 +32,13 @@ export const authSlice = createSlice({
       .addCase(logIn.pending, handlePending)
       .addCase(logIn.rejected, handleRejected)
       .addCase(logIn.fulfilled, (state, action) =>
-      {
-        console.log('logIn fulfilled action:', action);  // Logs the action object
-        return {
-          ...state,
-          token: action.payload.token,  // Access the payload token
-          isLoggedIn: true,
-        };
+
+      ({
+        ...state,
+        token: action.payload.token,
+        isLoggedIn: true,
       })
+      )
 
       .addCase(logOut.pending, handlePending)
       .addCase(logOut.rejected, handleRejected)
