@@ -9,7 +9,10 @@ export default function PrivateRoute({
 }) {
   const isLoggedIn = useSelector(getIsLoggedIn);
 
-  console.log('PrivateRoute redirect triggered', isLoggedIn);
+  console.log(
+    'PrivateRoute redirect triggered because login status is ',
+    isLoggedIn
+  );
 
   return !isLoggedIn ? <Navigate to={redirectTo} /> : <Component />;
 }

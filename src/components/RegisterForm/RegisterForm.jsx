@@ -40,7 +40,7 @@ const RegisterForm = () => {
       try {
         console.log('Form submited');
         await dispatch(register(values));
-        navigate(routesPath.CHAT);
+        navigate(routesPath.ROOMS);
         resetForm();
       } catch (error) {
         console.error('Registration failed:', error);

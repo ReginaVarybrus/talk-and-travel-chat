@@ -45,7 +45,7 @@ const LoginForm = () => {
       try {
         console.log('Form submited');
         await dispatch(logIn(values)).unwrap();
-        navigate(routesPath.CHAT);
+        navigate(routesPath.ROOMS);
         resetForm();
       } catch (error) {
         console.error('Login failed:', error);
