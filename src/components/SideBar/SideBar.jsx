@@ -5,6 +5,8 @@ import { getUser } from '@/redux-store/selectors';
 import { useChatContext } from '@/providers/ChatProvider';
 import { useWebSocket } from '@/hooks/useWebSocket.js';
 import { logOut } from '@/redux-store/AuthOperations/AuthOperations';
+import { useWebSocket } from '@/hooks/useWebSocket';
+
 import {
   SideBarStyled,
   ButtonsFrame,
@@ -23,8 +25,8 @@ const SideBar = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const location = useLocation();
-  const { handleDeactivateStopmClient } = useWebSocket();
   const currentPage = location.pathname;
+  const { handleDeactivateStopmClient } = useWebSocket();
 
   const { unreadRoomsCount, unreadDMsCount } = useChatContext();
 
@@ -40,16 +42,13 @@ const SideBar = () => {
     navigate(routesPath.DMS);
   };
 
-  const handleLogOut = () => {
-    dispatch(logOut())
-      .then(() => {
-        navigate(routesPath.MAIN);
-      })
-      .catch(error => {
-        console.error('Logout failed:', error.message);
-      });
-
-    handleDeactivateStopmClient();
+  const handleLogOut = async () => {
+    try {
+      handleDeactivateStopmClient();
+      await dispatch(logOut());
+    } catch (error) {
+      console.error('Logout failed:', error.message);
+    }
   };
 
   return (

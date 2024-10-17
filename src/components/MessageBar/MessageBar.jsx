@@ -30,7 +30,7 @@ const MessageBar = ({
   const [message, setMessage] = useState('');
   const typingStopTimeoutRef = useRef(null);
 
-  const { stompClient, sendMessage, sendEvent } = useWebSocket();
+  const { stompClient, sendMessageOrEvent } = useWebSocket();
   const isMessageNotEmpty = Boolean(message?.trim().length);
   const isGroupChat = chatData?.chatType === CHAT_TYPES.GROUP;
 
@@ -41,13 +41,13 @@ const MessageBar = ({
   const handleStartTyping = () => {
     if (!isUserTyping) {
       setIsUserTyping(true);
-      sendEvent(dataEventToSend, ULRs.startTyping);
+      sendMessageOrEvent(dataEventToSend, ULRs.startTyping);
     }
   };
 
   const handleStopTyping = () => {
     setIsUserTyping(false);
-    sendEvent(dataEventToSend, ULRs.stopTyping);
+    sendMessageOrEvent(dataEventToSend, ULRs.stopTyping);
   };
 
   const handleChange = ({ target: { value } }) => {
@@ -67,17 +67,19 @@ const MessageBar = ({
   const handleSubmit = e => {
     e.preventDefault();
 
-    if (!stompClient) {
-      console.error('Cannot send message: WebSocket not connected');
+    if (!stompClient || !isMessageNotEmpty) {
+      console.error(
+        'Cannot send message: WebSocket not connected or message is empty'
+      );
       return;
     }
 
     const dataMessageToSend = {
-      content: message,
+      content: message.trim(),
       chatId,
     };
 
-    sendMessage(dataMessageToSend);
+    sendMessageOrEvent(dataMessageToSend, ULRs.sendMessage);
     setMessage('');
     handleStopTyping();
     clearTimeout(typingStopTimeoutRef.current);
@@ -88,7 +90,7 @@ const MessageBar = ({
   };
 
   const handleJoinClick = () => {
-    sendEvent(dataEventToSend, ULRs.joinToGroupChat);
+    sendMessageOrEvent(dataEventToSend, ULRs.joinToGroupChat);
     setIsShowJoinBtn(false);
     setSubscriptionRooms(prevRooms => [...prevRooms, chatData.country]);
     setParticipantsAmount(prevCount => prevCount + 1);
@@ -118,7 +120,11 @@ const MessageBar = ({
             aria-label="empty textarea"
             placeholder="Type here"
             value={message}
-            onKeyUp={e => e.key === 'Enter' && handleSubmit(e)}
+            onKeyUp={e => {
+              if (e.key === 'Enter' && !e.shiftKey && isMessageNotEmpty) {
+                handleSubmit(e);
+              }
+            }}
             onChange={handleChange}
             maxLength="1000"
           />

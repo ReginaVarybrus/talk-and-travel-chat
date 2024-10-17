@@ -5,6 +5,7 @@ import { device } from '@/constants/mediaQueries.js';
 import ULRs from '@/constants/constants';
 import { useFetch } from '@/hooks/useFetch';
 import { dateStampConverter } from '@/components/utils/timeUtil.js';
+import { formatDate } from '@/components/utils/dateUtil.js';
 import { ScrollBar } from '@/components/SearchInput/SearchInputStyled.js';
 import {
   ListStyled,
@@ -70,48 +71,60 @@ const DMsList = () => {
       {dataUserChats?.length ? (
         <ListItems>
           <ScrollBar>
-            {dataUserChats.map(({ chat, companion, lastMessage }) => {
-              const isOnline =
-                listOfOnlineUsers.get(companion.id.toString()) === true;
+            {dataUserChats
+              .sort((a, b) => {
+                const dateA = a.lastMessage
+                  ? new Date(a.lastMessage.creationDate)
+                  : new Date(0);
+                const dateB = b.lastMessage
+                  ? new Date(b.lastMessage.creationDate)
+                  : new Date(0);
+                return dateB - dateA;
+              })
+              .map(({ chat, companion, lastMessage }) => {
+                const isOnline =
+                  listOfOnlineUsers.get(companion.id.toString()) === true;
 
-              return (
-                <Item
-                  key={chat.id}
-                  onClick={() => handleOpenChat(chat.id, companion)}
-                  $isActive={selectedChat && chat.id === selectedChat}
-                >
-                  <ChatNameStyled>
-                    <Avatar>
-                      {companion.userName[0].toUpperCase()}
-                      {isOnline && <BadgeStyled />}
-                    </Avatar>
-                    <ChatName>
-                      <NameAndDayBox>
-                        <CompanionName
-                          $isActive={selectedChat && chat.id === selectedChat}
-                        >
-                          {companion.userName}
-                        </CompanionName>
-                        <p>
-                          {lastMessage &&
-                            dateStampConverter(lastMessage.creationDate)}
-                        </p>
-                      </NameAndDayBox>
-                      <MessageAndCountBox>
-                        <p>{lastMessage && lastMessage.content}</p>
-                        {chat.unreadMessagesCount > 0 && (
-                          <UnreadMessagesCount
+                return (
+                  <Item
+                    key={chat.id}
+                    onClick={() => handleOpenChat(chat.id, companion)}
+                    $isActive={selectedChat && chat.id === selectedChat}
+                  >
+                    <ChatNameStyled>
+                      <Avatar>
+                        {companion.userName[0].toUpperCase()}
+                        {isOnline && <BadgeStyled />}
+                      </Avatar>
+                      <ChatName>
+                        <NameAndDayBox>
+                          <CompanionName
                             $isActive={selectedChat && chat.id === selectedChat}
                           >
-                            {chat.unreadMessagesCount}
-                          </UnreadMessagesCount>
-                        )}
-                      </MessageAndCountBox>
-                    </ChatName>
-                  </ChatNameStyled>
-                </Item>
-              );
-            })}
+                            {companion.userName}
+                          </CompanionName>
+                          <p>
+                            {lastMessage &&
+                              formatDate(lastMessage.creationDate)}
+                          </p>
+                        </NameAndDayBox>
+                        <MessageAndCountBox>
+                          <p>{lastMessage && lastMessage.content}</p>
+                          {chat.unreadMessagesCount > 0 && (
+                            <UnreadMessagesCount
+                              $isActive={
+                                selectedChat && chat.id === selectedChat
+                              }
+                            >
+                              {chat.unreadMessagesCount}
+                            </UnreadMessagesCount>
+                          )}
+                        </MessageAndCountBox>
+                      </ChatName>
+                    </ChatNameStyled>
+                  </Item>
+                );
+              })}
           </ScrollBar>
         </ListItems>
       ) : (

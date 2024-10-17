@@ -64,7 +64,16 @@ const SearchBar = ({
       >
         <Fade in={openMap}>
           <MapBox>
-            <ChatMap closeMap={handleClose} />
+            <ChatMap
+              openMap={openMap}
+              closeMap={handleClose}
+              setChatData={setChatData}
+              setParticipantsAmount={setParticipantsAmount}
+              setIsSubscribed={setIsSubscribed}
+              subscriptionRooms={subscriptionRooms}
+              setIsShowJoinBtn={setIsShowJoinBtn}
+              setIsChatVisible={setIsChatVisible}
+            />
           </MapBox>
         </Fade>
       </Modal>

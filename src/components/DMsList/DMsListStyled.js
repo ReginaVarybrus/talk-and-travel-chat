@@ -26,6 +26,7 @@ export const Item = styled.li`
   align-items: center;
   justify-content: space-between;
   width: 100%;
+  width: 100%;
   height: 72px;
   padding: 0 5%;
   background: ${({ $isActive }) =>
@@ -110,6 +111,16 @@ export const NameAndDayBox = styled.div`
     color: var(--color-grey-9);
     white-space: nowrap;
   }
+`;
+
+export const CompanionName = styled.h6`
+  flex-grow: 1;
+  margin-right: 8px;
+  font-size: 18px;
+  font-weight: ${({ $isActive }) => ($isActive ? '600' : '400')};
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 `;
 
 export const CompanionName = styled.h6`
