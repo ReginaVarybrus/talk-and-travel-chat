@@ -14,6 +14,7 @@ axiosClient.interceptors.request.use(
   config =>
   {
     let authData;
+    console.trace();
     console.log(config.headers.Authorization);
     try {
       // Get token from local storage and check if it
@@ -33,7 +34,9 @@ axiosClient.interceptors.request.use(
 
     if (!isAuthUrl) {
       config.headers.Authorization = `Bearer ${token}`;
-      console.log('we are adding token to ', config.url);
+      console.log('we are adding token to ', config.url, 'and ',
+        config.headers.Authorization
+      );
       return config;
     }
     delete config.headers.Authorization;

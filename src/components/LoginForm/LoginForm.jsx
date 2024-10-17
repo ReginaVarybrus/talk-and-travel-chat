@@ -8,6 +8,7 @@ import {
   schema,
 } from '@/components/LoginForm/LoginValidationSchema';
 import InputField from '@/components/InputField/InputField';
+import { persistor } from '@/redux-store/store';
 
 import {
   ButtonBlock,
@@ -44,7 +45,8 @@ const LoginForm = () => {
     onSubmit: async (values, { resetForm }) => {
       try {
         console.log('Form submited');
-        await dispatch(logIn(values)).unwrap();
+        await dispatch(logIn(values));
+        await persistor.flush();
         navigate(routesPath.ROOMS);
         resetForm();
       } catch (error) {

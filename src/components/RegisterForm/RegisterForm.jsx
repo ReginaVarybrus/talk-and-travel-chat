@@ -18,6 +18,7 @@ import ButtonFacebook from '@/components/Buttons/FaceBook/FaceBookButton';
 import ButtonGoogle from '@/components/Buttons/GoogleButton/GoogleButton';
 import InputField from '@/components/InputField/InputField';
 import { formFields, schema } from '@/components/RegisterForm/ValidationSchema';
+import { persistor } from '@/redux-store/store';
 
 const initialValues = {};
 Object.keys(formFields).forEach(key => {
@@ -40,6 +41,7 @@ const RegisterForm = () => {
       try {
         console.log('Form submited');
         await dispatch(register(values));
+        await persistor.flush();
         navigate(routesPath.ROOMS);
         resetForm();
       } catch (error) {

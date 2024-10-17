@@ -14,8 +14,9 @@ export const register = createAsyncThunk(
     try {
       console.log('Registration started');
       const response = await axiosClient.post(ULRs.register, userData);
+      console.log('Response from Registration', response);
+      dispatch(setUsers(response.data.userDto));
       token.set(response.data.token);
-      dispatch(setUsers(response.data));
       console.log('after dispatch');
       swal(
         'Success!',
@@ -36,8 +37,9 @@ export const logIn = createAsyncThunk(
     try {
       console.log('Login started');
       const response = await axiosClient.post(ULRs.login, userData);
-      token.set(response.data.token);
+      console.log('Response from Login', response);
       dispatch(setUsers(response.data.userDto));
+      token.set(response.data.token);
       console.log('after dispatch');
       return response.data;
     } catch (e) {
