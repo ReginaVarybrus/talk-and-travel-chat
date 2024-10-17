@@ -5,6 +5,7 @@ import { device } from '@/constants/mediaQueries.js';
 import ULRs from '@/constants/constants';
 import { useFetch } from '@/hooks/useFetch';
 import { dateStampConverter } from '@/components/utils/timeUtil.js';
+import { formatDate } from '@/components/utils/dateUtil.js';
 import { ScrollBar } from '@/components/SearchInput/SearchInputStyled.js';
 import {
   ListStyled,
@@ -16,8 +17,8 @@ import {
   ChatNameStyled,
   Avatar,
   ChatName,
-  MessageDay,
   BadgeStyled,
+  NameAndDayBox,
 } from './DMsListStyled';
 
 const DMsList = () => {
@@ -66,31 +67,44 @@ const DMsList = () => {
       {dataUserChats?.length ? (
         <ListItems>
           <ScrollBar>
-            {dataUserChats.map(({ chat, companion, lastReadMessageId }) => {
-              const isOnline =
-                listOfOnlineUsers.get(companion.id.toString()) === true;
+            {dataUserChats
+              .sort((a, b) => {
+                const dateA = a.lastMessage
+                  ? new Date(a.lastMessage.creationDate)
+                  : new Date(0);
+                const dateB = b.lastMessage
+                  ? new Date(b.lastMessage.creationDate)
+                  : new Date(0);
+                return dateB - dateA;
+              })
+              .map(({ chat, companion, lastMessage }) => {
+                const isOnline =
+                  listOfOnlineUsers.get(companion.id.toString()) === true;
 
-              return (
-                <Item
-                  key={chat.id}
-                  onClick={() => handleOpenChat(chat.id, companion)}
-                >
-                  <ChatNameStyled>
-                    <Avatar>
-                      {companion.userName[0].toUpperCase()}
-                      {isOnline && <BadgeStyled />}
-                    </Avatar>
-                    <ChatName>
-                      <h6>{companion.userName}</h6>
-                      <p>{lastReadMessageId}</p>
-                    </ChatName>
-                  </ChatNameStyled>
-                  <MessageDay>
-                    <p>{dateStampConverter(chat.creationDate)}</p>
-                  </MessageDay>
-                </Item>
-              );
-            })}
+                return (
+                  <Item
+                    key={chat.id}
+                    onClick={() => handleOpenChat(chat.id, companion)}
+                  >
+                    <ChatNameStyled>
+                      <Avatar>
+                        {companion.userName[0].toUpperCase()}
+                        {isOnline && <BadgeStyled />}
+                      </Avatar>
+                      <ChatName>
+                        <NameAndDayBox>
+                          <h6>{companion.userName}</h6>
+                          <p>
+                            {lastMessage &&
+                              formatDate(lastMessage.creationDate)}
+                          </p>
+                        </NameAndDayBox>
+                        <p>{lastMessage && lastMessage.content}</p>
+                      </ChatName>
+                    </ChatNameStyled>
+                  </Item>
+                );
+              })}
           </ScrollBar>
         </ListItems>
       ) : (
