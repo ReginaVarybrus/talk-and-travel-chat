@@ -47,7 +47,6 @@ const RegisterForm = () => {
       }
     },
   });
-
   return (
     <RegisterFormBackground>
       <RegisterFormContainer>

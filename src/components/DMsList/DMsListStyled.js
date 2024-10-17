@@ -5,10 +5,12 @@ export const Item = styled.li`
   display: flex;
   align-items: center;
   justify-content: space-between;
+  width: 100%;
   height: 72px;
   padding: 0 5%;
   background: var(--white-color);
   cursor: pointer;
+
   &:hover {
     background: var(--color-blue-1);
   }
@@ -20,6 +22,8 @@ export const Item = styled.li`
 export const ChatNameStyled = styled.div`
   display: flex;
   align-items: center;
+  justify-content: space-between;
+  width: 100%;
 `;
 
 export const Avatar = styled.div`
@@ -62,24 +66,40 @@ export const BadgeStyled = styled.div`
 export const ChatName = styled.div`
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
-  width: 116px;
+  justify-content: center;
+  gap: 8px;
+  width: calc(100% - 58px);
   height: 50px;
+
   & > p {
     color: var(--color-grey-9);
-  }
-  @media ${device.laptop} {
-    width: 156px;
+    font-size: 14px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
 `;
 
-export const MessageDay = styled.div`
+export const NameAndDayBox = styled.div`
   display: flex;
-  align-items: flex-start;
-  justify-content: flex-end;
-  width: 40px;
-  height: 50px;
-  & > p {
+  justify-content: space-between;
+  align-items: center;
+
+  h6 {
+    flex-grow: 1;
+    margin-right: 8px;
+    font-size: 18px;
+    font-weight: 400;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  p {
+    font-size: 14px;
+    font-weight: 400;
+    flex-shrink: 0;
     color: var(--color-grey-9);
+    white-space: nowrap;
   }
 `;
