@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 import { device } from '@/constants/mediaQueries';
 
-export const UnreadMessagesCount = styled.div`
+export const UnreadMessagesCount = styled.span`
   border-radius: 50px;
   color: var(--color-dark);
   font-size: 12px;
@@ -25,7 +25,6 @@ export const Item = styled.li`
   display: flex;
   align-items: center;
   justify-content: space-between;
-  width: 100%;
   width: 100%;
   height: 72px;
   padding: 0 5%;
@@ -105,8 +104,6 @@ export const NameAndDayBox = styled.div`
   align-items: center;
 
   p {
-    font-size: 14px;
-    font-weight: 400;
     flex-shrink: 0;
     color: var(--color-grey-9);
     white-space: nowrap;
@@ -116,7 +113,6 @@ export const NameAndDayBox = styled.div`
 export const CompanionName = styled.h6`
   flex-grow: 1;
   margin-right: 8px;
-  font-size: 18px;
   font-weight: ${({ $isActive }) => ($isActive ? '600' : '400')};
   white-space: nowrap;
   overflow: hidden;
@@ -131,7 +127,6 @@ export const MessageAndCountBox = styled.div`
   gap: 8px;
   p {
     color: var(--color-grey-9);
-    font-size: 14px;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;

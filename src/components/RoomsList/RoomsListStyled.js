@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 import { device } from '@/constants/mediaQueries';
 
-export const UnreadMessagesCount = styled.div`
+export const UnreadMessagesCount = styled.span`
   background: var(--color-blue-1);
   border-radius: 50px;
   color: var(--color-dark);
@@ -54,7 +54,6 @@ export const Item = styled.li`
 
 export const Text = styled.p`
   text-align: center;
-  font-size: 14px;
   color: var(--color-grey-9);
 `;
 
@@ -79,7 +78,6 @@ export const Flag = styled.img`
   padding-right: 12px;
 `;
 
-export const ChatName = styled.p`
-  font-size: 18px;
+export const ChatName = styled.h6`
   font-weight: ${({ $isActive }) => ($isActive ? '600' : '400')};
 `;
