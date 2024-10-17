@@ -123,16 +123,6 @@ export const CompanionName = styled.h6`
   text-overflow: ellipsis;
 `;
 
-export const CompanionName = styled.h6`
-  flex-grow: 1;
-  margin-right: 8px;
-  font-size: 18px;
-  font-weight: ${({ $isActive }) => ($isActive ? '600' : '400')};
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-`;
-
 export const MessageAndCountBox = styled.div`
   display: flex;
   justify-content: space-between;

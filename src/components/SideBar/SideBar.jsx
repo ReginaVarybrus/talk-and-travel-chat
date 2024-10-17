@@ -5,7 +5,6 @@ import { getUser } from '@/redux-store/selectors';
 import { useChatContext } from '@/providers/ChatProvider';
 import { useWebSocket } from '@/hooks/useWebSocket.js';
 import { logOut } from '@/redux-store/AuthOperations/AuthOperations';
-import { useWebSocket } from '@/hooks/useWebSocket';
 
 import {
   SideBarStyled,
