@@ -1,4 +1,6 @@
 import PropTypes from 'prop-types';
+import { useMediaQuery } from 'react-responsive';
+import { device } from '@/constants/mediaQueries.js';
 import { LuLogOut } from 'react-icons/lu';
 import { IoCloseOutline } from 'react-icons/io5';
 import { HiOutlineExclamationCircle } from 'react-icons/hi';
@@ -42,9 +44,11 @@ const CountryInfo = ({
   setSubscriptionRooms,
   chatId,
   setIsShowJoinBtn,
+  setIsChatVisible,
 }) => {
+  const isDesktop = useMediaQuery({ query: device.tablet });
   const currentUserId = useSelector(getUser)?.id;
-  const { sendEvent } = useWebSocket();
+  const { sendMessageOrEvent } = useWebSocket();
   const navigate = useNavigate();
 
   const { responseData: dataUserChats } = useFetch(ULRs.getPrivateChats);
@@ -87,11 +91,14 @@ const CountryInfo = ({
     const dataEventToSend = {
       chatId,
     };
-    sendEvent(dataEventToSend, ULRs.leaveOutGroupChat);
+    sendMessageOrEvent(dataEventToSend, ULRs.leaveOutGroupChat);
     setSubscriptionRooms(prevRooms =>
       prevRooms.filter(room => room.name !== countryName)
     );
     setParticipantsAmount(prevCount => (prevCount > 0 ? prevCount - 1 : 0));
+    if (!isDesktop) {
+      setIsChatVisible(false);
+    }
     onClose();
     setIsShowJoinBtn(true);
   };

@@ -46,7 +46,7 @@ const SearchInput = ({
       setParticipantsAmount(responseData.usersCount);
       setIsSubscribed(true);
     }
-    console.log(mapData);
+    console.log('map data', mapData);
   }, [responseData, setChatData]);
 
   const handleChange = event => {

@@ -46,47 +46,27 @@ export const router = createBrowserRouter([
     element: (
       <PrivateRoute
         component={importComponent.LAYOUT}
-        redirectTo={routesPath.LOGIN}
+        redirectTo={routesPath.MAIN}
       />
     ),
     children: [
       {
         path: routesPath.CHAT,
-        element: (
-          <PrivateRoute
-            component={importComponent.CHAT}
-            redirectTo={routesPath.LOGIN}
-          />
-        ),
+        Component: importComponent.CHAT,
         children: [
           {
             path: routesPath.ROOMS,
-            element: (
-              <PrivateRoute
-                component={importComponent.ROOMS}
-                redirectTo={routesPath.LOGIN}
-              />
-            ),
+            Component: importComponent.ROOMS,
           },
           {
             path: routesPath.DMS,
-            element: (
-              <PrivateRoute
-                component={importComponent.DMS}
-                redirectTo={routesPath.LOGIN}
-              />
-            ),
+            Component: importComponent.DMS,
           },
         ],
       },
       {
         path: routesPath.ACCOUNT,
-        element: (
-          <PrivateRoute
-            component={importComponent.ACCOUNT}
-            redirectTo={routesPath.LOGIN}
-          />
-        ),
+        Component: importComponent.ACCOUNT,
       },
     ],
   },

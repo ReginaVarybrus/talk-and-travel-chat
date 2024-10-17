@@ -75,27 +75,16 @@ export const useWebSocket = () => {
 
   const unsubscribeFromUsersStatuses = () => unsubscribe('statuses');
 
-  const sendMessage = message => {
-    if (isClientConnected()) {
-      stompClient.publish({
-        destination: `/chat/messages`,
-        body: JSON.stringify(message),
-      });
-    } else {
-      console.error(
-        'MESSAGE.Stomp client is not connected or no current chat.'
-      );
-    }
-  };
-
-  const sendEvent = (message, endpoint) => {
+  const sendMessageOrEvent = (message, endpoint) => {
     if (isClientConnected()) {
       stompClient.publish({
         destination: endpoint,
         body: JSON.stringify(message),
       });
     } else {
-      console.error('EVENT.Stomp client is not connected or no current chat.');
+      console.error(
+        'MESSAGE.Stomp client is not connected or no current chat.'
+      );
     }
   };
 
@@ -118,8 +107,7 @@ export const useWebSocket = () => {
     subscribeToUserErrors,
     subscribeToUsersStatuses,
     unsubscribeFromUsersStatuses,
-    sendMessage,
-    sendEvent,
+    sendMessageOrEvent,
     handleDeactivateStopmClient,
   };
 };

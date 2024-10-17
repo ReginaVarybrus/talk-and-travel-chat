@@ -1,7 +1,7 @@
 import ULRs from '@/constants/constants';
 import axios from 'axios';
 
-const urlToOmit = [ULRs.login, ULRs.register, ULRs.logout];
+const urlToOmit = [ULRs.login, ULRs.register];
 
 const axiosClient = axios.create({
   baseURL: `${import.meta.env.VITE_APP_API_URL}/api/`,
@@ -11,25 +11,35 @@ const axiosClient = axios.create({
 });
 
 axiosClient.interceptors.request.use(
-  config => {
-    const authData = JSON.parse(localStorage.getItem('persist:auth'));
+  config =>
+  {
+    let authData;
+    try {
+      // Get token from local storage and check if it
+      authData = JSON.parse(localStorage.getItem('persist:auth'));
+    } catch (e) {
+      console.error('Error parsing auth data from local storage', e);
+      authData = null;
+    }
     const token = authData ? authData?.token?.replace(/"/g, '') : null;
     const isAuthUrl = urlToOmit.includes(config.url);
-
     if (!isAuthUrl && token) {
       config.headers.Authorization = `Bearer ${token}`;
+      return config;
     }
-
+    delete config.headers.Authorization;
     return config;
   },
   error => Promise.reject(error)
 );
 
 const token = {
-  set(tokenValue) {
+  set(tokenValue)
+  {
     axiosClient.defaults.headers.common.Authorization = `Bearer ${tokenValue}`;
   },
-  unset() {
+  unset()
+  {
     delete axiosClient.defaults.headers.common.Authorization;
   },
 };
