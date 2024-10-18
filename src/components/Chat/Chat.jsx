@@ -377,7 +377,9 @@ const Chat = ({
                 10
               );
               if (unreadMessages.some(msg => msg.id === visibleMessageId)) {
+                const remainingUnread = unreadMessages.length - 1;
                 debouncedMarkAsRead(id, visibleMessageId);
+                updateUnreadMessagesCount(id, remainingUnread, isPrivateChat);
                 setUnreadCount(prev => Math.max(prev - 1, 0));
                 setUnreadMessages(prevUnread =>
                   prevUnread.filter(msg => msg.id !== visibleMessageId)
