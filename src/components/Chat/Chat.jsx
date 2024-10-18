@@ -16,6 +16,7 @@ import MessageList from '@/components/MessageList/MessageList';
 import MessageBar from '@/components/MessageBar/MessageBar';
 import ChatFirstLoading from '@/components/ChatFirstLoading/ChatFirstLoading';
 import Loader from '@/components/Loader/Loader';
+import { useChatContext } from '@/providers/ChatProvider';
 import {
   ChatStyled,
   MessageBlock,
@@ -74,6 +75,8 @@ const Chat = ({
     unsubscribeFromMessages,
   } = useWebSocket();
 
+  const { updateUnreadMessagesCount } = useChatContext();
+
   const debouncedMarkAsRead = useRef(
     debounce(async (chatId, lastMessageId) => {
       if (!chatId || !lastMessageId) return;
@@ -81,6 +84,8 @@ const Chat = ({
         await axiosClient.patch(ULRs.lastReadMessage(chatId), {
           lastReadMessageId: lastMessageId,
         });
+        const remainingUnread = unreadMessages.length - 1;
+        updateUnreadMessagesCount(id, remainingUnread, isPrivateChat);
       } catch (error) {
         console.error('Error updating last read message:', error);
       }
@@ -372,7 +377,9 @@ const Chat = ({
                 10
               );
               if (unreadMessages.some(msg => msg.id === visibleMessageId)) {
+                const remainingUnread = unreadMessages.length - 1;
                 debouncedMarkAsRead(id, visibleMessageId);
+                updateUnreadMessagesCount(id, remainingUnread, isPrivateChat);
                 setUnreadCount(prev => Math.max(prev - 1, 0));
                 setUnreadMessages(prevUnread =>
                   prevUnread.filter(msg => msg.id !== visibleMessageId)
@@ -408,8 +415,7 @@ const Chat = ({
         });
       };
     }
-  }, [id, unreadMessages]);
-
+  }, [id, unreadMessages, updateUnreadMessagesCount]);
   return (
     <ChatStyled $isChatVisible={isChatVisible}>
       {!name && <ChatFirstLoading />}
