@@ -41,7 +41,7 @@ const Chat = ({
   setIsChatVisible,
 }) => {
   const userId = useSelector(getUser)?.id;
-  const { id, name, chatType, country } = chatData;
+  const { id, name, chatType, country } = chatData || {};
   const isPrivateChat = chatType === CHAT_TYPES.PRIVATE;
 
   const [isUserTyping, setIsUserTyping] = useState(false);
@@ -59,6 +59,7 @@ const Chat = ({
   const [showNewMessagesIndicator, setShowNewMessagesIndicator] =
     useState(false);
   const [isAutoScrolling, setIsAutoScrolling] = useState(false);
+  const [messagesToMarkAsRead, setMessagesToMarkAsRead] = useState([]);
 
   const messagesEndRef = useRef(null);
   const messageBlockRef = useRef(null);
@@ -66,6 +67,7 @@ const Chat = ({
   const unreadMessageRef = useRef(null);
   const isFetchingRead = useRef(false);
   const isFetchingUnread = useRef(false);
+  const previousChatIdRef = useRef(null);
 
   const {
     subscribeToMessages,
@@ -75,17 +77,20 @@ const Chat = ({
 
   const { updateUnreadMessagesCount } = useChatContext();
 
-  const markAsRead = async messageId => {
-    try {
-      await axiosClient.patch(ULRs.lastReadMessage(id), {
-        lastReadMessageId: messageId,
-      });
-      const remainingUnread = unreadMessages.length - 1;
-      updateUnreadMessagesCount(id, remainingUnread, isPrivateChat);
-    } catch (error) {
-      console.error('Error updating last read message:', error);
-    }
-  };
+  const debouncedMarkAsRead = useRef(
+    debounce(async (chatId, lastMessageId) => {
+      if (!chatId || !lastMessageId) return;
+      try {
+        await axiosClient.patch(ULRs.lastReadMessage(chatId), {
+          lastReadMessageId: lastMessageId,
+        });
+        const remainingUnread = unreadMessages.length - 1;
+        updateUnreadMessagesCount(id, remainingUnread, isPrivateChat);
+      } catch (error) {
+        console.error('Error updating last read message:', error);
+      }
+    }, 1000)
+  ).current;
 
   const fetchPublicMessages = async (pageNumber = 0) => {
     setIsFetchingMore(true);
@@ -205,13 +210,27 @@ const Chat = ({
 
   useEffect(() => {
     if (id) {
+      const currentChatId = previousChatIdRef.current;
+
       setHasScrolledToEnd(false);
       setMessages([]);
       setUnreadMessages([]);
       setPage(0);
       setUnreadPage(0);
       setShowNewMessagesIndicator(false);
+      setMessagesToMarkAsRead([]);
+
+      if (currentChatId && messagesToMarkAsRead.length > 0) {
+        const lastMessageId =
+          messagesToMarkAsRead[messagesToMarkAsRead.length - 1];
+        debouncedMarkAsRead(currentChatId, lastMessageId);
+        debouncedMarkAsRead.flush();
+        setMessagesToMarkAsRead([]);
+      }
+
       fetchChatMessages();
+
+      previousChatIdRef.current = id;
     }
   }, [id]);
 
@@ -251,7 +270,7 @@ const Chat = ({
             setTimeout(() => {
               scrollToBottom();
             }, 100);
-            markAsRead(newMessage.id);
+            setMessagesToMarkAsRead(prev => [...prev, newMessage.id]);
           } else {
             setUnreadMessages(prev => [...prev, newMessage]);
             setShowNewMessagesIndicator(true);
@@ -270,6 +289,37 @@ const Chat = ({
       };
     }
   }, [id, isSubscribed, setChatData]);
+
+  useEffect(() => {
+    if (messagesToMarkAsRead.length > 0) {
+      const timer = setTimeout(() => {
+        const lastMessageId =
+          messagesToMarkAsRead[messagesToMarkAsRead.length - 1];
+
+        debouncedMarkAsRead(id, lastMessageId);
+        setMessagesToMarkAsRead([]);
+      }, 3000);
+
+      return () => clearTimeout(timer);
+    }
+  }, [messagesToMarkAsRead, id]);
+
+  useEffect(() => {
+    const handleBeforeUnload = () => {
+      if (messagesToMarkAsRead.length > 0 && previousChatIdRef.current) {
+        const lastMessageId =
+          messagesToMarkAsRead[messagesToMarkAsRead.length - 1];
+        debouncedMarkAsRead(previousChatIdRef.current, lastMessageId);
+        debouncedMarkAsRead.flush();
+      }
+    };
+
+    window.addEventListener('beforeunload', handleBeforeUnload);
+
+    return () => {
+      window.removeEventListener('beforeunload', handleBeforeUnload);
+    };
+  }, [messagesToMarkAsRead]);
 
   const handleScroll = debounce(e => {
     const { scrollHeight, clientHeight, scrollTop } = e.target;
@@ -327,7 +377,7 @@ const Chat = ({
                 10
               );
               if (unreadMessages.some(msg => msg.id === visibleMessageId)) {
-                markAsRead(visibleMessageId);
+                debouncedMarkAsRead(id, visibleMessageId);
                 setUnreadCount(prev => Math.max(prev - 1, 0));
                 setUnreadMessages(prevUnread =>
                   prevUnread.filter(msg => msg.id !== visibleMessageId)
