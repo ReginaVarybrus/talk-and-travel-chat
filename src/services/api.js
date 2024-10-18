@@ -15,7 +15,7 @@ axiosClient.interceptors.request.use(
   {
     let authData;
     try {
-      // Get token from local storage and check if it
+      // Get token from local storage and check if it had been retrieved.
       authData = JSON.parse(localStorage.getItem('persist:auth'));
     } catch (e) {
       console.error('Error parsing auth data from local storage', e);
@@ -23,7 +23,7 @@ axiosClient.interceptors.request.use(
     }
     const token = authData ? authData?.token?.replace(/"/g, '') : null;
     const isAuthUrl = urlToOmit.includes(config.url);
-    if (!isAuthUrl && token) {
+    if (!isAuthUrl) {
       config.headers.Authorization = `Bearer ${token}`;
       return config;
     }

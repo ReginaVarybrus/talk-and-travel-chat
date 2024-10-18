@@ -56,8 +56,6 @@ const ChatRoute = () => {
       try {
         const response = await axiosClient.get(ULRs.getUsersOnlineStatusPath);
 
-        console.log('Received data:', response.data);
-
         setListOfOnlineUsersStatuses(prevStatus => {
           const updatedList = new Map(prevStatus);
           Object.entries(response.data).forEach(([id, value]) => {
