@@ -70,6 +70,7 @@ export const SideBarButton = styled.div`
   width: 56px;
   height: 76px;
   cursor: pointer;
+  position: relative;
   color: ${({ $isActive }) =>
     $isActive ? 'var(--color-brand-blue)' : 'var(--color-grey-9)'};
   transition: color 0.3s;
@@ -99,4 +100,20 @@ export const ChatsButtonsFrame = styled.div`
   align-items: center;
   width: 51px;
   height: 166px;
+`;
+
+export const UnreadMessagesCount = styled.div`
+  border-radius: 50px;
+  color: var(--white-color);
+  font-size: 12px;
+  font-weight: 500;
+  height: 17px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: var(--color-blue-5);
+  padding: 4px 8px;
+  position: absolute;
+  left: 55%;
+  top: 2px;
 `;

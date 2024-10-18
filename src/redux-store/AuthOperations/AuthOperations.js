@@ -13,7 +13,7 @@ export const register = createAsyncThunk(
   {
     try {
       const response = await axiosClient.post(ULRs.register, userData);
-      dispatch(setUsers(response.data));
+      dispatch(setUsers(response.data.userDto));
       token.set(response.data.token);
       swal(
         'Success!',
@@ -33,8 +33,8 @@ export const logIn = createAsyncThunk(
   {
     try {
       const response = await axiosClient.post(ULRs.login, userData);
-      token.set(response.data.token);
       dispatch(setUsers(response.data.userDto));
+      token.set(response.data.token);
       return response.data;
     } catch (e) {
       if (e.response.status === 400 || e.response.status === 401) {

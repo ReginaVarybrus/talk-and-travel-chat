@@ -82,7 +82,7 @@ h5 {
 }
 
 h6 {
-  font-size: 16px;
+  font-size: 18px;
   font-weight: 700;
   line-height: 19px;
 } 

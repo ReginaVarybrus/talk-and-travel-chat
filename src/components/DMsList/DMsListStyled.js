@@ -1,6 +1,26 @@
 import styled from 'styled-components';
 import { device } from '@/constants/mediaQueries';
 
+export const UnreadMessagesCount = styled.span`
+  border-radius: 50px;
+  color: var(--color-dark);
+  font-size: 12px;
+  font-weight: 500;
+
+  height: 17px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 4px 8px;
+  flex-shrink: 0;
+  background: ${({ $isActive }) =>
+    $isActive ? 'var(--white-color)' : 'var(--color-blue-1)'};
+
+  @media ${device.tablet} {
+    color: var(--color-grey-9);
+  }
+`;
+
 export const Item = styled.li`
   display: flex;
   align-items: center;
@@ -8,11 +28,17 @@ export const Item = styled.li`
   width: 100%;
   height: 72px;
   padding: 0 5%;
-  background: var(--white-color);
+  background: ${({ $isActive }) =>
+    $isActive ? 'var(--color-blue-1)' : 'var(--white-color)'};
   cursor: pointer;
+  transition: all 0.3s ease;
 
   &:hover {
     background: var(--color-blue-1);
+
+    & ${UnreadMessagesCount} {
+      background: var(--white-color);
+    }
   }
   @media ${device.tablet} {
     padding: 0 16px;
@@ -70,14 +96,6 @@ export const ChatName = styled.div`
   gap: 8px;
   width: calc(100% - 58px);
   height: 50px;
-
-  & > p {
-    color: var(--color-grey-9);
-    font-size: 14px;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-  }
 `;
 
 export const NameAndDayBox = styled.div`
@@ -85,21 +103,33 @@ export const NameAndDayBox = styled.div`
   justify-content: space-between;
   align-items: center;
 
-  h6 {
-    flex-grow: 1;
-    margin-right: 8px;
-    font-size: 18px;
-    font-weight: 400;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-  }
-
   p {
-    font-size: 14px;
-    font-weight: 400;
     flex-shrink: 0;
     color: var(--color-grey-9);
     white-space: nowrap;
+  }
+`;
+
+export const CompanionName = styled.h6`
+  flex-grow: 1;
+  margin-right: 8px;
+  font-weight: ${({ $isActive }) => ($isActive ? '600' : '400')};
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+`;
+
+export const MessageAndCountBox = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  gap: 8px;
+  p {
+    color: var(--color-grey-9);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    flex-grow: 1;
   }
 `;

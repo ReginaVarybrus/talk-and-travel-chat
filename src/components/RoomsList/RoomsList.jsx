@@ -4,12 +4,17 @@ import { useMediaQuery } from 'react-responsive';
 import { device } from '@/constants/mediaQueries.js';
 import { useFetch } from '@/hooks/useFetch.js';
 import ULRs from '@/constants/constants';
+import { Flag, ScrollBar } from '@/components/SearchInput/SearchInputStyled.js';
+import { useChatContext } from '@/providers/ChatProvider';
 import {
-  Flag,
-  ScrollBar,
+  ListStyled,
   Item,
-} from '@/components/SearchInput/SearchInputStyled.js';
-import { ListStyled, Text, ListItems } from './RoomsListStyled';
+  Text,
+  ListItems,
+  UnreadMessagesCount,
+  ChatNameBox,
+  ChatName,
+} from './RoomsListStyled';
 
 const RoomsList = () => {
   const isDesktop = useMediaQuery({ query: device.tablet });
@@ -21,12 +26,12 @@ const RoomsList = () => {
 
   const {
     setChatData,
-    subscriptionRooms,
     setIsSubscribed,
     setIsShowJoinBtn,
     setIsChatVisible,
     setParticipantsAmount,
   } = useOutletContext();
+  const { subscriptionRooms } = useChatContext();
 
   useEffect(() => {
     if (responseData) {
@@ -51,17 +56,29 @@ const RoomsList = () => {
           <ScrollBar>
             {subscriptionRooms.map(room => (
               <Item
-                key={room.flagCode}
+                key={room.country.flagCode}
                 onClick={() => handleOpenCountryRoom(room.name)}
+                $isActive={room.name === selectedCountry}
               >
-                <Flag
-                  loading="lazy"
-                  width="48"
-                  srcSet={`https://flagcdn.com/w40/${room.flagCode}.png 2x`}
-                  src={`https://flagcdn.com/w20/${room.flagCode}.png`}
-                  alt={`${room.flagCode} flag`}
-                />
-                <p>{room.name}</p>
+                <ChatNameBox>
+                  <Flag
+                    loading="lazy"
+                    width="48"
+                    srcSet={`https://flagcdn.com/w40/${room.country.flagCode}.png 2x`}
+                    src={`https://flagcdn.com/w20/${room.country.flagCode}.png`}
+                    alt={`${room.country.flagCode} flag`}
+                  />
+                  <ChatName $isActive={room.name === selectedCountry}>
+                    {room.name}
+                  </ChatName>
+                </ChatNameBox>
+                {room.unreadMessagesCount > 0 && (
+                  <UnreadMessagesCount
+                    $isActive={room.name === selectedCountry}
+                  >
+                    {room.unreadMessagesCount}
+                  </UnreadMessagesCount>
+                )}
               </Item>
             ))}
           </ScrollBar>

@@ -70,8 +70,9 @@ export const Item = styled.li`
   padding: 0 5%;
   background: var(--white-color);
   cursor: pointer;
+
   &:hover {
-    background: var(--color-grey-3);
+    background: var(--color-blue-1);
   }
   @media ${device.tablet} {
     padding: 0 16px;
