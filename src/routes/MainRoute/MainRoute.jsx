@@ -136,6 +136,7 @@ const MainRoute = () => {
               marginBottom: '20px',
               fontSize: '40px',
               lineHeight: '48px',
+              color: 'var(--white-color)',
             }}
           >
             What is <b>Talk & Travel?</b>
@@ -144,6 +145,7 @@ const MainRoute = () => {
             sx={{
               fontSize: '20px',
               lineHeight: '24px',
+              color: 'var(--white-color)',
             }}
           >
             Talk & Travel is the chat where everyone joins a vibrant community,
@@ -154,6 +156,7 @@ const MainRoute = () => {
             sx={{
               fontSize: '20px',
               lineHeight: '24px',
+              color: 'var(--white-color)',
             }}
           >
             <br />
