@@ -14,7 +14,6 @@ export const useFetch = url =>
       try {
         const response = await axiosClient.get(url);
         setResponseData(response.data);
-        // console.log(response.data);
       } catch (error) {
         console.error('Error fetching country rooms:', error);
       }
