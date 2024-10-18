@@ -10,7 +10,7 @@ const MessageList = ({
   messages,
   setIsUserTyping,
   setUserNameisTyping,
-  listOfOnlineUsers,
+  listOfOnlineUsersStatuses,
   lastReadMessageRef,
 }) => {
   useEffect(() => {
@@ -59,8 +59,11 @@ const MessageList = ({
       const isShownAvatar =
         message.type === MESSAGE_TYPES.TEXT && isLastMessage;
 
-      const isOnline =
-        listOfOnlineUsers.get(message.user.id.toString()) === true;
+      const userStatus = listOfOnlineUsersStatuses.get(
+        message.user.id.toString()
+      );
+
+      const isOnline = userStatus ? userStatus.isOnline : false;
 
       const isLastReadMessage = index === sortedMessages.length - 1;
       return (

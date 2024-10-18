@@ -4,7 +4,7 @@ import { useMediaQuery } from 'react-responsive';
 import { device } from '@/constants/mediaQueries.js';
 import ULRs from '@/constants/constants';
 import { useFetch } from '@/hooks/useFetch';
-import { dateStampConverter } from '@/components/utils/timeUtil.js';
+// import { dateStampConverter } from '@/components/utils/timeUtil.js';
 import { formatDate } from '@/components/utils/dateUtil.js';
 import { ScrollBar } from '@/components/SearchInput/SearchInputStyled.js';
 import {
@@ -31,7 +31,7 @@ const DMsList = () => {
     setIsSubscribed,
     setSelectedCompanion,
     setIsChatVisible,
-    listOfOnlineUsers,
+    listOfOnlineUsersStatuses,
   } = useOutletContext();
 
   const { responseData: dataUserChats } = useFetch(ULRs.getPrivateChats);
@@ -78,8 +78,11 @@ const DMsList = () => {
                 return dateB - dateA;
               })
               .map(({ chat, companion, lastMessage }) => {
-                const isOnline =
-                  listOfOnlineUsers.get(companion.id.toString()) === true;
+                const userStatus = listOfOnlineUsersStatuses.get(
+                  companion.id.toString()
+                );
+
+                const isOnline = userStatus ? userStatus.isOnline : false;
 
                 return (
                   <Item

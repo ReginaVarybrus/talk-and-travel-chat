@@ -35,7 +35,7 @@ const Chat = ({
   setSelectedCompanion,
   participantsAmount,
   setParticipantsAmount,
-  listOfOnlineUsers,
+  listOfOnlineUsersStatuses,
   isChatVisible,
   setIsChatVisible,
 }) => {
@@ -375,7 +375,7 @@ const Chat = ({
         setSubscriptionRooms={setSubscriptionRooms}
         setIsShowJoinBtn={setIsShowJoinBtn}
         setIsChatVisible={setIsChatVisible}
-        listOfOnlineUsers={listOfOnlineUsers}
+        listOfOnlineUsersStatuses={listOfOnlineUsersStatuses}
       />
       <MessageBlock ref={messageBlockRef} onScroll={handleScroll}>
         {isFetchingMore && <Loader size={50} />}
@@ -384,7 +384,7 @@ const Chat = ({
             messages={messages}
             setIsUserTyping={setIsUserTyping}
             setUserNameisTyping={setUserNameisTyping}
-            listOfOnlineUsers={listOfOnlineUsers}
+            listOfOnlineUsersStatuses={listOfOnlineUsersStatuses}
             lastReadMessageRef={unreadMessageRef}
           />
         ) : (

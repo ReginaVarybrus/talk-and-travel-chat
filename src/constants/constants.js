@@ -21,7 +21,7 @@ const ULRs = {
   leaveOutGroupChat: '/request/chat/events.leaveChat',
   startTyping: '/request/chat/events.startTyping',
   stopTyping: '/request/chat/events.stopTyping',
-  updateOnlineStatus: '/request/auth-user/events.updateOnlineStatu',
+  updateOnlineStatus: '/request/auth-user/events.updateOnlineStatus',
   getPrivateChats: 'v2/user/private-chats',
   createPrivateChat: 'chats/private',
   usersOnlineStatus: '/notify/users/onlineStatus',

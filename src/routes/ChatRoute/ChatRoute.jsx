@@ -16,7 +16,9 @@ const ChatRoute = () => {
   const [isShowJoinBtn, setIsShowJoinBtn] = useState(false);
   const [participantsAmount, setParticipantsAmount] = useState(null);
   const [selectedCompanion, setSelectedCompanion] = useState(null);
-  const [listOfOnlineUsers, setListOfOnlineUsers] = useState(new Map());
+  const [listOfOnlineUsersStatuses, setListOfOnlineUsersStatuses] = useState(
+    new Map()
+  );
   const { responseData } = useFetch(ULRs.userCountries);
   const {
     stompClient,
@@ -38,7 +40,7 @@ const ChatRoute = () => {
     if (stompClient?.connected) {
       const subscription = subscribeToUsersStatuses(
         ULRs.usersOnlineStatus,
-        setListOfOnlineUsers
+        setListOfOnlineUsersStatuses
       );
 
       return () => {
@@ -56,7 +58,7 @@ const ChatRoute = () => {
 
         console.log('Received data:', response.data);
 
-        setListOfOnlineUsers(prevStatus => {
+        setListOfOnlineUsersStatuses(prevStatus => {
           const updatedList = new Map(prevStatus);
           Object.entries(response.data).forEach(([id, value]) => {
             updatedList.set(id, value);
@@ -80,7 +82,7 @@ const ChatRoute = () => {
         setIsShowJoinBtn={setIsShowJoinBtn}
         setSelectedCompanion={setSelectedCompanion}
         setParticipantsAmount={setParticipantsAmount}
-        listOfOnlineUsers={listOfOnlineUsers}
+        listOfOnlineUsersStatuses={listOfOnlineUsersStatuses}
         isChatVisible={isChatVisible}
         setIsChatVisible={setIsChatVisible}
       />
@@ -96,7 +98,7 @@ const ChatRoute = () => {
         setSelectedCompanion={setSelectedCompanion}
         participantsAmount={participantsAmount}
         setParticipantsAmount={setParticipantsAmount}
-        listOfOnlineUsers={listOfOnlineUsers}
+        listOfOnlineUsersStatuses={listOfOnlineUsersStatuses}
         isChatVisible={isChatVisible}
         setIsChatVisible={setIsChatVisible}
       />

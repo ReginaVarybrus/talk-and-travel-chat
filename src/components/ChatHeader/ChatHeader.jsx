@@ -28,15 +28,18 @@ const ChatHeader = ({
   setSubscriptionRooms,
   setIsShowJoinBtn,
   setIsChatVisible,
-  listOfOnlineUsers,
+  listOfOnlineUsersStatuses,
 }) => {
   const [openModal, setOpenModal] = useState(false);
   const userName = useSelector(getUser)?.userName;
   const showUserIsTyping = userNameisTyping !== userName && isUserTyping;
   const nameOfChat = isPrivateChat ? selectedCompanion.userName : chatName;
-  const isOnline =
-    isPrivateChat &&
-    listOfOnlineUsers.get(selectedCompanion.id.toString()) === true;
+  const userStatus = listOfOnlineUsersStatuses.get(
+    selectedCompanion?.id.toString()
+  );
+
+  const isOnline = userStatus ? userStatus.isOnline : false;
+
   const firstLetterOfName = selectedCompanion?.userName
     .substr(0, 1)
     .toUpperCase();
