@@ -58,7 +58,7 @@ const Chat = ({
   const [hasScrolledToEnd, setHasScrolledToEnd] = useState(false);
   const [showNewMessagesIndicator, setShowNewMessagesIndicator] =
     useState(false);
-  const [isAutoScrolling, setIsAutoScrolling] = useState(false);
+  // const [isAutoScrolling, setIsAutoScrolling] = useState(false);
   const [messagesToMarkAsRead, setMessagesToMarkAsRead] = useState([]);
 
   const messagesEndRef = useRef(null);
@@ -234,24 +234,20 @@ const Chat = ({
     }
   }, [id]);
 
-  const scrollToBottom = () => {
-    if (messageBlockRef.current) {
-      setIsAutoScrolling(true);
-      messageBlockRef.current.scrollTo({
-        top: messageBlockRef.current.scrollHeight,
-        behavior: 'smooth',
-      });
-      setTimeout(() => {
-        setIsAutoScrolling(false);
-      }, 300);
-    }
-  };
-  useEffect(() => {
-    if (messages.length > 0 && !hasScrolledToEnd) {
-      scrollToBottom();
-      setHasScrolledToEnd(true);
-    }
-  }, [messages, hasScrolledToEnd]);
+  // const scrollToBottom = () => {
+  //   if (messageBlockRef.current) {
+  //     messageBlockRef.current.scrollTo({
+  //       bottom: messageBlockRef.current.scrollHeight,
+  //       behavior: 'smooth',
+  //     });
+  //   }
+  // };
+  // useEffect(() => {
+  //   if (messages.length > 0 && !hasScrolledToEnd) {
+  //     scrollToBottom();
+  //     setHasScrolledToEnd(true);
+  //   }
+  // }, [messages, hasScrolledToEnd]);
 
   useEffect(() => {
     if (isSubscribed && id) {
@@ -268,7 +264,7 @@ const Chat = ({
 
           if (isAtBottom) {
             setTimeout(() => {
-              scrollToBottom();
+              // scrollToBottom();
             }, 100);
             setMessagesToMarkAsRead(prev => [...prev, newMessage.id]);
           } else {
@@ -321,50 +317,56 @@ const Chat = ({
     };
   }, [messagesToMarkAsRead]);
 
-  const handleScroll = debounce(e => {
+  const handleScroll = e => {
     const { scrollHeight, clientHeight, scrollTop } = e.target;
-    const atBottom = scrollTop + clientHeight >= scrollHeight - 10;
-    const nearTop = scrollTop < 200;
+    // const atTop = scrollTop + clientHeight <= scrollHeight - 10;
+    // const nearBottom = scrollTop > 200;
+    // console.log(' scrollTop', scrollTop);
+    const atBottom = scrollTop === 0;
+    const nearTop = scrollHeight - clientHeight - scrollTop < 200;
+    const atTop = scrollTop <= -10;
+    const isAtTop = scrollHeight + scrollTop <= clientHeight + 200;
 
     if (isFetching.current) return;
-    if (isAutoScrolling) return;
+    // if (isAutoScrolling) return;
 
-    if (atBottom && unreadMessages.length > 0) {
-      setUnreadMessages([]);
-      setShowNewMessagesIndicator(false);
-    }
+    // if (atBottom && unreadMessages.length > 0) {
+    //   setUnreadMessages([]);
+    //   setShowNewMessagesIndicator(false);
+    // }
 
     if (!isShowJoinBtn) {
-      if (nearTop && hasMore && !isFetching.current) {
+      if (isAtTop && hasMore && !isFetching.current) {
         isFetching.current = true;
-        const currentScrollHeight = e.target.scrollHeight;
-
+        const previousScrollHeight = e.target.scrollHeight;
         fetchReadMessages(page)
           .then(() => {
-            e.target.scrollTop = e.target.scrollHeight - currentScrollHeight;
+            const newScrollHeight = e.target.scrollHeight;
+            e.target.scrollBottom = newScrollHeight - previousScrollHeight;
           })
           .finally(() => {
             isFetching.current = false;
           });
       }
-    } else if (nearTop && hasMore && !isFetching.current) {
+    } else if (isAtTop && hasMore && !isFetching.current) {
       isFetching.current = true;
 
-      const currentScrollHeight = e.target.scrollHeight;
+      const previousScrollHeight = e.target.scrollHeight;
 
       fetchPublicMessages(page)
         .then(() => {
-          e.target.scrollTop = e.target.scrollHeight - currentScrollHeight;
+          const newScrollHeight = e.target.scrollHeight;
+          e.target.scrollBottom = newScrollHeight - previousScrollHeight;
         })
         .finally(() => {
           isFetching.current = false;
         });
     }
 
-    if (atBottom) {
-      setShowNewMessagesIndicator(false);
-    }
-  }, 300);
+    //   if (atBottom) {
+    //     setShowNewMessagesIndicator(false);
+    //   }
+  };
 
   useEffect(() => {
     if (id && unreadMessages.length > 0) {
@@ -416,6 +418,7 @@ const Chat = ({
       };
     }
   }, [id, unreadMessages, updateUnreadMessagesCount]);
+
   return (
     <ChatStyled $isChatVisible={isChatVisible}>
       {!name && <ChatFirstLoading />}
@@ -456,7 +459,7 @@ const Chat = ({
         <NewMessagesNotification>
           <button
             type="button"
-            onClick={scrollToBottom}
+            // onClick={scrollToBottom}
             aria-label="Scroll to bottom"
           >
             <IoIosArrowDown />
@@ -482,7 +485,7 @@ const Chat = ({
         isUserTyping={isUserTyping}
         setIsUserTyping={setIsUserTyping}
         setParticipantsAmount={setParticipantsAmount}
-        scrollToBottom={scrollToBottom}
+        // scrollToBottom={scrollToBottom}
         setShowNewMessagesIndicator={setShowNewMessagesIndicator}
       />
     </ChatStyled>
