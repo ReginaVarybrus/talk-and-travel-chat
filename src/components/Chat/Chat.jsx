@@ -234,20 +234,20 @@ const Chat = ({
     }
   }, [id]);
 
-  // const scrollToBottom = () => {
-  //   if (messageBlockRef.current) {
-  //     messageBlockRef.current.scrollTo({
-  //       bottom: messageBlockRef.current.scrollHeight,
-  //       behavior: 'smooth',
-  //     });
-  //   }
-  // };
-  // useEffect(() => {
-  //   if (messages.length > 0 && !hasScrolledToEnd) {
-  //     scrollToBottom();
-  //     setHasScrolledToEnd(true);
-  //   }
-  // }, [messages, hasScrolledToEnd]);
+  const scrollToBottom = () => {
+    if (messageBlockRef.current) {
+      messageBlockRef.current.scrollTo({
+        top: 0,
+        behavior: 'smooth',
+      });
+    }
+  };
+  useEffect(() => {
+    if (messages.length > 0 && !hasScrolledToEnd) {
+      scrollToBottom();
+      setHasScrolledToEnd(true);
+    }
+  }, [messages, hasScrolledToEnd]);
 
   useEffect(() => {
     if (isSubscribed && id) {
@@ -322,10 +322,8 @@ const Chat = ({
     // const atTop = scrollTop + clientHeight <= scrollHeight - 10;
     // const nearBottom = scrollTop > 200;
     // console.log(' scrollTop', scrollTop);
-    const atBottom = scrollTop === 0;
-    const nearTop = scrollHeight - clientHeight - scrollTop < 200;
-    const atTop = scrollTop <= -10;
-    const isAtTop = scrollHeight + scrollTop <= clientHeight + 200;
+
+    const nearTop = scrollHeight + scrollTop <= clientHeight + 200;
 
     if (isFetching.current) return;
     // if (isAutoScrolling) return;
@@ -336,7 +334,7 @@ const Chat = ({
     // }
 
     if (!isShowJoinBtn) {
-      if (isAtTop && hasMore && !isFetching.current) {
+      if (nearTop && hasMore && !isFetching.current) {
         isFetching.current = true;
         const previousScrollHeight = e.target.scrollHeight;
         fetchReadMessages(page)
@@ -348,7 +346,7 @@ const Chat = ({
             isFetching.current = false;
           });
       }
-    } else if (isAtTop && hasMore && !isFetching.current) {
+    } else if (nearTop && hasMore && !isFetching.current) {
       isFetching.current = true;
 
       const previousScrollHeight = e.target.scrollHeight;
@@ -459,7 +457,7 @@ const Chat = ({
         <NewMessagesNotification>
           <button
             type="button"
-            // onClick={scrollToBottom}
+            onClick={scrollToBottom}
             aria-label="Scroll to bottom"
           >
             <IoIosArrowDown />
@@ -485,7 +483,7 @@ const Chat = ({
         isUserTyping={isUserTyping}
         setIsUserTyping={setIsUserTyping}
         setParticipantsAmount={setParticipantsAmount}
-        // scrollToBottom={scrollToBottom}
+        scrollToBottom={scrollToBottom}
         setShowNewMessagesIndicator={setShowNewMessagesIndicator}
       />
     </ChatStyled>
