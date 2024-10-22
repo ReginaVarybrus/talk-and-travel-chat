@@ -56,7 +56,6 @@ const Chat = ({
   const [unreadMessages, setUnreadMessages] = useState([]);
   const [isFetchingMore, setIsFetchingMore] = useState(false);
   const [hasInitialScrolled, setHasInitialScrolled] = useState(false);
-  // const [hasScrolledToEnd, setHasScrolledToEnd] = useState(false);
   const [showNewMessagesIndicator, setShowNewMessagesIndicator] =
     useState(false);
   const [messagesToMarkAsRead, setMessagesToMarkAsRead] = useState([]);
@@ -222,7 +221,6 @@ const Chat = ({
     if (id) {
       const currentChatId = previousChatIdRef.current;
 
-      // setHasScrolledToEnd(false);
       setMessages([]);
       setUnreadMessages([]);
       setPage(0);
@@ -253,11 +251,6 @@ const Chat = ({
       });
     }
   };
-
-  // console.log(
-  //   'messageBlockRef.current.scrollTop',
-  //   messageBlockRef.current.scrollTop
-  // );
 
   useEffect(() => {
     if (isSubscribed && id) {
@@ -339,7 +332,7 @@ const Chat = ({
     const { scrollHeight, clientHeight, scrollTop } = e.target;
 
     const isAtBottom = scrollTop + clientHeight >= scrollHeight - 10;
-    const nearTop = scrollHeight + scrollTop <= clientHeight + 200;
+    const nearTop = scrollHeight + scrollTop <= clientHeight + 300;
 
     if (isFetching.current) return;
 

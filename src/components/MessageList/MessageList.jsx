@@ -11,7 +11,6 @@ const MessageList = ({
   setIsUserTyping,
   setUserNameisTyping,
   listOfOnlineUsers,
-  // lastReadMessageRef,
   unreadMessages,
   lastVisibleReadMessageRef,
 }) => {
@@ -64,7 +63,6 @@ const MessageList = ({
       const isOnline =
         listOfOnlineUsers.get(message.user.id.toString()) === true;
 
-      // const isLastReadMessage = index === sortedMessages.length - 1;
       const isLastVisibleReadMessage =
         index === sortedMessages.length - unreadMessages.length - 1;
       return (
