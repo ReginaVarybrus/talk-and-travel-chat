@@ -7,7 +7,7 @@ import {
   useCallback,
 } from 'react';
 import { useFetch } from '@/hooks/useFetch';
-import ULRs from '@/constants/constants';
+import URLs from '@/constants/constants';
 
 const ChatContext = createContext();
 
@@ -19,8 +19,8 @@ export const ChatProvider = ({ children }) => {
   const [unreadRoomsCount, setUnreadRoomsCount] = useState(0);
   const [unreadDMsCount, setUnreadDMsCount] = useState(0);
 
-  const { responseData: roomsData } = useFetch(ULRs.userCountries);
-  const { responseData: dmsData } = useFetch(ULRs.getPrivateChats);
+  const { responseData: roomsData } = useFetch(URLs.userCountries);
+  const { responseData: dmsData } = useFetch(URLs.getPrivateChats);
 
   useEffect(() => {
     if (roomsData) {

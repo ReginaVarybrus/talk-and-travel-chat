@@ -79,7 +79,7 @@ const Chat = ({
     debounce(async (chatId, lastMessageId) => {
       if (!chatId || !lastMessageId) return;
       try {
-        await axiosClient.patch(ULRs.lastReadMessage(chatId), {
+        await axiosClient.patch(URLs.lastReadMessage(chatId), {
           lastReadMessageId: lastMessageId,
         });
         const remainingUnread = unreadMessages.length - 1;

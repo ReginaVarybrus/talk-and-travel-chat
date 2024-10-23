@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { useSelector } from 'react-redux';
 import { getUser } from '@/redux-store/selectors.js';
 import CountryInfo from '@/components/CountryInfo/CountryInfo';
+import { formatDateOfLastSeen } from '@/components/utils/dateUtil.js';
 import {
   ChatHeaderStyled,
   MobileHeaderStyled,
@@ -51,6 +52,10 @@ const ChatHeader = ({
 
     if (isPrivateChat && isOnline) {
       return 'online';
+    }
+
+    if (isPrivateChat && userStatus.lastSeenOn) {
+      return formatDateOfLastSeen(userStatus.lastSeenOn);
     }
 
     if (isPrivateChat) {
