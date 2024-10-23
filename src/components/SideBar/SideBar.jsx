@@ -2,8 +2,9 @@ import { useNavigate, useLocation } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { routesPath } from '@/routes/routesConfig';
 import { getUser } from '@/redux-store/selectors';
+import { useChatContext } from '@/providers/ChatProvider';
+import { useWebSocket } from '@/hooks/useWebSocket.js';
 import { logOut } from '@/redux-store/AuthOperations/AuthOperations';
-import { useWebSocket } from '@/hooks/useWebSocket';
 
 import {
   SideBarStyled,
@@ -15,6 +16,7 @@ import {
   RoomsIcon,
   DMsIcon,
   LogoutIcon,
+  UnreadMessagesCount,
 } from './SideBarStyled';
 
 const SideBar = () => {
@@ -24,6 +26,8 @@ const SideBar = () => {
   const location = useLocation();
   const currentPage = location.pathname;
   const { handleDeactivateStopmClient } = useWebSocket();
+
+  const { unreadRoomsCount, unreadDMsCount } = useChatContext();
 
   const handleProfileOpen = () => {
     navigate(routesPath.ACCOUNT);
@@ -63,6 +67,9 @@ const SideBar = () => {
           >
             <RoomsIcon />
             <Text>Rooms</Text>
+            {unreadRoomsCount > 0 && (
+              <UnreadMessagesCount>{unreadRoomsCount}</UnreadMessagesCount>
+            )}
           </SideBarButton>
           <SideBarButton
             onClick={handleDMsOpen}
@@ -70,6 +77,9 @@ const SideBar = () => {
           >
             <DMsIcon />
             <Text>DMs</Text>
+            {unreadDMsCount > 0 && (
+              <UnreadMessagesCount>{unreadDMsCount}</UnreadMessagesCount>
+            )}
           </SideBarButton>
         </ChatsButtonsFrame>
         <SideBarButton onClick={handleLogOut}>

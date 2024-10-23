@@ -7,7 +7,7 @@ const URLs = {
   userInfo: userId => `users/${userId}`,
   getMainCountryChatByName: countryName =>
     `v2/country/${countryName}/main-chat`,
-  userCountries: 'v2/user/countries',
+  userCountries: '/v2/user/public-chats',
   getChat: chatId => `chats/${chatId}`,
   subscriptionToMessages: chatId => `/notify/chat/${chatId}/messages`,
   subscriptionToUserErrors: userId => `/notify/user/${userId}/errors`,

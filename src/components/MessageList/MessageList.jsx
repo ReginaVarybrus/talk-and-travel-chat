@@ -11,7 +11,8 @@ const MessageList = ({
   setIsUserTyping,
   setUserNameisTyping,
   listOfOnlineUsersStatuses,
-  lastReadMessageRef,
+  unreadMessages,
+  lastVisibleReadMessageRef,
 }) => {
   useEffect(() => {
     messages?.forEach(message => {
@@ -65,11 +66,12 @@ const MessageList = ({
 
       const isOnline = userStatus ? userStatus.isOnline : false;
 
-      const isLastReadMessage = index === sortedMessages.length - 1;
+      const isLastVisibleReadMessage =
+        index === sortedMessages.length - unreadMessages.length - 1;
       return (
         <div
           key={message.id || message.creationDate}
-          ref={isLastReadMessage ? lastReadMessageRef : null}
+          ref={isLastVisibleReadMessage ? lastVisibleReadMessageRef : null}
           data-message-id={message.id}
         >
           {showDateSeparator && <DateSeparator date={currentMessageDate} />}
