@@ -87,8 +87,8 @@ const ChatHeader = ({
             <FlagImg
               loading="lazy"
               width="36"
-              srcSet={`https://flagcdn.com/w40/${flagCode}.png 2x`}
-              src={`https://flagcdn.com/w20/${flagCode}.png`}
+              srcSet={`https://flagcdn.com/${flagCode}.svg 2x`}
+              src={`https://flagcdn.com/${flagCode}.svg`}
               alt={`${flagCode} flag`}
             />
           )}

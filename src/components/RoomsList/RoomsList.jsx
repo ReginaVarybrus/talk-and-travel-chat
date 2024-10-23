@@ -64,8 +64,8 @@ const RoomsList = () => {
                   <Flag
                     loading="lazy"
                     width="48"
-                    srcSet={`https://flagcdn.com/w40/${room.country.flagCode}.png 2x`}
-                    src={`https://flagcdn.com/w20/${room.country.flagCode}.png`}
+                    srcSet={`https://flagcdn.com/${room.country.flagCode}.svg 2x`}
+                    src={`https://flagcdn.com/${room.country.flagCode}.svg`}
                     alt={`${room.country.flagCode} flag`}
                   />
                   <ChatName $isActive={room.name === selectedCountry}>

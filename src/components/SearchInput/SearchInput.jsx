@@ -125,8 +125,8 @@ const SearchInput = ({
                     <Flag
                       loading="lazy"
                       width="48"
-                      srcSet={`https://flagcdn.com/w40/${country.properties.code.toLowerCase()}.png 2x`}
-                      src={`https://flagcdn.com/w20/${country.properties.code.toLowerCase()}.png`}
+                      srcSet={`https://flagcdn.com/${country.properties.code.toLowerCase()}.svg 2x`}
+                      src={`https://flagcdn.com/${country.properties.code.toLowerCase()}.svg`}
                       alt={`${country.properties.admin} flag`}
                     />
                     <p>{country.properties.admin}</p>

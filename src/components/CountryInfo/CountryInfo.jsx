@@ -133,8 +133,8 @@ const CountryInfo = ({
         <HeaderStyled>
           <Flag
             loading="lazy"
-            srcSet={`https://flagcdn.com/w40/${countryData.properties.code.toLowerCase()}.png 2x`}
-            src={`https://flagcdn.com/w20/${countryData.properties.code.toLowerCase()}.png`}
+            srcSet={`https://flagcdn.com/${countryData.properties.code.toLowerCase()}.svg 2x`}
+            src={`https://flagcdn.com/${countryData.properties.code.toLowerCase()}.svg`}
             alt={`${countryData.properties.admin} flag`}
           />
           <InfoBoxStyled>
