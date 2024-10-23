@@ -8,6 +8,7 @@ import {
 } from 'react';
 import { useFetch } from '@/hooks/useFetch';
 import ULRs from '@/constants/constants';
+import { axiosClient } from '@/services/api';
 
 const ChatContext = createContext();
 
@@ -43,6 +44,15 @@ export const ChatProvider = ({ children }) => {
       setUnreadDMsCount(totalUnreadDMs);
     }
   }, [dmsData]);
+
+  const updateUserChats = async () => {
+    try {
+      const response = await axiosClient.get(ULRs.getPrivateChats);
+      setDataUserChats(response.data);
+    } catch (error) {
+      console.error('Error updating user chats:', error);
+    }
+  };
 
   const updateUnreadMessagesCount = useCallback(
     (chatId, unreadCount, isPrivate) => {
@@ -88,10 +98,13 @@ export const ChatProvider = ({ children }) => {
   const value = useMemo(
     () => ({
       subscriptionRooms,
+      setSubscriptionRooms,
       dataUserChats,
+      setDataUserChats,
       unreadRoomsCount,
       unreadDMsCount,
       updateUnreadMessagesCount,
+      updateUserChats,
     }),
     [subscriptionRooms, dataUserChats, unreadRoomsCount, unreadDMsCount]
   );

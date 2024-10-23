@@ -6,11 +6,11 @@ import Fade from '@mui/material/Fade';
 import { Outlet } from 'react-router-dom';
 import SearchInput from '@/components/SearchInput/SearchInput';
 import ChatMap from '@/components/ChatMap/ChatMap';
+import { useChatContext } from '@/providers/ChatProvider';
 import { SearchBarStyled, ButtonMapOpen, MapBox } from './SearchBarStyled';
 
 const SearchBar = ({
   setChatData,
-  subscriptionRooms,
   setIsSubscribed,
   setIsShowJoinBtn,
   setSelectedCompanion,
@@ -22,6 +22,8 @@ const SearchBar = ({
   const [openMap, setOpenMap] = useState(false);
   const handleOpen = () => setOpenMap(true);
   const handleClose = () => setOpenMap(false);
+
+  const { subscriptionRooms } = useChatContext();
 
   return (
     <SearchBarStyled $isChatVisible={isChatVisible}>
@@ -83,7 +85,6 @@ const SearchBar = ({
 
 SearchBar.propTypes = {
   setChatData: PropTypes.func,
-  subscriptionRooms: PropTypes.array,
   setIsSubscribed: PropTypes.func,
   setIsShowJoinBtn: PropTypes.func,
   setSelectedCompanion: PropTypes.func,

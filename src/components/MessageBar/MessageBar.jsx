@@ -4,6 +4,8 @@ import ULRs from '@/constants/constants';
 import { CHAT_TYPES } from '@/constants/chatTypes';
 import { useWebSocket } from '@/hooks/useWebSocket.js';
 import BasicButton from '@/components/Buttons/BasicButton/BasicButton';
+import { useChatContext } from '@/providers/ChatProvider';
+
 import {
   MessageBarStyled,
   ButtonJoinWrapper,
@@ -19,7 +21,6 @@ import {
 const MessageBar = ({
   chatId,
   chatData,
-  setSubscriptionRooms,
   isShowJoinBtn,
   setIsShowJoinBtn,
   isUserTyping,
@@ -28,6 +29,7 @@ const MessageBar = ({
   scrollToBottom,
 }) => {
   const [message, setMessage] = useState('');
+  const { setSubscriptionRooms } = useChatContext();
   const typingStopTimeoutRef = useRef(null);
 
   const { stompClient, sendMessageOrEvent } = useWebSocket();
@@ -92,7 +94,7 @@ const MessageBar = ({
   const handleJoinClick = () => {
     sendMessageOrEvent(dataEventToSend, ULRs.joinToGroupChat);
     setIsShowJoinBtn(false);
-    setSubscriptionRooms(prevRooms => [...prevRooms, chatData.country]);
+    setSubscriptionRooms(prevRooms => [...prevRooms, chatData]);
     setParticipantsAmount(prevCount => prevCount + 1);
   };
 
@@ -157,7 +159,6 @@ MessageBar.propTypes = {
     name: PropTypes.string,
     usersCount: PropTypes.number,
   }),
-  setSubscriptionRooms: PropTypes.func,
   isShowJoinBtn: PropTypes.bool,
   setIsShowJoinBtn: PropTypes.func,
   isUserTyping: PropTypes.bool,
