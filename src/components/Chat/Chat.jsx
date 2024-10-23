@@ -55,16 +55,14 @@ const Chat = ({
   const [unreadCount, setUnreadCount] = useState(0);
   const [unreadMessages, setUnreadMessages] = useState([]);
   const [isFetchingMore, setIsFetchingMore] = useState(false);
-  const [hasScrolledToEnd, setHasScrolledToEnd] = useState(false);
+  const [hasInitialScrolled, setHasInitialScrolled] = useState(false);
   const [showNewMessagesIndicator, setShowNewMessagesIndicator] =
     useState(false);
-  const [isAutoScrolling, setIsAutoScrolling] = useState(false);
   const [messagesToMarkAsRead, setMessagesToMarkAsRead] = useState([]);
 
-  const messagesEndRef = useRef(null);
+  const lastVisibleReadMessageRef = useRef(null);
   const messageBlockRef = useRef(null);
   const isFetching = useRef(false);
-  const unreadMessageRef = useRef(null);
   const isFetchingRead = useRef(false);
   const isFetchingUnread = useRef(false);
   const previousChatIdRef = useRef(null);
@@ -143,6 +141,15 @@ const Chat = ({
     }
   };
 
+  const scrollToLastVisibleReadMessage = () => {
+    if (!messageBlockRef.current || !lastVisibleReadMessageRef.current) return;
+
+    lastVisibleReadMessageRef.current.scrollIntoView({
+      behavior: 'auto',
+      block: 'end',
+    });
+  };
+
   const fetchUnreadMessages = async (pageNumber = 0) => {
     if (isFetchingUnread.current) return;
     isFetchingUnread.current = true;
@@ -157,7 +164,6 @@ const Chat = ({
       const unreadMessagesPage = response.data.content;
 
       if (unreadMessagesPage.length > 0) {
-        setMessages(prevMessages => [...unreadMessagesPage, ...prevMessages]);
         setUnreadMessages(prevMessages => [
           ...prevMessages,
           ...unreadMessagesPage,
@@ -182,10 +188,13 @@ const Chat = ({
       if (!isShowJoinBtn) {
         const readMessages = await fetchReadMessages();
         const fetchedUnreadMessages = await fetchUnreadMessages();
-        const allMessages = [...fetchedUnreadMessages, ...readMessages].sort(
-          (a, b) => new Date(a.creationDate) - new Date(b.creationDate)
-        );
-        setMessages(allMessages);
+
+        const combinedMessages = [
+          ...readMessages,
+          ...fetchedUnreadMessages,
+        ].sort((a, b) => new Date(a.creationDate) - new Date(b.creationDate));
+
+        setMessages(combinedMessages);
 
         if (fetchedUnreadMessages.length > 0) {
           setUnreadMessages(fetchedUnreadMessages);
@@ -212,13 +221,13 @@ const Chat = ({
     if (id) {
       const currentChatId = previousChatIdRef.current;
 
-      setHasScrolledToEnd(false);
       setMessages([]);
       setUnreadMessages([]);
       setPage(0);
       setUnreadPage(0);
       setShowNewMessagesIndicator(false);
       setMessagesToMarkAsRead([]);
+      setHasInitialScrolled(false);
 
       if (currentChatId && messagesToMarkAsRead.length > 0) {
         const lastMessageId =
@@ -236,22 +245,12 @@ const Chat = ({
 
   const scrollToBottom = () => {
     if (messageBlockRef.current) {
-      setIsAutoScrolling(true);
       messageBlockRef.current.scrollTo({
         top: messageBlockRef.current.scrollHeight,
         behavior: 'smooth',
       });
-      setTimeout(() => {
-        setIsAutoScrolling(false);
-      }, 300);
     }
   };
-  useEffect(() => {
-    if (messages.length > 0 && !hasScrolledToEnd) {
-      scrollToBottom();
-      setHasScrolledToEnd(true);
-    }
-  }, [messages, hasScrolledToEnd]);
 
   useEffect(() => {
     if (isSubscribed && id) {
@@ -260,16 +259,17 @@ const Chat = ({
         if (newMessage.user.id !== userId) {
           setShowNewMessagesIndicator(false);
         }
+
         if (newMessage.type === MESSAGE_TYPES.TEXT && messageBlockRef.current) {
           const isAtBottom =
             messageBlockRef.current.scrollTop +
               messageBlockRef.current.clientHeight >=
             messageBlockRef.current.scrollHeight - 10;
-
           if (isAtBottom) {
-            setTimeout(() => {
-              scrollToBottom();
-            }, 100);
+            messageBlockRef.current.scrollTo({
+              top: messageBlockRef.current.scrollHeight,
+              behavior: 'smooth',
+            });
             setMessagesToMarkAsRead(prev => [...prev, newMessage.id]);
           } else {
             setUnreadMessages(prev => [...prev, newMessage]);
@@ -321,27 +321,29 @@ const Chat = ({
     };
   }, [messagesToMarkAsRead]);
 
-  const handleScroll = debounce(e => {
+  useEffect(() => {
+    if (id && unreadMessages.length > 0 && !hasInitialScrolled) {
+      scrollToLastVisibleReadMessage();
+      setHasInitialScrolled(true);
+    }
+  }, [id, unreadMessages]);
+
+  const handleScroll = e => {
     const { scrollHeight, clientHeight, scrollTop } = e.target;
-    const atBottom = scrollTop + clientHeight >= scrollHeight - 10;
-    const nearTop = scrollTop < 200;
+
+    const isAtBottom = scrollTop + clientHeight >= scrollHeight - 10;
+    const nearTop = scrollHeight + scrollTop <= clientHeight + 300;
 
     if (isFetching.current) return;
-    if (isAutoScrolling) return;
-
-    if (atBottom && unreadMessages.length > 0) {
-      setUnreadMessages([]);
-      setShowNewMessagesIndicator(false);
-    }
 
     if (!isShowJoinBtn) {
       if (nearTop && hasMore && !isFetching.current) {
         isFetching.current = true;
-        const currentScrollHeight = e.target.scrollHeight;
-
+        const previousScrollHeight = e.target.scrollHeight;
         fetchReadMessages(page)
           .then(() => {
-            e.target.scrollTop = e.target.scrollHeight - currentScrollHeight;
+            const newScrollHeight = e.target.scrollHeight;
+            e.target.scrollBottom = newScrollHeight - previousScrollHeight;
           })
           .finally(() => {
             isFetching.current = false;
@@ -350,21 +352,22 @@ const Chat = ({
     } else if (nearTop && hasMore && !isFetching.current) {
       isFetching.current = true;
 
-      const currentScrollHeight = e.target.scrollHeight;
+      const previousScrollHeight = e.target.scrollHeight;
 
       fetchPublicMessages(page)
         .then(() => {
-          e.target.scrollTop = e.target.scrollHeight - currentScrollHeight;
+          const newScrollHeight = e.target.scrollHeight;
+          e.target.scrollBottom = newScrollHeight - previousScrollHeight;
         })
         .finally(() => {
           isFetching.current = false;
         });
     }
 
-    if (atBottom) {
+    if (isAtBottom) {
       setShowNewMessagesIndicator(false);
     }
-  }, 300);
+  };
 
   useEffect(() => {
     if (id && unreadMessages.length > 0) {
@@ -439,10 +442,11 @@ const Chat = ({
         {messages?.length ? (
           <MessageList
             messages={messages}
+            unreadMessages={unreadMessages}
             setIsUserTyping={setIsUserTyping}
             setUserNameisTyping={setUserNameisTyping}
             listOfOnlineUsers={listOfOnlineUsers}
-            lastReadMessageRef={unreadMessageRef}
+            lastVisibleReadMessageRef={lastVisibleReadMessageRef}
           />
         ) : (
           <NoMassegesNotification>
@@ -450,7 +454,6 @@ const Chat = ({
             <p>There are no discussions yet. Be the first to start.</p>
           </NoMassegesNotification>
         )}
-        <div ref={messagesEndRef} />
       </MessageBlock>
       {showNewMessagesIndicator && (
         <NewMessagesNotification>
