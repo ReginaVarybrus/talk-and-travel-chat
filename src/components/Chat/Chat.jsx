@@ -28,7 +28,6 @@ import {
 const Chat = ({
   chatData,
   setChatData,
-  setSubscriptionRooms,
   isSubscribed,
   isShowJoinBtn,
   setIsShowJoinBtn,
@@ -432,7 +431,6 @@ const Chat = ({
         isUserTyping={isUserTyping}
         userNameisTyping={userNameisTyping}
         chatId={id}
-        setSubscriptionRooms={setSubscriptionRooms}
         setIsShowJoinBtn={setIsShowJoinBtn}
         setIsChatVisible={setIsChatVisible}
         listOfOnlineUsers={listOfOnlineUsers}
@@ -482,7 +480,6 @@ const Chat = ({
       <MessageBar
         chatId={id}
         chatData={chatData}
-        setSubscriptionRooms={setSubscriptionRooms}
         isShowJoinBtn={isShowJoinBtn}
         setIsShowJoinBtn={setIsShowJoinBtn}
         isUserTyping={isUserTyping}
@@ -510,7 +507,6 @@ Chat.propTypes = {
     usersCount: PropTypes.number,
   }),
   setChatData: PropTypes.func,
-  setSubscriptionRooms: PropTypes.func,
   isSubscribed: PropTypes.bool,
   isShowJoinBtn: PropTypes.bool,
   setIsShowJoinBtn: PropTypes.func,

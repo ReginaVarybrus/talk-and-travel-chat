@@ -15,6 +15,7 @@ import { useSelector } from 'react-redux';
 import { getUser } from '@/redux-store/selectors.js';
 import { routesPath } from '@/routes/routesConfig.jsx';
 import { axiosClient } from '@/services/api.js';
+import { useChatContext } from '@/providers/ChatProvider';
 
 import {
   BoxStyled,
@@ -41,7 +42,6 @@ const CountryInfo = ({
   countryName,
   participantsAmount,
   setParticipantsAmount,
-  setSubscriptionRooms,
   chatId,
   setIsShowJoinBtn,
   setIsChatVisible,
@@ -50,8 +50,8 @@ const CountryInfo = ({
   const currentUserId = useSelector(getUser)?.id;
   const { sendMessageOrEvent } = useWebSocket();
   const navigate = useNavigate();
-
-  const { responseData: dataUserChats } = useFetch(ULRs.getPrivateChats);
+  const { setSubscriptionRooms, dataUserChats, updateUserChats } =
+    useChatContext();
 
   const checkExistingPrivateChat = id => {
     const isExist = dataUserChats?.find(chat => chat.companion.id === id);
@@ -74,6 +74,7 @@ const CountryInfo = ({
           companionId: id,
         });
         const privateChatId = response.data;
+        await updateUserChats();
         navigate(routesPath.DMS, {
           state: {
             privateChatId,
@@ -208,7 +209,6 @@ CountryInfo.propTypes = {
   countryName: PropTypes.string,
   participantsAmount: PropTypes.number,
   chatId: PropTypes.number,
-  setSubscriptionRooms: PropTypes.func,
   setIsShowJoinBtn: PropTypes.func,
 };
 

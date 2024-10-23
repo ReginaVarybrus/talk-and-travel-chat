@@ -25,7 +25,6 @@ const ChatHeader = ({
   isUserTyping,
   userNameisTyping,
   chatId,
-  setSubscriptionRooms,
   setIsShowJoinBtn,
   setIsChatVisible,
   listOfOnlineUsers,
@@ -114,7 +113,6 @@ const ChatHeader = ({
         participantsAmount={participantsAmount || 0}
         setParticipantsAmount={setParticipantsAmount}
         chatId={chatId}
-        setSubscriptionRooms={setSubscriptionRooms}
         setIsShowJoinBtn={setIsShowJoinBtn}
         setIsChatVisible={setIsChatVisible}
       />
@@ -136,7 +134,6 @@ ChatHeader.propTypes = {
   isUserTyping: PropTypes.bool,
   userNameisTyping: PropTypes.string,
   chatId: PropTypes.number,
-  setSubscriptionRooms: PropTypes.func,
   setIsShowJoinBtn: PropTypes.func,
   setIsChatVisible: PropTypes.func,
 };
