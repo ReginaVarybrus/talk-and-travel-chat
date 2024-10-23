@@ -38,6 +38,8 @@ import {
   formFields,
 } from '@/routes/AccountRoute/AccountRouteValidationSchema';
 import { logOut } from '@/redux-store/AuthOperations/AuthOperations';
+import Input from '@mui/material/Input';
+import Button from '@mui/material/Button';
 
 const AccountRoute = () => {
   // User details to display in Profile form are taken from Redux data.
@@ -49,6 +51,12 @@ const AccountRoute = () => {
   const [editMode, setEditMode] = useState(false);
   // This {loading} is used to trigger display of <Loader/> while updateUser performig.
   const [loading, setLoading] = useState(false);
+
+  const handleAvatarChange = event => {
+    console.log('avatar');
+    const file = event.target.files[0]; // Get the uploaded file
+    console.log(file);
+  };
 
   const formik = useFormik({
     initialValues: user,
@@ -116,11 +124,23 @@ const AccountRoute = () => {
         <AvatarBlock>
           <Avatar />
           {editMode && (
-            <BasicButton
-              sx={{ marginTop: '8px' }}
-              variant="transparent"
-              text="Change photo"
-            />
+            <>
+              <Input
+                type="file"
+                id="avatar-upload"
+                onChange={handleAvatarChange}
+                style={{ display: 'none' }}
+              />
+              <label htmlFor="avatar-upload">
+                <Button
+                  component="span"
+                  sx={{ marginTop: '8px' }}
+                  variant="text"
+                >
+                  Change photo
+                </Button>
+              </label>
+            </>
           )}
         </AvatarBlock>
         <InputBlock>
