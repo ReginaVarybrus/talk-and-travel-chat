@@ -459,12 +459,15 @@ const Chat = ({
         <NewMessagesNotification>
           <button
             type="button"
+            className="scroll-button"
             onClick={scrollToBottom}
             aria-label="Scroll to bottom"
           >
-            <IoIosArrowDown />
+            <span aria-hidden="true">
+              <IoIosArrowDown />
+            </span>
+            <span>{unreadCount} new messages</span>
           </button>
-          <span>{unreadCount} new messages</span>
           <div className="divider" />
 
           <button
