@@ -1,4 +1,4 @@
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import PropTypes from 'prop-types';
 import ULRs from '@/constants/constants';
 import { CHAT_TYPES } from '@/constants/chatTypes';
@@ -97,6 +97,10 @@ const MessageBar = ({
     setSubscriptionRooms(prevRooms => [...prevRooms, chatData]);
     setParticipantsAmount(prevCount => prevCount + 1);
   };
+
+  useEffect(() => {
+    setMessage('');
+  }, [chatId]);
 
   return (
     <MessageBarStyled>
