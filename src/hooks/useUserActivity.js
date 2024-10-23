@@ -5,6 +5,7 @@ const useUserActivity = sendUpdateUserActivityEvent => {
   const isUserOffline = useRef(false);
 
   useEffect(() => {
+    console.log('User is active');
     const handleUpdateActivity = () => {
       if (isUserOffline.current) {
         sendUpdateUserActivityEvent();

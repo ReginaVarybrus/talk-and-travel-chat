@@ -35,10 +35,23 @@ const SearchInput = ({
   const { responseData } = useFetch(
     selectedCountry ? URLs.getMainCountryChatByName(selectedCountry) : null
   );
+  const lowerCaseSearch = searchedValue.toLowerCase();
 
-  const filterCountries = mapData.filter(name =>
-    name.properties.admin.toLowerCase().includes(searchedValue.toLowerCase())
+  const sortedData = [...mapData].sort((a, b) =>
+    a.properties.admin.localeCompare(b.properties.admin)
   );
+
+  const startsWithFilter = sortedData.filter(item =>
+    item.properties.admin.toLowerCase().startsWith(lowerCaseSearch)
+  );
+
+  const containsFilter = sortedData.filter(
+    item =>
+      !item.properties.admin.toLowerCase().startsWith(lowerCaseSearch) &&
+      item.properties.admin.toLowerCase().includes(lowerCaseSearch)
+  );
+
+  const filterCountries = [...startsWithFilter, ...containsFilter];
 
   useEffect(() => {
     if (responseData) {
