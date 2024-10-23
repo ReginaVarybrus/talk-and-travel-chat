@@ -75,6 +75,9 @@ const Chat = ({
 
   const { updateUnreadMessagesCount } = useChatContext();
 
+  const isMessageAlreadyExists = (messagesList, newMessage) =>
+    messagesList.some(message => message.id === newMessage.id);
+
   const debouncedMarkAsRead = useRef(
     debounce(async (chatId, lastMessageId) => {
       if (!chatId || !lastMessageId) return;
@@ -129,7 +132,11 @@ const Chat = ({
 
       const { content, page: pageData } = response.data;
 
-      setMessages(prevMessages => [...content, ...prevMessages]);
+      const newMessages = content.filter(
+        msg => !isMessageAlreadyExists(messages, msg)
+      );
+
+      setMessages(prevMessages => [...newMessages, ...prevMessages]);
       setPage(pageData.number + 1);
       setHasMore(pageData.number + 1 < pageData.totalPages);
       return content;
