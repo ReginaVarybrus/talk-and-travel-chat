@@ -5,7 +5,7 @@ import debounce from 'lodash/debounce';
 import { axiosClient } from '@/services/api';
 import { IoClose } from 'react-icons/io5';
 import PropTypes from 'prop-types';
-import ULRs from '@/constants/constants';
+import URLs from '@/constants/constants';
 import { CHAT_TYPES } from '@/constants/chatTypes';
 import { MESSAGE_TYPES } from '@/constants/messageTypes';
 import { getUser } from '@/redux-store/selectors.js';
@@ -74,7 +74,7 @@ const Chat = ({
 
   const markAsRead = async messageId => {
     try {
-      await axiosClient.patch(ULRs.lastReadMessage(id), {
+      await axiosClient.patch(URLs.lastReadMessage(id), {
         lastReadMessageId: messageId,
       });
     } catch (error) {
@@ -85,7 +85,7 @@ const Chat = ({
   const fetchPublicMessages = async (pageNumber = 0) => {
     setIsFetchingMore(true);
     try {
-      const response = await axiosClient.get(ULRs.getMessages(id), {
+      const response = await axiosClient.get(URLs.getMessages(id), {
         params: {
           size: 20,
           page: pageNumber,
@@ -111,7 +111,7 @@ const Chat = ({
     isFetchingRead.current = true;
     setIsFetchingMore(true);
     try {
-      const response = await axiosClient.get(ULRs.getReadMessages(id), {
+      const response = await axiosClient.get(URLs.getReadMessages(id), {
         params: {
           size: 20,
           page: pageNumber,
@@ -137,7 +137,7 @@ const Chat = ({
     if (isFetchingUnread.current) return;
     isFetchingUnread.current = true;
     try {
-      const response = await axiosClient.get(ULRs.getUnreadMessages(id), {
+      const response = await axiosClient.get(URLs.getUnreadMessages(id), {
         params: {
           size: 1000,
           page: pageNumber,
@@ -231,7 +231,7 @@ const Chat = ({
 
   useEffect(() => {
     if (isSubscribed && id) {
-      subscribeToMessages(ULRs.subscriptionToMessages(id), newMessage => {
+      subscribeToMessages(URLs.subscriptionToMessages(id), newMessage => {
         setMessages(prevMessages => [...prevMessages, newMessage]);
         if (newMessage.user.id !== userId) {
           setShowNewMessagesIndicator(false);
@@ -258,7 +258,7 @@ const Chat = ({
         setSelectedCompanion(null);
       }
 
-      subscribeToUserErrors(ULRs.subscriptionToUserErrors(userId), setChatData);
+      subscribeToUserErrors(URLs.subscriptionToUserErrors(userId), setChatData);
 
       return () => {
         unsubscribeFromMessages();

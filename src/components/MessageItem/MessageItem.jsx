@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useSelector } from 'react-redux';
 import { getUser } from '@/redux-store/selectors';
-import ULRs from '@/constants/constants';
+import URLs from '@/constants/constants';
 import { axiosClient } from '@/services/api';
 import { MESSAGE_TYPES } from '@/constants/messageTypes.js';
 import PropTypes from 'prop-types';
@@ -47,9 +47,9 @@ const MessageItem = ({
       return;
     }
     try {
-      const userInfoResponse = await axiosClient.get(ULRs.userInfo(userId));
+      const userInfoResponse = await axiosClient.get(URLs.userInfo(userId));
       setUserInfo(userInfoResponse.data);
-      const privateChatsResponse = await axiosClient.get(ULRs.getPrivateChats);
+      const privateChatsResponse = await axiosClient.get(URLs.getPrivateChats);
       setUserChats(privateChatsResponse.data);
       if (userInfoResponse.data.userName) {
         setOpen(true);

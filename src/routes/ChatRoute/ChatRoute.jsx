@@ -1,12 +1,13 @@
 import { useState, useEffect } from 'react';
 import { useOutletContext } from 'react-router-dom';
 import { useFetch } from '@/hooks/useFetch.js';
-import ULRs from '@/constants/constants';
+import URLs from '@/constants/constants';
 import SearchBar from '@/components/SearchBar/SearchBar';
 import Chat from '@/components/Chat/Chat';
 import { axiosClient } from '@/services/api';
 
 import { useWebSocket } from '@/hooks/useWebSocket.js';
+import useUserActivity from '@/hooks/useUserActivity.js';
 import { ChatRouteStyled } from './ChatRouteStyled.js';
 
 const ChatRoute = () => {
@@ -19,11 +20,12 @@ const ChatRoute = () => {
   const [listOfOnlineUsersStatuses, setListOfOnlineUsersStatuses] = useState(
     new Map()
   );
-  const { responseData } = useFetch(ULRs.userCountries);
+  const { responseData } = useFetch(URLs.userCountries);
   const {
     stompClient,
     subscribeToUsersStatuses,
     unsubscribeFromUsersStatuses,
+    sendMessageOrEvent,
   } = useWebSocket();
 
   const context = useOutletContext();
@@ -39,7 +41,7 @@ const ChatRoute = () => {
   useEffect(() => {
     if (stompClient?.connected) {
       const subscription = subscribeToUsersStatuses(
-        ULRs.usersOnlineStatus,
+        URLs.usersOnlineStatus,
         setListOfOnlineUsersStatuses
       );
 
@@ -54,7 +56,7 @@ const ChatRoute = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axiosClient.get(ULRs.getUsersOnlineStatusPath);
+        const response = await axiosClient.get(URLs.getUsersOnlineStatusPath);
 
         setListOfOnlineUsersStatuses(prevStatus => {
           const updatedList = new Map(prevStatus);
@@ -70,6 +72,12 @@ const ChatRoute = () => {
 
     fetchData();
   }, []);
+
+  const handleUserActiveEvent = () => {
+    sendMessageOrEvent(true, URLs.updateOnlineStatus);
+  };
+
+  useUserActivity(handleUserActiveEvent);
 
   return (
     <ChatRouteStyled>

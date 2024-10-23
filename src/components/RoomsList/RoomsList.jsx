@@ -3,7 +3,7 @@ import { useOutletContext } from 'react-router-dom';
 import { useMediaQuery } from 'react-responsive';
 import { device } from '@/constants/mediaQueries.js';
 import { useFetch } from '@/hooks/useFetch.js';
-import ULRs from '@/constants/constants.js';
+import URLs from '@/constants/constants.js';
 import {
   Flag,
   ScrollBar,
@@ -16,7 +16,7 @@ const RoomsList = () => {
   const [selectedCountry, setSelectedCountry] = useState(null);
 
   const { responseData } = useFetch(
-    selectedCountry ? ULRs.getMainCountryChatByName(selectedCountry) : null
+    selectedCountry ? URLs.getMainCountryChatByName(selectedCountry) : null
   );
 
   const {

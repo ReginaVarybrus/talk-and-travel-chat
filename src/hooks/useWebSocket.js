@@ -1,6 +1,6 @@
 import { useRef, useEffect } from 'react';
 import { useStompClient } from 'react-stomp-hooks';
-import ULRs from '@/constants/constants.js';
+// import URLs from '@/constants/constants.js';
 
 export const useWebSocket = () => {
   const stompClient = useStompClient();
@@ -64,10 +64,10 @@ export const useWebSocket = () => {
       receivedStatus => {
         setUserStatus(prevMap => {
           const updatedMap = new Map(prevMap);
-          updatedMap.set(
-            receivedStatus.userId.toString(),
-            receivedStatus.isOnline
-          );
+          updatedMap.set(receivedStatus.userId.toString(), {
+            isOnline: receivedStatus.isOnline,
+            lastSeenOn: receivedStatus.lastSeenOn,
+          });
           return updatedMap;
         });
       },

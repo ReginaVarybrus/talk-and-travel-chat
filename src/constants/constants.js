@@ -1,4 +1,4 @@
-const ULRs = {
+const URLs = {
   register: 'authentication/register',
   login: 'authentication/login',
   logout: 'authentication/logout',
@@ -28,4 +28,4 @@ const ULRs = {
   getUsersOnlineStatusPath: 'v2/users/online',
 };
 
-export default ULRs;
+export default URLs;

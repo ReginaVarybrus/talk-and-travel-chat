@@ -7,7 +7,7 @@ import { HiOutlineExclamationCircle } from 'react-icons/hi';
 import { FaRegMessage } from 'react-icons/fa6';
 import Modal from '@mui/material/Modal';
 import { useFetch } from '@/hooks/useFetch.js';
-import ULRs from '@/constants/constants';
+import URLs from '@/constants/constants';
 import mapData from '@/data/countries.json';
 import { useNavigate } from 'react-router-dom';
 import { useWebSocket } from '@/hooks/useWebSocket.js';
@@ -51,7 +51,7 @@ const CountryInfo = ({
   const { sendMessageOrEvent } = useWebSocket();
   const navigate = useNavigate();
 
-  const { responseData: dataUserChats } = useFetch(ULRs.getPrivateChats);
+  const { responseData: dataUserChats } = useFetch(URLs.getPrivateChats);
 
   const checkExistingPrivateChat = id => {
     const isExist = dataUserChats?.find(chat => chat.companion.id === id);
@@ -70,7 +70,7 @@ const CountryInfo = ({
           },
         });
       } else {
-        const response = await axiosClient.post(ULRs.createPrivateChat, {
+        const response = await axiosClient.post(URLs.createPrivateChat, {
           companionId: id,
         });
         const privateChatId = response.data;
@@ -91,7 +91,7 @@ const CountryInfo = ({
     const dataEventToSend = {
       chatId,
     };
-    sendMessageOrEvent(dataEventToSend, ULRs.leaveOutGroupChat);
+    sendMessageOrEvent(dataEventToSend, URLs.leaveOutGroupChat);
     setSubscriptionRooms(prevRooms =>
       prevRooms.filter(room => room.name !== countryName)
     );
@@ -103,7 +103,7 @@ const CountryInfo = ({
     setIsShowJoinBtn(true);
   };
 
-  const url = chatId && ULRs.getChatsParticipants(chatId);
+  const url = chatId && URLs.getChatsParticipants(chatId);
   const { responseData: participants } = useFetch(url, '');
 
   if (!isOpen || !countryName || !chatId) {

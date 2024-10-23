@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { useOutletContext, useLocation } from 'react-router-dom';
 import { useMediaQuery } from 'react-responsive';
 import { device } from '@/constants/mediaQueries.js';
-import ULRs from '@/constants/constants';
+import URLs from '@/constants/constants';
 import { useFetch } from '@/hooks/useFetch';
 // import { dateStampConverter } from '@/components/utils/timeUtil.js';
 import { formatDate } from '@/components/utils/dateUtil.js';
@@ -34,10 +34,10 @@ const DMsList = () => {
     listOfOnlineUsersStatuses,
   } = useOutletContext();
 
-  const { responseData: dataUserChats } = useFetch(ULRs.getPrivateChats);
+  const { responseData: dataUserChats } = useFetch(URLs.getPrivateChats);
 
   const { responseData: dataChat } = useFetch(
-    selectedChat ? ULRs.getChat(selectedChat) : null
+    selectedChat ? URLs.getChat(selectedChat) : null
   );
 
   useEffect(() => {

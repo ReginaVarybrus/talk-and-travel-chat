@@ -2,7 +2,7 @@ import Backdrop from '@mui/material/Backdrop';
 import Fade from '@mui/material/Fade';
 import { SignUpBtn } from '@/components/RegisterForm/RegisterForm.styled';
 import PropTypes from 'prop-types';
-import ULRs from '@/constants/constants';
+import URLs from '@/constants/constants';
 import { axiosClient } from '@/services/api';
 import { useNavigate } from 'react-router-dom';
 import { routesPath } from '@/routes/routesConfig';
@@ -53,7 +53,7 @@ const UserInfoModal = ({
           },
         });
       } else {
-        const response = await axiosClient.post(ULRs.createPrivateChat, {
+        const response = await axiosClient.post(URLs.createPrivateChat, {
           companionId,
         });
         const privateChatId = response.data;

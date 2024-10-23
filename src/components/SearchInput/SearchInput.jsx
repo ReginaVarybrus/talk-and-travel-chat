@@ -4,7 +4,7 @@ import { device } from '@/constants/mediaQueries.js';
 import { routesPath } from '@/routes/routesConfig';
 import PropTypes from 'prop-types';
 import { useFetch } from '@/hooks/useFetch.js';
-import ULRs from '@/constants/constants';
+import URLs from '@/constants/constants';
 import mapData from '@/data/countries.json';
 import { useNavigate } from 'react-router-dom';
 import {
@@ -33,7 +33,7 @@ const SearchInput = ({
   const [showItem, setShowItem] = useState(false);
   const autoCompleteRef = useRef(null);
   const { responseData } = useFetch(
-    selectedCountry ? ULRs.getMainCountryChatByName(selectedCountry) : null
+    selectedCountry ? URLs.getMainCountryChatByName(selectedCountry) : null
   );
 
   const filterCountries = mapData.filter(name =>
