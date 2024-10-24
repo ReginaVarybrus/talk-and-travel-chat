@@ -255,9 +255,6 @@ const Chat = ({
     if (isSubscribed && id) {
       subscribeToMessages(ULRs.subscriptionToMessages(id), newMessage => {
         setMessages(prevMessages => [...prevMessages, newMessage]);
-        if (newMessage.user.id !== userId) {
-          setShowNewMessagesIndicator(false);
-        }
 
         if (newMessage.type === MESSAGE_TYPES.TEXT && messageBlockRef.current) {
           const isAtBottom =
@@ -270,9 +267,12 @@ const Chat = ({
               behavior: 'smooth',
             });
             setMessagesToMarkAsRead(prev => [...prev, newMessage.id]);
-          } else {
+          } else if (newMessage.user.id !== userId) {
             setUnreadMessages(prev => [...prev, newMessage]);
             setShowNewMessagesIndicator(true);
+          }
+          if (newMessage.user.id === userId) {
+            setMessagesToMarkAsRead(prev => [...prev, newMessage.id]);
           }
         }
       });
