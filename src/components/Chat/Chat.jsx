@@ -423,6 +423,7 @@ const Chat = ({
       {!name && <ChatFirstLoading />}
       <ChatHeader
         chatName={name}
+        chatData={chatData}
         participantsAmount={participantsAmount}
         setParticipantsAmount={setParticipantsAmount}
         flagCode={country?.flagCode}
@@ -434,6 +435,7 @@ const Chat = ({
         setIsShowJoinBtn={setIsShowJoinBtn}
         setIsChatVisible={setIsChatVisible}
         listOfOnlineUsers={listOfOnlineUsers}
+        isShowJoinBtn={isShowJoinBtn}
       />
       <MessageBlock ref={messageBlockRef} onScroll={handleScroll}>
         {isFetchingMore && <Loader size={50} />}
