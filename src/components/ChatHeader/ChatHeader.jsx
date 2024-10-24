@@ -31,7 +31,9 @@ const ChatHeader = ({
 }) => {
   const [openModal, setOpenModal] = useState(false);
   const userName = useSelector(getUser)?.userName;
-  const showUserIsTyping = userNameisTyping !== userName && isUserTyping;
+
+  const showUserIsTyping =
+    isUserTyping && userNameisTyping && userNameisTyping !== userName;
   const nameOfChat = isPrivateChat ? selectedCompanion.userName : chatName;
   const isOnline =
     isPrivateChat &&
