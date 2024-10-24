@@ -44,13 +44,28 @@ export const ContactsBoxStyled = styled.div`
 
 export const ContactsList = styled.ul`
   height: 216px;
-  overflow-y: auto;
+  overflow-y: overlay;
   border-radius: 8px;
   box-shadow: inset 0px 1px 5px 0px rgba(0, 0, 0, 0.05);
   background: var(--color-grey-3);
 
   @media screen and (min-width: 768px) {
     height: 260px;
+  }
+
+  &::-webkit-scrollbar {
+    width: 2px;
+  }
+
+  &::-webkit-scrollbar-track {
+    background: var(--color-grey-6);
+    border-radius: 100px;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    height: 144px;
+    border-radius: 100px;
+    background: var(--color-grey-9);
   }
 `;
 
@@ -125,14 +140,13 @@ export const LetterAvatar = styled.div`
 export const Item = styled.li`
   display: flex;
   align-items: center;
-  height: 44px;
+  height: 52px;
   gap: 16px;
   padding: 4px 8px;
-
   position: relative;
 
   @media screen and (min-width: 768px) {
-    height: 49px;
+    height: 65px;
     padding: 8px;
   }
 
@@ -146,22 +160,27 @@ export const Item = styled.li`
 export const UserContactInfo = styled.div`
   display: flex;
   flex-direction: column;
-  width: 209px;
+  width: 140px;
   gap: 4px;
 
   h5 {
     font-size: 14px;
     font-weight: 700;
     line-height: 1.1;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
   p {
     font-size: 14px;
     color: var(--color-grey-9);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
 
   @media screen and (min-width: 768px) {
-    width: 278px;
-
+    width: 200px;
     gap: 8px;
 
     h5 {
