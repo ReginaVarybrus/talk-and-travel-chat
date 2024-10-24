@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types';
 import { useMediaQuery } from 'react-responsive';
 import { device } from '@/constants/mediaQueries.js';
-import { LuLogOut } from 'react-icons/lu';
+import { LuLogOut, LuLogIn } from 'react-icons/lu';
 import { IoCloseOutline } from 'react-icons/io5';
 import { HiOutlineExclamationCircle } from 'react-icons/hi';
 import { FaRegMessage } from 'react-icons/fa6';
@@ -28,7 +28,7 @@ import {
   CloseBtn,
   InfoBoxStyled,
   HeaderStyled,
-  ExitBtn,
+  ExitOrJoinBtn,
   ReportBtn,
   Subtitle,
   LetterAvatar,
@@ -37,6 +37,7 @@ import {
 } from './CountryInfoStyled.js';
 
 const CountryInfo = ({
+  chatData,
   isOpen,
   onClose,
   countryName,
@@ -45,6 +46,7 @@ const CountryInfo = ({
   chatId,
   setIsShowJoinBtn,
   setIsChatVisible,
+  isShowJoinBtn,
 }) => {
   const isDesktop = useMediaQuery({ query: device.tablet });
   const currentUserId = useSelector(getUser)?.id;
@@ -53,6 +55,9 @@ const CountryInfo = ({
   const { setSubscriptionRooms, dataUserChats, updateUserChats } =
     useChatContext();
 
+  const dataEventToSend = {
+    chatId,
+  };
   const checkExistingPrivateChat = id => {
     const isExist = dataUserChats?.find(chat => chat.companion.id === id);
     return isExist && isExist.chat.id;
@@ -89,9 +94,6 @@ const CountryInfo = ({
   };
 
   const handleLeaveGroup = () => {
-    const dataEventToSend = {
-      chatId,
-    };
     sendMessageOrEvent(dataEventToSend, ULRs.leaveOutGroupChat);
     setSubscriptionRooms(prevRooms =>
       prevRooms.filter(room => room.name !== countryName)
@@ -102,6 +104,14 @@ const CountryInfo = ({
     }
     onClose();
     setIsShowJoinBtn(true);
+  };
+
+  const handleJoinToChat = () => {
+    sendMessageOrEvent(dataEventToSend, ULRs.joinToGroupChat);
+    setIsShowJoinBtn(false);
+    setSubscriptionRooms(prevRooms => [...prevRooms, chatData]);
+    setParticipantsAmount(prevCount => prevCount + 1);
+    onClose();
   };
 
   const url = chatId && ULRs.getChatsParticipants(chatId);
@@ -189,10 +199,17 @@ const CountryInfo = ({
         )}
 
         <ButtonsBoxStyled>
-          <ExitBtn onClick={handleLeaveGroup}>
-            <LuLogOut />
-            Leave group
-          </ExitBtn>
+          {isShowJoinBtn ? (
+            <ExitOrJoinBtn onClick={handleJoinToChat}>
+              <LuLogIn />
+              Join to chat
+            </ExitOrJoinBtn>
+          ) : (
+            <ExitOrJoinBtn onClick={handleLeaveGroup}>
+              <LuLogOut />
+              Leave group
+            </ExitOrJoinBtn>
+          )}
           <ReportBtn>
             <HiOutlineExclamationCircle />
             Report

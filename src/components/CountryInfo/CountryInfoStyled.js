@@ -224,7 +224,7 @@ export const ButtonsBoxStyled = styled.div`
   gap: 16px;
 `;
 
-export const ExitBtn = styled.button`
+export const ExitOrJoinBtn = styled.button`
   display: flex;
   flex-direction: row;
   align-items: center;
