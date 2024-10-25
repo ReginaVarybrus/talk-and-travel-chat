@@ -18,6 +18,7 @@ import {
   ScrollBar,
   Text,
 } from './SearchInputStyled';
+import { axiosClient } from '@/services/api';
 
 const SearchInput = ({
   setChatData,
@@ -33,13 +34,37 @@ const SearchInput = ({
   const [showItem, setShowItem] = useState(false);
   const autoCompleteRef = useRef(null);
   const { subscriptionRooms } = useChatContext();
+  const [countries, setCountries] = useState([]);
+
+  const fetchCountryList = async (pageNumber = 0) => {
+    try {
+      const response = await axiosClient.get(ULRs.getChatsList, {
+        params: {
+          size: 1000,
+          page: pageNumber,
+        },
+      });
+
+      const { content, page } = response.data;
+      console.log(response.data);
+
+      setCountries(content);
+      // setPage(pageData.number + 1);
+      // setHasMore(pageData.number + 1 < pageData.totalPages);
+      return content;
+    } catch (error) {
+      console.error('Error fetching messages:', error.message);
+    }
+  };
+
+  console.log(countries);
 
   const { responseData } = useFetch(
     selectedCountry ? ULRs.getMainCountryChatByName(selectedCountry) : null
   );
 
-  const filterCountries = mapData.filter(name =>
-    name.properties.admin.toLowerCase().includes(searchedValue.toLowerCase())
+  const filterCountries = countries.filter(country =>
+    country.name.toLowerCase().includes(searchedValue.toLowerCase())
   );
 
   useEffect(() => {
@@ -61,10 +86,12 @@ const SearchInput = ({
     }
   };
 
-  const handleClick = () => setShowItem(!showItem);
-
+  const handleClick = () => {
+    fetchCountryList();
+    setShowItem(!showItem);
+  };
   const handleCountryClick = country => {
-    const countryName = country.properties.admin;
+    const countryName = country.name;
     setSelectedCountry(countryName);
     const nameOfCountry = subscriptionRooms.find(
       item => item.name === countryName
@@ -121,17 +148,18 @@ const SearchInput = ({
               <>
                 {filterCountries.map(country => (
                   <Item
-                    key={country.properties.admin}
+                    key={country.id}
                     onClick={() => handleCountryClick(country)}
                   >
-                    <Flag
+                    {/* <Flag
                       loading="lazy"
                       width="48"
-                      srcSet={`https://flagcdn.com/w40/${country.properties.code.toLowerCase()}.png 2x`}
-                      src={`https://flagcdn.com/w20/${country.properties.code.toLowerCase()}.png`}
+                      srcSet={`https://flagcdn.com/${country.properties.code.toLowerCase()}.png 2x`}
+                      src={`https://flagcdn.com/${country.properties.code.toLowerCase()}.png`}
                       alt={`${country.properties.admin} flag`}
-                    />
-                    <p>{country.properties.admin}</p>
+                    /> */}
+                    <p>{country.name}</p>
+                    <p>{country.usersCount}</p>
                   </Item>
                 ))}
               </>
