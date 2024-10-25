@@ -168,6 +168,7 @@ MessageBar.propTypes = {
   isUserTyping: PropTypes.bool,
   setIsUserTyping: PropTypes.func,
   setParticipantsAmount: PropTypes.func,
+  scrollToBottom: PropTypes.func,
 };
 
 export default MessageBar;

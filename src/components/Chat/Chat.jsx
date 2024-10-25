@@ -44,8 +44,7 @@ const Chat = ({
   const isPrivateChat = chatType === CHAT_TYPES.PRIVATE;
 
   const [isUserTyping, setIsUserTyping] = useState(false);
-  const [userNameisTyping, setUserNameisTyping] = useState('');
-
+  const [usersTyping, setUsersTyping] = useState([]);
   const [messages, setMessages] = useState([]);
   const [page, setPage] = useState(0);
   const [unreadPage, setUnreadPage] = useState(0);
@@ -436,8 +435,7 @@ const Chat = ({
         flagCode={country?.flagCode}
         selectedCompanion={selectedCompanion}
         isPrivateChat={isPrivateChat}
-        isUserTyping={isUserTyping}
-        userNameisTyping={userNameisTyping}
+        usersTyping={usersTyping}
         chatId={id}
         setIsShowJoinBtn={setIsShowJoinBtn}
         setIsChatVisible={setIsChatVisible}
@@ -451,7 +449,7 @@ const Chat = ({
             messages={messages}
             unreadMessages={unreadMessages}
             setIsUserTyping={setIsUserTyping}
-            setUserNameisTyping={setUserNameisTyping}
+            setUsersTyping={setUsersTyping}
             listOfOnlineUsers={listOfOnlineUsers}
             lastVisibleReadMessageRef={lastVisibleReadMessageRef}
           />
@@ -529,6 +527,7 @@ Chat.propTypes = {
   setParticipantsAmount: PropTypes.func,
   isChatVisible: PropTypes.bool,
   setIsChatVisible: PropTypes.func,
+  listOfOnlineUsers: PropTypes.instanceOf(Map),
 };
 
 export default Chat;
