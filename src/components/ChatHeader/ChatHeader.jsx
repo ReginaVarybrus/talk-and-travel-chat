@@ -17,6 +17,7 @@ import {
 
 const ChatHeader = ({
   chatName = 'Country name',
+  chatData,
   participantsAmount,
   setParticipantsAmount,
   flagCode,
@@ -28,6 +29,7 @@ const ChatHeader = ({
   setIsShowJoinBtn,
   setIsChatVisible,
   listOfOnlineUsers,
+  isShowJoinBtn,
 }) => {
   const [openModal, setOpenModal] = useState(false);
   const userName = useSelector(getUser)?.userName;
@@ -109,6 +111,7 @@ const ChatHeader = ({
       </DesktopHeaderStyled>
 
       <CountryInfo
+        chatData={chatData}
         isOpen={openModal}
         onClose={handleClose}
         countryName={chatName}
@@ -117,6 +120,7 @@ const ChatHeader = ({
         chatId={chatId}
         setIsShowJoinBtn={setIsShowJoinBtn}
         setIsChatVisible={setIsChatVisible}
+        isShowJoinBtn={isShowJoinBtn}
       />
     </ChatHeaderStyled>
   );
