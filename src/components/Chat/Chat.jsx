@@ -28,7 +28,6 @@ import {
 const Chat = ({
   chatData,
   setChatData,
-  setSubscriptionRooms,
   isSubscribed,
   isShowJoinBtn,
   setIsShowJoinBtn,
@@ -45,8 +44,7 @@ const Chat = ({
   const isPrivateChat = chatType === CHAT_TYPES.PRIVATE;
 
   const [isUserTyping, setIsUserTyping] = useState(false);
-  const [userNameisTyping, setUserNameisTyping] = useState('');
-
+  const [usersTyping, setUsersTyping] = useState([]);
   const [messages, setMessages] = useState([]);
   const [page, setPage] = useState(0);
   const [unreadPage, setUnreadPage] = useState(0);
@@ -74,6 +72,9 @@ const Chat = ({
   } = useWebSocket();
 
   const { updateUnreadMessagesCount } = useChatContext();
+
+  const isMessageAlreadyExists = (messagesList, newMessage) =>
+    messagesList.some(message => message.id === newMessage.id);
 
   const debouncedMarkAsRead = useRef(
     debounce(async (chatId, lastMessageId) => {
@@ -129,7 +130,11 @@ const Chat = ({
 
       const { content, page: pageData } = response.data;
 
-      setMessages(prevMessages => [...content, ...prevMessages]);
+      const newMessages = content.filter(
+        msg => !isMessageAlreadyExists(messages, msg)
+      );
+
+      setMessages(prevMessages => [...newMessages, ...prevMessages]);
       setPage(pageData.number + 1);
       setHasMore(pageData.number + 1 < pageData.totalPages);
       return content;
@@ -256,9 +261,6 @@ const Chat = ({
     if (isSubscribed && id) {
       subscribeToMessages(URLs.subscriptionToMessages(id), newMessage => {
         setMessages(prevMessages => [...prevMessages, newMessage]);
-        if (newMessage.user.id !== userId) {
-          setShowNewMessagesIndicator(false);
-        }
 
         if (newMessage.type === MESSAGE_TYPES.TEXT && messageBlockRef.current) {
           const isAtBottom =
@@ -271,9 +273,12 @@ const Chat = ({
               behavior: 'smooth',
             });
             setMessagesToMarkAsRead(prev => [...prev, newMessage.id]);
-          } else {
+          } else if (newMessage.user.id !== userId) {
             setUnreadMessages(prev => [...prev, newMessage]);
             setShowNewMessagesIndicator(true);
+          }
+          if (newMessage.user.id === userId) {
+            setMessagesToMarkAsRead(prev => [...prev, newMessage.id]);
           }
         }
       });
@@ -424,18 +429,18 @@ const Chat = ({
       {!name && <ChatFirstLoading />}
       <ChatHeader
         chatName={name}
+        chatData={chatData}
         participantsAmount={participantsAmount}
         setParticipantsAmount={setParticipantsAmount}
         flagCode={country?.flagCode}
         selectedCompanion={selectedCompanion}
         isPrivateChat={isPrivateChat}
-        isUserTyping={isUserTyping}
-        userNameisTyping={userNameisTyping}
+        usersTyping={usersTyping}
         chatId={id}
-        setSubscriptionRooms={setSubscriptionRooms}
         setIsShowJoinBtn={setIsShowJoinBtn}
         setIsChatVisible={setIsChatVisible}
         listOfOnlineUsersStatuses={listOfOnlineUsersStatuses}
+        isShowJoinBtn={isShowJoinBtn}
       />
       <MessageBlock ref={messageBlockRef} onScroll={handleScroll}>
         {isFetchingMore && <Loader size={50} />}
@@ -444,7 +449,7 @@ const Chat = ({
             messages={messages}
             unreadMessages={unreadMessages}
             setIsUserTyping={setIsUserTyping}
-            setUserNameisTyping={setUserNameisTyping}
+            setUsersTyping={setUsersTyping}
             listOfOnlineUsersStatuses={listOfOnlineUsersStatuses}
             lastVisibleReadMessageRef={lastVisibleReadMessageRef}
           />
@@ -459,12 +464,15 @@ const Chat = ({
         <NewMessagesNotification>
           <button
             type="button"
+            className="scroll-button"
             onClick={scrollToBottom}
             aria-label="Scroll to bottom"
           >
-            <IoIosArrowDown />
+            <span aria-hidden="true">
+              <IoIosArrowDown />
+            </span>
+            <span>{unreadCount} new messages</span>
           </button>
-          <span>{unreadCount} new messages</span>
           <div className="divider" />
 
           <button
@@ -479,7 +487,6 @@ const Chat = ({
       <MessageBar
         chatId={id}
         chatData={chatData}
-        setSubscriptionRooms={setSubscriptionRooms}
         isShowJoinBtn={isShowJoinBtn}
         setIsShowJoinBtn={setIsShowJoinBtn}
         isUserTyping={isUserTyping}
@@ -507,7 +514,6 @@ Chat.propTypes = {
     usersCount: PropTypes.number,
   }),
   setChatData: PropTypes.func,
-  setSubscriptionRooms: PropTypes.func,
   isSubscribed: PropTypes.bool,
   isShowJoinBtn: PropTypes.bool,
   setIsShowJoinBtn: PropTypes.func,
@@ -521,6 +527,7 @@ Chat.propTypes = {
   setParticipantsAmount: PropTypes.func,
   isChatVisible: PropTypes.bool,
   setIsChatVisible: PropTypes.func,
+  listOfOnlineUsers: PropTypes.instanceOf(Map),
 };
 
 export default Chat;

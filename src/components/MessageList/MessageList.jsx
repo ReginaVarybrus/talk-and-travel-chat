@@ -1,29 +1,44 @@
 import { useEffect } from 'react';
+import { useSelector } from 'react-redux';
 import { isSameDay } from 'date-fns';
 import PropTypes from 'prop-types';
 import MessageItem from '@/components/MessageItem/MessageItem';
 import { MESSAGE_TYPES } from '@/constants/messageTypes.js';
+import { getUser } from '@/redux-store/selectors.js';
 import DateSeparator from '@/components/DateSeparator/DateSeparator.jsx';
 import { MessageListStyled } from './MessageListStyled.js';
 
 const MessageList = ({
   messages,
   setIsUserTyping,
-  setUserNameisTyping,
+  setUsersTyping,
   listOfOnlineUsersStatuses,
   unreadMessages,
   lastVisibleReadMessageRef,
 }) => {
+  const currentUserName = useSelector(getUser)?.userName;
+
   useEffect(() => {
     messages?.forEach(message => {
-      if (message.type === MESSAGE_TYPES.START_TYPING) {
-        setIsUserTyping(true);
-        setUserNameisTyping(message.user?.userName);
+      const currentUser = message.user?.userName;
+
+      if (
+        message.type === MESSAGE_TYPES.START_TYPING &&
+        currentUser !== currentUserName
+      ) {
+        setUsersTyping(prevUsers => {
+          if (!prevUsers.includes(currentUser)) {
+            return [...prevUsers, currentUser];
+          }
+          return prevUsers;
+        });
       } else if (message.type === MESSAGE_TYPES.STOP_TYPING) {
-        setIsUserTyping(false);
+        setUsersTyping(prevUsers =>
+          prevUsers.filter(userName => userName !== currentUser)
+        );
       }
     });
-  }, [messages, setIsUserTyping, setUserNameisTyping]);
+  }, [messages, setIsUserTyping, setUsersTyping, currentUserName]);
 
   const renderMessagesWithDateSeparator = () => {
     const sortedMessages = messages
@@ -47,7 +62,7 @@ const MessageList = ({
             !isSameDay(currentMessageDate, previousMessageDate)));
 
       let nextUserMessage = null;
-      for (let i = index + 1; i < sortedMessages.length; i++) {
+      for (let i = index + 1; i < sortedMessages.length; i += 1) {
         if (sortedMessages[i].type === MESSAGE_TYPES.TEXT) {
           nextUserMessage = sortedMessages[i];
           break;
@@ -98,7 +113,12 @@ const MessageList = ({
 MessageList.propTypes = {
   messages: PropTypes.array,
   setIsUserTyping: PropTypes.func,
-  setUserNameisTyping: PropTypes.func,
+  setUsersTyping: PropTypes.func,
+  listOfOnlineUsers: PropTypes.instanceOf(Map),
+  unreadMessages: PropTypes.array,
+  lastVisibleReadMessageRef: PropTypes.shape({
+    current: PropTypes.instanceOf(Element),
+  }),
 };
 
 export default MessageList;

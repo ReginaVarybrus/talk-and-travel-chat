@@ -29,7 +29,6 @@ const MessageItem = ({
 }) => {
   const [open, setOpen] = useState(false);
   const [userInfo, setUserInfo] = useState({});
-  const [userChats, setUserChats] = useState([]);
   const currentUserId = useSelector(getUser)?.id;
   const time = timeStampConverter(date);
   const isCurrentUser = userId === currentUserId;
@@ -93,7 +92,6 @@ const MessageItem = ({
         userEmail={userInfo?.userEmail}
         about={userInfo?.about}
         id={userInfo?.id}
-        dataUserChats={userChats}
       />
     </MessageItemStyled>
   );

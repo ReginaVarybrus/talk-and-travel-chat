@@ -7,12 +7,12 @@ import Chat from '@/components/Chat/Chat';
 import { axiosClient } from '@/services/api';
 
 import { useWebSocket } from '@/hooks/useWebSocket.js';
+import { useChatContext } from '@/providers/ChatProvider.jsx';
 import useUserActivity from '@/hooks/useUserActivity.js';
 import { ChatRouteStyled } from './ChatRouteStyled.js';
 
 const ChatRoute = () => {
   const [chatData, setChatData] = useState({});
-  const [subscriptionRooms, setSubscriptionRooms] = useState([]);
   const [isSubscribed, setIsSubscribed] = useState(false);
   const [isShowJoinBtn, setIsShowJoinBtn] = useState(false);
   const [participantsAmount, setParticipantsAmount] = useState(null);
@@ -27,6 +27,8 @@ const ChatRoute = () => {
     unsubscribeFromUsersStatuses,
     sendMessageOrEvent,
   } = useWebSocket();
+
+  const { setSubscriptionRooms } = useChatContext();
 
   const context = useOutletContext();
   const isChatVisible = context?.isChatVisible;
@@ -83,7 +85,6 @@ const ChatRoute = () => {
     <ChatRouteStyled>
       <SearchBar
         setChatData={setChatData}
-        subscriptionRooms={subscriptionRooms}
         setIsSubscribed={setIsSubscribed}
         setIsShowJoinBtn={setIsShowJoinBtn}
         setSelectedCompanion={setSelectedCompanion}

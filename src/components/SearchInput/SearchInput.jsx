@@ -7,6 +7,7 @@ import { useFetch } from '@/hooks/useFetch.js';
 import URLs from '@/constants/constants';
 import mapData from '@/data/countries.json';
 import { useNavigate } from 'react-router-dom';
+import { useChatContext } from '@/providers/ChatProvider';
 import {
   AutocompleteInputStyled,
   AutocompleteInput,
@@ -23,7 +24,6 @@ const SearchInput = ({
   setIsSubscribed,
   setIsShowJoinBtn,
   setIsChatVisible,
-  subscriptionRooms,
   setParticipantsAmount,
 }) => {
   const isDesktop = useMediaQuery({ query: device.tablet });
@@ -32,6 +32,8 @@ const SearchInput = ({
   const [searchedValue, setSearchedValue] = useState('');
   const [showItem, setShowItem] = useState(false);
   const autoCompleteRef = useRef(null);
+  const { subscriptionRooms } = useChatContext();
+
   const { responseData } = useFetch(
     selectedCountry ? URLs.getMainCountryChatByName(selectedCountry) : null
   );
@@ -159,7 +161,6 @@ SearchInput.propTypes = {
   setIsSubscribed: PropTypes.func,
   setIsShowJoinBtn: PropTypes.func,
   setIsChatVisible: PropTypes.func,
-  subscriptionRooms: PropTypes.array,
   setParticipantsAmount: PropTypes.func,
 };
 

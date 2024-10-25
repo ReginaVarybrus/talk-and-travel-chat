@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types';
 import { useMediaQuery } from 'react-responsive';
 import { device } from '@/constants/mediaQueries.js';
-import { LuLogOut } from 'react-icons/lu';
+import { LuLogOut, LuLogIn } from 'react-icons/lu';
 import { IoCloseOutline } from 'react-icons/io5';
 import { HiOutlineExclamationCircle } from 'react-icons/hi';
 import { FaRegMessage } from 'react-icons/fa6';
@@ -15,6 +15,7 @@ import { useSelector } from 'react-redux';
 import { getUser } from '@/redux-store/selectors.js';
 import { routesPath } from '@/routes/routesConfig.jsx';
 import { axiosClient } from '@/services/api.js';
+import { useChatContext } from '@/providers/ChatProvider';
 
 import {
   BoxStyled,
@@ -27,7 +28,7 @@ import {
   CloseBtn,
   InfoBoxStyled,
   HeaderStyled,
-  ExitBtn,
+  ExitOrJoinBtn,
   ReportBtn,
   Subtitle,
   LetterAvatar,
@@ -36,20 +37,23 @@ import {
 } from './CountryInfoStyled.js';
 
 const CountryInfo = ({
+  chatData,
   isOpen,
   onClose,
   countryName,
   participantsAmount,
   setParticipantsAmount,
-  setSubscriptionRooms,
   chatId,
   setIsShowJoinBtn,
   setIsChatVisible,
+  isShowJoinBtn,
 }) => {
   const isDesktop = useMediaQuery({ query: device.tablet });
   const currentUserId = useSelector(getUser)?.id;
   const { sendMessageOrEvent } = useWebSocket();
   const navigate = useNavigate();
+  const { setSubscriptionRooms, dataUserChats, updateUserChats } =
+    useChatContext();
 
   const { responseData: dataUserChats } = useFetch(URLs.getPrivateChats);
 
@@ -74,6 +78,7 @@ const CountryInfo = ({
           companionId: id,
         });
         const privateChatId = response.data;
+        await updateUserChats();
         navigate(routesPath.DMS, {
           state: {
             privateChatId,
@@ -101,6 +106,14 @@ const CountryInfo = ({
     }
     onClose();
     setIsShowJoinBtn(true);
+  };
+
+  const handleJoinToChat = () => {
+    sendMessageOrEvent(dataEventToSend, ULRs.joinToGroupChat);
+    setIsShowJoinBtn(false);
+    setSubscriptionRooms(prevRooms => [...prevRooms, chatData]);
+    setParticipantsAmount(prevCount => prevCount + 1);
+    onClose();
   };
 
   const url = chatId && URLs.getChatsParticipants(chatId);
@@ -188,10 +201,17 @@ const CountryInfo = ({
         )}
 
         <ButtonsBoxStyled>
-          <ExitBtn onClick={handleLeaveGroup}>
-            <LuLogOut />
-            Leave group
-          </ExitBtn>
+          {isShowJoinBtn ? (
+            <ExitOrJoinBtn onClick={handleJoinToChat}>
+              <LuLogIn />
+              Join to chat
+            </ExitOrJoinBtn>
+          ) : (
+            <ExitOrJoinBtn onClick={handleLeaveGroup}>
+              <LuLogOut />
+              Leave group
+            </ExitOrJoinBtn>
+          )}
           <ReportBtn>
             <HiOutlineExclamationCircle />
             Report
@@ -208,7 +228,6 @@ CountryInfo.propTypes = {
   countryName: PropTypes.string,
   participantsAmount: PropTypes.number,
   chatId: PropTypes.number,
-  setSubscriptionRooms: PropTypes.func,
   setIsShowJoinBtn: PropTypes.func,
 };
 

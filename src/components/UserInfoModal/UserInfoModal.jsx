@@ -6,6 +6,8 @@ import URLs from '@/constants/constants';
 import { axiosClient } from '@/services/api';
 import { useNavigate } from 'react-router-dom';
 import { routesPath } from '@/routes/routesConfig';
+import { useChatContext } from '@/providers/ChatProvider';
+
 import {
   ModalWindowStyled,
   InfoModalStyled,
@@ -28,9 +30,9 @@ const UserInfoModal = ({
   userEmail = 'email@gmail.com',
   about,
   id,
-  dataUserChats,
 }) => {
   const navigate = useNavigate();
+  const { dataUserChats, updateUserChats } = useChatContext();
 
   const firstLetterOfName = userName.substr(0, 1).toUpperCase();
 
@@ -57,6 +59,7 @@ const UserInfoModal = ({
           companionId,
         });
         const privateChatId = response.data;
+        await updateUserChats();
         navigate(routesPath.DMS, {
           state: {
             privateChatId,
