@@ -28,7 +28,6 @@ import {
 const Chat = ({
   chatData,
   setChatData,
-  setSubscriptionRooms,
   isSubscribed,
   isShowJoinBtn,
   setIsShowJoinBtn,
@@ -263,9 +262,6 @@ const Chat = ({
     if (isSubscribed && id) {
       subscribeToMessages(ULRs.subscriptionToMessages(id), newMessage => {
         setMessages(prevMessages => [...prevMessages, newMessage]);
-        if (newMessage.user.id !== userId) {
-          setShowNewMessagesIndicator(false);
-        }
 
         if (newMessage.type === MESSAGE_TYPES.TEXT && messageBlockRef.current) {
           const isAtBottom =
@@ -278,9 +274,12 @@ const Chat = ({
               behavior: 'smooth',
             });
             setMessagesToMarkAsRead(prev => [...prev, newMessage.id]);
-          } else {
+          } else if (newMessage.user.id !== userId) {
             setUnreadMessages(prev => [...prev, newMessage]);
             setShowNewMessagesIndicator(true);
+          }
+          if (newMessage.user.id === userId) {
+            setMessagesToMarkAsRead(prev => [...prev, newMessage.id]);
           }
         }
       });
@@ -431,6 +430,7 @@ const Chat = ({
       {!name && <ChatFirstLoading />}
       <ChatHeader
         chatName={name}
+        chatData={chatData}
         participantsAmount={participantsAmount}
         setParticipantsAmount={setParticipantsAmount}
         flagCode={country?.flagCode}
@@ -439,10 +439,10 @@ const Chat = ({
         isUserTyping={isUserTyping}
         userNameisTyping={userNameisTyping}
         chatId={id}
-        setSubscriptionRooms={setSubscriptionRooms}
         setIsShowJoinBtn={setIsShowJoinBtn}
         setIsChatVisible={setIsChatVisible}
         listOfOnlineUsers={listOfOnlineUsers}
+        isShowJoinBtn={isShowJoinBtn}
       />
       <MessageBlock ref={messageBlockRef} onScroll={handleScroll}>
         {isFetchingMore && <Loader size={50} />}
@@ -466,12 +466,15 @@ const Chat = ({
         <NewMessagesNotification>
           <button
             type="button"
+            className="scroll-button"
             onClick={scrollToBottom}
             aria-label="Scroll to bottom"
           >
-            <IoIosArrowDown />
+            <span aria-hidden="true">
+              <IoIosArrowDown />
+            </span>
+            <span>{unreadCount} new messages</span>
           </button>
-          <span>{unreadCount} new messages</span>
           <div className="divider" />
 
           <button
@@ -486,7 +489,6 @@ const Chat = ({
       <MessageBar
         chatId={id}
         chatData={chatData}
-        setSubscriptionRooms={setSubscriptionRooms}
         isShowJoinBtn={isShowJoinBtn}
         setIsShowJoinBtn={setIsShowJoinBtn}
         isUserTyping={isUserTyping}
@@ -514,7 +516,6 @@ Chat.propTypes = {
     usersCount: PropTypes.number,
   }),
   setChatData: PropTypes.func,
-  setSubscriptionRooms: PropTypes.func,
   isSubscribed: PropTypes.bool,
   isShowJoinBtn: PropTypes.bool,
   setIsShowJoinBtn: PropTypes.func,

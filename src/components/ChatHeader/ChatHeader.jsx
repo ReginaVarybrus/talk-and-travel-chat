@@ -17,6 +17,7 @@ import {
 
 const ChatHeader = ({
   chatName = 'Country name',
+  chatData,
   participantsAmount,
   setParticipantsAmount,
   flagCode,
@@ -25,14 +26,16 @@ const ChatHeader = ({
   isUserTyping,
   userNameisTyping,
   chatId,
-  setSubscriptionRooms,
   setIsShowJoinBtn,
   setIsChatVisible,
   listOfOnlineUsers,
+  isShowJoinBtn,
 }) => {
   const [openModal, setOpenModal] = useState(false);
   const userName = useSelector(getUser)?.userName;
-  const showUserIsTyping = userNameisTyping !== userName && isUserTyping;
+
+  const showUserIsTyping =
+    isUserTyping && userNameisTyping && userNameisTyping !== userName;
   const nameOfChat = isPrivateChat ? selectedCompanion.userName : chatName;
   const isOnline =
     isPrivateChat &&
@@ -108,15 +111,16 @@ const ChatHeader = ({
       </DesktopHeaderStyled>
 
       <CountryInfo
+        chatData={chatData}
         isOpen={openModal}
         onClose={handleClose}
         countryName={chatName}
         participantsAmount={participantsAmount || 0}
         setParticipantsAmount={setParticipantsAmount}
         chatId={chatId}
-        setSubscriptionRooms={setSubscriptionRooms}
         setIsShowJoinBtn={setIsShowJoinBtn}
         setIsChatVisible={setIsChatVisible}
+        isShowJoinBtn={isShowJoinBtn}
       />
     </ChatHeaderStyled>
   );
@@ -136,7 +140,6 @@ ChatHeader.propTypes = {
   isUserTyping: PropTypes.bool,
   userNameisTyping: PropTypes.string,
   chatId: PropTypes.number,
-  setSubscriptionRooms: PropTypes.func,
   setIsShowJoinBtn: PropTypes.func,
   setIsChatVisible: PropTypes.func,
 };
