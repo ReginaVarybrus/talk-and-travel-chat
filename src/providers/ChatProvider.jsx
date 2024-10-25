@@ -9,19 +9,26 @@ import {
 import { useFetch } from '@/hooks/useFetch';
 import ULRs from '@/constants/constants';
 import { axiosClient } from '@/services/api';
+import { useSelector } from 'react-redux';
+import { getIsLoggedIn } from '@/redux-store/selectors';
 
 const ChatContext = createContext();
 
 export const useChatContext = () => useContext(ChatContext);
 
 export const ChatProvider = ({ children }) => {
+  const isUserLoggedIn = useSelector(getIsLoggedIn);
   const [subscriptionRooms, setSubscriptionRooms] = useState([]);
   const [dataUserChats, setDataUserChats] = useState([]);
   const [unreadRoomsCount, setUnreadRoomsCount] = useState(0);
   const [unreadDMsCount, setUnreadDMsCount] = useState(0);
 
-  const { responseData: roomsData } = useFetch(ULRs.userCountries);
-  const { responseData: dmsData } = useFetch(ULRs.getPrivateChats);
+  const { responseData: roomsData } = useFetch(
+    isUserLoggedIn ? ULRs.userCountries : null
+  );
+  const { responseData: dmsData } = useFetch(
+    isUserLoggedIn ? ULRs.getPrivateChats : null
+  );
 
   useEffect(() => {
     if (roomsData) {
