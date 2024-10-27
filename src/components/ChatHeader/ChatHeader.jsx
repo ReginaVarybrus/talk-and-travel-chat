@@ -17,22 +17,21 @@ import {
 
 const ChatHeader = ({
   chatName = 'Country name',
+  chatData,
   participantsAmount,
   setParticipantsAmount,
   flagCode,
   selectedCompanion,
   isPrivateChat,
-  isUserTyping,
-  userNameisTyping,
+  usersTyping,
   chatId,
-  setSubscriptionRooms,
   setIsShowJoinBtn,
   setIsChatVisible,
   listOfOnlineUsers,
+  isShowJoinBtn,
 }) => {
   const [openModal, setOpenModal] = useState(false);
-  const userName = useSelector(getUser)?.userName;
-  const showUserIsTyping = userNameisTyping !== userName && isUserTyping;
+  const currentUserName = useSelector(getUser)?.userName;
   const nameOfChat = isPrivateChat ? selectedCompanion.userName : chatName;
   const isOnline =
     isPrivateChat &&
@@ -42,19 +41,25 @@ const ChatHeader = ({
     .toUpperCase();
 
   const getMessage = () => {
-    if (showUserIsTyping) {
-      return `${userNameisTyping} is typing...`;
+    const usersTypingWithoutCurrent = usersTyping.filter(
+      user => user !== currentUserName
+    );
+    if (!usersTyping || usersTypingWithoutCurrent.length === 0) {
+      return isPrivateChat && isOnline
+        ? 'online'
+        : `${participantsAmount} participants`;
     }
 
-    if (isPrivateChat && isOnline) {
-      return 'online';
-    }
+    const firstUser = usersTyping[0];
+    const othersCount = usersTyping.length - 1;
 
-    if (isPrivateChat) {
-      return '';
+    if (othersCount === 0) {
+      return `${firstUser} is typing...`;
     }
-
-    return `${participantsAmount} participants`;
+    if (othersCount === 1) {
+      return `${firstUser} and 1 other are typing...`;
+    }
+    return `${firstUser} and ${othersCount} others are typing...`;
   };
 
   const handleOpen = () => {
@@ -108,15 +113,16 @@ const ChatHeader = ({
       </DesktopHeaderStyled>
 
       <CountryInfo
+        chatData={chatData}
         isOpen={openModal}
         onClose={handleClose}
         countryName={chatName}
         participantsAmount={participantsAmount || 0}
         setParticipantsAmount={setParticipantsAmount}
         chatId={chatId}
-        setSubscriptionRooms={setSubscriptionRooms}
         setIsShowJoinBtn={setIsShowJoinBtn}
         setIsChatVisible={setIsChatVisible}
+        isShowJoinBtn={isShowJoinBtn}
       />
     </ChatHeaderStyled>
   );
@@ -124,6 +130,19 @@ const ChatHeader = ({
 
 ChatHeader.propTypes = {
   chatName: PropTypes.string,
+  chatData: PropTypes.shape({
+    chatType: PropTypes.oneOf(['GROUP', 'PRIVATE']),
+    country: PropTypes.shape({
+      flagCode: PropTypes.string,
+      name: PropTypes.string,
+    }),
+    creationDate: PropTypes.string,
+    description: PropTypes.string,
+    id: PropTypes.number,
+    messages: PropTypes.array,
+    name: PropTypes.string,
+    usersCount: PropTypes.number,
+  }),
   participantsAmount: PropTypes.number,
   setParticipantsAmount: PropTypes.func,
   flagCode: PropTypes.string,
@@ -133,12 +152,12 @@ ChatHeader.propTypes = {
     userEmail: PropTypes.string,
   }),
   isPrivateChat: PropTypes.bool,
-  isUserTyping: PropTypes.bool,
-  userNameisTyping: PropTypes.string,
+  usersTyping: PropTypes.array,
   chatId: PropTypes.number,
-  setSubscriptionRooms: PropTypes.func,
   setIsShowJoinBtn: PropTypes.func,
   setIsChatVisible: PropTypes.func,
+  listOfOnlineUsers: PropTypes.instanceOf(Map),
+  isShowJoinBtn: PropTypes.bool,
 };
 
 export default ChatHeader;

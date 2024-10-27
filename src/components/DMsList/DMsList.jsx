@@ -4,7 +4,6 @@ import { useMediaQuery } from 'react-responsive';
 import { device } from '@/constants/mediaQueries.js';
 import ULRs from '@/constants/constants';
 import { useFetch } from '@/hooks/useFetch';
-import { dateStampConverter } from '@/components/utils/timeUtil.js';
 import { formatDate } from '@/components/utils/dateUtil.js';
 import { ScrollBar } from '@/components/SearchInput/SearchInputStyled.js';
 import {
