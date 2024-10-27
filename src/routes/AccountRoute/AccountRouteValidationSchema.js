@@ -42,6 +42,6 @@ export const formFields = {
         general: 'about',
         type: 'textarea',
         label: 'About',
-        placeholder: '',
+        placeholder: 'you can write here something about yourself for other users',
     },
 };
