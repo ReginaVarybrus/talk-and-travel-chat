@@ -49,17 +49,18 @@ const ChatHeader = ({
       user => user !== currentUserName
     );
     if (!usersTyping || usersTypingWithoutCurrent.length === 0) {
-      return isPrivateChat && isOnline
-        ? 'online'
-        : `${participantsAmount} participants`;
-    }
-
-    if (isPrivateChat && userStatus.lastSeenOn) {
-      return formatDateOfLastSeen(userStatus.lastSeenOn);
-    }
-
-    if (isPrivateChat) {
-      return '';
+      if (isPrivateChat && isOnline) {
+        return 'online';
+      }
+      if (isPrivateChat && userStatus.lastSeenOn) {
+        return formatDateOfLastSeen(userStatus.lastSeenOn);
+      }
+      if (isPrivateChat) {
+        return '';
+      }
+      if (!isPrivateChat) {
+        return `${participantsAmount} participants`;
+      }
     }
 
     const firstUser = usersTyping[0];
@@ -168,7 +169,7 @@ ChatHeader.propTypes = {
   chatId: PropTypes.number,
   setIsShowJoinBtn: PropTypes.func,
   setIsChatVisible: PropTypes.func,
-  listOfOnlineUsers: PropTypes.instanceOf(Map),
+  listOfOnlineUsersStatuses: PropTypes.instanceOf(Map),
   isShowJoinBtn: PropTypes.bool,
 };
 

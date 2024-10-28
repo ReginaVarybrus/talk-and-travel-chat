@@ -8,7 +8,7 @@ import { axiosClient } from '@/services/api';
 
 import { useWebSocket } from '@/hooks/useWebSocket.js';
 import { useChatContext } from '@/providers/ChatProvider.jsx';
-import useUserActivity from '@/hooks/useUserActivity.js';
+// import useUserActivity from '@/hooks/useUserActivity.js';
 import { ChatRouteStyled } from './ChatRouteStyled.js';
 
 const ChatRoute = () => {
@@ -25,7 +25,6 @@ const ChatRoute = () => {
     stompClient,
     subscribeToUsersStatuses,
     unsubscribeFromUsersStatuses,
-    sendMessageOrEvent,
   } = useWebSocket();
 
   const { setSubscriptionRooms } = useChatContext();
@@ -75,11 +74,11 @@ const ChatRoute = () => {
     fetchData();
   }, []);
 
-  const handleUserActiveEvent = () => {
-    sendMessageOrEvent(true, URLs.updateOnlineStatus);
-  };
+  // const handleUserActiveEvent = () => {
+  //   sendMessageOrEvent(true, URLs.updateOnlineStatus);
+  // };
 
-  useUserActivity(handleUserActiveEvent);
+  // useUserActivity(handleUserActiveEvent);
 
   return (
     <ChatRouteStyled>

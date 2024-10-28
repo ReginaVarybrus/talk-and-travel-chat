@@ -55,8 +55,6 @@ const CountryInfo = ({
   const { setSubscriptionRooms, dataUserChats, updateUserChats } =
     useChatContext();
 
-  const { responseData: dataUserChats } = useFetch(URLs.getPrivateChats);
-
   const checkExistingPrivateChat = id => {
     const isExist = dataUserChats?.find(chat => chat.companion.id === id);
     return isExist && isExist.chat.id;
@@ -109,7 +107,10 @@ const CountryInfo = ({
   };
 
   const handleJoinToChat = () => {
-    sendMessageOrEvent(dataEventToSend, ULRs.joinToGroupChat);
+    const dataEventToSend = {
+      chatId,
+    };
+    sendMessageOrEvent(dataEventToSend, URLs.joinToGroupChat);
     setIsShowJoinBtn(false);
     setSubscriptionRooms(prevRooms => [...prevRooms, chatData]);
     setParticipantsAmount(prevCount => prevCount + 1);

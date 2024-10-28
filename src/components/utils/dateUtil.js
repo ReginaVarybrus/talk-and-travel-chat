@@ -48,5 +48,5 @@ export const formatDateOfLastSeen = dateString => {
     return `last seen on ${dayOfWeek}`;
   }
 
-  return format(messageDate, 'last seen a long time ago');
+  return 'last seen a long time ago';
 };
