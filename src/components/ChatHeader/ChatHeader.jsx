@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { useSelector } from 'react-redux';
 import { getUser } from '@/redux-store/selectors.js';
 import CountryInfo from '@/components/CountryInfo/CountryInfo';
+import { formatDateOfLastSeen } from '@/components/utils/dateUtil.js';
 import {
   ChatHeaderStyled,
   MobileHeaderStyled,
@@ -27,15 +28,18 @@ const ChatHeader = ({
   chatId,
   setIsShowJoinBtn,
   setIsChatVisible,
-  listOfOnlineUsers,
+  listOfOnlineUsersStatuses,
   isShowJoinBtn,
 }) => {
   const [openModal, setOpenModal] = useState(false);
   const currentUserName = useSelector(getUser)?.userName;
   const nameOfChat = isPrivateChat ? selectedCompanion.userName : chatName;
-  const isOnline =
-    isPrivateChat &&
-    listOfOnlineUsers.get(selectedCompanion.id.toString()) === true;
+  const userStatus = listOfOnlineUsersStatuses.get(
+    selectedCompanion?.id.toString()
+  );
+
+  const isOnline = userStatus ? userStatus.isOnline : false;
+
   const firstLetterOfName = selectedCompanion?.userName
     .substr(0, 1)
     .toUpperCase();
@@ -45,9 +49,18 @@ const ChatHeader = ({
       user => user !== currentUserName
     );
     if (!usersTyping || usersTypingWithoutCurrent.length === 0) {
-      return isPrivateChat && isOnline
-        ? 'online'
-        : `${participantsAmount} participants`;
+      if (isPrivateChat && isOnline) {
+        return 'online';
+      }
+      if (isPrivateChat && userStatus.lastSeenOn) {
+        return formatDateOfLastSeen(userStatus.lastSeenOn);
+      }
+      if (isPrivateChat) {
+        return '';
+      }
+      if (!isPrivateChat) {
+        return `${participantsAmount} participants`;
+      }
     }
 
     const firstUser = usersTyping[0];
@@ -89,8 +102,8 @@ const ChatHeader = ({
             <FlagImg
               loading="lazy"
               width="36"
-              srcSet={`https://flagcdn.com/w40/${flagCode}.png 2x`}
-              src={`https://flagcdn.com/w20/${flagCode}.png`}
+              srcSet={`https://flagcdn.com/${flagCode}.svg 2x`}
+              src={`https://flagcdn.com/${flagCode}.svg`}
               alt={`${flagCode} flag`}
             />
           )}
@@ -156,7 +169,7 @@ ChatHeader.propTypes = {
   chatId: PropTypes.number,
   setIsShowJoinBtn: PropTypes.func,
   setIsChatVisible: PropTypes.func,
-  listOfOnlineUsers: PropTypes.instanceOf(Map),
+  listOfOnlineUsersStatuses: PropTypes.instanceOf(Map),
   isShowJoinBtn: PropTypes.bool,
 };
 

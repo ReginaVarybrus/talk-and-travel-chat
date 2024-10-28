@@ -7,7 +7,7 @@ import { HiOutlineExclamationCircle } from 'react-icons/hi';
 import { FaRegMessage } from 'react-icons/fa6';
 import Modal from '@mui/material/Modal';
 import { useFetch } from '@/hooks/useFetch.js';
-import ULRs from '@/constants/constants';
+import URLs from '@/constants/constants';
 import mapData from '@/data/countries.json';
 import { useNavigate } from 'react-router-dom';
 import { useWebSocket } from '@/hooks/useWebSocket.js';
@@ -55,9 +55,6 @@ const CountryInfo = ({
   const { setSubscriptionRooms, dataUserChats, updateUserChats } =
     useChatContext();
 
-  const dataEventToSend = {
-    chatId,
-  };
   const checkExistingPrivateChat = id => {
     const isExist = dataUserChats?.find(chat => chat.companion.id === id);
     return isExist && isExist.chat.id;
@@ -75,7 +72,7 @@ const CountryInfo = ({
           },
         });
       } else {
-        const response = await axiosClient.post(ULRs.createPrivateChat, {
+        const response = await axiosClient.post(URLs.createPrivateChat, {
           companionId: id,
         });
         const privateChatId = response.data;
@@ -94,7 +91,10 @@ const CountryInfo = ({
   };
 
   const handleLeaveGroup = () => {
-    sendMessageOrEvent(dataEventToSend, ULRs.leaveOutGroupChat);
+    const dataEventToSend = {
+      chatId,
+    };
+    sendMessageOrEvent(dataEventToSend, URLs.leaveOutGroupChat);
     setSubscriptionRooms(prevRooms =>
       prevRooms.filter(room => room.name !== countryName)
     );
@@ -107,14 +107,17 @@ const CountryInfo = ({
   };
 
   const handleJoinToChat = () => {
-    sendMessageOrEvent(dataEventToSend, ULRs.joinToGroupChat);
+    const dataEventToSend = {
+      chatId,
+    };
+    sendMessageOrEvent(dataEventToSend, URLs.joinToGroupChat);
     setIsShowJoinBtn(false);
     setSubscriptionRooms(prevRooms => [...prevRooms, chatData]);
     setParticipantsAmount(prevCount => prevCount + 1);
     onClose();
   };
 
-  const url = chatId && ULRs.getChatsParticipants(chatId);
+  const url = chatId && URLs.getChatsParticipants(chatId);
   const { responseData: participants } = useFetch(url, '');
 
   if (!isOpen || !countryName || !chatId) {
@@ -144,8 +147,8 @@ const CountryInfo = ({
         <HeaderStyled>
           <Flag
             loading="lazy"
-            srcSet={`https://flagcdn.com/w40/${countryData.properties.code.toLowerCase()}.png 2x`}
-            src={`https://flagcdn.com/w20/${countryData.properties.code.toLowerCase()}.png`}
+            srcSet={`https://flagcdn.com/${countryData.properties.code.toLowerCase()}.svg 2x`}
+            src={`https://flagcdn.com/${countryData.properties.code.toLowerCase()}.svg`}
             alt={`${countryData.properties.admin} flag`}
           />
           <InfoBoxStyled>
