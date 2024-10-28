@@ -5,6 +5,7 @@ import Footer from '@/components/Footer/Footer';
 import {
   MainPageLayout,
   MainPageSectionOne,
+  HeaderH1,
   Globe,
   Star,
   Telegram,
@@ -76,26 +77,12 @@ const MainRoute = () => {
     <MainPageLayout>
       <Header />
       <MainPageSectionOne>
-        <Typography
-          variant="h1"
-          sx={{
-            fontSize: '64px',
-            lineHeight: '76.8px',
-            color: 'var(--color-dark)',
-          }}
-        >
+        <HeaderH1>
           <b>Talk</b> Without Borders
-        </Typography>
-        <Typography
-          variant="h1"
-          sx={{
-            fontSize: '64px',
-            lineHeight: '76.8px',
-            color: 'var(--color-dark)',
-          }}
-        >
+        </HeaderH1>
+        <HeaderH1>
           <b>Travel</b> Without Limits
-        </Typography>
+        </HeaderH1>
         <Typography
           sx={{
             marginTop: '24px',

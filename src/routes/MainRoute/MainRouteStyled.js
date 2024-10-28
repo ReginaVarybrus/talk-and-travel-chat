@@ -7,16 +7,39 @@ export const MainPageLayout = styled(Box)`
   box-sizing: border-box;
   padding-top: 80px;
   font-family: Roboto, sans-serif;
+
+  @media (max-width: 768px) {
+    padding-top: 0px;
+  }
 `;
 
 export const MainPageSectionOne = styled(Box)`
-  margin-top: 180px;
-  margin-bottom: 138px;
+  margin-top: 20px;
+  margin-bottom: 20px;
   display: flex;
   flex-direction: column;
   align-items: center;
   text-align: center;
+
+  @media (min-width: 768px) {
+    margin-top: 180px;
+    margin-bottom: 138px;
+  }
 `;
+
+export const HeaderH1 = styled.h1`
+  color: var(--color-dark);
+  font-size: 32px;
+  font-weight: 400;
+  line-height: 38.4px;
+  text-align: center;
+
+  @media (min-width: 768px) {
+    font-size: 64px;
+    line-height: 76.8px;
+  }
+`;
+
 
 export const Globe = styled.div`
   position: absolute;
@@ -53,6 +76,10 @@ export const MainPageSectionTwo = styled(Box)`
   background-size: contain;
   background-position: center;
   margin-bottom: 100px;
+
+  @media (max-width: 768px) {
+    display: none;
+  }
 `;
 
 export const MainPageSectionThree = styled(Box)`
