@@ -60,7 +60,6 @@ export const ListItemsStyled = styled.div`
   }
   @media ${device.laptop} {
     width: 298px;
-    // left: -6%;
   }
 `;
 
