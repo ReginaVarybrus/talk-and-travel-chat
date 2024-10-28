@@ -4,10 +4,12 @@ import { device } from '@/constants/mediaQueries.js';
 import { routesPath } from '@/routes/routesConfig';
 import PropTypes from 'prop-types';
 import { useFetch } from '@/hooks/useFetch.js';
-import URLs from '@/constants/constants';
-import mapData from '@/data/countries.json';
 import { useNavigate } from 'react-router-dom';
 import { useChatContext } from '@/providers/ChatProvider';
+import { axiosClient } from '@/services/api';
+import URLs from '@/constants/constants';
+import { TbUsers } from 'react-icons/tb';
+
 import {
   AutocompleteInputStyled,
   AutocompleteInput,
@@ -17,8 +19,9 @@ import {
   Flag,
   ScrollBar,
   Text,
+  NameAndCountStyleBox,
 } from './SearchInputStyled';
-import { axiosClient } from '@/services/api';
+import Loader from '../Loader/Loader';
 
 const SearchInput = ({
   setChatData,
@@ -31,51 +34,50 @@ const SearchInput = ({
   const navigate = useNavigate();
   const [selectedCountry, setSelectedCountry] = useState(null);
   const [searchedValue, setSearchedValue] = useState('');
+  const [countries, setCountries] = useState([]);
   const [showItem, setShowItem] = useState(false);
   const autoCompleteRef = useRef(null);
+  const [isFetching, setIsFetching] = useState(false);
   const { subscriptionRooms } = useChatContext();
-  const [countries, setCountries] = useState([]);
 
   const fetchCountryList = async (pageNumber = 0) => {
+    setIsFetching(true);
     try {
-      const response = await axiosClient.get(ULRs.getCountries, {
+      const response = await axiosClient.get(URLs.getCountries, {
         params: {
           size: 1000,
           page: pageNumber,
         },
       });
 
-      const { content, page } = response.data;
-      console.log(response.data);
+      const { content } = response.data;
 
       setCountries(content);
-      // setPage(pageData.number + 1);
-      // setHasMore(pageData.number + 1 < pageData.totalPages);
       return content;
     } catch (error) {
       console.error('Error fetching messages:', error.message);
+    } finally {
+      setIsFetching(false);
     }
   };
-
-  console.log(countries);
 
   const { responseData } = useFetch(
     selectedCountry ? URLs.getMainCountryChatByName(selectedCountry) : null
   );
   const lowerCaseSearch = searchedValue.toLowerCase();
 
-  const sortedData = [...mapData].sort((a, b) =>
-    a.properties.admin.localeCompare(b.properties.admin)
+  const sortedData = [...countries].sort((a, b) =>
+    a.name.localeCompare(b.name)
   );
 
   const startsWithFilter = sortedData.filter(item =>
-    item.properties.admin.toLowerCase().startsWith(lowerCaseSearch)
+    item.name.toLowerCase().startsWith(lowerCaseSearch)
   );
 
   const containsFilter = sortedData.filter(
     item =>
-      !item.properties.admin.toLowerCase().startsWith(lowerCaseSearch) &&
-      item.properties.admin.toLowerCase().includes(lowerCaseSearch)
+      !item.name.toLowerCase().startsWith(lowerCaseSearch) &&
+      item.name.toLowerCase().includes(lowerCaseSearch)
   );
 
   const filterCountries = [...startsWithFilter, ...containsFilter];
@@ -138,7 +140,6 @@ const SearchInput = ({
       document.removeEventListener('click', handleOutsideClick);
     };
   }, []);
-
   return (
     <AutocompleteInputStyled ref={autoCompleteRef}>
       <AutocompleteInput
@@ -152,7 +153,9 @@ const SearchInput = ({
       {showItem && (
         <ListItemsStyled>
           <ScrollBar>
-            {!filterCountries.length ? (
+            {isFetching ? (
+              <Loader size={40} />
+            ) : !filterCountries.length ? (
               <Text>
                 Sorry, the room for this country does not exist, try creating
                 one yourself
@@ -164,15 +167,20 @@ const SearchInput = ({
                     key={country.id}
                     onClick={() => handleCountryClick(country)}
                   >
-                    <Flag
-                      loading="lazy"
-                      width="48"
-                      srcSet={`https://flagcdn.com/${country.properties.code.toLowerCase()}.svg 2x`}
-                      src={`https://flagcdn.com/${country.properties.code.toLowerCase()}.svg`}
-                      alt={`${country.properties.admin} flag`}
-                    />
-                    <p>{country.name}</p>
-                    <p>{country.usersCount}</p>
+                    <NameAndCountStyleBox>
+                      <Flag
+                        loading="lazy"
+                        width="48"
+                        srcSet={`https://flagcdn.com/${country.country.flagCode.toLowerCase()}.svg 2x`}
+                        src={`https://flagcdn.com/${country.country.flagCode.toLowerCase()}.svg`}
+                        alt={`${country.name} flag`}
+                      />
+                      <p>{country.name}</p>
+                    </NameAndCountStyleBox>
+                    <span>
+                      <TbUsers />
+                      {country.usersCount}
+                    </span>
                   </Item>
                 ))}
               </>

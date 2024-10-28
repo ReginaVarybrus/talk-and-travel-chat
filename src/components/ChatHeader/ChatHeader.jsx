@@ -88,7 +88,6 @@ const ChatHeader = ({
   const handleBackToSearchBar = () => {
     setIsChatVisible(false);
   };
-
   return (
     <ChatHeaderStyled>
       <MobileHeaderStyled>

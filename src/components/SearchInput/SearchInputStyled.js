@@ -6,7 +6,7 @@ import { FiSearch } from 'react-icons/fi';
 export const AutocompleteInputStyled = styled.div`
   position: relative;
   min-width: 90%;
-  @media ${device.laptop} {
+  @media ${device.tablet} {
     min-width: 100%;
   }
 `;
@@ -60,12 +60,14 @@ export const ListItemsStyled = styled.div`
   }
   @media ${device.laptop} {
     width: 298px;
+    // left: -6%;
   }
 `;
 
 export const Item = styled.li`
   display: flex;
   align-items: center;
+  justify-content: space-between;
   height: 72px;
   padding: 0 5%;
   background: var(--white-color);
@@ -77,10 +79,20 @@ export const Item = styled.li`
   @media ${device.tablet} {
     padding: 0 16px;
   }
+
+  span {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 2px;
+    color: var(--color-grey-9);
+    font-size: 12px;
+  }
 `;
 
 export const Flag = styled.img`
   margin-right: 12px;
+  max-height: 36px;
 `;
 
 export const ScrollBar = styled(SimpleBar)`
@@ -95,4 +107,15 @@ export const Text = styled.p`
   font-size: 14px;
   color: var(--color-grey-9);
   margin: 0 20px;
+`;
+
+export const NameAndCountStyleBox = styled.div`
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  p {
+    font-size: 16px;
+    margin-right: 12px;
+    line-height: 1;
+  }
 `;
