@@ -5,7 +5,7 @@ import debounce from 'lodash/debounce';
 import { axiosClient } from '@/services/api';
 import { IoClose } from 'react-icons/io5';
 import PropTypes from 'prop-types';
-import ULRs from '@/constants/constants';
+import URLs from '@/constants/constants';
 import { CHAT_TYPES } from '@/constants/chatTypes';
 import { MESSAGE_TYPES } from '@/constants/messageTypes';
 import { getUser } from '@/redux-store/selectors.js';
@@ -35,7 +35,7 @@ const Chat = ({
   setSelectedCompanion,
   participantsAmount,
   setParticipantsAmount,
-  listOfOnlineUsers,
+  listOfOnlineUsersStatuses,
   isChatVisible,
   setIsChatVisible,
 }) => {
@@ -80,7 +80,7 @@ const Chat = ({
     debounce(async (chatId, lastMessageId) => {
       if (!chatId || !lastMessageId) return;
       try {
-        await axiosClient.patch(ULRs.lastReadMessage(chatId), {
+        await axiosClient.patch(URLs.lastReadMessage(chatId), {
           lastReadMessageId: lastMessageId,
         });
         const remainingUnread = unreadMessages.length - 1;
@@ -94,7 +94,7 @@ const Chat = ({
   const fetchPublicMessages = async (pageNumber = 0) => {
     setIsFetchingMore(true);
     try {
-      const response = await axiosClient.get(ULRs.getMessages(id), {
+      const response = await axiosClient.get(URLs.getMessages(id), {
         params: {
           size: 20,
           page: pageNumber,
@@ -120,7 +120,7 @@ const Chat = ({
     isFetchingRead.current = true;
     setIsFetchingMore(true);
     try {
-      const response = await axiosClient.get(ULRs.getReadMessages(id), {
+      const response = await axiosClient.get(URLs.getReadMessages(id), {
         params: {
           size: 20,
           page: pageNumber,
@@ -159,7 +159,7 @@ const Chat = ({
     if (isFetchingUnread.current) return;
     isFetchingUnread.current = true;
     try {
-      const response = await axiosClient.get(ULRs.getUnreadMessages(id), {
+      const response = await axiosClient.get(URLs.getUnreadMessages(id), {
         params: {
           size: 1000,
           page: pageNumber,
@@ -259,7 +259,7 @@ const Chat = ({
 
   useEffect(() => {
     if (isSubscribed && id) {
-      subscribeToMessages(ULRs.subscriptionToMessages(id), newMessage => {
+      subscribeToMessages(URLs.subscriptionToMessages(id), newMessage => {
         setMessages(prevMessages => [...prevMessages, newMessage]);
 
         if (newMessage.type === MESSAGE_TYPES.TEXT && messageBlockRef.current) {
@@ -287,7 +287,7 @@ const Chat = ({
         setSelectedCompanion(null);
       }
 
-      subscribeToUserErrors(ULRs.subscriptionToUserErrors(userId), setChatData);
+      subscribeToUserErrors(URLs.subscriptionToUserErrors(userId), setChatData);
 
       return () => {
         unsubscribeFromMessages();
@@ -439,7 +439,7 @@ const Chat = ({
         chatId={id}
         setIsShowJoinBtn={setIsShowJoinBtn}
         setIsChatVisible={setIsChatVisible}
-        listOfOnlineUsers={listOfOnlineUsers}
+        listOfOnlineUsersStatuses={listOfOnlineUsersStatuses}
         isShowJoinBtn={isShowJoinBtn}
       />
       <MessageBlock ref={messageBlockRef} onScroll={handleScroll}>
@@ -450,7 +450,7 @@ const Chat = ({
             unreadMessages={unreadMessages}
             setIsUserTyping={setIsUserTyping}
             setUsersTyping={setUsersTyping}
-            listOfOnlineUsers={listOfOnlineUsers}
+            listOfOnlineUsersStatuses={listOfOnlineUsersStatuses}
             lastVisibleReadMessageRef={lastVisibleReadMessageRef}
           />
         ) : (

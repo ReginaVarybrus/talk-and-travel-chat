@@ -12,7 +12,7 @@ const MessageList = ({
   messages,
   setIsUserTyping,
   setUsersTyping,
-  listOfOnlineUsers,
+  listOfOnlineUsersStatuses,
   unreadMessages,
   lastVisibleReadMessageRef,
 }) => {
@@ -75,8 +75,11 @@ const MessageList = ({
       const isShownAvatar =
         message.type === MESSAGE_TYPES.TEXT && isLastMessage;
 
-      const isOnline =
-        listOfOnlineUsers.get(message.user.id.toString()) === true;
+      const userStatus = listOfOnlineUsersStatuses.get(
+        message.user.id.toString()
+      );
+
+      const isOnline = userStatus ? userStatus.isOnline : false;
 
       const isLastVisibleReadMessage =
         index === sortedMessages.length - unreadMessages.length - 1;

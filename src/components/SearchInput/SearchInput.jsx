@@ -4,7 +4,7 @@ import { device } from '@/constants/mediaQueries.js';
 import { routesPath } from '@/routes/routesConfig';
 import PropTypes from 'prop-types';
 import { useFetch } from '@/hooks/useFetch.js';
-import ULRs from '@/constants/constants';
+import URLs from '@/constants/constants';
 import mapData from '@/data/countries.json';
 import { useNavigate } from 'react-router-dom';
 import { useChatContext } from '@/providers/ChatProvider';
@@ -60,12 +60,25 @@ const SearchInput = ({
   console.log(countries);
 
   const { responseData } = useFetch(
-    selectedCountry ? ULRs.getMainCountryChatByName(selectedCountry) : null
+    selectedCountry ? URLs.getMainCountryChatByName(selectedCountry) : null
+  );
+  const lowerCaseSearch = searchedValue.toLowerCase();
+
+  const sortedData = [...mapData].sort((a, b) =>
+    a.properties.admin.localeCompare(b.properties.admin)
   );
 
-  const filterCountries = countries.filter(country =>
-    country.name.toLowerCase().includes(searchedValue.toLowerCase())
+  const startsWithFilter = sortedData.filter(item =>
+    item.properties.admin.toLowerCase().startsWith(lowerCaseSearch)
   );
+
+  const containsFilter = sortedData.filter(
+    item =>
+      !item.properties.admin.toLowerCase().startsWith(lowerCaseSearch) &&
+      item.properties.admin.toLowerCase().includes(lowerCaseSearch)
+  );
+
+  const filterCountries = [...startsWithFilter, ...containsFilter];
 
   useEffect(() => {
     if (responseData) {
@@ -154,9 +167,9 @@ const SearchInput = ({
                     <Flag
                       loading="lazy"
                       width="48"
-                      srcSet={`https://flagcdn.com/w20/${country.country.flagCode.toLowerCase()}.png 2x`}
-                      src={`https://flagcdn.com/${country.country.flagCode.toLowerCase()}.png`}
-                      alt={`${country.country.name} flag`}
+                      srcSet={`https://flagcdn.com/${country.properties.code.toLowerCase()}.svg 2x`}
+                      src={`https://flagcdn.com/${country.properties.code.toLowerCase()}.svg`}
+                      alt={`${country.properties.admin} flag`}
                     />
                     <p>{country.name}</p>
                     <p>{country.usersCount}</p>

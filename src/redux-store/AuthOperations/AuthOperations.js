@@ -4,15 +4,13 @@ import swal from 'sweetalert';
 
 import { token, axiosClient } from '@/services/api';
 import { clearUser, setUsers } from '@/redux-store/slices/userSlice';
-import ULRs from '@/constants/constants';
-
+import URLs from '@/constants/constants';
 
 export const register = createAsyncThunk(
   'auth/register',
-  async (userData, { dispatch }) =>
-  {
+  async (userData, { dispatch }) => {
     try {
-      const response = await axiosClient.post(ULRs.register, userData);
+      const response = await axiosClient.post(URLs.register, userData);
       dispatch(setUsers(response.data.userDto));
       token.set(response.data.token);
       swal(
@@ -29,10 +27,9 @@ export const register = createAsyncThunk(
 
 export const logIn = createAsyncThunk(
   'auth/login',
-  async (userData, { dispatch }) =>
-  {
+  async (userData, { dispatch }) => {
     try {
-      const response = await axiosClient.post(ULRs.login, userData);
+      const response = await axiosClient.post(URLs.login, userData);
       dispatch(setUsers(response.data.userDto));
       token.set(response.data.token);
       return response.data;
@@ -50,10 +47,9 @@ export const logIn = createAsyncThunk(
 
 export const logOut = createAsyncThunk(
   'auth/logOut',
-  async (arg, { dispatch }) =>
-  {
+  async (arg, { dispatch }) => {
     try {
-      await axiosClient.post(ULRs.logout);
+      await axiosClient.post(URLs.logout);
       token.unset();
       dispatch(clearUser());
     } catch (error) {

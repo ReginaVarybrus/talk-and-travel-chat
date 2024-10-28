@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { useOutletContext, useLocation } from 'react-router-dom';
 import { useMediaQuery } from 'react-responsive';
 import { device } from '@/constants/mediaQueries.js';
-import ULRs from '@/constants/constants';
+import URLs from '@/constants/constants';
 import { useFetch } from '@/hooks/useFetch';
 import { formatDate } from '@/components/utils/dateUtil.js';
 import { ScrollBar } from '@/components/SearchInput/SearchInputStyled.js';
@@ -34,13 +34,13 @@ const DMsList = () => {
     setIsSubscribed,
     setSelectedCompanion,
     setIsChatVisible,
-    listOfOnlineUsers,
+    listOfOnlineUsersStatuses,
   } = useOutletContext();
 
   const { dataUserChats } = useChatContext();
 
   const { responseData: dataChat } = useFetch(
-    selectedChat ? ULRs.getChat(selectedChat) : null
+    selectedChat ? URLs.getChat(selectedChat) : null
   );
 
   useEffect(() => {
@@ -81,8 +81,11 @@ const DMsList = () => {
                 return dateB - dateA;
               })
               .map(({ chat, companion, lastMessage }) => {
-                const isOnline =
-                  listOfOnlineUsers.get(companion.id.toString()) === true;
+                const userStatus = listOfOnlineUsersStatuses.get(
+                  companion.id.toString()
+                );
+
+                const isOnline = userStatus ? userStatus.isOnline : false;
 
                 return (
                   <Item

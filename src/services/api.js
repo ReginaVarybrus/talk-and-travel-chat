@@ -1,7 +1,7 @@
-import ULRs from '@/constants/constants';
+import URLs from '@/constants/constants';
 import axios from 'axios';
 
-const urlToOmit = [ULRs.login, ULRs.register];
+const urlToOmit = [URLs.login, URLs.register];
 
 const axiosClient = axios.create({
   baseURL: `${import.meta.env.VITE_APP_API_URL}/api/`,
@@ -11,8 +11,7 @@ const axiosClient = axios.create({
 });
 
 axiosClient.interceptors.request.use(
-  config =>
-  {
+  config => {
     let authData;
     try {
       // Get token from local storage and check if it had been retrieved.
@@ -34,12 +33,10 @@ axiosClient.interceptors.request.use(
 );
 
 const token = {
-  set(tokenValue)
-  {
+  set(tokenValue) {
     axiosClient.defaults.headers.common.Authorization = `Bearer ${tokenValue}`;
   },
-  unset()
-  {
+  unset() {
     delete axiosClient.defaults.headers.common.Authorization;
   },
 };
