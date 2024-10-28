@@ -38,7 +38,7 @@ const SearchInput = ({
 
   const fetchCountryList = async (pageNumber = 0) => {
     try {
-      const response = await axiosClient.get(ULRs.getChatsList, {
+      const response = await axiosClient.get(ULRs.getCountries, {
         params: {
           size: 1000,
           page: pageNumber,
@@ -151,13 +151,13 @@ const SearchInput = ({
                     key={country.id}
                     onClick={() => handleCountryClick(country)}
                   >
-                    {/* <Flag
+                    <Flag
                       loading="lazy"
                       width="48"
-                      srcSet={`https://flagcdn.com/${country.properties.code.toLowerCase()}.png 2x`}
-                      src={`https://flagcdn.com/${country.properties.code.toLowerCase()}.png`}
-                      alt={`${country.properties.admin} flag`}
-                    /> */}
+                      srcSet={`https://flagcdn.com/w20/${country.country.flagCode.toLowerCase()}.png 2x`}
+                      src={`https://flagcdn.com/${country.country.flagCode.toLowerCase()}.png`}
+                      alt={`${country.country.name} flag`}
+                    />
                     <p>{country.name}</p>
                     <p>{country.usersCount}</p>
                   </Item>

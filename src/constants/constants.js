@@ -4,7 +4,7 @@ const ULRs = {
   logout: 'authentication/logout',
   currentUser: 'current',
   updateUser: 'users',
-  getChatsList: 'chats',
+  getCountries: 'v2/main-countries-chats',
   userInfo: userId => `users/${userId}`,
   getMainCountryChatByName: countryName =>
     `v2/country/${countryName}/main-chat`,
