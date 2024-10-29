@@ -1,14 +1,13 @@
 import PropTypes from 'prop-types';
 import { useMediaQuery } from 'react-responsive';
 import { device } from '@/constants/mediaQueries.js';
-import { LuLogOut } from 'react-icons/lu';
+import { LuLogOut, LuLogIn } from 'react-icons/lu';
 import { IoCloseOutline } from 'react-icons/io5';
 import { HiOutlineExclamationCircle } from 'react-icons/hi';
 import { FaRegMessage } from 'react-icons/fa6';
 import Modal from '@mui/material/Modal';
 import { useFetch } from '@/hooks/useFetch.js';
-import ULRs from '@/constants/constants';
-import mapData from '@/data/countries.json';
+import URLs from '@/constants/constants';
 import { useNavigate } from 'react-router-dom';
 import { useWebSocket } from '@/hooks/useWebSocket.js';
 import { useSelector } from 'react-redux';
@@ -28,7 +27,7 @@ import {
   CloseBtn,
   InfoBoxStyled,
   HeaderStyled,
-  ExitBtn,
+  ExitOrJoinBtn,
   ReportBtn,
   Subtitle,
   LetterAvatar,
@@ -37,6 +36,7 @@ import {
 } from './CountryInfoStyled.js';
 
 const CountryInfo = ({
+  chatData,
   isOpen,
   onClose,
   countryName,
@@ -45,6 +45,7 @@ const CountryInfo = ({
   chatId,
   setIsShowJoinBtn,
   setIsChatVisible,
+  isShowJoinBtn,
 }) => {
   const isDesktop = useMediaQuery({ query: device.tablet });
   const currentUserId = useSelector(getUser)?.id;
@@ -70,7 +71,7 @@ const CountryInfo = ({
           },
         });
       } else {
-        const response = await axiosClient.post(ULRs.createPrivateChat, {
+        const response = await axiosClient.post(URLs.createPrivateChat, {
           companionId: id,
         });
         const privateChatId = response.data;
@@ -92,7 +93,7 @@ const CountryInfo = ({
     const dataEventToSend = {
       chatId,
     };
-    sendMessageOrEvent(dataEventToSend, ULRs.leaveOutGroupChat);
+    sendMessageOrEvent(dataEventToSend, URLs.leaveOutGroupChat);
     setSubscriptionRooms(prevRooms =>
       prevRooms.filter(room => room.name !== countryName)
     );
@@ -104,17 +105,23 @@ const CountryInfo = ({
     setIsShowJoinBtn(true);
   };
 
-  const url = chatId && ULRs.getChatsParticipants(chatId);
+  const handleJoinToChat = () => {
+    const dataEventToSend = {
+      chatId,
+    };
+    sendMessageOrEvent(dataEventToSend, URLs.joinToGroupChat);
+    setIsShowJoinBtn(false);
+    setSubscriptionRooms(prevRooms => [...prevRooms, chatData]);
+    setParticipantsAmount(prevCount => prevCount + 1);
+    onClose();
+  };
+
+  const url = chatId && URLs.getChatsParticipants(chatId);
   const { responseData: participants } = useFetch(url, '');
 
   if (!isOpen || !countryName || !chatId) {
     return null;
   }
-
-  const countryData = mapData.find(
-    country =>
-      country.properties.admin.toLowerCase() === countryName.toLowerCase()
-  );
 
   const hasParticipants =
     Array.isArray(participants) && participants.length > 0;
@@ -134,9 +141,9 @@ const CountryInfo = ({
         <HeaderStyled>
           <Flag
             loading="lazy"
-            srcSet={`https://flagcdn.com/w40/${countryData.properties.code.toLowerCase()}.png 2x`}
-            src={`https://flagcdn.com/w20/${countryData.properties.code.toLowerCase()}.png`}
-            alt={`${countryData.properties.admin} flag`}
+            srcSet={`https://flagcdn.com/${chatData.country.flagCode.toLowerCase()}.svg 2x`}
+            src={`https://flagcdn.com/${chatData.country.flagCode.toLowerCase()}.svg`}
+            alt={`${countryName} flag`}
           />
           <InfoBoxStyled>
             <h5>{countryName}</h5>
@@ -189,10 +196,17 @@ const CountryInfo = ({
         )}
 
         <ButtonsBoxStyled>
-          <ExitBtn onClick={handleLeaveGroup}>
-            <LuLogOut />
-            Leave group
-          </ExitBtn>
+          {isShowJoinBtn ? (
+            <ExitOrJoinBtn onClick={handleJoinToChat}>
+              <LuLogIn />
+              Join to chat
+            </ExitOrJoinBtn>
+          ) : (
+            <ExitOrJoinBtn onClick={handleLeaveGroup}>
+              <LuLogOut />
+              Leave group
+            </ExitOrJoinBtn>
+          )}
           <ReportBtn>
             <HiOutlineExclamationCircle />
             Report

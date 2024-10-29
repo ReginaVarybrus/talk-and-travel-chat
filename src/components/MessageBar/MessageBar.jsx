@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import PropTypes from 'prop-types';
-import ULRs from '@/constants/constants';
+import URLs from '@/constants/constants';
 import { CHAT_TYPES } from '@/constants/chatTypes';
 import { useWebSocket } from '@/hooks/useWebSocket.js';
 import BasicButton from '@/components/Buttons/BasicButton/BasicButton';
@@ -43,13 +43,13 @@ const MessageBar = ({
   const handleStartTyping = () => {
     if (!isUserTyping) {
       setIsUserTyping(true);
-      sendMessageOrEvent(dataEventToSend, ULRs.startTyping);
+      sendMessageOrEvent(dataEventToSend, URLs.startTyping);
     }
   };
 
   const handleStopTyping = () => {
     setIsUserTyping(false);
-    sendMessageOrEvent(dataEventToSend, ULRs.stopTyping);
+    sendMessageOrEvent(dataEventToSend, URLs.stopTyping);
   };
 
   const handleChange = ({ target: { value } }) => {
@@ -81,7 +81,7 @@ const MessageBar = ({
       chatId,
     };
 
-    sendMessageOrEvent(dataMessageToSend, ULRs.sendMessage);
+    sendMessageOrEvent(dataMessageToSend, URLs.sendMessage);
     setMessage('');
     handleStopTyping();
     clearTimeout(typingStopTimeoutRef.current);
@@ -92,7 +92,7 @@ const MessageBar = ({
   };
 
   const handleJoinClick = () => {
-    sendMessageOrEvent(dataEventToSend, ULRs.joinToGroupChat);
+    sendMessageOrEvent(dataEventToSend, URLs.joinToGroupChat);
     setIsShowJoinBtn(false);
     setSubscriptionRooms(prevRooms => [...prevRooms, chatData]);
     setParticipantsAmount(prevCount => prevCount + 1);
@@ -168,6 +168,7 @@ MessageBar.propTypes = {
   isUserTyping: PropTypes.bool,
   setIsUserTyping: PropTypes.func,
   setParticipantsAmount: PropTypes.func,
+  scrollToBottom: PropTypes.func,
 };
 
 export default MessageBar;

@@ -1,13 +1,14 @@
 import { useState, useEffect } from 'react';
 import { useOutletContext } from 'react-router-dom';
 import { useFetch } from '@/hooks/useFetch.js';
-import ULRs from '@/constants/constants';
+import URLs from '@/constants/constants';
 import SearchBar from '@/components/SearchBar/SearchBar';
 import Chat from '@/components/Chat/Chat';
 import { axiosClient } from '@/services/api';
 
 import { useWebSocket } from '@/hooks/useWebSocket.js';
 import { useChatContext } from '@/providers/ChatProvider.jsx';
+// import useUserActivity from '@/hooks/useUserActivity.js';
 import { ChatRouteStyled } from './ChatRouteStyled.js';
 
 const ChatRoute = () => {
@@ -16,8 +17,10 @@ const ChatRoute = () => {
   const [isShowJoinBtn, setIsShowJoinBtn] = useState(false);
   const [participantsAmount, setParticipantsAmount] = useState(null);
   const [selectedCompanion, setSelectedCompanion] = useState(null);
-  const [listOfOnlineUsers, setListOfOnlineUsers] = useState(new Map());
-  const { responseData } = useFetch(ULRs.userCountries);
+  const [listOfOnlineUsersStatuses, setListOfOnlineUsersStatuses] = useState(
+    new Map()
+  );
+  const { responseData } = useFetch(URLs.userCountries);
   const {
     stompClient,
     subscribeToUsersStatuses,
@@ -39,8 +42,8 @@ const ChatRoute = () => {
   useEffect(() => {
     if (stompClient?.connected) {
       const subscription = subscribeToUsersStatuses(
-        ULRs.usersOnlineStatus,
-        setListOfOnlineUsers
+        URLs.usersOnlineStatus,
+        setListOfOnlineUsersStatuses
       );
 
       return () => {
@@ -54,9 +57,9 @@ const ChatRoute = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axiosClient.get(ULRs.getUsersOnlineStatusPath);
-
-        setListOfOnlineUsers(prevStatus => {
+        const response = await axiosClient.get(URLs.getUsersOnlineStatusPath);
+        console.log('Map of online statuses:', response.data);
+        setListOfOnlineUsersStatuses(prevStatus => {
           const updatedList = new Map(prevStatus);
           Object.entries(response.data).forEach(([id, value]) => {
             updatedList.set(id, value);
@@ -71,6 +74,12 @@ const ChatRoute = () => {
     fetchData();
   }, []);
 
+  // const handleUserActiveEvent = () => {
+  //   sendMessageOrEvent(true, URLs.updateOnlineStatus);
+  // };
+
+  // useUserActivity(handleUserActiveEvent);
+
   return (
     <ChatRouteStyled>
       <SearchBar
@@ -79,7 +88,7 @@ const ChatRoute = () => {
         setIsShowJoinBtn={setIsShowJoinBtn}
         setSelectedCompanion={setSelectedCompanion}
         setParticipantsAmount={setParticipantsAmount}
-        listOfOnlineUsers={listOfOnlineUsers}
+        listOfOnlineUsersStatuses={listOfOnlineUsersStatuses}
         isChatVisible={isChatVisible}
         setIsChatVisible={setIsChatVisible}
       />
@@ -95,7 +104,7 @@ const ChatRoute = () => {
         setSelectedCompanion={setSelectedCompanion}
         participantsAmount={participantsAmount}
         setParticipantsAmount={setParticipantsAmount}
-        listOfOnlineUsers={listOfOnlineUsers}
+        listOfOnlineUsersStatuses={listOfOnlineUsersStatuses}
         isChatVisible={isChatVisible}
         setIsChatVisible={setIsChatVisible}
       />

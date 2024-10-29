@@ -5,7 +5,7 @@ import debounce from 'lodash/debounce';
 import { axiosClient } from '@/services/api';
 import { IoClose } from 'react-icons/io5';
 import PropTypes from 'prop-types';
-import ULRs from '@/constants/constants';
+import URLs from '@/constants/constants';
 import { CHAT_TYPES } from '@/constants/chatTypes';
 import { MESSAGE_TYPES } from '@/constants/messageTypes';
 import { getUser } from '@/redux-store/selectors.js';
@@ -35,7 +35,7 @@ const Chat = ({
   setSelectedCompanion,
   participantsAmount,
   setParticipantsAmount,
-  listOfOnlineUsers,
+  listOfOnlineUsersStatuses,
   isChatVisible,
   setIsChatVisible,
 }) => {
@@ -44,8 +44,7 @@ const Chat = ({
   const isPrivateChat = chatType === CHAT_TYPES.PRIVATE;
 
   const [isUserTyping, setIsUserTyping] = useState(false);
-  const [userNameisTyping, setUserNameisTyping] = useState('');
-
+  const [usersTyping, setUsersTyping] = useState([]);
   const [messages, setMessages] = useState([]);
   const [page, setPage] = useState(0);
   const [unreadPage, setUnreadPage] = useState(0);
@@ -74,11 +73,14 @@ const Chat = ({
 
   const { updateUnreadMessagesCount } = useChatContext();
 
+  const isMessageAlreadyExists = (messagesList, newMessage) =>
+    messagesList.some(message => message.id === newMessage.id);
+
   const debouncedMarkAsRead = useRef(
     debounce(async (chatId, lastMessageId) => {
       if (!chatId || !lastMessageId) return;
       try {
-        await axiosClient.patch(ULRs.lastReadMessage(chatId), {
+        await axiosClient.patch(URLs.lastReadMessage(chatId), {
           lastReadMessageId: lastMessageId,
         });
         const remainingUnread = unreadMessages.length - 1;
@@ -92,7 +94,7 @@ const Chat = ({
   const fetchPublicMessages = async (pageNumber = 0) => {
     setIsFetchingMore(true);
     try {
-      const response = await axiosClient.get(ULRs.getMessages(id), {
+      const response = await axiosClient.get(URLs.getMessages(id), {
         params: {
           size: 20,
           page: pageNumber,
@@ -118,7 +120,7 @@ const Chat = ({
     isFetchingRead.current = true;
     setIsFetchingMore(true);
     try {
-      const response = await axiosClient.get(ULRs.getReadMessages(id), {
+      const response = await axiosClient.get(URLs.getReadMessages(id), {
         params: {
           size: 20,
           page: pageNumber,
@@ -128,7 +130,11 @@ const Chat = ({
 
       const { content, page: pageData } = response.data;
 
-      setMessages(prevMessages => [...content, ...prevMessages]);
+      const newMessages = content.filter(
+        msg => !isMessageAlreadyExists(messages, msg)
+      );
+
+      setMessages(prevMessages => [...newMessages, ...prevMessages]);
       setPage(pageData.number + 1);
       setHasMore(pageData.number + 1 < pageData.totalPages);
       return content;
@@ -153,7 +159,7 @@ const Chat = ({
     if (isFetchingUnread.current) return;
     isFetchingUnread.current = true;
     try {
-      const response = await axiosClient.get(ULRs.getUnreadMessages(id), {
+      const response = await axiosClient.get(URLs.getUnreadMessages(id), {
         params: {
           size: 1000,
           page: pageNumber,
@@ -253,11 +259,8 @@ const Chat = ({
 
   useEffect(() => {
     if (isSubscribed && id) {
-      subscribeToMessages(ULRs.subscriptionToMessages(id), newMessage => {
+      subscribeToMessages(URLs.subscriptionToMessages(id), newMessage => {
         setMessages(prevMessages => [...prevMessages, newMessage]);
-        if (newMessage.user.id !== userId) {
-          setShowNewMessagesIndicator(false);
-        }
 
         if (newMessage.type === MESSAGE_TYPES.TEXT && messageBlockRef.current) {
           const isAtBottom =
@@ -270,9 +273,12 @@ const Chat = ({
               behavior: 'smooth',
             });
             setMessagesToMarkAsRead(prev => [...prev, newMessage.id]);
-          } else {
+          } else if (newMessage.user.id !== userId) {
             setUnreadMessages(prev => [...prev, newMessage]);
             setShowNewMessagesIndicator(true);
+          }
+          if (newMessage.user.id === userId) {
+            setMessagesToMarkAsRead(prev => [...prev, newMessage.id]);
           }
         }
       });
@@ -281,7 +287,7 @@ const Chat = ({
         setSelectedCompanion(null);
       }
 
-      subscribeToUserErrors(ULRs.subscriptionToUserErrors(userId), setChatData);
+      subscribeToUserErrors(URLs.subscriptionToUserErrors(userId), setChatData);
 
       return () => {
         unsubscribeFromMessages();
@@ -423,17 +429,18 @@ const Chat = ({
       {!name && <ChatFirstLoading />}
       <ChatHeader
         chatName={name}
+        chatData={chatData}
         participantsAmount={participantsAmount}
         setParticipantsAmount={setParticipantsAmount}
         flagCode={country?.flagCode}
         selectedCompanion={selectedCompanion}
         isPrivateChat={isPrivateChat}
-        isUserTyping={isUserTyping}
-        userNameisTyping={userNameisTyping}
+        usersTyping={usersTyping}
         chatId={id}
         setIsShowJoinBtn={setIsShowJoinBtn}
         setIsChatVisible={setIsChatVisible}
-        listOfOnlineUsers={listOfOnlineUsers}
+        listOfOnlineUsersStatuses={listOfOnlineUsersStatuses}
+        isShowJoinBtn={isShowJoinBtn}
       />
       <MessageBlock ref={messageBlockRef} onScroll={handleScroll}>
         {isFetchingMore && <Loader size={50} />}
@@ -442,8 +449,8 @@ const Chat = ({
             messages={messages}
             unreadMessages={unreadMessages}
             setIsUserTyping={setIsUserTyping}
-            setUserNameisTyping={setUserNameisTyping}
-            listOfOnlineUsers={listOfOnlineUsers}
+            setUsersTyping={setUsersTyping}
+            listOfOnlineUsersStatuses={listOfOnlineUsersStatuses}
             lastVisibleReadMessageRef={lastVisibleReadMessageRef}
           />
         ) : (
@@ -520,6 +527,7 @@ Chat.propTypes = {
   setParticipantsAmount: PropTypes.func,
   isChatVisible: PropTypes.bool,
   setIsChatVisible: PropTypes.func,
+  listOfOnlineUsers: PropTypes.instanceOf(Map),
 };
 
 export default Chat;

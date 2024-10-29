@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { useSelector } from 'react-redux';
 import { getUser } from '@/redux-store/selectors.js';
 import CountryInfo from '@/components/CountryInfo/CountryInfo';
+import { formatDateOfLastSeen } from '@/components/utils/dateUtil.js';
 import {
   ChatHeaderStyled,
   MobileHeaderStyled,
@@ -17,43 +18,61 @@ import {
 
 const ChatHeader = ({
   chatName = 'Country name',
+  chatData,
   participantsAmount,
   setParticipantsAmount,
   flagCode,
   selectedCompanion,
   isPrivateChat,
-  isUserTyping,
-  userNameisTyping,
+  usersTyping,
   chatId,
   setIsShowJoinBtn,
   setIsChatVisible,
-  listOfOnlineUsers,
+  listOfOnlineUsersStatuses,
+  isShowJoinBtn,
 }) => {
   const [openModal, setOpenModal] = useState(false);
-  const userName = useSelector(getUser)?.userName;
-  const showUserIsTyping = userNameisTyping !== userName && isUserTyping;
+  const currentUserName = useSelector(getUser)?.userName;
   const nameOfChat = isPrivateChat ? selectedCompanion.userName : chatName;
-  const isOnline =
-    isPrivateChat &&
-    listOfOnlineUsers.get(selectedCompanion.id.toString()) === true;
+  const userStatus = listOfOnlineUsersStatuses.get(
+    selectedCompanion?.id.toString()
+  );
+
+  const isOnline = userStatus ? userStatus.isOnline : false;
+
   const firstLetterOfName = selectedCompanion?.userName
     .substr(0, 1)
     .toUpperCase();
 
   const getMessage = () => {
-    if (showUserIsTyping) {
-      return `${userNameisTyping} is typing...`;
+    const usersTypingWithoutCurrent = usersTyping.filter(
+      user => user !== currentUserName
+    );
+    if (!usersTyping || usersTypingWithoutCurrent.length === 0) {
+      if (isPrivateChat && isOnline) {
+        return 'online';
+      }
+      if (isPrivateChat && userStatus.lastSeenOn) {
+        return formatDateOfLastSeen(userStatus.lastSeenOn);
+      }
+      if (isPrivateChat) {
+        return '';
+      }
+      if (!isPrivateChat) {
+        return `${participantsAmount} participants`;
+      }
     }
 
-    if (isPrivateChat && isOnline) {
-      return 'online';
-    }
+    const firstUser = usersTyping[0];
+    const othersCount = usersTyping.length - 1;
 
-    if (isPrivateChat) {
-      return '';
+    if (othersCount === 0) {
+      return `${firstUser} is typing...`;
     }
-
-    return `${participantsAmount} participants`;
+    if (othersCount === 1) {
+      return `${firstUser} and 1 other are typing...`;
+    }
+    return `${firstUser} and ${othersCount} others are typing...`;
   };
 
   const handleOpen = () => {
@@ -69,7 +88,6 @@ const ChatHeader = ({
   const handleBackToSearchBar = () => {
     setIsChatVisible(false);
   };
-
   return (
     <ChatHeaderStyled>
       <MobileHeaderStyled>
@@ -83,8 +101,8 @@ const ChatHeader = ({
             <FlagImg
               loading="lazy"
               width="36"
-              srcSet={`https://flagcdn.com/w40/${flagCode}.png 2x`}
-              src={`https://flagcdn.com/w20/${flagCode}.png`}
+              srcSet={`https://flagcdn.com/${flagCode}.svg 2x`}
+              src={`https://flagcdn.com/${flagCode}.svg`}
               alt={`${flagCode} flag`}
             />
           )}
@@ -107,6 +125,7 @@ const ChatHeader = ({
       </DesktopHeaderStyled>
 
       <CountryInfo
+        chatData={chatData}
         isOpen={openModal}
         onClose={handleClose}
         countryName={chatName}
@@ -115,6 +134,7 @@ const ChatHeader = ({
         chatId={chatId}
         setIsShowJoinBtn={setIsShowJoinBtn}
         setIsChatVisible={setIsChatVisible}
+        isShowJoinBtn={isShowJoinBtn}
       />
     </ChatHeaderStyled>
   );
@@ -122,6 +142,19 @@ const ChatHeader = ({
 
 ChatHeader.propTypes = {
   chatName: PropTypes.string,
+  chatData: PropTypes.shape({
+    chatType: PropTypes.oneOf(['GROUP', 'PRIVATE']),
+    country: PropTypes.shape({
+      flagCode: PropTypes.string,
+      name: PropTypes.string,
+    }),
+    creationDate: PropTypes.string,
+    description: PropTypes.string,
+    id: PropTypes.number,
+    messages: PropTypes.array,
+    name: PropTypes.string,
+    usersCount: PropTypes.number,
+  }),
   participantsAmount: PropTypes.number,
   setParticipantsAmount: PropTypes.func,
   flagCode: PropTypes.string,
@@ -131,11 +164,12 @@ ChatHeader.propTypes = {
     userEmail: PropTypes.string,
   }),
   isPrivateChat: PropTypes.bool,
-  isUserTyping: PropTypes.bool,
-  userNameisTyping: PropTypes.string,
+  usersTyping: PropTypes.array,
   chatId: PropTypes.number,
   setIsShowJoinBtn: PropTypes.func,
   setIsChatVisible: PropTypes.func,
+  listOfOnlineUsersStatuses: PropTypes.instanceOf(Map),
+  isShowJoinBtn: PropTypes.bool,
 };
 
 export default ChatHeader;
