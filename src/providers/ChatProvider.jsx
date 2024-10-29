@@ -54,7 +54,7 @@ export const ChatProvider = ({ children }) => {
 
   const updateUserChats = async () => {
     try {
-      const response = await axiosClient.get(ULRs.getPrivateChats);
+      const response = await axiosClient.get(URLs.getPrivateChats);
       setDataUserChats(response.data);
     } catch (error) {
       console.error('Error updating user chats:', error);
