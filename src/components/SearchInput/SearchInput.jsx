@@ -40,13 +40,12 @@ const SearchInput = ({
   const [isFetching, setIsFetching] = useState(false);
   const { subscriptionRooms } = useChatContext();
 
-  const fetchCountryList = async (pageNumber = 0) => {
+  const fetchCountryList = async () => {
     setIsFetching(true);
     try {
       const response = await axiosClient.get(URLs.getCountries, {
         params: {
           size: 1000,
-          page: pageNumber,
         },
       });
 

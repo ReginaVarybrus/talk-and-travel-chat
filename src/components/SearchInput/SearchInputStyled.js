@@ -84,7 +84,7 @@ export const Item = styled.li`
     flex-direction: row;
     align-items: center;
     gap: 2px;
-    color: var(--color-grey-9);
+    color: var(--color-blue-4);
     font-size: 12px;
   }
 `;
