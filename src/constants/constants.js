@@ -1,9 +1,14 @@
 const URLs = {
+  // Auth
   register: 'authentication/register',
   login: 'authentication/login',
   logout: 'authentication/logout',
+
+  // User operations
   currentUser: 'current',
   updateUser: 'users',
+  usersAvatar: userId => `avatars/user/${userId}`,
+
   getCountries: 'v2/main-countries-chats',
   userInfo: userId => `users/${userId}`,
   getMainCountryChatByName: countryName =>

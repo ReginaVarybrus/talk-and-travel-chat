@@ -64,11 +64,11 @@ grid-area: avatar;
 }
 `
 
-export const Avatar = styled.div`
+export const Avatar = styled.img`
 width: 256px;
 height: 256px;
 border-radius: 8px;
-background-color: var(--color-grey-12);
+background-color: var(--color-grey-3);
 
 @media (max-width: 767px) {
     width: 64px;

@@ -5,7 +5,10 @@ import { useDispatch, useSelector } from 'react-redux';
 import Loader from '@/components/Loader/Loader';
 import { routesPath } from '@/routes/routesConfig';
 import { getUser } from '@/redux-store/selectors';
-import { updateUser } from '@/redux-store/UserOperations/UserOperations';
+import {
+  getUsersAvatar,
+  updateUser,
+} from '@/redux-store/UserOperations/UserOperations';
 import { useWebSocket } from '@/hooks/useWebSocket.js';
 
 import {
@@ -51,7 +54,9 @@ const AccountRoute = () => {
   const [editMode, setEditMode] = useState(false);
   // This {loading} is used to trigger display of <Loader/> while updateUser performig.
   const [loading, setLoading] = useState(false);
+  const [avatarData, setavatarData] = useState(null);
 
+  // it's a TEST
   const handleAvatarChange = event => {
     console.log('avatar');
     const file = event.target.files[0]; // Get the uploaded file
@@ -95,7 +100,7 @@ const AccountRoute = () => {
   };
 
   /* On-fligth validation of ABOUT field to prevent user
-  from typing any symbols above maximum lenght set in scheme  */
+  from typing any symbols above maximum length set in scheme  */
   const handleChange = e => {
     if (e.target.value.length <= ABOUT_MAX_CHAR_LIMIT) {
       formik.handleChange(e);
@@ -104,6 +109,8 @@ const AccountRoute = () => {
 
   useEffect(() => {
     formik.setValues(user);
+    setavatarData(dispatch(getUsersAvatar(user.id)));
+    // console.log(avatarData);
   }, [user]);
 
   const handleLogOut = async () => {
@@ -115,6 +122,8 @@ const AccountRoute = () => {
     }
   };
 
+  // Avatar fetch from server if exists
+
   return (
     <ProfileStyled>
       <Header>
@@ -122,7 +131,7 @@ const AccountRoute = () => {
       </Header>
       <ProfileContainer>
         <AvatarBlock>
-          <Avatar />
+          <Avatar src={avatarData} alt="User Avatar" />
           {editMode && (
             <>
               <Input

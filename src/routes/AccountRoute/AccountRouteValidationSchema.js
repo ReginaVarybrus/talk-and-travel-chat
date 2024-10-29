@@ -22,6 +22,7 @@ export const schema = yup.object().shape({
         .required('the field is empty'),
     about: yup
         .string()
+        .nullable()
         .max(ABOUT_MAX_CHAR_LIMIT, `this field should be less then ${ABOUT_MAX_CHAR_LIMIT} symbols`)
 });
 
