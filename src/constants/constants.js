@@ -4,6 +4,7 @@ const URLs = {
   logout: 'authentication/logout',
   currentUser: 'current',
   updateUser: 'users',
+  getCountries: 'v2/main-countries-chats',
   userInfo: userId => `users/${userId}`,
   getMainCountryChatByName: countryName =>
     `v2/country/${countryName}/main-chat`,

@@ -8,7 +8,6 @@ import { FaRegMessage } from 'react-icons/fa6';
 import Modal from '@mui/material/Modal';
 import { useFetch } from '@/hooks/useFetch.js';
 import URLs from '@/constants/constants';
-import mapData from '@/data/countries.json';
 import { useNavigate } from 'react-router-dom';
 import { useWebSocket } from '@/hooks/useWebSocket.js';
 import { useSelector } from 'react-redux';
@@ -124,11 +123,6 @@ const CountryInfo = ({
     return null;
   }
 
-  const countryData = mapData.find(
-    country =>
-      country.properties.admin.toLowerCase() === countryName.toLowerCase()
-  );
-
   const hasParticipants =
     Array.isArray(participants) && participants.length > 0;
 
@@ -147,9 +141,9 @@ const CountryInfo = ({
         <HeaderStyled>
           <Flag
             loading="lazy"
-            srcSet={`https://flagcdn.com/${countryData.properties.code.toLowerCase()}.svg 2x`}
-            src={`https://flagcdn.com/${countryData.properties.code.toLowerCase()}.svg`}
-            alt={`${countryData.properties.admin} flag`}
+            srcSet={`https://flagcdn.com/${chatData.country.flagCode.toLowerCase()}.svg 2x`}
+            src={`https://flagcdn.com/${chatData.country.flagCode.toLowerCase()}.svg`}
+            alt={`${countryName} flag`}
           />
           <InfoBoxStyled>
             <h5>{countryName}</h5>
