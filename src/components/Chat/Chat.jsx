@@ -53,12 +53,10 @@ const Chat = ({
   const [hasMoreUnread, setHasMoreUnread] = useState(true);
   const [unreadCount, setUnreadCount] = useState(0);
   const [unreadMessages, setUnreadMessages] = useState([]);
-  const [isFetchingMore, setIsFetchingMore] = useState(false);
   const [hasInitialScrolled, setHasInitialScrolled] = useState(false);
   const [showNewMessagesIndicator, setShowNewMessagesIndicator] =
     useState(false);
   const [messagesToMarkAsRead, setMessagesToMarkAsRead] = useState([]);
-  const [fromMessageId, setFromMessageId] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
 
   const lastVisibleReadMessageRef = useRef(null);
@@ -93,7 +91,6 @@ const Chat = ({
   ).current;
 
   const fetchPublicMessages = async (pageNumber = 0) => {
-    setIsFetchingMore(true);
     try {
       const response = await axiosClient.get(URLs.getMessages(id), {
         params: {
@@ -111,15 +108,12 @@ const Chat = ({
       return content;
     } catch (error) {
       console.error('Error fetching messages:', error.message);
-    } finally {
-      setIsFetchingMore(false);
     }
   };
 
   const fetchReadMessages = async (pageNumber = 0) => {
     if (isFetchingRead.current) return;
     isFetchingRead.current = true;
-    setIsFetchingMore(true);
 
     try {
       const params = {
@@ -150,7 +144,6 @@ const Chat = ({
     } catch (error) {
       console.error('Error fetching messages:', error);
     } finally {
-      setIsFetchingMore(false);
       isFetchingRead.current = false;
     }
   };
@@ -246,7 +239,6 @@ const Chat = ({
       setShowNewMessagesIndicator(false);
       setMessagesToMarkAsRead([]);
       setHasInitialScrolled(false);
-      setFromMessageId(null);
 
       if (currentChatId && messagesToMarkAsRead.length > 0) {
         const lastMessageId =
@@ -547,7 +539,6 @@ Chat.propTypes = {
   setParticipantsAmount: PropTypes.func,
   isChatVisible: PropTypes.bool,
   setIsChatVisible: PropTypes.func,
-  listOfOnlineUsers: PropTypes.instanceOf(Map),
 };
 
 export default Chat;
