@@ -57,9 +57,11 @@ box-sizing: border-box;
 export const AvatarBlock = styled.div`
 text-align: center;
 grid-area: avatar;
+display: flex;
+flex-direction: column;
 
 @media (max-width: 767px) {
-    display: flex;
+    flex-direction: row;
     margin: 12px 12px 24px 12px;
 }
 `

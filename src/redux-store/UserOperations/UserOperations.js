@@ -37,8 +37,9 @@ export const getUsersAvatar = createAsyncThunk('avatar/get', async (userId) =>
       responseType: 'blob',
     });
     const blob = await response.data;
-    const url = (URL.createObjectURL(blob)).replace("blob:", "")
-    console.log(url);
+    const url = URL.createObjectURL(blob)
+    // console.log(blob);
+
     return url;
   } catch (error) {
     throw new Error(error.message);

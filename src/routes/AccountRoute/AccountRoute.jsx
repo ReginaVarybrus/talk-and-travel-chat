@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import Loader from '@/components/Loader/Loader';
 import { routesPath } from '@/routes/routesConfig';
-import { getUser } from '@/redux-store/selectors';
+import { getAvatar, getUser } from '@/redux-store/selectors';
 import {
   getUsersAvatar,
   updateUser,
@@ -47,6 +47,8 @@ import Button from '@mui/material/Button';
 const AccountRoute = () => {
   // User details to display in Profile form are taken from Redux data.
   const user = useSelector(getUser);
+  const avatar = useSelector(getAvatar);
+
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { handleDeactivateStopmClient } = useWebSocket();
@@ -54,9 +56,9 @@ const AccountRoute = () => {
   const [editMode, setEditMode] = useState(false);
   // This {loading} is used to trigger display of <Loader/> while updateUser performig.
   const [loading, setLoading] = useState(false);
-  const [avatarData, setavatarData] = useState(null);
+  const [avatarData, setavatarData] = useState(avatar);
 
-  // it's a TEST
+  // it's a TEST of Avatar change
   const handleAvatarChange = event => {
     console.log('avatar');
     const file = event.target.files[0]; // Get the uploaded file
@@ -86,19 +88,16 @@ const AccountRoute = () => {
       }
     },
   });
-
   // This const is to toggle the Profile form from view to edit.
   const toggleEditMode = () => {
     setEditMode(!editMode);
   };
-
   /* This const is to toggle the Profile form from edit to view 
   mode and restore the form values. */
   const cancelEdit = () => {
     formik.setValues(user);
     setEditMode(false);
   };
-
   /* On-fligth validation of ABOUT field to prevent user
   from typing any symbols above maximum length set in scheme  */
   const handleChange = e => {
@@ -106,12 +105,29 @@ const AccountRoute = () => {
       formik.handleChange(e);
     }
   };
-
+  /* on page render user data is selected from redux */
   useEffect(() => {
     formik.setValues(user);
-    setavatarData(dispatch(getUsersAvatar(user.id)));
+    // setavatarData(dispatch(getUsersAvatar(user.id)));
     // console.log(avatarData);
   }, [user]);
+
+  // Avatar fetch from server if exists
+  useEffect(() => {
+    if (!avatarData && avatar == null) {
+      // Only fetch if avatarData is unset and avatar is null
+      const fetchAvatar = async () => {
+        try {
+          const result = await dispatch(getUsersAvatar(user.id)).unwrap();
+          setavatarData(result);
+          console.log('Avatar data fetched:', result);
+        } catch (error) {
+          console.error('Failed to fetch avatar data:', error);
+        }
+      };
+      fetchAvatar();
+    }
+  }, [avatarData, avatar]);
 
   const handleLogOut = async () => {
     try {
@@ -122,8 +138,6 @@ const AccountRoute = () => {
     }
   };
 
-  // Avatar fetch from server if exists
-
   return (
     <ProfileStyled>
       <Header>
@@ -131,7 +145,12 @@ const AccountRoute = () => {
       </Header>
       <ProfileContainer>
         <AvatarBlock>
-          <Avatar src={avatarData} alt="User Avatar" />
+          {avatarData ? (
+            <Avatar src={avatarData} alt="User Avatar" />
+          ) : (
+            <p>Loading avatar...</p>
+          )}
+
           {editMode && (
             <>
               <Input
