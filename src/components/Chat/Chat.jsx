@@ -57,6 +57,7 @@ const Chat = ({
   const [showNewMessagesIndicator, setShowNewMessagesIndicator] =
     useState(false);
   const [messagesToMarkAsRead, setMessagesToMarkAsRead] = useState([]);
+  const [fromMessageId, setFromMessageId] = useState(null);
 
   const lastVisibleReadMessageRef = useRef(null);
   const messageBlockRef = useRef(null);
@@ -64,6 +65,7 @@ const Chat = ({
   const isFetchingRead = useRef(false);
   const isFetchingUnread = useRef(false);
   const previousChatIdRef = useRef(null);
+  const fromMessageIdRef = useRef(null);
 
   const {
     subscribeToMessages,
@@ -72,9 +74,6 @@ const Chat = ({
   } = useWebSocket();
 
   const { updateUnreadMessagesCount } = useChatContext();
-
-  const isMessageAlreadyExists = (messagesList, newMessage) =>
-    messagesList.some(message => message.id === newMessage.id);
 
   const debouncedMarkAsRead = useRef(
     debounce(async (chatId, lastMessageId) => {
@@ -115,28 +114,41 @@ const Chat = ({
     }
   };
 
+  useEffect(() => {
+    console.log('Chat ID changed:', id);
+    console.log('Resetting fromMessageIdRef:', fromMessageIdRef.current);
+  }, [id]);
+
   const fetchReadMessages = async (pageNumber = 0) => {
     if (isFetchingRead.current) return;
     isFetchingRead.current = true;
     setIsFetchingMore(true);
+
     try {
+      const params = {
+        size: 20,
+        page: pageNumber,
+        sort: 'creationDate,desc',
+      };
+
+      if (fromMessageIdRef.current !== null) {
+        params['from-message-id'] = fromMessageIdRef.current;
+      }
+
       const response = await axiosClient.get(URLs.getReadMessages(id), {
-        params: {
-          size: 20,
-          page: pageNumber,
-          sort: 'creationDate,desc',
-        },
+        params,
       });
 
       const { content, page: pageData } = response.data;
 
-      const newMessages = content.filter(
-        msg => !isMessageAlreadyExists(messages, msg)
-      );
+      if (pageNumber === 0 && content.length > 0) {
+        fromMessageIdRef.current = content[0].id;
+      }
 
-      setMessages(prevMessages => [...newMessages, ...prevMessages]);
+      setMessages(prevMessages => [...content, ...prevMessages]);
       setPage(pageData.number + 1);
       setHasMore(pageData.number + 1 < pageData.totalPages);
+
       return content;
     } catch (error) {
       console.error('Error fetching messages:', error);
@@ -191,11 +203,12 @@ const Chat = ({
 
     try {
       if (!isShowJoinBtn) {
-        const readMessages = await fetchReadMessages();
+        const initialMessages = await fetchReadMessages();
+
         const fetchedUnreadMessages = await fetchUnreadMessages();
 
         const combinedMessages = [
-          ...readMessages,
+          ...initialMessages,
           ...fetchedUnreadMessages,
         ].sort((a, b) => new Date(a.creationDate) - new Date(b.creationDate));
 
@@ -233,6 +246,7 @@ const Chat = ({
       setShowNewMessagesIndicator(false);
       setMessagesToMarkAsRead([]);
       setHasInitialScrolled(false);
+      setFromMessageId(null);
 
       if (currentChatId && messagesToMarkAsRead.length > 0) {
         const lastMessageId =
@@ -242,9 +256,12 @@ const Chat = ({
         setMessagesToMarkAsRead([]);
       }
 
-      fetchChatMessages();
-
+      fromMessageIdRef.current = null;
       previousChatIdRef.current = id;
+
+      setTimeout(() => {
+        fetchChatMessages();
+      }, 300);
     }
   }, [id]);
 
