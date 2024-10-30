@@ -23,6 +23,7 @@ import {
   NoMassegesNotification,
   Logo,
   NewMessagesNotification,
+  LoaderStyleBox,
 } from './ChatStyled';
 
 const Chat = ({
@@ -58,6 +59,7 @@ const Chat = ({
     useState(false);
   const [messagesToMarkAsRead, setMessagesToMarkAsRead] = useState([]);
   const [fromMessageId, setFromMessageId] = useState(null);
+  const [isLoading, setIsLoading] = useState(true);
 
   const lastVisibleReadMessageRef = useRef(null);
   const messageBlockRef = useRef(null);
@@ -113,11 +115,6 @@ const Chat = ({
       setIsFetchingMore(false);
     }
   };
-
-  useEffect(() => {
-    console.log('Chat ID changed:', id);
-    console.log('Resetting fromMessageIdRef:', fromMessageIdRef.current);
-  }, [id]);
 
   const fetchReadMessages = async (pageNumber = 0) => {
     if (isFetchingRead.current) return;
@@ -201,10 +198,11 @@ const Chat = ({
   const fetchChatMessages = async () => {
     if (isFetchingRead.current || isFetchingUnread.current) return;
 
+    setIsLoading(true);
+
     try {
       if (!isShowJoinBtn) {
         const initialMessages = await fetchReadMessages();
-
         const fetchedUnreadMessages = await fetchUnreadMessages();
 
         const combinedMessages = [
@@ -224,6 +222,8 @@ const Chat = ({
       }
     } catch (error) {
       console.error('Error fetching messages:', error);
+    } finally {
+      setIsLoading(false);
     }
   };
   useEffect(() => {
@@ -460,8 +460,16 @@ const Chat = ({
         isShowJoinBtn={isShowJoinBtn}
       />
       <MessageBlock ref={messageBlockRef} onScroll={handleScroll}>
-        {isFetchingMore && <Loader size={50} />}
-        {messages?.length ? (
+        {isLoading ? (
+          <LoaderStyleBox>
+            <Loader size={50} />
+          </LoaderStyleBox>
+        ) : !messages.length ? (
+          <NoMassegesNotification>
+            <Logo src={logo} alt="logo" width="200" height="160" />
+            <p>There are no discussions yet. Be the first to start.</p>
+          </NoMassegesNotification>
+        ) : (
           <MessageList
             messages={messages}
             unreadMessages={unreadMessages}
@@ -470,11 +478,6 @@ const Chat = ({
             listOfOnlineUsersStatuses={listOfOnlineUsersStatuses}
             lastVisibleReadMessageRef={lastVisibleReadMessageRef}
           />
-        ) : (
-          <NoMassegesNotification>
-            <Logo src={logo} alt="logo" width="200" height="160" />
-            <p>There are no discussions yet. Be the first to start.</p>
-          </NoMassegesNotification>
         )}
       </MessageBlock>
       {showNewMessagesIndicator && (
