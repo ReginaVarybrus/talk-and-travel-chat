@@ -20,8 +20,11 @@ export const ChatProvider = ({ children }) => {
   const isUserLoggedIn = useSelector(getIsLoggedIn);
   const [subscriptionRooms, setSubscriptionRooms] = useState([]);
   const [dataUserChats, setDataUserChats] = useState([]);
+  const [filteredPrivateChats, setFilteredPrivateChats] =
+    useState(dataUserChats);
   const [unreadRoomsCount, setUnreadRoomsCount] = useState(0);
   const [unreadDMsCount, setUnreadDMsCount] = useState(0);
+  const [searchedValue, setSearchedValue] = useState('');
 
   const { responseData: roomsData } = useFetch(
     isUserLoggedIn ? URLs.userCountries : null
@@ -44,6 +47,7 @@ export const ChatProvider = ({ children }) => {
   useEffect(() => {
     if (dmsData) {
       setDataUserChats(dmsData);
+      setFilteredPrivateChats(dmsData);
       const totalUnreadDMs = dmsData.reduce(
         (acc, chat) => acc + chat.chat.unreadMessagesCount,
         0
@@ -56,6 +60,7 @@ export const ChatProvider = ({ children }) => {
     try {
       const response = await axiosClient.get(URLs.getPrivateChats);
       setDataUserChats(response.data);
+      setFilteredPrivateChats(response.data);
     } catch (error) {
       console.error('Error updating user chats:', error);
     }
@@ -112,8 +117,18 @@ export const ChatProvider = ({ children }) => {
       unreadDMsCount,
       updateUnreadMessagesCount,
       updateUserChats,
+      filteredPrivateChats,
+      setFilteredPrivateChats,
+      searchedValue,
+      setSearchedValue,
     }),
-    [subscriptionRooms, dataUserChats, unreadRoomsCount, unreadDMsCount]
+    [
+      subscriptionRooms,
+      dataUserChats,
+      filteredPrivateChats,
+      unreadRoomsCount,
+      unreadDMsCount,
+    ]
   );
 
   return <ChatContext.Provider value={value}>{children}</ChatContext.Provider>;
