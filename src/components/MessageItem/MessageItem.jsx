@@ -48,8 +48,7 @@ const MessageItem = ({
     try {
       const userInfoResponse = await axiosClient.get(URLs.userInfo(userId));
       setUserInfo(userInfoResponse.data);
-      const privateChatsResponse = await axiosClient.get(URLs.getPrivateChats);
-      setUserChats(privateChatsResponse.data);
+
       if (userInfoResponse.data.userName) {
         setOpen(true);
       }
