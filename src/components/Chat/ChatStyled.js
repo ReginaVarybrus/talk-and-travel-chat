@@ -172,3 +172,11 @@ export const NewMessagesNotification = styled.div`
     vertical-align: middle;
   }
 `;
+
+export const LoaderStyleBox = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+`;
