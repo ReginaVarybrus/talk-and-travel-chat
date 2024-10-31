@@ -23,6 +23,7 @@ import {
   NoMassegesNotification,
   Logo,
   NewMessagesNotification,
+  LoaderStyleBox,
 } from './ChatStyled';
 
 const Chat = ({
@@ -52,11 +53,11 @@ const Chat = ({
   const [hasMoreUnread, setHasMoreUnread] = useState(true);
   const [unreadCount, setUnreadCount] = useState(0);
   const [unreadMessages, setUnreadMessages] = useState([]);
-  const [isFetchingMore, setIsFetchingMore] = useState(false);
   const [hasInitialScrolled, setHasInitialScrolled] = useState(false);
   const [showNewMessagesIndicator, setShowNewMessagesIndicator] =
     useState(false);
   const [messagesToMarkAsRead, setMessagesToMarkAsRead] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
 
   const lastVisibleReadMessageRef = useRef(null);
   const messageBlockRef = useRef(null);
@@ -64,6 +65,7 @@ const Chat = ({
   const isFetchingRead = useRef(false);
   const isFetchingUnread = useRef(false);
   const previousChatIdRef = useRef(null);
+  const fromMessageIdRef = useRef(null);
 
   const {
     subscribeToMessages,
@@ -72,9 +74,6 @@ const Chat = ({
   } = useWebSocket();
 
   const { updateUnreadMessagesCount } = useChatContext();
-
-  const isMessageAlreadyExists = (messagesList, newMessage) =>
-    messagesList.some(message => message.id === newMessage.id);
 
   const debouncedMarkAsRead = useRef(
     debounce(async (chatId, lastMessageId) => {
@@ -92,7 +91,6 @@ const Chat = ({
   ).current;
 
   const fetchPublicMessages = async (pageNumber = 0) => {
-    setIsFetchingMore(true);
     try {
       const response = await axiosClient.get(URLs.getMessages(id), {
         params: {
@@ -110,38 +108,42 @@ const Chat = ({
       return content;
     } catch (error) {
       console.error('Error fetching messages:', error.message);
-    } finally {
-      setIsFetchingMore(false);
     }
   };
 
   const fetchReadMessages = async (pageNumber = 0) => {
     if (isFetchingRead.current) return;
     isFetchingRead.current = true;
-    setIsFetchingMore(true);
+
     try {
+      const params = {
+        size: 20,
+        page: pageNumber,
+        sort: 'creationDate,desc',
+      };
+
+      if (fromMessageIdRef.current !== null) {
+        params['from-message-id'] = fromMessageIdRef.current;
+      }
+
       const response = await axiosClient.get(URLs.getReadMessages(id), {
-        params: {
-          size: 20,
-          page: pageNumber,
-          sort: 'creationDate,desc',
-        },
+        params,
       });
 
       const { content, page: pageData } = response.data;
 
-      const newMessages = content.filter(
-        msg => !isMessageAlreadyExists(messages, msg)
-      );
+      if (pageNumber === 0 && content.length > 0) {
+        fromMessageIdRef.current = content[0].id;
+      }
 
-      setMessages(prevMessages => [...newMessages, ...prevMessages]);
+      setMessages(prevMessages => [...content, ...prevMessages]);
       setPage(pageData.number + 1);
       setHasMore(pageData.number + 1 < pageData.totalPages);
+
       return content;
     } catch (error) {
       console.error('Error fetching messages:', error);
     } finally {
-      setIsFetchingMore(false);
       isFetchingRead.current = false;
     }
   };
@@ -189,13 +191,15 @@ const Chat = ({
   const fetchChatMessages = async () => {
     if (isFetchingRead.current || isFetchingUnread.current) return;
 
+    setIsLoading(true);
+
     try {
       if (!isShowJoinBtn) {
-        const readMessages = await fetchReadMessages();
+        const initialMessages = await fetchReadMessages();
         const fetchedUnreadMessages = await fetchUnreadMessages();
 
         const combinedMessages = [
-          ...readMessages,
+          ...initialMessages,
           ...fetchedUnreadMessages,
         ].sort((a, b) => new Date(a.creationDate) - new Date(b.creationDate));
 
@@ -211,6 +215,8 @@ const Chat = ({
       }
     } catch (error) {
       console.error('Error fetching messages:', error);
+    } finally {
+      setIsLoading(false);
     }
   };
   useEffect(() => {
@@ -242,9 +248,12 @@ const Chat = ({
         setMessagesToMarkAsRead([]);
       }
 
-      fetchChatMessages();
-
+      fromMessageIdRef.current = null;
       previousChatIdRef.current = id;
+
+      setTimeout(() => {
+        fetchChatMessages();
+      }, 300);
     }
   }, [id]);
 
@@ -443,8 +452,16 @@ const Chat = ({
         isShowJoinBtn={isShowJoinBtn}
       />
       <MessageBlock ref={messageBlockRef} onScroll={handleScroll}>
-        {isFetchingMore && <Loader size={50} />}
-        {messages?.length ? (
+        {isLoading ? (
+          <LoaderStyleBox>
+            <Loader size={50} />
+          </LoaderStyleBox>
+        ) : !messages.length ? (
+          <NoMassegesNotification>
+            <Logo src={logo} alt="logo" width="200" height="160" />
+            <p>There are no discussions yet. Be the first to start.</p>
+          </NoMassegesNotification>
+        ) : (
           <MessageList
             messages={messages}
             unreadMessages={unreadMessages}
@@ -453,11 +470,6 @@ const Chat = ({
             listOfOnlineUsersStatuses={listOfOnlineUsersStatuses}
             lastVisibleReadMessageRef={lastVisibleReadMessageRef}
           />
-        ) : (
-          <NoMassegesNotification>
-            <Logo src={logo} alt="logo" width="200" height="160" />
-            <p>There are no discussions yet. Be the first to start.</p>
-          </NoMassegesNotification>
         )}
       </MessageBlock>
       {showNewMessagesIndicator && (
@@ -527,7 +539,6 @@ Chat.propTypes = {
   setParticipantsAmount: PropTypes.func,
   isChatVisible: PropTypes.bool,
   setIsChatVisible: PropTypes.func,
-  listOfOnlineUsers: PropTypes.instanceOf(Map),
 };
 
 export default Chat;
