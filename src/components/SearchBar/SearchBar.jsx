@@ -8,8 +8,8 @@ import SearchInput from '@/components/SearchInput/SearchInput';
 import ChatMap from '@/components/ChatMap/ChatMap';
 import { useChatContext } from '@/providers/ChatProvider';
 import { SearchBarStyled, ButtonMapOpen, MapBox } from './SearchBarStyled';
-import { routesPath } from '@/routes/routesConfig';
 import SearchInputDMs from '../SearchInputDMs/SearchInputDMs';
+import AllUsersModal from '../AllUsersModal/AllUsersModal';
 
 const SearchBar = ({
   setChatData,
@@ -24,8 +24,11 @@ const SearchBar = ({
   const location = useLocation();
   const isRoomRoute = location.pathname.includes('/rooms-chat');
   const [openMap, setOpenMap] = useState(false);
-  const handleOpen = () => setOpenMap(true);
-  const handleClose = () => setOpenMap(false);
+  const handleOpenMap = () => setOpenMap(true);
+  const handleCloseMap = () => setOpenMap(false);
+  const [openModal, setOpenModal] = useState(false);
+  const handleOpenModal = () => setOpenModal(true);
+  const handleCloseModal = () => setOpenModal(false);
 
   const { subscriptionRooms } = useChatContext();
 
@@ -41,13 +44,15 @@ const SearchBar = ({
             subscriptionRooms={subscriptionRooms}
             setParticipantsAmount={setParticipantsAmount}
           />
-          <ButtonMapOpen onClick={handleOpen}>Search by map</ButtonMapOpen>
+          <ButtonMapOpen onClick={handleOpenMap}>Search by map</ButtonMapOpen>
         </>
       ) : (
         <>
           <SearchInputDMs />
 
-          <ButtonMapOpen>Search new companion</ButtonMapOpen>
+          <ButtonMapOpen onClick={handleOpenModal}>
+            Search new companion
+          </ButtonMapOpen>
         </>
       )}
       <div>
@@ -69,7 +74,7 @@ const SearchBar = ({
         aria-labelledby="transition-modal-title"
         aria-describedby="transition-modal-description"
         open={openMap}
-        onClose={handleClose}
+        onClose={handleCloseMap}
         closeAfterTransition
         slots={{ backdrop: Backdrop }}
         slotProps={{
@@ -82,7 +87,7 @@ const SearchBar = ({
           <MapBox>
             <ChatMap
               openMap={openMap}
-              closeMap={handleClose}
+              closeMap={handleCloseMap}
               setChatData={setChatData}
               setParticipantsAmount={setParticipantsAmount}
               setIsSubscribed={setIsSubscribed}
@@ -93,6 +98,8 @@ const SearchBar = ({
           </MapBox>
         </Fade>
       </Modal>
+
+      <AllUsersModal isOpen={openModal} onClose={handleCloseModal} />
     </SearchBarStyled>
   );
 };

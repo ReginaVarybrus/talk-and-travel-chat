@@ -27,6 +27,7 @@ const URLs = {
   createPrivateChat: 'chats/private',
   usersOnlineStatus: '/notify/users/onlineStatus',
   getUsersOnlineStatusPath: 'v2/users/online',
+  getAllUsers: 'v2/users',
 };
 
 export default URLs;

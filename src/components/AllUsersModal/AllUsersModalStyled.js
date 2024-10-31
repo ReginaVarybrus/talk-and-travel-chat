@@ -1,0 +1,196 @@
+import styled from 'styled-components';
+import { Box } from '@mui/material';
+
+export const BoxStyled = styled(Box)`
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: var(--white-color);
+  border-radius: 16px;
+  box-shadow:
+    0px 2px 6px 2px rgba(0, 0, 0, 0.15),
+    0px 1px 2px 0px rgba(0, 0, 0, 0.3);
+  padding: 16px;
+  width: 295px;
+
+  @media screen and (min-width: 768px) {
+    width: 416px;
+    padding: 32px;
+    gap: 32px;
+  }
+`;
+
+export const Avatar = styled.div`
+  width: 36px;
+  height: 36px;
+
+  img {
+    width: 100%;
+    height: 100%;
+  }
+
+  @media screen and (min-width: 768px) {
+    width: 48px;
+    height: 48px;
+  }
+`;
+
+export const LetterAvatar = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 4px;
+  font-weight: 600;
+  font-size: 18px;
+  background: var(--color-grey-6);
+  color: var(--white-color);
+
+  @media screen and (min-width: 768px) {
+    width: 48px;
+    height: 48px;
+  }
+`;
+
+export const CloseBtn = styled.button`
+  position: absolute;
+  right: 5px;
+  top: 9px;
+  background: none;
+  border: none;
+  cursor: pointer;
+
+  svg {
+    stroke: var(--color-grey-9);
+    width: 27px;
+    height: 27px;
+    transition: stroke 0.3s;
+  }
+
+  &:hover {
+    svg {
+      stroke: var(--color-blue-3);
+    }
+  }
+
+  @media screen and (min-width: 768px) {
+    right: 14px;
+    top: 17px;
+  }
+`;
+export const Item = styled.li`
+  display: flex;
+  align-items: center;
+  height: 52px;
+  gap: 16px;
+  padding: 4px 8px;
+  position: relative;
+
+  @media screen and (min-width: 768px) {
+    height: 65px;
+    padding: 8px;
+  }
+
+  &:hover {
+    button {
+      opacity: 1;
+      visibility: visible;
+    }
+  }
+`;
+
+export const UsersList = styled.ul`
+  height: 216px;
+  overflow-y: overlay;
+  border-radius: 8px;
+  box-shadow: inset 0px 1px 5px 0px rgba(0, 0, 0, 0.05);
+  background: var(--color-grey-3);
+
+  @media screen and (min-width: 768px) {
+    height: 260px;
+  }
+
+  &::-webkit-scrollbar {
+    width: 2px;
+  }
+
+  &::-webkit-scrollbar-track {
+    background: var(--color-grey-6);
+    border-radius: 100px;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    height: 144px;
+    border-radius: 100px;
+    background: var(--color-grey-9);
+  }
+`;
+
+export const UsersBoxStyled = styled.div`
+  border-top: 1px solid rgb(222, 222, 222);
+  border-bottom: 1px solid rgb(222, 222, 222);
+  padding-top: 16px;
+  padding-bottom: 16px;
+  @media screen and (min-width: 768px) {
+    padding-top: 32px;
+    padding-bottom: 32px;
+  }
+`;
+
+export const UserContactInfo = styled.div`
+  display: flex;
+  flex-direction: column;
+  width: 140px;
+  gap: 4px;
+
+  h5 {
+    font-size: 14px;
+    font-weight: 700;
+    line-height: 1.1;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  p {
+    font-size: 14px;
+    color: var(--color-grey-9);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  @media screen and (min-width: 768px) {
+    width: 200px;
+    gap: 8px;
+
+    h5 {
+      font-size: 18px;
+      font-weight: 600;
+    }
+  }
+`;
+
+export const SendMessageBtn = styled.button`
+  opacity: 0;
+  visibility: hidden;
+  background: none;
+  border: none;
+  cursor: pointer;
+  transition: all 0.3s ease;
+
+  svg {
+    width: 20px;
+    height: 21px;
+    fill: var(--color-grey-9);
+    transition: all 0.3s ease;
+  }
+
+  &:hover svg {
+    fill: var(--color-blue-3);
+  }
+`;

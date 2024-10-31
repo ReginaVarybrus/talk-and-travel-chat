@@ -159,9 +159,9 @@ const CountryInfo = ({
               {participants?.map(user => (
                 <Item key={user.id}>
                   <Avatar>
-                    {user.avatar ? (
+                    {user.avatarUrl ? (
                       <img
-                        src={user.avatar}
+                        src={user.avatarUrl}
                         alt={user.userName}
                         width="48"
                         height="48"

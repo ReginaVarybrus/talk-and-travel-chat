@@ -157,6 +157,7 @@ export const Item = styled.li`
     }
   }
 `;
+
 export const UserContactInfo = styled.div`
   display: flex;
   flex-direction: column;
@@ -189,6 +190,7 @@ export const UserContactInfo = styled.div`
     }
   }
 `;
+
 export const SendMessageBtn = styled.button`
   opacity: 0;
   visibility: hidden;
