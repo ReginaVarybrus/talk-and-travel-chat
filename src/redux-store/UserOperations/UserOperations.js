@@ -30,27 +30,12 @@ export const updateUser = createAsyncThunk('user/update', async user =>
   }
 });
 
-export const getUsersAvatar = createAsyncThunk('avatar/get', async (userId) =>
+export const updateUsersAvatar = createAsyncThunk('user/avatar', async () =>
 {
   try {
-    const response = await axiosClient(URLs.usersAvatar(userId), {
-      responseType: 'blob',
-    });
-    const blob = await response.data;
-    const url = URL.createObjectURL(blob)
-    // console.log(blob);
-
-    return url;
-  } catch (error) {
-    throw new Error(error.message);
-  }
-});
-
-export const updateUsersAvatar = createAsyncThunk('avatar/update', async user =>
-{
-  try {
-    const { data } = await axiosClient.post(URLs.getUsersAvatar, user);
-    return data;
+    const response = await axiosClient(URLs.usersAvatarUrl);
+    console.log('from avatar update', response);
+    return response;
   } catch (error) {
     throw new Error(error.message);
   }

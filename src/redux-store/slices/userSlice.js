@@ -3,7 +3,7 @@ import
 {
   fetchCurrentUser,
   updateUser,
-  getUsersAvatar
+  updateUsersAvatar
 } from '@/redux-store/UserOperations/UserOperations';
 
 const initialState = {
@@ -56,9 +56,9 @@ export const userSlice = createSlice({
       })
       )
 
-      .addCase(getUsersAvatar.pending, handlePending)
-      .addCase(getUsersAvatar.rejected, handleRejected)
-      .addCase(getUsersAvatar.fulfilled, (state, action) =>
+      .addCase(updateUsersAvatar.pending, handlePending)
+      .addCase(updateUsersAvatar.rejected, handleRejected)
+      .addCase(updateUsersAvatar.fulfilled, (state, action) =>
       ({
         ...state,
         avatar: action.payload,

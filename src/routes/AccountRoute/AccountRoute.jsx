@@ -4,11 +4,8 @@ import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import Loader from '@/components/Loader/Loader';
 import { routesPath } from '@/routes/routesConfig';
-import { getAvatar, getUser } from '@/redux-store/selectors';
-import {
-  getUsersAvatar,
-  updateUser,
-} from '@/redux-store/UserOperations/UserOperations';
+import { getUser } from '@/redux-store/selectors';
+import { updateUser } from '@/redux-store/UserOperations/UserOperations';
 import { useWebSocket } from '@/hooks/useWebSocket.js';
 
 import {
@@ -47,22 +44,29 @@ import Button from '@mui/material/Button';
 const AccountRoute = () => {
   // User details to display in Profile form are taken from Redux data.
   const user = useSelector(getUser);
-  const avatar = useSelector(getAvatar);
-
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { handleDeactivateStopmClient } = useWebSocket();
-
   const [editMode, setEditMode] = useState(false);
   // This {loading} is used to trigger display of <Loader/> while updateUser performig.
   const [loading, setLoading] = useState(false);
-  const [avatarData, setavatarData] = useState(avatar);
-
   // it's a TEST of Avatar change
+  const [avatarUpdate, setAvatarUpdate] = useState(null);
+  const [avatarPreview, setAvatarPreview] = useState(null);
+
   const handleAvatarChange = event => {
-    console.log('avatar');
-    const file = event.target.files[0]; // Get the uploaded file
-    console.log(file);
+    const file = event.target.files[0];
+
+    if (file) {
+      setAvatarUpdate(file);
+      setAvatarPreview(URL.createObjectURL(file)); // Set preview URL for the selected image
+      console.log(avatarPreview);
+      console.log(avatarUpdate);
+      // Reset the input value to allow reselecting the same file
+      event.target.value = null;
+    } else {
+      console.log('No file selected');
+    }
   };
 
   const formik = useFormik({
@@ -111,24 +115,7 @@ const AccountRoute = () => {
     // setavatarData(dispatch(getUsersAvatar(user.id)));
     // console.log(avatarData);
   }, [user]);
-
-  // Avatar fetch from server if exists
-  useEffect(() => {
-    if (!avatarData && avatar == null) {
-      // Only fetch if avatarData is unset and avatar is null
-      const fetchAvatar = async () => {
-        try {
-          const result = await dispatch(getUsersAvatar(user.id)).unwrap();
-          setavatarData(result);
-          console.log('Avatar data fetched:', result);
-        } catch (error) {
-          console.error('Failed to fetch avatar data:', error);
-        }
-      };
-      fetchAvatar();
-    }
-  }, [avatarData, avatar]);
-
+  /* when logout button pressed logout is performed */
   const handleLogOut = async () => {
     try {
       handleDeactivateStopmClient();
@@ -145,8 +132,8 @@ const AccountRoute = () => {
       </Header>
       <ProfileContainer>
         <AvatarBlock>
-          {avatarData ? (
-            <Avatar src={avatarData} alt="User Avatar" />
+          {user.avatarUrl ? (
+            <Avatar src={user.avatarUrl} alt="User Avatar" />
           ) : (
             <p>Loading avatar...</p>
           )}
@@ -161,6 +148,7 @@ const AccountRoute = () => {
               />
               <label htmlFor="avatar-upload">
                 <Button
+                  onChange={handleAvatarChange}
                   component="span"
                   sx={{ marginTop: '8px' }}
                   variant="text"

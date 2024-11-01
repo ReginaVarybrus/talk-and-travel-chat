@@ -7,7 +7,7 @@ const URLs = {
   // User operations
   currentUser: 'current',
   updateUser: 'users',
-  usersAvatar: userId => `avatars/user/${userId}`,
+  usersAvatarUrl: `/v2/user/avatar`,
 
   getCountries: 'v2/main-countries-chats',
   userInfo: userId => `users/${userId}`,
