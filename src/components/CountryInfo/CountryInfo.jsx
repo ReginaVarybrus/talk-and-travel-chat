@@ -16,6 +16,7 @@ import { routesPath } from '@/routes/routesConfig.jsx';
 import { axiosClient } from '@/services/api.js';
 import { useChatContext } from '@/providers/ChatProvider';
 
+import { Badge } from '@/components/MessageItem/MessageItemStyled.js';
 import {
   BoxStyled,
   ContactsList,
@@ -24,6 +25,7 @@ import {
   Flag,
   Item,
   Avatar,
+  ImgAvatar,
   CloseBtn,
   InfoBoxStyled,
   HeaderStyled,
@@ -41,6 +43,7 @@ const CountryInfo = ({
   onClose,
   countryName,
   participantsAmount,
+  listOfOnlineUsersStatuses,
   setParticipantsAmount,
   chatId,
   setIsShowJoinBtn,
@@ -156,41 +159,48 @@ const CountryInfo = ({
         ) : (
           <ContactsBoxStyled>
             <ContactsList>
-              {participants?.map(user => (
-                <Item key={user.id}>
-                  <Avatar>
-                    {user.avatar ? (
-                      <img
-                        src={user.avatar}
-                        alt={user.userName}
-                        width="48"
-                        height="48"
-                      />
-                    ) : (
-                      <LetterAvatar>
-                        {user.userName.charAt(0).toUpperCase()}
-                      </LetterAvatar>
+              {participants?.map(user => {
+                const userStatus = listOfOnlineUsersStatuses.get(
+                  user.id.toString()
+                );
+
+                const isOnline = userStatus ? userStatus.isOnline : false;
+
+                return (
+                  <Item key={user.id}>
+                    <Avatar>
+                      {user.avatarUrl ? (
+                        <ImgAvatar
+                          src={user.avatarUrl}
+                          alt={`${user.userName}'s avatar`}
+                        />
+                      ) : (
+                        <LetterAvatar>
+                          {user.userName.charAt(0).toUpperCase()}
+                        </LetterAvatar>
+                      )}
+                      {isOnline && <Badge />}
+                    </Avatar>
+                    <UserContactInfo>
+                      <h5>{user.userName}</h5>
+                      <p>{user.userEmail}</p>
+                    </UserContactInfo>
+                    {user.id !== currentUserId && (
+                      <SendMessageBtn
+                        onClick={() =>
+                          handleCreatePrivateChat(
+                            user.id,
+                            user.userName,
+                            user.userEmail
+                          )
+                        }
+                      >
+                        <FaRegMessage />
+                      </SendMessageBtn>
                     )}
-                  </Avatar>
-                  <UserContactInfo>
-                    <h5>{user.userName}</h5>
-                    <p>{user.userEmail}</p>
-                  </UserContactInfo>
-                  {user.id !== currentUserId && (
-                    <SendMessageBtn
-                      onClick={() =>
-                        handleCreatePrivateChat(
-                          user.id,
-                          user.userName,
-                          user.userEmail
-                        )
-                      }
-                    >
-                      <FaRegMessage />
-                    </SendMessageBtn>
-                  )}
-                </Item>
-              ))}
+                  </Item>
+                );
+              })}
             </ContactsList>
           </ContactsBoxStyled>
         )}

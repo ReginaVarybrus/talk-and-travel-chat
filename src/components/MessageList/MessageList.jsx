@@ -95,6 +95,7 @@ const MessageList = ({
             content={message.content}
             userId={message.user?.id}
             userName={message.user?.userName}
+            userAvatarUrl={message.user?.avatarUrl}
             date={message.creationDate}
             type={message.type}
             isShownAvatar={isShownAvatar}
@@ -114,7 +115,7 @@ MessageList.propTypes = {
   messages: PropTypes.array,
   setIsUserTyping: PropTypes.func,
   setUsersTyping: PropTypes.func,
-  listOfOnlineUsers: PropTypes.instanceOf(Map),
+  listOfOnlineUsersStatuses: PropTypes.instanceOf(Map),
   unreadMessages: PropTypes.array,
   lastVisibleReadMessageRef: PropTypes.shape({
     current: PropTypes.instanceOf(Element),

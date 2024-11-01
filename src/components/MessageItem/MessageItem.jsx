@@ -11,6 +11,8 @@ import { timeStampConverter } from '@/components/utils/timeUtil.js';
 import {
   MessageItemStyled,
   MessageContentStyled,
+  Avatar,
+  ImgAvatar,
   LetterAvatarStyled,
   ContentMessage,
   ContentJoinOrLeave,
@@ -22,6 +24,7 @@ const MessageItem = ({
   content,
   userId,
   userName,
+  userAvatarUrl,
   date,
   type,
   isShownAvatar,
@@ -57,18 +60,26 @@ const MessageItem = ({
     }
   };
 
+  const checkToShowAvatar = messageTypeText && userId && isShownAvatar;
   const handleClose = () => setOpen(false);
 
   return (
     <MessageItemStyled $isShownAvatar={isShownAvatar}>
-      {messageTypeText && userId && isShownAvatar && (
-        <LetterAvatarStyled
+      {checkToShowAvatar && (
+        <Avatar
           $isCurrentUser={isCurrentUser}
           onClick={!isCurrentUser ? handleOpen : undefined}
         >
-          {userName[0].toUpperCase()}
+          <ImgAvatar
+            src={userAvatarUrl || undefined}
+            alt={`${userName}'s avatar`}
+            $userAvatarUrl={userAvatarUrl}
+          />
+          {!userAvatarUrl && (
+            <LetterAvatarStyled>{userName[0].toUpperCase()}</LetterAvatarStyled>
+          )}
           {isOnline && <Badge />}
-        </LetterAvatarStyled>
+        </Avatar>
       )}
 
       {messageTypeText && (
@@ -86,7 +97,7 @@ const MessageItem = ({
       <UserInfoModal
         open={open}
         handleClose={handleClose}
-        avatar={userInfo?.avatar}
+        userAvatarUrl={userInfo?.avatarUrl}
         userName={userInfo?.userName}
         userEmail={userInfo?.userEmail}
         about={userInfo?.about}
@@ -100,6 +111,7 @@ MessageItem.propTypes = {
   content: PropTypes.string,
   userId: PropTypes.number,
   userName: PropTypes.string,
+  userAvatarUrl: PropTypes.string,
   date: PropTypes.string,
   type: PropTypes.string,
   isShownAvatar: PropTypes.bool,
