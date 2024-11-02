@@ -8,7 +8,8 @@ import URLs from '@/constants/constants';
 
 export const register = createAsyncThunk(
   'auth/register',
-  async (userData, { dispatch }) => {
+  async (userData, { dispatch }) =>
+  {
     try {
       const response = await axiosClient.post(URLs.register, userData);
       dispatch(setUsers(response.data.userDto));
@@ -27,7 +28,8 @@ export const register = createAsyncThunk(
 
 export const logIn = createAsyncThunk(
   'auth/login',
-  async (userData, { dispatch }) => {
+  async (userData, { dispatch }) =>
+  {
     try {
       const response = await axiosClient.post(URLs.login, userData);
       dispatch(setUsers(response.data.userDto));
@@ -47,7 +49,8 @@ export const logIn = createAsyncThunk(
 
 export const logOut = createAsyncThunk(
   'auth/logOut',
-  async (arg, { dispatch }) => {
+  async (arg, { dispatch }) =>
+  {
     try {
       await axiosClient.post(URLs.logout);
       token.unset();

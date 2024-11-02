@@ -15,6 +15,7 @@ import {
   ProfileContainer,
   AvatarBlock,
   Avatar,
+  AvatarVisuallyHiddenInput,
   InputBlock,
   ProfileForm,
   TextAbout,
@@ -38,7 +39,6 @@ import {
   formFields,
 } from '@/routes/AccountRoute/AccountRouteValidationSchema';
 import { logOut } from '@/redux-store/AuthOperations/AuthOperations';
-import Input from '@mui/material/Input';
 import Button from '@mui/material/Button';
 
 const AccountRoute = () => {
@@ -50,18 +50,14 @@ const AccountRoute = () => {
   const [editMode, setEditMode] = useState(false);
   // This {loading} is used to trigger display of <Loader/> while updateUser performig.
   const [loading, setLoading] = useState(false);
-  // it's a TEST of Avatar change
-  const [avatarUpdate, setAvatarUpdate] = useState(null);
+  // this avatarPreview is used to render Avatar when user tries to upload a new image.
   const [avatarPreview, setAvatarPreview] = useState(null);
-
+  // handleAvatarChange catches the file picked by user
   const handleAvatarChange = event => {
     const file = event.target.files[0];
-
     if (file) {
-      setAvatarUpdate(file);
-      setAvatarPreview(URL.createObjectURL(file)); // Set preview URL for the selected image
-      console.log(avatarPreview);
-      console.log(avatarUpdate);
+      // Set preview URL for the selected image
+      setAvatarPreview(URL.createObjectURL(file));
       // Reset the input value to allow reselecting the same file
       event.target.value = null;
     } else {
@@ -100,6 +96,7 @@ const AccountRoute = () => {
   mode and restore the form values. */
   const cancelEdit = () => {
     formik.setValues(user);
+    setAvatarPreview(null);
     setEditMode(false);
   };
   /* On-fligth validation of ABOUT field to prevent user
@@ -132,31 +129,15 @@ const AccountRoute = () => {
       </Header>
       <ProfileContainer>
         <AvatarBlock>
-          {user.avatarUrl ? (
-            <Avatar src={user.avatarUrl} alt="User Avatar" />
-          ) : (
-            <p>Loading avatar...</p>
-          )}
-
+          <Avatar src={avatarPreview || user.avatarUrl} alt="User Avatar" />
           {editMode && (
-            <>
-              <Input
+            <Button component="label" role={undefined} variant="text">
+              Change photo
+              <AvatarVisuallyHiddenInput
                 type="file"
-                id="avatar-upload"
                 onChange={handleAvatarChange}
-                style={{ display: 'none' }}
               />
-              <label htmlFor="avatar-upload">
-                <Button
-                  onChange={handleAvatarChange}
-                  component="span"
-                  sx={{ marginTop: '8px' }}
-                  variant="text"
-                >
-                  Change photo
-                </Button>
-              </label>
-            </>
+            </Button>
           )}
         </AvatarBlock>
         <InputBlock>

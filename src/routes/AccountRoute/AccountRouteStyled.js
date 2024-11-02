@@ -10,6 +10,9 @@ border-left: 1px solid var(--color-grey-6);
 @media (max-width: 767px) {
     padding: 16px 24px 0 24px;
     border-left: none;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
 `;
 
@@ -50,6 +53,7 @@ box-sizing: border-box;
         "logout logout";
     margin: 0;
     padding: 0;
+    max-width: 450px;
 }
 `;
 
@@ -70,6 +74,7 @@ width: 256px;
 height: 256px;
 border-radius: 8px;
 background-color: var(--color-grey-3);
+object-fit: cover;
 
 @media (max-width: 767px) {
     width: 64px;
@@ -86,6 +91,17 @@ width: 120px;
     padding: 8px 16px;
 }
 `
+export const AvatarVisuallyHiddenInput = styled('input')({
+    clip: 'rect(0 0 0 0)',
+    clipPath: 'inset(50%)',
+    height: 1,
+    overflow: 'hidden',
+    position: 'absolute',
+    bottom: 0,
+    left: 0,
+    whiteSpace: 'nowrap',
+    width: 1,
+});
 
 export const InputBlock = styled.div`
 grid-area: form;
