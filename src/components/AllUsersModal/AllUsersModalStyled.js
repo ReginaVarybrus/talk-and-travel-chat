@@ -2,6 +2,7 @@ import styled from 'styled-components';
 import { Box } from '@mui/material';
 import { FiSearch } from 'react-icons/fi';
 import { LuInfo } from 'react-icons/lu';
+import { device } from '@/constants/mediaQueries';
 
 export const BoxStyled = styled(Box)`
   position: absolute;
@@ -19,7 +20,7 @@ export const BoxStyled = styled(Box)`
   padding: 16px;
   width: 395px;
 
-  @media screen and (min-width: 768px) {
+  @media ${device.tablet} {
     width: 466px;
     padding: 32px;
   }
@@ -35,7 +36,7 @@ export const AvatarInList = styled.div`
     height: 100%;
   }
 
-  @media screen and (min-width: 768px) {
+  @media ${device.tablet} {
     width: 48px;
     height: 48px;
   }
@@ -52,7 +53,7 @@ export const AvatarInUserBlock = styled.div`
     height: 100%;
   }
 
-  @media screen and (min-width: 768px) {
+  @media ${device.tablet} {
     width: 100px;
     height: 100px;
   }
@@ -70,7 +71,7 @@ export const LetterAvatar = styled.div`
   background: var(--color-grey-6);
   color: var(--white-color);
 
-  @media screen and (min-width: 768px) {
+  @media ${device.tablet} {
     width: 48px;
     height: 48px;
   }
@@ -87,7 +88,7 @@ export const LetterAvatarInUserBlock = styled.div`
   color: var(--white-color);
   border-radius: 8px;
 
-  @media screen and (min-width: 768px) {
+  @media ${device.tablet} {
     width: 100px;
     height: 100px;
   }
@@ -114,7 +115,7 @@ export const CloseBtn = styled.button`
     }
   }
 
-  @media screen and (min-width: 768px) {
+  @media ${device.tablet} {
     right: 14px;
     top: 17px;
   }
@@ -133,7 +134,8 @@ export const UsersList = styled.ul`
   box-shadow: inset 0px 1px 5px 0px rgba(0, 0, 0, 0.05);
   background: var(--color-grey-3);
   padding: 8px 12px;
-  @media screen and (min-width: 768px) {
+
+  @media ${device.tablet} {
     height: 325px;
   }
 
@@ -158,7 +160,8 @@ export const MainBoxStyled = styled.div`
   border-bottom: 1px solid rgb(222, 222, 222);
   padding-top: 16px;
   padding-bottom: 16px;
-  @media screen and (min-width: 768px) {
+
+  @media ${device.tablet} {
     padding-top: 32px;
     padding-bottom: 32px;
   }
@@ -180,7 +183,7 @@ export const UserName = styled.div`
     text-overflow: ellipsis;
   }
 
-  @media screen and (min-width: 768px) {
+  @media ${device.tablet} {
     width: 200px;
     gap: 8px;
 
@@ -219,7 +222,7 @@ export const SendMessageBtn = styled.button`
     background: var(--color-blue-5);
   }
 
-  @media (min-width: 768px) {
+  @media ${device.tablet} {
     font-size: 16px;
     line-height: 19.2px;
     letter-spacing: -0.36px;
@@ -269,7 +272,7 @@ export const Subtitle = styled.h5`
   font-size: 12px;
   font-weight: 700;
 
-  @media screen and (min-width: 768px) {
+  @media ${device.tablet} {
     font-size: 16px;
   }
 `;
@@ -289,7 +292,7 @@ export const UserInfoBox = styled.div`
   flex-direction: column;
   justify-content: space-between;
 
-  @media screen and (min-width: 768px) {
+  @media ${device.tablet} {
     height: 325px;
   }
 `;
@@ -308,6 +311,7 @@ export const InfoIcon = styled(LuInfo)`
   height: 24px;
   margin-right: 12px;
 `;
+
 export const MoreInfoBtn = styled.button`
   display: flex;
   justify-content: center;
@@ -357,12 +361,14 @@ export const ButtonBack = styled.button`
   cursor: pointer;
   width: 35px;
   height: 35px;
+
   svg {
     width: 30px;
     height: 30px;
     color: var(--color-grey-9);
     transition: all 0.3s;
   }
+
   &:hover svg {
     color: var(--color-blue-5);
   }

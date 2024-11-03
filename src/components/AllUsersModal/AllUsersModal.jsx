@@ -42,7 +42,7 @@ const AllUsersModal = ({ isOpen, onClose }) => {
   const [filteredUsers, setFilteredUsers] = useState([]);
 
   const { dataUserChats, updateUserChats } = useChatContext();
-  const { responseData: users } = useFetch(URLs.getAllUsers, '');
+  const { responseData: users } = useFetch(URLs.getAllUsers);
   const navigate = useNavigate();
 
   const [openUserInfo, setOpenUserInfo] = useState(false);
