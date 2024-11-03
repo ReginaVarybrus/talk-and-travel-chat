@@ -5,7 +5,10 @@ import { useDispatch, useSelector } from 'react-redux';
 import Loader from '@/components/Loader/Loader';
 import { routesPath } from '@/routes/routesConfig';
 import { getUser } from '@/redux-store/selectors';
-import { updateUser } from '@/redux-store/UserOperations/UserOperations';
+import {
+  updateUser,
+  updateUsersAvatar,
+} from '@/redux-store/UserOperations/UserOperations';
 import { useWebSocket } from '@/hooks/useWebSocket.js';
 
 import {
@@ -52,10 +55,22 @@ const AccountRoute = () => {
   const [loading, setLoading] = useState(false);
   // this avatarPreview is used to render Avatar when user tries to upload a new image.
   const [avatarPreview, setAvatarPreview] = useState(null);
+  const [avatarBlob, setavatarBlob] = useState(null);
   // handleAvatarChange catches the file picked by user
   const handleAvatarChange = event => {
     const file = event.target.files[0];
     if (file) {
+      console.log(file);
+      if (file.size > 2 * 1024 * 1024) {
+        console.log('File is too large. Please select a file under 2MB.');
+        return;
+      }
+      // Check the file type (e.g., allow only images)
+      if (!file.type.startsWith('image/')) {
+        console.log('Only image files are allowed.');
+        return;
+      }
+      setavatarBlob(file);
       // Set preview URL for the selected image
       setAvatarPreview(URL.createObjectURL(file));
       // Reset the input value to allow reselecting the same file
@@ -73,13 +88,26 @@ const AccountRoute = () => {
     onSubmit: async (values, { resetForm }) => {
       setLoading(true);
       try {
-        const resultAction = await dispatch(updateUser(values));
-        if (updateUser.fulfilled.match(resultAction)) {
+        let userUpdateResult;
+        if (avatarPreview) {
+          const [avatarUpdateResult, userResult] = await Promise.all([
+            dispatch(updateUsersAvatar(avatarBlob)),
+            dispatch(updateUser(values)),
+          ]);
+          if (!updateUsersAvatar.fulfilled.match(avatarUpdateResult)) {
+            console.error('Avatar Update Failed:', avatarUpdateResult.error);
+            return;
+          }
+          userUpdateResult = userResult;
+        } else {
+          userUpdateResult = await dispatch(updateUser(values));
+        }
+        if (updateUser.fulfilled.match(userUpdateResult)) {
           navigate(routesPath.ACCOUNT);
           resetForm();
           setEditMode(false);
         } else {
-          console.error('Update Failed:', resultAction.error);
+          console.error('Update Failed:', userUpdateResult.error);
         }
       } catch (error) {
         console.error('Something went wrong:', error);
@@ -109,8 +137,6 @@ const AccountRoute = () => {
   /* on page render user data is selected from redux */
   useEffect(() => {
     formik.setValues(user);
-    // setavatarData(dispatch(getUsersAvatar(user.id)));
-    // console.log(avatarData);
   }, [user]);
   /* when logout button pressed logout is performed */
   const handleLogOut = async () => {
@@ -129,7 +155,13 @@ const AccountRoute = () => {
       </Header>
       <ProfileContainer>
         <AvatarBlock>
-          <Avatar src={avatarPreview || user.avatarUrl} alt="User Avatar" />
+          <Avatar
+            src={
+              avatarPreview ||
+              `${user.avatarUrl}?lastmod=${new Date().getTime()}`
+            }
+            alt="User Avatar"
+          />
           {editMode && (
             <Button component="label" role={undefined} variant="text">
               Change photo

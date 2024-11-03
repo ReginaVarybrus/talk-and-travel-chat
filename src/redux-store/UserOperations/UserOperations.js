@@ -30,12 +30,18 @@ export const updateUser = createAsyncThunk('user/update', async user =>
   }
 });
 
-export const updateUsersAvatar = createAsyncThunk('user/avatar', async () =>
+export const updateUsersAvatar = createAsyncThunk('user/avatar', async avatar =>
 {
   try {
-    const response = await axiosClient(URLs.usersAvatarUrl);
+    const formData = new FormData();
+    formData.append('image', avatar);
+    const response = await axiosClient.post(URLs.usersAvatarUrl, formData, {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+      },
+    });
     console.log('from avatar update', response);
-    return response;
+    return response.data;
   } catch (error) {
     throw new Error(error.message);
   }

@@ -53,7 +53,7 @@ box-sizing: border-box;
         "logout logout";
     margin: 0;
     padding: 0;
-    max-width: 450px;
+    width: 450px;
 }
 `;
 
@@ -184,7 +184,7 @@ export const LogoutButton = styled(Button)`
     text-transform: none;
     font-size: 14px;
     line-height: 19.6px;
-
+    width: 450px;
 
     @media (min-width: 768px) {
         display: none;

@@ -34,6 +34,7 @@ export const logIn = createAsyncThunk(
       const response = await axiosClient.post(URLs.login, userData);
       dispatch(setUsers(response.data.userDto));
       token.set(response.data.token);
+      console.log(response.data);
       return response.data;
     } catch (e) {
       if (e.response.status === 400 || e.response.status === 401) {
