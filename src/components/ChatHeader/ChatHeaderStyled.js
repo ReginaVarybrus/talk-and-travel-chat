@@ -17,8 +17,44 @@ export const ChatHeaderStyled = styled.header`
   }
 `;
 
+export const HeaderButtonBack = styled.button`
+  display: flex;
+  width: 24px;
+  padding: 0;
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: var(--color-grey-9);
+  transition: color 0.3s;
+
+  @media ${device.tablet} {
+    display: none;
+  }
+
+  &:active,
+  &:focus,
+  &:hover {
+    color: var(--color-blue-3);
+  }
+`;
+
+export const HeaderButtonOpenMenu = styled.button`
+  display: flex;
+  width: 24px;
+  padding: 0;
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: var(--color-grey-9);
+  transition: color 0.3s;
+
+  @media ${device.tablet} {
+    display: none;
+  }
+`;
+
 export const MobileHeaderStyled = styled.div`
-  position: sticky;
+  position: fixed;
   top: 0;
   display: flex;
   justify-content: center;
@@ -26,6 +62,9 @@ export const MobileHeaderStyled = styled.div`
   align-items: center;
   padding: 0 24px;
   z-index: 1000;
+  background: var(--white-color);
+  border-bottom: 1px solid var(--color-grey-6);
+  width: 100%;
 
   p {
     font-size: 14px;
@@ -43,7 +82,17 @@ export const MobileHeaderContentStyled = styled.div`
   display: flex;
   flex: 1;
   align-items: center;
-  margin: 0 16px;
+  justify-content: space-between;
+  margin-left: 16px;
+  cursor: pointer;
+
+  &:focus,
+  &:hover,
+  &:active {
+    ${HeaderButtonOpenMenu} {
+      color: var(--color-blue-3);
+    }
+  }
 
   h5 {
     width: 144px;
@@ -99,19 +148,6 @@ export const DesktopHeaderStyled = styled.div`
   }
 `;
 
-export const HeaderButton = styled.button`
-  display: flex;
-  width: 24px;
-  padding: 0;
-  background: none;
-  border: none;
-  cursor: pointer;
-  color: var(--color-grey-9);
-  @media ${device.tablet} {
-    display: none;
-  }
-`;
-
 export const BackIcon = styled(IoIosArrowBack)`
   width: 24px;
   height: 24px;
@@ -119,8 +155,16 @@ export const BackIcon = styled(IoIosArrowBack)`
 
 export const FlagImg = styled.img`
   margin-right: 12px;
+  width: 36px;
+  height: 24px;
 `;
 
 export const OpenCountryInfoIcon = styled(MdMoreHoriz)`
   ${iconProperties('24px', '24px')};
+`;
+
+export const FlagBoxStyled = styled.div`
+  display: flex;
+  flex-direction: row;
+  align-items: center;
 `;
