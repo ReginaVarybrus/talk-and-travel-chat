@@ -131,6 +131,7 @@ const ChatHeader = ({
         countryName={chatName}
         participantsAmount={participantsAmount || 0}
         setParticipantsAmount={setParticipantsAmount}
+        listOfOnlineUsersStatuses={listOfOnlineUsersStatuses}
         chatId={chatId}
         setIsShowJoinBtn={setIsShowJoinBtn}
         setIsChatVisible={setIsChatVisible}

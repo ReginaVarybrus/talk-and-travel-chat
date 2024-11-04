@@ -13,11 +13,15 @@ import {
 } from '@/components/RoomsList/RoomsListStyled.js';
 import { useChatContext } from '@/providers/ChatProvider';
 import {
+  LetterAvatarStyled,
+  Badge,
+} from '@/components/MessageItem/MessageItemStyled';
+import {
   Item,
   ChatNameStyled,
   Avatar,
+  ImgAvatar,
   ChatName,
-  BadgeStyled,
   NameAndDayBox,
   MessageAndCountBox,
   UnreadMessagesCount,
@@ -55,6 +59,7 @@ const DMsList = () => {
       setChatData(dataChat);
       setIsSubscribed(true);
     }
+    console.log(dataUserChats);
   }, [setChatData, dataChat, setIsSubscribed]);
 
   const handleOpenChat = (chatId, companion) => {
@@ -95,8 +100,17 @@ const DMsList = () => {
                   >
                     <ChatNameStyled>
                       <Avatar>
-                        {companion.userName[0].toUpperCase()}
-                        {isOnline && <BadgeStyled />}
+                        {companion.avatarUrl ? (
+                          <ImgAvatar
+                            src={companion.avatarUrl || undefined}
+                            alt={`${companion.userName}'s avatar`}
+                          />
+                        ) : (
+                          <LetterAvatarStyled>
+                            {companion.userName[0].toUpperCase()}
+                          </LetterAvatarStyled>
+                        )}
+                        {isOnline && <Badge />}
                       </Avatar>
                       <ChatName>
                         <NameAndDayBox>
