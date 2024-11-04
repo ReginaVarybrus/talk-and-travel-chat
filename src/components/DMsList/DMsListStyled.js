@@ -67,26 +67,10 @@ export const Avatar = styled.div`
   margin-right: 12px;
 `;
 
-export const BadgeStyled = styled.div`
-  position: absolute;
-  bottom: -2px;
-  right: -2px;
-  width: 14px;
-  height: 14px;
-  border-radius: 50%;
-  background: var(--white-color);
-
-  &:after {
-    position: absolute;
-    content: '';
-    width: 10px;
-    height: 10px;
-    border-radius: 50%;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    background: var(--color-badge);
-  }
+export const ImgAvatar = styled.img`
+  width: 100%;
+  height: 100%;
+  border-radius: 4px;
 `;
 
 export const ChatName = styled.div`
