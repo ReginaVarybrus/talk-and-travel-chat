@@ -34,6 +34,7 @@ import {
   UserInfoBox,
   UserContact,
   LetterAvatarInUserBlock,
+  AvatarImg,
 } from './AllUsersModalStyled';
 
 const AllUsersModal = ({ isOpen, onClose }) => {
@@ -193,11 +194,9 @@ const AllUsersModal = ({ isOpen, onClose }) => {
               <UserContact>
                 <AvatarInUserBlock>
                   {userInfo.avatarUrl ? (
-                    <img
+                    <AvatarImg
                       src={userInfo.avatarUrl}
-                      alt={userInfo.userName}
-                      width="48"
-                      height="48"
+                      alt={`${userInfo.userName}'s avatar`}
                     />
                   ) : (
                     <LetterAvatarInUserBlock>

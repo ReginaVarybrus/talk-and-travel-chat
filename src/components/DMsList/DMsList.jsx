@@ -59,7 +59,6 @@ const DMsList = () => {
       setChatData(dataChat);
       setIsSubscribed(true);
     }
-    console.log(dataUserChats);
   }, [setChatData, dataChat, setIsSubscribed]);
 
   const handleOpenChat = (chatId, companion) => {

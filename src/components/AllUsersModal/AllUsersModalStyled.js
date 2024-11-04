@@ -42,16 +42,21 @@ export const AvatarInList = styled.div`
   }
 `;
 
+export const AvatarImg = styled.img`
+  min-width: 48px;
+  height: 48px;
+  border-radius: 8px;
+  @media ${device.tablet} {
+    width: 100px;
+    height: 100px;
+  }
+`;
+
 export const AvatarInUserBlock = styled.div`
   width: 48px;
   height: 48px;
   background: var(--color-grey-6);
   border-radius: 8px;
-
-  img {
-    width: 100%;
-    height: 100%;
-  }
 
   @media ${device.tablet} {
     width: 100px;
@@ -91,6 +96,7 @@ export const LetterAvatarInUserBlock = styled.div`
   @media ${device.tablet} {
     width: 100px;
     height: 100px;
+    font-size: 36px;
   }
 `;
 
