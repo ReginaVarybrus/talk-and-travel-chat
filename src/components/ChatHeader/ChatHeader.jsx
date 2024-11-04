@@ -10,10 +10,12 @@ import {
   DesktopHeaderStyled,
   MobileHeaderContentStyled,
   LetterAvatarStyled,
-  HeaderButton,
   BackIcon,
   FlagImg,
   OpenCountryInfoIcon,
+  HeaderButtonBack,
+  HeaderButtonOpenMenu,
+  FlagBoxStyled,
 } from './ChatHeaderStyled';
 
 const ChatHeader = ({
@@ -92,32 +94,34 @@ const ChatHeader = ({
   return (
     <ChatHeaderStyled>
       <MobileHeaderStyled>
-        <HeaderButton onClick={handleBackToSearchBar}>
+        <HeaderButtonBack onClick={handleBackToSearchBar}>
           <BackIcon />
-        </HeaderButton>
-        <MobileHeaderContentStyled>
+        </HeaderButtonBack>
+        <MobileHeaderContentStyled onClick={handleOpen}>
           {isPrivateChat ? (
             <LetterAvatarStyled>{firstLetterOfName}</LetterAvatarStyled>
           ) : (
-            <FlagImg
-              loading="lazy"
-              width="36"
-              srcSet={`https://flagcdn.com/${flagCode}.svg 2x`}
-              src={`https://flagcdn.com/${flagCode}.svg`}
-              alt={`${flagCode} flag`}
-            />
-          )}
+            <FlagBoxStyled>
+              <FlagImg
+                loading="lazy"
+                width="36"
+                srcSet={`https://flagcdn.com/${flagCode}.svg 2x`}
+                src={`https://flagcdn.com/${flagCode}.svg`}
+                alt={`${flagCode} flag`}
+              />
 
-          <div>
-            <h5>{nameOfChat}</h5>
-            <p>{getMessage()}</p>
-          </div>
+              <div>
+                <h5>{nameOfChat}</h5>
+                <p>{getMessage()}</p>
+              </div>
+            </FlagBoxStyled>
+          )}
+          {!isPrivateChat && (
+            <HeaderButtonOpenMenu>
+              <OpenCountryInfoIcon />
+            </HeaderButtonOpenMenu>
+          )}
         </MobileHeaderContentStyled>
-        {!isPrivateChat && (
-          <HeaderButton onClick={handleOpen}>
-            <OpenCountryInfoIcon />
-          </HeaderButton>
-        )}
       </MobileHeaderStyled>
 
       <DesktopHeaderStyled onClick={handleOpen}>
