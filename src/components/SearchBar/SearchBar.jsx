@@ -3,11 +3,13 @@ import PropTypes from 'prop-types';
 import Backdrop from '@mui/material/Backdrop';
 import Modal from '@mui/material/Modal';
 import Fade from '@mui/material/Fade';
-import { Outlet } from 'react-router-dom';
+import { Outlet, useLocation } from 'react-router-dom';
 import SearchInput from '@/components/SearchInput/SearchInput';
 import ChatMap from '@/components/ChatMap/ChatMap';
 import { useChatContext } from '@/providers/ChatProvider';
 import { SearchBarStyled, ButtonMapOpen, MapBox } from './SearchBarStyled';
+import SearchInputDMs from '../SearchInputDMs/SearchInputDMs';
+import AllUsersModal from '../AllUsersModal/AllUsersModal';
 
 const SearchBar = ({
   setChatData,
@@ -19,23 +21,40 @@ const SearchBar = ({
   isChatVisible,
   setIsChatVisible,
 }) => {
+  const location = useLocation();
+  const isRoomRoute = location.pathname.includes('/rooms-chat');
   const [openMap, setOpenMap] = useState(false);
-  const handleOpen = () => setOpenMap(true);
-  const handleClose = () => setOpenMap(false);
+  const handleOpenMap = () => setOpenMap(true);
+  const handleCloseMap = () => setOpenMap(false);
+  const [openModal, setOpenModal] = useState(false);
+  const handleOpenModal = () => setOpenModal(true);
+  const handleCloseModal = () => setOpenModal(false);
 
   const { subscriptionRooms } = useChatContext();
 
   return (
     <SearchBarStyled $isChatVisible={isChatVisible}>
-      <SearchInput
-        setChatData={setChatData}
-        setIsSubscribed={setIsSubscribed}
-        setIsShowJoinBtn={setIsShowJoinBtn}
-        setIsChatVisible={setIsChatVisible}
-        subscriptionRooms={subscriptionRooms}
-        setParticipantsAmount={setParticipantsAmount}
-      />
-      <ButtonMapOpen onClick={handleOpen}>Search by map</ButtonMapOpen>
+      {isRoomRoute ? (
+        <>
+          <SearchInput
+            setChatData={setChatData}
+            setIsSubscribed={setIsSubscribed}
+            setIsShowJoinBtn={setIsShowJoinBtn}
+            setIsChatVisible={setIsChatVisible}
+            subscriptionRooms={subscriptionRooms}
+            setParticipantsAmount={setParticipantsAmount}
+          />
+          <ButtonMapOpen onClick={handleOpenMap}>Search by map</ButtonMapOpen>
+        </>
+      ) : (
+        <>
+          <SearchInputDMs />
+
+          <ButtonMapOpen onClick={handleOpenModal}>
+            Search new companion
+          </ButtonMapOpen>
+        </>
+      )}
       <div>
         <Outlet
           context={{
@@ -55,7 +74,7 @@ const SearchBar = ({
         aria-labelledby="transition-modal-title"
         aria-describedby="transition-modal-description"
         open={openMap}
-        onClose={handleClose}
+        onClose={handleCloseMap}
         closeAfterTransition
         slots={{ backdrop: Backdrop }}
         slotProps={{
@@ -68,7 +87,7 @@ const SearchBar = ({
           <MapBox>
             <ChatMap
               openMap={openMap}
-              closeMap={handleClose}
+              closeMap={handleCloseMap}
               setChatData={setChatData}
               setParticipantsAmount={setParticipantsAmount}
               setIsSubscribed={setIsSubscribed}
@@ -79,6 +98,8 @@ const SearchBar = ({
           </MapBox>
         </Fade>
       </Modal>
+
+      <AllUsersModal isOpen={openModal} onClose={handleCloseModal} />
     </SearchBarStyled>
   );
 };

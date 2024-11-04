@@ -41,7 +41,7 @@ const DMsList = () => {
     listOfOnlineUsersStatuses,
   } = useOutletContext();
 
-  const { dataUserChats } = useChatContext();
+  const { filteredPrivateChats, searchedValue } = useChatContext();
 
   const { responseData: dataChat } = useFetch(
     selectedChat ? URLs.getChat(selectedChat) : null
@@ -59,7 +59,6 @@ const DMsList = () => {
       setChatData(dataChat);
       setIsSubscribed(true);
     }
-    console.log(dataUserChats);
   }, [setChatData, dataChat, setIsSubscribed]);
 
   const handleOpenChat = (chatId, companion) => {
@@ -72,10 +71,10 @@ const DMsList = () => {
 
   return (
     <ListStyled>
-      {dataUserChats?.length ? (
+      {filteredPrivateChats.length ? (
         <ListItems>
           <ScrollBar>
-            {dataUserChats
+            {filteredPrivateChats
               .sort((a, b) => {
                 const dateA = a.lastMessage
                   ? new Date(a.lastMessage.creationDate)
@@ -145,8 +144,9 @@ const DMsList = () => {
         </ListItems>
       ) : (
         <Text>
-          There are no chats in the list.
-          <br /> Start a conversation and it will be shown here
+          {searchedValue
+            ? 'No companions found with this name'
+            : 'There are no chats in the list. Start a conversation and it will be shown here'}
         </Text>
       )}
     </ListStyled>

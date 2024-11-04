@@ -146,7 +146,7 @@ const SearchInput = ({
         value={searchedValue}
         onClick={handleClick}
         onChange={handleChange}
-        placeholder="Search..."
+        placeholder="Search country..."
       />
       <IconSearch />
       {showItem && (

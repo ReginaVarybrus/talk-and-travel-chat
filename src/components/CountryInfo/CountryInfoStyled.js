@@ -193,6 +193,7 @@ export const UserContactInfo = styled.div`
     }
   }
 `;
+
 export const SendMessageBtn = styled.button`
   opacity: 0;
   visibility: hidden;
