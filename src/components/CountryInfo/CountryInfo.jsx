@@ -39,6 +39,7 @@ import {
 
 const CountryInfo = ({
   chatData,
+  setChatData,
   isOpen,
   onClose,
   countryName,
@@ -104,8 +105,9 @@ const CountryInfo = ({
     if (!isDesktop) {
       setIsChatVisible(false);
     }
-    onClose();
     setIsShowJoinBtn(true);
+    setChatData(null);
+    onClose();
   };
 
   const handleJoinToChat = () => {

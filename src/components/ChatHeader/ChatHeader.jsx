@@ -19,6 +19,7 @@ import {
 const ChatHeader = ({
   chatName = 'Country name',
   chatData,
+  setChatData,
   participantsAmount,
   setParticipantsAmount,
   flagCode,
@@ -126,6 +127,7 @@ const ChatHeader = ({
 
       <CountryInfo
         chatData={chatData}
+        setChatData={setChatData}
         isOpen={openModal}
         onClose={handleClose}
         countryName={chatName}

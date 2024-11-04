@@ -450,6 +450,7 @@ const Chat = ({
         setIsChatVisible={setIsChatVisible}
         listOfOnlineUsersStatuses={listOfOnlineUsersStatuses}
         isShowJoinBtn={isShowJoinBtn}
+        setChatData={setChatData}
       />
       <MessageBlock ref={messageBlockRef} onScroll={handleScroll}>
         {isLoading ? (
