@@ -30,10 +30,11 @@ export const AvatarInList = styled.div`
   width: 36px;
   height: 36px;
   background: var(--color-grey-6);
-
+  border-radius: 4px;
   img {
     width: 100%;
     height: 100%;
+    border-radius: 4px;
   }
 
   @media ${device.tablet} {
