@@ -5,10 +5,12 @@ import {
   StyledTextarea,
   ErrorStyled,
   SuccessStyled,
-  PasswordReapetLable,
   IconContainer,
+  SuccessIcon,
+  PopupPassword,
 } from '@/components/InputField/InputFieldStyled';
 import { useState } from 'react';
+import { useLocation } from 'react-router-dom';
 import { TbEye, TbEyeClosed } from 'react-icons/tb';
 
 /* 
@@ -38,16 +40,24 @@ const InputField = ({
   onChange,
 }) => {
   const [showPassword, setShowPassword] = useState(false);
-
+  const [isPopupVisible, setIsPopupVisible] = useState(false);
+  const location = useLocation();
+  const isRegisterPage = location.pathname === '/register';
   const togglePassword = () => {
     setShowPassword(!showPassword);
   };
 
+  const handleFocus = () => {
+    if (props.general === 'password' && isRegisterPage) {
+      setIsPopupVisible(true);
+    }
+  };
+
+  const handleBlur = () => {
+    setIsPopupVisible(false);
+  };
+
   const renderValidationMessage = () => {
-    const label =
-      props.general === 'password'
-        ? 'your password must be 8+ characters, with at least 1 number and 1 special symbol'
-        : '';
     if (formik.errors[props.general]) {
       return (
         <ErrorStyled id={props.general}>
@@ -57,10 +67,12 @@ const InputField = ({
     }
     if (!formik.errors[props.general] && formik.touched[props.general]) {
       return (
-        <SuccessStyled id={props.general}>field is not empty</SuccessStyled>
+        <SuccessStyled id={props.general}>
+          <SuccessIcon />
+        </SuccessStyled>
       );
     }
-    return <PasswordReapetLable>{label}</PasswordReapetLable>;
+    return null;
   };
 
   return (
@@ -97,6 +109,8 @@ const InputField = ({
               ? 'text'
               : props.type
           }
+          onFocus={handleFocus}
+          onBlur={handleBlur}
           disabled={disabled}
           onChange={formik.handleChange}
           value={formik.values[props.general] || ''}
@@ -105,6 +119,11 @@ const InputField = ({
           $isSuccessColor={formik.touched[props.general]}
           $backgroundcolor={backgroundcolor}
         />
+      )}
+      {isPopupVisible && props.general === 'password' && isRegisterPage && (
+        <PopupPassword>
+          Your password must be 8+ characters, with at least 1 number
+        </PopupPassword>
       )}
       {(props.general === 'password' || props.general === 'repeatPassword') && (
         <IconContainer onClick={togglePassword}>
