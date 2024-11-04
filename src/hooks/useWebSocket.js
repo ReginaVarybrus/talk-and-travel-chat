@@ -66,7 +66,7 @@ export const useWebSocket = () => {
           const updatedMap = new Map(prevMap);
           updatedMap.set(receivedStatus.userId.toString(), {
             isOnline: receivedStatus.isOnline,
-            lastSeenOn: receivedStatus.lastSeenOn,
+            lastSeenOn: receivedStatus.lastSeenOn || null,
           });
           return updatedMap;
         });
@@ -78,6 +78,7 @@ export const useWebSocket = () => {
 
   const sendMessageOrEvent = (message, endpoint) => {
     if (isClientConnected()) {
+      console.log('websocket message send to:', endpoint);
       stompClient.publish({
         destination: endpoint,
         body: JSON.stringify(message),

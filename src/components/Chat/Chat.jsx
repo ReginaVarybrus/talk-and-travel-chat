@@ -344,7 +344,6 @@ const Chat = ({
 
   const handleScroll = e => {
     const { scrollHeight, clientHeight, scrollTop } = e.target;
-
     const isAtBottom = scrollTop + clientHeight >= scrollHeight - 10;
     const nearTop = scrollHeight + scrollTop <= clientHeight + 300;
 
@@ -433,6 +432,7 @@ const Chat = ({
       };
     }
   }, [id, unreadMessages, updateUnreadMessagesCount]);
+
   return (
     <ChatStyled $isChatVisible={isChatVisible}>
       {!name && <ChatFirstLoading />}

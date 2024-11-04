@@ -24,6 +24,7 @@ const ChatRoute = () => {
   const {
     stompClient,
     subscribeToUsersStatuses,
+    // sendMessageOrEvent,
     unsubscribeFromUsersStatuses,
   } = useWebSocket();
 
@@ -59,13 +60,15 @@ const ChatRoute = () => {
       try {
         const response = await axiosClient.get(URLs.getUsersOnlineStatusPath);
         console.log('Map of online statuses:', response.data);
-        setListOfOnlineUsersStatuses(prevStatus => {
-          const updatedList = new Map(prevStatus);
-          Object.entries(response.data).forEach(([id, value]) => {
-            updatedList.set(id, value);
-          });
-          return updatedList;
-        });
+        // setListOfOnlineUsersStatuses(prevStatus => {
+        //   const updatedList = new Map(prevStatus);
+        //   Object.entries(response.data).forEach(([id, value]) => {
+        //     updatedList.set(id, value);
+        //   });
+        //   return updatedList;
+        // });
+        const updatedList = new Map(Object.entries(response.data));
+        setListOfOnlineUsersStatuses(updatedList);
       } catch (error) {
         console.error('Error fetching data:', error);
       }
@@ -75,7 +78,7 @@ const ChatRoute = () => {
   }, []);
 
   // const handleUserActiveEvent = () => {
-  //   sendMessageOrEvent(true, URLs.updateOnlineStatus);
+  //   sendMessageOrEvent({ isOnline: true }, URLs.updateOnlineStatus);
   // };
 
   // useUserActivity(handleUserActiveEvent);
