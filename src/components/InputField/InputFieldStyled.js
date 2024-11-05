@@ -65,7 +65,7 @@ export const StyledTextarea = styled(TextareaAutosize)`
   box-sizing: border-box;
   width: 100%;
   resize: none;
-  font-family: 'Roboto', sans-serif;
+
   font-size: 18px;
   line-height: 21.6px;
   overflow: auto !important;
@@ -111,14 +111,6 @@ export const SuccessIcon = styled(AiOutlineCheck)`
   right: 50px;
   top: 18px;
 `;
-
-// export const PasswordReapetLable = styled.p`
-//   ${generalNotificationStyles}
-//   padding-left: 14px;
-//   color: var(--color-grey-8);
-//   position: absolute;
-//   top: 62px;
-// `;
 
 export const IconContainer = styled.div`
   position: absolute;

@@ -12,6 +12,7 @@ import {
 import { useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import { TbEye, TbEyeClosed } from 'react-icons/tb';
+import { routesPath } from '@/routes/routesConfig';
 
 /* 
 {disabled} variable is passed to determine whether input filed is asctive or not and 
@@ -42,7 +43,7 @@ const InputField = ({
   const [showPassword, setShowPassword] = useState(false);
   const [isPopupVisible, setIsPopupVisible] = useState(false);
   const location = useLocation();
-  const isRegisterPage = location.pathname === '/register';
+  const isRegisterPage = location.pathname === routesPath.REGISTER;
   const togglePassword = () => {
     setShowPassword(!showPassword);
   };
