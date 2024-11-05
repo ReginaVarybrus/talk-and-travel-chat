@@ -26,12 +26,19 @@ export const ChatProvider = ({ children }) => {
   const [unreadRoomsCount, setUnreadRoomsCount] = useState(0);
   const [unreadDMsCount, setUnreadDMsCount] = useState(0);
   const [searchedValue, setSearchedValue] = useState('');
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    if (isUserLoggedIn && token) {
+      setIsLoading(false);
+    }
+  }, [isUserLoggedIn, token]);
 
   const { responseData: roomsData } = useFetch(
-    isUserLoggedIn && token ? URLs.userCountries : null
+    !isLoading && isUserLoggedIn && token ? URLs.userCountries : null
   );
   const { responseData: dmsData } = useFetch(
-    isUserLoggedIn && token ? URLs.getPrivateChats : null
+    !isLoading && isUserLoggedIn && token ? URLs.getPrivateChats : null
   );
 
   useEffect(() => {
