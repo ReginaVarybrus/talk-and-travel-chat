@@ -4,17 +4,18 @@ import { register, logIn, logOut } from '../AuthOperations/AuthOperations.js';
 const initialState = {
   token: null,
   isLoggedIn: false,
+  error: null,
 };
 
-const handlePending = () => ({
-  isLoggedIn: false,
-});
+const handlePending = state => {
+  state.isLoggedIn = false;
+  state.error = null;
+};
 
-const handleRejected = (state, action) => ({
-  ...state,
-  isLoggedIn: false,
-  error: action.payload,
-});
+const handleRejected = (state, action) => {
+  state.isLoggedIn = false;
+  state.error = action.payload;
+};
 
 export const authSlice = createSlice({
   name: 'auth',
@@ -23,29 +24,26 @@ export const authSlice = createSlice({
     builder
       .addCase(register.pending, handlePending)
       .addCase(register.rejected, handleRejected)
-      .addCase(register.fulfilled, (state, action) => ({
-        ...state,
-        token: action.payload.token,
-        isLoggedIn: true,
-      }))
+      .addCase(register.fulfilled, (state, action) => {
+        state.token = action.payload.token;
+        state.isLoggedIn = true;
+        state.error = null;
+      })
 
       .addCase(logIn.pending, handlePending)
       .addCase(logIn.rejected, handleRejected)
-      .addCase(logIn.fulfilled, (state, action) =>
-
-      ({
-        ...state,
-        token: action.payload.token,
-        isLoggedIn: true,
+      .addCase(logIn.fulfilled, (state, action) => {
+        state.token = action.payload.token;
+        state.isLoggedIn = true;
+        state.error = null;
       })
-      )
-
       .addCase(logOut.pending, handlePending)
       .addCase(logOut.rejected, handleRejected)
-      .addCase(logOut.fulfilled, state => ({
-        ...state,
-        ...initialState,
-      })),
+      .addCase(logOut.fulfilled, state => {
+        state.token = null;
+        state.isLoggedIn = false;
+        state.error = null;
+      }),
 });
 
 export default authSlice.reducer;
