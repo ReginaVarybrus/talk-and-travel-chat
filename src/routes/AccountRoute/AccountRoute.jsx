@@ -18,7 +18,6 @@ import {
   ProfileContainer,
   AvatarBlock,
   Avatar,
-  AvatarVisuallyHiddenInput,
   InputBlock,
   ProfileForm,
   TextAbout,
@@ -29,7 +28,6 @@ import {
   LogoutButton,
   LogoutIcon,
 } from '@/routes/AccountRoute/AccountRouteStyled';
-import BasicButton from '@/components/Buttons/BasicButton/BasicButton';
 import InputField from '@/components/InputField/InputField';
 import {
   StyledLabel,
@@ -41,8 +39,10 @@ import {
   schema,
   formFields,
 } from '@/routes/AccountRoute/AccountRouteValidationSchema';
-import { logOut } from '@/redux-store/AuthOperations/AuthOperations';
-import Button from '@mui/material/Button';
+import { logOut } from '@/redux-store/slices/AuthOperations';
+import TextButton from '@/components/Buttons/TextButton/TextButton';
+import MediumOutlinedButton from '@/components/Buttons/MediumOutlined/MediumOutlinedButton';
+import MediumFilledButton from '@/components/Buttons/MediumFilledButton/MediumFilledButton';
 
 const AccountRoute = () => {
   // User details to display in Profile form are taken from Redux data.
@@ -60,14 +60,13 @@ const AccountRoute = () => {
   const handleAvatarChange = event => {
     const file = event.target.files[0];
     if (file) {
-      console.log(file);
       if (file.size > 2 * 1024 * 1024) {
-        console.log('File is too large. Please select a file under 2MB.');
+        console.error('File is too large. Please select a file under 2MB.');
         return;
       }
       // Check the file type (e.g., allow only images)
       if (!file.type.startsWith('image/')) {
-        console.log('Only image files are allowed.');
+        console.error('Only image files are allowed.');
         return;
       }
       setavatarBlob(file);
@@ -76,7 +75,7 @@ const AccountRoute = () => {
       // Reset the input value to allow reselecting the same file
       event.target.value = null;
     } else {
-      console.log('No file selected');
+      console.error('No file selected');
     }
   };
 
@@ -163,13 +162,15 @@ const AccountRoute = () => {
             alt="User Avatar"
           />
           {editMode && (
-            <Button component="label" role={undefined} variant="text">
-              Change photo
-              <AvatarVisuallyHiddenInput
+            <>
+              <input
+                id="file-upload"
                 type="file"
+                style={{ display: 'none' }}
                 onChange={handleAvatarChange}
               />
-            </Button>
+              <TextButton htmlFor="file-upload" text="Change photo" />
+            </>
           )}
         </AvatarBlock>
         <InputBlock>
@@ -212,18 +213,16 @@ const AccountRoute = () => {
               )}
               {editMode && (
                 <ChoiceButtonBlock>
-                  <BasicButton
-                    sx={{ margin: '0' }}
-                    variant="outlined"
+                  <MediumOutlinedButton
+                    style={{ margin: '0' }}
                     text="Cancel"
                     handleClick={cancelEdit}
                   />
-                  <BasicButton
-                    sx={{ margin: '0' }}
+                  <MediumFilledButton
+                    style={{ margin: '0' }}
                     handleClick={formik.handleSubmit}
                     type="submit"
                     text="Update"
-                    variant="contained"
                   />
                 </ChoiceButtonBlock>
               )}

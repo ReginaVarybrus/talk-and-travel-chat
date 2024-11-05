@@ -53,7 +53,8 @@ box-sizing: border-box;
         "logout logout";
     margin: 0;
     padding: 0;
-    width: 450px;
+    width: 100%;
+    max-width: 450px;
 }
 `;
 
@@ -62,10 +63,12 @@ text-align: center;
 grid-area: avatar;
 display: flex;
 flex-direction: column;
+align-items: center;
+gap: 8px;
 
 @media (max-width: 767px) {
     flex-direction: row;
-    margin: 12px 12px 24px 12px;
+    margin: 12px 12px 24px 12px; 
 }
 `
 
@@ -82,15 +85,7 @@ object-fit: cover;
 }
 `;
 
-export const ChangeAvatar = styled(Button)`
-padding-top: 8px;
-color: var(--color-brand-blue);
-width: 120px;
 
-@media (max-width: 767px) {
-    padding: 8px 16px;
-}
-`
 export const AvatarVisuallyHiddenInput = styled('input')({
     clip: 'rect(0 0 0 0)',
     clipPath: 'inset(50%)',
@@ -164,10 +159,10 @@ gap: 16px;
 grid-template-columns: 92px 92px auto;
 
 @media (max-width: 768px) {
-    display: grid;
+    display: flex;
     gap: 19px;
-    grid-template-columns: 1fr 1fr;
     padding-bottom: 12px;
+    justify-content: space-between;
 }
 `
 
