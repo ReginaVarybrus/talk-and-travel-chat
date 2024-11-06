@@ -1,28 +1,32 @@
 import styled from 'styled-components';
 import Button from '@mui/material/Button';
 import { LuLogOut, LuPencil, LuX } from 'react-icons/lu';
+import { device } from '@/constants/mediaQueries';
 
 export const ProfileStyled = styled.section`
+padding: 16px 24px 0 24px;
+border-left: none;
+display: flex;
+flex-direction: column;
+align-items: center;
 background-color: var(--color-grey-3);
 height: 100vh;
-border-left: 1px solid var(--color-grey-6);
 
-@media (max-width: 767px) {
-    padding: 16px 24px 0 24px;
-    border-left: none;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
+@media ${device.tablet} {
+    display: block;
+    padding: 0;
+    border-left: 1px solid var(--color-grey-6);
 }
 `;
 
 export const Header = styled.div`
-height: 77px;
-background-color: var(--white-color);
-border-bottom: solid 1px var(--color-grey-6);
+display: none;
 
-@media (max-width: 767px) {
-    display: none;
+@media ${device.tablet} {
+    display: block; 
+    height: 77px;
+    background-color: var(--white-color);
+    border-bottom: solid 1px var(--color-grey-6);
 }
 `;
 
@@ -34,83 +38,71 @@ line-height: 28.8px;
 `;
 
 export const ProfileContainer = styled.div`
-max-width: 1045px;
 background-color: var(--white-color);
-display: grid;
-grid-template-columns: auto 2fr auto;
-grid-template-areas: "avatar form edit";
-margin: 32px;
 border-radius: 16px;
-padding: 32px;
-min-height: 320px;
-box-sizing: border-box;
+display: grid;
+grid-template-columns: 1fr auto;
+grid-template-areas:
+    "avatar edit" 
+    "form form"
+    "logout logout";
+margin: 0;
+padding: 12px;
+width: 100%;
+max-width: 450px;
 
-@media (max-width: 767px) {
-    grid-template-columns: 1fr auto;
-    grid-template-areas:
-        "avatar edit" 
-        "form form"
-        "logout logout";
-    margin: 0;
-    padding: 0;
-    width: 100%;
-    max-width: 450px;
+@media ${device.tablet} {
+    width: auto;
+    max-width: 1045px;
+    grid-template-columns: auto 2fr auto;
+    grid-template-areas: "avatar form edit";
+    gap: 48px;
+    margin: 32px;
+    padding: 32px;
+    min-height: 320px;
 }
 `;
 
 export const AvatarBlock = styled.div`
-text-align: center;
-grid-area: avatar;
 display: flex;
-flex-direction: column;
+flex-direction: row;
 align-items: center;
-gap: 8px;
+grid-area: avatar;
 
-@media (max-width: 767px) {
-    flex-direction: row;
-    margin: 12px 12px 24px 12px; 
+@media ${device.tablet} {
+    gap: 8px;
+    flex-direction: column;
 }
-`
+`;
 
 export const Avatar = styled.img`
-width: 256px;
-height: 256px;
+width: 64px;
+height: 64px;
 border-radius: 8px;
 background-color: var(--color-grey-3);
 object-fit: cover;
 
-@media (max-width: 767px) {
-    width: 64px;
-    height: 64px;
+@media ${device.tablet} {
+    width: 256px;
+    height: 256px;
 }
 `;
 
-
-export const AvatarVisuallyHiddenInput = styled('input')({
-    clip: 'rect(0 0 0 0)',
-    clipPath: 'inset(50%)',
-    height: 1,
-    overflow: 'hidden',
-    position: 'absolute',
-    bottom: 0,
-    left: 0,
-    whiteSpace: 'nowrap',
-    width: 1,
-});
-
 export const InputBlock = styled.div`
 grid-area: form;
-margin: 0px 48px;
-min-width: 300px;
+margin-top: 24px;
+min-width: 200px;
 
-@media (max-width: 767px) {
-    margin: 0px 12px;
-    min-width: 200px;
-}   
+@media ${device.tablet} {
+    min-width: 300px;
+    margin-top: 5px;
+}
 `;
 
 export const ProfileForm = styled.form`
-@media (max-width: 767px) {
+gap: 8px;
+
+@media ${device.tablet} {
     display: flex;
     flex-direction: column;
 }
@@ -128,41 +120,39 @@ border: 1px solid;
 border-color: transparent;
 `
 
-export const EditPencilIcon = styled(LuPencil)`
-width: 18px;
-height: 18px;
-color: var(--color-grey-9);
-`
-export const CloseIcon = styled(LuX)`
-width: 20px;
-height: 20px;
-color: var(--color-grey-9);
-`
-
 export const EditButton = styled.button`
 grid-area: edit;
-width: 18px;
-height: 18px;
+width: 24px;
+height: 24px;
+padding: 0;
 background-color: var(--white-color);
 border: none;
 outline: none;
 cursor: pointer;
-
-@media (max-width: 768px) {
-    margin: 14.5px 14.5px 0 0;
-}
 `
 
-export const ChoiceButtonBlock = styled.div`
-display: grid;
-gap: 16px;
-grid-template-columns: 92px 92px auto;
+export const EditPencilIcon = styled(LuPencil)`
+width: 24px;
+height: 24px;
+color: var(--color-grey-9);
+`
+export const CloseIcon = styled(LuX)`
+width: 24px;
+height: 24px;
+color: var(--color-grey-9);
+`
 
-@media (max-width: 768px) {
-    display: flex;
-    gap: 19px;
-    padding-bottom: 12px;
-    justify-content: space-between;
+
+export const ChoiceButtonBlock = styled.div`
+display: flex;
+gap: 19px;
+padding-bottom: 12px;
+justify-content: space-between;
+
+@media ${device.tablet} {
+    display: grid;
+    gap: 16px;
+    grid-template-columns: 92px 92px 1fr;
 }
 `
 
@@ -179,11 +169,16 @@ export const LogoutButton = styled(Button)`
     text-transform: none;
     font-size: 14px;
     line-height: 19.6px;
-    width: 450px;
-
-    @media (min-width: 768px) {
-        display: none;
+    max-width: 450px;
+    width: 100%;
+    &:hover {
+        font-weight: 700;
+        background-color: var(--white-color);
     }
+
+    @media ${device.tablet} {
+            display: none;
+        }
 }
 `
 
@@ -192,5 +187,3 @@ width: 24px;
 height: 24px;
 margin: 12px 12px 12px 0;
 `
-
-

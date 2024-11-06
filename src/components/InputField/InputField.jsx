@@ -56,9 +56,7 @@ const InputField = ({
       );
     }
     if (!formik.errors[props.general] && formik.touched[props.general]) {
-      return (
-        <SuccessStyled id={props.general}>field is not empty</SuccessStyled>
-      );
+      return <SuccessStyled id={props.general} />;
     }
     return <PasswordReapetLable>{label}</PasswordReapetLable>;
   };

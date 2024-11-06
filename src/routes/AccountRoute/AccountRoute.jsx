@@ -123,6 +123,7 @@ const AccountRoute = () => {
   mode and restore the form values. */
   const cancelEdit = () => {
     formik.setValues(user);
+    formik.setErrors({});
     setAvatarPreview(null);
     setEditMode(false);
   };
