@@ -27,6 +27,7 @@ export const ChatProvider = ({ children }) => {
   const [unreadDMsCount, setUnreadDMsCount] = useState(0);
   const [searchedValue, setSearchedValue] = useState('');
   const [isLoading, setIsLoading] = useState(true);
+  const checkLogin = !isLoading && isUserLoggedIn && token;
 
   useEffect(() => {
     if (isUserLoggedIn && token) {
@@ -35,10 +36,10 @@ export const ChatProvider = ({ children }) => {
   }, [isUserLoggedIn, token]);
 
   const { responseData: roomsData } = useFetch(
-    !isLoading && isUserLoggedIn && token ? URLs.userCountries : null
+    checkLogin ? URLs.userCountries : null
   );
   const { responseData: dmsData } = useFetch(
-    !isLoading && isUserLoggedIn && token ? URLs.getPrivateChats : null
+    checkLogin ? URLs.getPrivateChats : null
   );
 
   useEffect(() => {
