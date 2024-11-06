@@ -41,6 +41,7 @@ export const GlobalStyles = createGlobalStyle`
 body {
   font-family: "Roboto", sans-serif;
   margin: 0;
+  user-select: none;
 }
 
 ul {

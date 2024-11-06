@@ -6,7 +6,6 @@ import { IoCloseOutline } from 'react-icons/io5';
 import { HiOutlineExclamationCircle } from 'react-icons/hi';
 import { FaRegMessage } from 'react-icons/fa6';
 import Modal from '@mui/material/Modal';
-import { useFetch } from '@/hooks/useFetch.js';
 import URLs from '@/constants/constants';
 import { useNavigate } from 'react-router-dom';
 import { useWebSocket } from '@/hooks/useWebSocket.js';
@@ -16,6 +15,7 @@ import { routesPath } from '@/routes/routesConfig.jsx';
 import { axiosClient } from '@/services/api.js';
 import { useChatContext } from '@/providers/ChatProvider';
 
+import { Badge } from '@/components/MessageItem/MessageItemStyled.js';
 import {
   BoxStyled,
   ContactsList,
@@ -24,6 +24,7 @@ import {
   Flag,
   Item,
   Avatar,
+  ImgAvatar,
   CloseBtn,
   InfoBoxStyled,
   HeaderStyled,
@@ -34,18 +35,23 @@ import {
   UserContactInfo,
   SendMessageBtn,
 } from './CountryInfoStyled.js';
+import Loader from '../Loader/Loader.jsx';
 
 const CountryInfo = ({
   chatData,
+  setChatData,
   isOpen,
   onClose,
   countryName,
   participantsAmount,
+  listOfOnlineUsersStatuses,
   setParticipantsAmount,
   chatId,
   setIsShowJoinBtn,
   setIsChatVisible,
   isShowJoinBtn,
+  participants,
+  loading,
 }) => {
   const isDesktop = useMediaQuery({ query: device.tablet });
   const currentUserId = useSelector(getUser)?.id;
@@ -101,8 +107,9 @@ const CountryInfo = ({
     if (!isDesktop) {
       setIsChatVisible(false);
     }
-    onClose();
     setIsShowJoinBtn(true);
+    setChatData(null);
+    onClose();
   };
 
   const handleJoinToChat = () => {
@@ -115,9 +122,6 @@ const CountryInfo = ({
     setParticipantsAmount(prevCount => prevCount + 1);
     onClose();
   };
-
-  const url = chatId && URLs.getChatsParticipants(chatId);
-  const { responseData: participants } = useFetch(url, '');
 
   if (!isOpen || !countryName || !chatId) {
     return null;
@@ -150,50 +154,58 @@ const CountryInfo = ({
             <p>{participantsAmount} members</p>
           </InfoBoxStyled>
         </HeaderStyled>
-
-        {!hasParticipants ? (
-          <Subtitle>There are no members here yet. Be the first.</Subtitle>
-        ) : (
-          <ContactsBoxStyled>
+        <ContactsBoxStyled>
+          {loading ? (
+            <Loader size={40} />
+          ) : !hasParticipants ? (
+            <Subtitle>There are no members here yet. Be the first.</Subtitle>
+          ) : (
             <ContactsList>
-              {participants?.map(user => (
-                <Item key={user.id}>
-                  <Avatar>
-                    {user.avatar ? (
-                      <img
-                        src={user.avatar}
-                        alt={user.userName}
-                        width="48"
-                        height="48"
-                      />
-                    ) : (
-                      <LetterAvatar>
-                        {user.userName.charAt(0).toUpperCase()}
-                      </LetterAvatar>
+              {participants?.map(user => {
+                const userStatus = listOfOnlineUsersStatuses.get(
+                  user.id.toString()
+                );
+
+                const isOnline = userStatus ? userStatus.isOnline : false;
+
+                return (
+                  <Item key={user.id}>
+                    <Avatar>
+                      {user.avatarUrl ? (
+                        <ImgAvatar
+                          src={user.avatarUrl}
+                          alt={`${user.userName}'s avatar`}
+                        />
+                      ) : (
+                        <LetterAvatar>
+                          {user.userName.charAt(0).toUpperCase()}
+                        </LetterAvatar>
+                      )}
+                      {isOnline && <Badge />}
+                    </Avatar>
+                    <UserContactInfo>
+                      <h5>{user.userName}</h5>
+                      <p>{user.userEmail}</p>
+                    </UserContactInfo>
+                    {user.id !== currentUserId && (
+                      <SendMessageBtn
+                        onClick={() =>
+                          handleCreatePrivateChat(
+                            user.id,
+                            user.userName,
+                            user.userEmail
+                          )
+                        }
+                      >
+                        <FaRegMessage />
+                      </SendMessageBtn>
                     )}
-                  </Avatar>
-                  <UserContactInfo>
-                    <h5>{user.userName}</h5>
-                    <p>{user.userEmail}</p>
-                  </UserContactInfo>
-                  {user.id !== currentUserId && (
-                    <SendMessageBtn
-                      onClick={() =>
-                        handleCreatePrivateChat(
-                          user.id,
-                          user.userName,
-                          user.userEmail
-                        )
-                      }
-                    >
-                      <FaRegMessage />
-                    </SendMessageBtn>
-                  )}
-                </Item>
-              ))}
+                  </Item>
+                );
+              })}
             </ContactsList>
-          </ContactsBoxStyled>
-        )}
+          )}
+        </ContactsBoxStyled>
 
         <ButtonsBoxStyled>
           {isShowJoinBtn ? (

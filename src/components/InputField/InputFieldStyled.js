@@ -1,8 +1,9 @@
 import styled from 'styled-components';
+import { AiOutlineCheck } from 'react-icons/ai';
+
 import { TextareaAutosize } from '@mui/material';
 
-const getNotificationColor = ({ $isErrorColor, $isSuccessColor }) =>
-{
+const getNotificationColor = ({ $isErrorColor, $isSuccessColor }) => {
   if ($isErrorColor) return 'var(--color-error)';
   if ($isSuccessColor) return 'var(--color-success)';
   return 'var(--color-grey-13)';
@@ -14,7 +15,7 @@ const generalNotificationStyles = `
 `;
 
 export const InputFieldStyled = styled.div`
-  margin-bottom: 15px;
+  margin-bottom: 24px;
   position: relative;
 `;
 
@@ -28,7 +29,6 @@ export const StyledLabel = styled.label`
   color: var(--color-grey-9);
   font-size: 12px;
   line-height: 16px;
-
 `;
 
 export const StyledInput = styled.input`
@@ -51,7 +51,8 @@ export const StyledInput = styled.input`
   }
 
   &:hover {
-    border: 1px solid ${({ disabled }) => (disabled ? 'transparent' : 'var(--color-dark)')};;
+    border: 1px solid
+      ${({ disabled }) => (disabled ? 'transparent' : 'var(--color-dark)')};
   }
   &:focus {
     border: 1px solid var(--color-brand-blue);
@@ -65,7 +66,8 @@ export const StyledInput = styled.input`
   padding-right: ${({ type }) => (type === 'password' ? '48px' : '16px')};
 
   @media screen and (min-width: 768px) {
-    background-color: ${({ $backgroundcolor }) => $backgroundcolor || 'var(--color-grey-4)'};
+    background-color: ${({ $backgroundcolor }) =>
+      $backgroundcolor || 'var(--color-grey-4)'};
   }
 `;
 
@@ -82,7 +84,8 @@ export const StyledTextarea = styled(TextareaAutosize)`
   border-radius: 8px;
   border: 1px solid;
   padding: 18px 16px;
-  border-color: ${({ disabled }) => (disabled ? 'transparent' : getNotificationColor)};
+  border-color: ${({ disabled }) =>
+    disabled ? 'transparent' : getNotificationColor};
 
   &:disabled {
     color: var(--color-dark);
@@ -92,7 +95,8 @@ export const StyledTextarea = styled(TextareaAutosize)`
   }
 
   &:hover {
-    border: 1px solid ${({ disabled }) => (disabled ? 'transparent' : 'var(--color-dark)')};
+    border: 1px solid
+      ${({ disabled }) => (disabled ? 'transparent' : 'var(--color-dark)')};
   }
   &:focus {
     border: 1px solid var(--color-brand-blue);
@@ -104,13 +108,16 @@ export const StyledTextarea = styled(TextareaAutosize)`
   }
 
   @media screen and (min-width: 768px) {
-    background-color: ${({ $backgroundcolor }) => $backgroundcolor || 'var(--color-grey-4)'};
+    background-color: ${({ $backgroundcolor }) =>
+      $backgroundcolor || 'var(--color-grey-4)'};
   }
 `;
 
 export const ErrorStyled = styled.p`
   ${generalNotificationStyles}
   color: var(--color-error);
+  position: absolute;
+  top: 58px;
 `;
 
 export const SuccessStyled = styled.p`
@@ -118,10 +125,13 @@ export const SuccessStyled = styled.p`
   color: var(--color-success);
 `;
 
-export const PasswordReapetLable = styled.p`
-  ${generalNotificationStyles}
-  padding-left: 14px;
-  color: 'var(--color-grey-6)';
+export const SuccessIcon = styled(AiOutlineCheck)`
+  width: 20px;
+  height: 20px;
+  color: var(--color-success);
+  position: absolute;
+  right: 50px;
+  top: 18px;
 `;
 
 export const IconContainer = styled.div`
@@ -142,4 +152,20 @@ export const IconContainer = styled.div`
       color: var(--color-blue-3);
     }
   }
+`;
+
+export const PopupPassword = styled.div`
+  position: absolute;
+  top: 100%;
+  left: 14px;
+  background-color: var(--white-color);
+  padding: 8px;
+  border-radius: 4px;
+  font-size: 12px;
+  color: var(--color-grey-7);
+  z-index: 1000;
+  width: 300px;
+  box-shadow:
+    0px 2px 4px 2px rgba(0, 0, 0, 0.1),
+    0px 1px 2px 0px rgba(0, 0, 0, 0.1);
 `;

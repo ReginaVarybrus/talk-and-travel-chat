@@ -12,7 +12,8 @@ import {
   SideBarButton,
   ChatsButtonsFrame,
   Text,
-  UserIcon,
+  ImgAvatar,
+  LetterAvatarStyled,
   RoomsIcon,
   DMsIcon,
   LogoutIcon,
@@ -20,7 +21,7 @@ import {
 } from './SideBarStyled';
 
 const SideBar = () => {
-  const { userName } = useSelector(getUser) || {};
+  const { userName, avatarUrl } = useSelector(getUser) || {};
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const location = useLocation();
@@ -57,7 +58,14 @@ const SideBar = () => {
           onClick={handleProfileOpen}
           $isActive={currentPage === routesPath.ACCOUNT}
         >
-          <UserIcon />
+          {avatarUrl ? (
+            <ImgAvatar
+              src={avatarUrl || undefined}
+              alt={`${userName}'s avatar`}
+            />
+          ) : (
+            <LetterAvatarStyled>{userName[0].toUpperCase()}</LetterAvatarStyled>
+          )}
           <Text>{userName}</Text>
         </SideBarButton>
         <ChatsButtonsFrame>

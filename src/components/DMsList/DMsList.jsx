@@ -13,11 +13,15 @@ import {
 } from '@/components/RoomsList/RoomsListStyled.js';
 import { useChatContext } from '@/providers/ChatProvider';
 import {
+  LetterAvatarStyled,
+  Badge,
+} from '@/components/MessageItem/MessageItemStyled';
+import {
   Item,
   ChatNameStyled,
   Avatar,
+  ImgAvatar,
   ChatName,
-  BadgeStyled,
   NameAndDayBox,
   MessageAndCountBox,
   UnreadMessagesCount,
@@ -37,7 +41,7 @@ const DMsList = () => {
     listOfOnlineUsersStatuses,
   } = useOutletContext();
 
-  const { dataUserChats } = useChatContext();
+  const { filteredPrivateChats, searchedValue } = useChatContext();
 
   const { responseData: dataChat } = useFetch(
     selectedChat ? URLs.getChat(selectedChat) : null
@@ -67,10 +71,10 @@ const DMsList = () => {
 
   return (
     <ListStyled>
-      {dataUserChats?.length ? (
+      {filteredPrivateChats.length ? (
         <ListItems>
           <ScrollBar>
-            {dataUserChats
+            {filteredPrivateChats
               .sort((a, b) => {
                 const dateA = a.lastMessage
                   ? new Date(a.lastMessage.creationDate)
@@ -95,8 +99,17 @@ const DMsList = () => {
                   >
                     <ChatNameStyled>
                       <Avatar>
-                        {companion.userName[0].toUpperCase()}
-                        {isOnline && <BadgeStyled />}
+                        {companion.avatarUrl ? (
+                          <ImgAvatar
+                            src={companion.avatarUrl || undefined}
+                            alt={`${companion.userName}'s avatar`}
+                          />
+                        ) : (
+                          <LetterAvatarStyled>
+                            {companion.userName[0].toUpperCase()}
+                          </LetterAvatarStyled>
+                        )}
+                        {isOnline && <Badge />}
                       </Avatar>
                       <ChatName>
                         <NameAndDayBox>
@@ -131,8 +144,9 @@ const DMsList = () => {
         </ListItems>
       ) : (
         <Text>
-          There are no chats in the list.
-          <br /> Start a conversation and it will be shown here
+          {searchedValue
+            ? 'No companions found with this name'
+            : 'There are no chats in the list. Start a conversation and it will be shown here'}
         </Text>
       )}
     </ListStyled>

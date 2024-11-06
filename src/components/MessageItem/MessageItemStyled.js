@@ -31,19 +31,31 @@ export const MessageContentStyled = styled.div`
   }
 `;
 
-export const LetterAvatarStyled = styled.div`
+export const Avatar = styled.div`
   position: relative;
+  width: 48px;
+  height: 48px;
+  cursor: ${({ $isCurrentUser }) => ($isCurrentUser ? 'default' : 'pointer')};
+`;
+
+export const LetterAvatarStyled = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  width: 48px;
-  height: 48px;
+  width: 100%;
+  height: 100%;
   border-radius: 4px;
   font-weight: 600;
   font-size: 18px;
   background: var(--color-grey-6);
   color: var(--white-color);
-  cursor: ${({ $isCurrentUser }) => ($isCurrentUser ? 'default' : 'pointer')};
+`;
+
+export const ImgAvatar = styled.img`
+  width: 100%;
+  height: 100%;
+  border-radius: 4px;
+  display: ${({ $userAvatarUrl }) => ($userAvatarUrl ? 'block' : 'none')};
 `;
 
 export const ContentMessage = styled.p`
