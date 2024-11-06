@@ -56,7 +56,6 @@ export const SignInTitle = styled.h1`
 
 export const SignInText = styled.p`
   line-height: 19px;
-
   @media (max-width: 767px) {
     margin-bottom: 32px;
   }
@@ -69,6 +68,10 @@ export const SignInText = styled.p`
 export const LoginLink = styled.a`
   color: var(--color-brand-blue);
   cursor: pointer;
+  transition: all 0.3s;
+  &:hover {
+    color: var(--color-grey-7);
+  }
 `;
 
 export const SignUpBtn = styled.button`
@@ -89,6 +92,7 @@ export const SignUpBtn = styled.button`
   box-shadow: 4px 2px 16px 0px rgba(136, 165, 191, 0.48);
   cursor: pointer;
   color: var(--white-color);
+  transition: all 0.3s;
 
   &:hover {
     background: var(--color-blue-5);
@@ -161,4 +165,10 @@ export const TextForgotPassword = styled.p`
   right: 125px;
   color: var(--color-brand-blue);
   font-size: 12px;
+  cursor: pointer;
+  transition: all 0.3s;
+
+  &:hover {
+    color: var(--color-grey-7);
+  }
 `;
