@@ -57,6 +57,7 @@ export const ImgAvatar = styled.img`
   width: 48px;
   height: 48px;
   border-radius: 4px;
+  object-fit: cover;
 `;
 
 export const RoomsIcon = styled(TbUsers)`

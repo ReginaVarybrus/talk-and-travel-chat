@@ -1,10 +1,12 @@
 import { useEffect, useState } from 'react';
+import { useSelector } from 'react-redux';
 import { useOutletContext, useLocation } from 'react-router-dom';
 import { useMediaQuery } from 'react-responsive';
 import { device } from '@/constants/mediaQueries.js';
 import URLs from '@/constants/constants';
 import { useFetch } from '@/hooks/useFetch';
 import { formatDate } from '@/components/utils/dateUtil.js';
+import { getUsersStatuses } from '@/redux-store/selectors.js';
 import { ScrollBar } from '@/components/SearchInput/SearchInputStyled.js';
 import {
   ListStyled,
@@ -31,6 +33,7 @@ import {
 const DMsList = () => {
   const isDesktop = useMediaQuery({ query: device.tablet });
   const [selectedChat, setSelectedChat] = useState(null);
+  const usersStatuses = useSelector(getUsersStatuses);
   const location = useLocation();
   const { privateChatId, companionObject } = location.state || {};
   const {
@@ -38,7 +41,6 @@ const DMsList = () => {
     setIsSubscribed,
     setSelectedCompanion,
     setIsChatVisible,
-    listOfOnlineUsersStatuses,
   } = useOutletContext();
 
   const { filteredPrivateChats, searchedValue } = useChatContext();
@@ -85,11 +87,13 @@ const DMsList = () => {
                 return dateB - dateA;
               })
               .map(({ chat, companion, lastMessage }) => {
-                const userStatus = listOfOnlineUsersStatuses.get(
-                  companion.id.toString()
+                const userStatus = usersStatuses.find(
+                  user => user.userId === companion.id
                 );
 
-                const isOnline = userStatus ? userStatus.isOnline : false;
+                const isOnline = userStatus
+                  ? userStatus.status.isOnline
+                  : false;
 
                 return (
                   <Item

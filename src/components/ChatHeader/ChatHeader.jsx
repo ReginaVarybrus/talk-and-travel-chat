@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import PropTypes from 'prop-types';
 import { useSelector } from 'react-redux';
-import { getUser } from '@/redux-store/selectors.js';
+import { getUser, getUsersStatuses } from '@/redux-store/selectors.js';
 import CountryInfo from '@/components/CountryInfo/CountryInfo';
 import { formatDateOfLastSeen } from '@/components/utils/dateUtil.js';
 import {
@@ -28,17 +28,17 @@ const ChatHeader = ({
   chatId,
   setIsShowJoinBtn,
   setIsChatVisible,
-  listOfOnlineUsersStatuses,
   isShowJoinBtn,
 }) => {
   const [openModal, setOpenModal] = useState(false);
   const currentUserName = useSelector(getUser)?.userName;
+  const usersStatuses = useSelector(getUsersStatuses);
   const nameOfChat = isPrivateChat ? selectedCompanion.userName : chatName;
-  const userStatus = listOfOnlineUsersStatuses.get(
-    selectedCompanion?.id.toString()
+  const userStatus = usersStatuses.find(
+    user => user.userId === selectedCompanion?.id
   );
 
-  const isOnline = userStatus ? userStatus.isOnline : false;
+  const isOnline = userStatus ? userStatus.status.isOnline : false;
 
   const firstLetterOfName = selectedCompanion?.userName
     .substr(0, 1)
@@ -52,8 +52,8 @@ const ChatHeader = ({
       if (isPrivateChat && isOnline) {
         return 'online';
       }
-      if (isPrivateChat && userStatus.lastSeenOn) {
-        return formatDateOfLastSeen(userStatus.lastSeenOn);
+      if (isPrivateChat && userStatus.status.lastSeenOn) {
+        return formatDateOfLastSeen(userStatus.status.lastSeenOn);
       }
       if (isPrivateChat) {
         return '';
@@ -131,7 +131,6 @@ const ChatHeader = ({
         countryName={chatName}
         participantsAmount={participantsAmount || 0}
         setParticipantsAmount={setParticipantsAmount}
-        listOfOnlineUsersStatuses={listOfOnlineUsersStatuses}
         chatId={chatId}
         setIsShowJoinBtn={setIsShowJoinBtn}
         setIsChatVisible={setIsChatVisible}
@@ -169,7 +168,6 @@ ChatHeader.propTypes = {
   chatId: PropTypes.number,
   setIsShowJoinBtn: PropTypes.func,
   setIsChatVisible: PropTypes.func,
-  listOfOnlineUsersStatuses: PropTypes.instanceOf(Map),
   isShowJoinBtn: PropTypes.bool,
 };
 

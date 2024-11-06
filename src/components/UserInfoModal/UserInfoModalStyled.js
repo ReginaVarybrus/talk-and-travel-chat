@@ -67,6 +67,7 @@ export const ModalAvatar = styled.img`
   min-width: 48px;
   height: 48px;
   border-radius: 8px;
+  object-fit: cover;
   @media ${device.tablet} {
     width: 100px;
     height: 100px;

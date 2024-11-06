@@ -27,3 +27,23 @@ export const updateUser = createAsyncThunk('user/update', async user => {
     throw new Error(error.message);
   }
 });
+
+export const fetchUsersOnlineStatuses = createAsyncThunk(
+  'onlineUsers/fetchStatuses',
+  async () => {
+    try {
+      const response = await axiosClient.get(URLs.getUsersOnlineStatusPath);
+      console.log('Original response data:', response.data);
+      return Object.entries(response.data).map(([userId, userData]) => ({
+        userId: Number(userId),
+        status: {
+          isOnline: userData.isOnline,
+          lastSeenOn: userData.lastSeenOn,
+        },
+      }));
+    } catch (e) {
+      console.error('Error fetching user statuses:', e);
+      throw e;
+    }
+  }
+);

@@ -10,7 +10,7 @@ const useUserActivity = sendUpdateUserActivityEvent => {
         sendUpdateUserActivityEvent(status);
         isUserOffline.current = false;
       }
-      console.log('event sended');
+      // console.log('event sended');
     };
 
     const updateActivityEvents = [
@@ -25,7 +25,7 @@ const useUserActivity = sendUpdateUserActivityEvent => {
     );
 
     document.addEventListener('visibilitychange', () => {
-      console.log('visibility state', document.visibilityState);
+      // console.log('visibility state', document.visibilityState);
       if (document.visibilityState === 'visible') {
         handleUpdateActivity(true);
       } else {
