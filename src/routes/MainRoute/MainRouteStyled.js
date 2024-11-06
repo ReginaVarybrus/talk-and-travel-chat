@@ -1,43 +1,43 @@
 import styled from 'styled-components';
 import Miniature from '@/images/main_page_miniature.svg'
 import { Box } from '@mui/material';
+import { device } from '@/constants/mediaQueries';
 
 
 export const MainPageLayout = styled(Box)`
-  box-sizing: border-box;
-  padding-top: 80px;
-  font-family: Roboto, sans-serif;
+box-sizing: border-box;
+padding-top: 0px;
 
-  @media (max-width: 768px) {
-    padding-top: 0px;
-  }
+@media ${device.tablet} {
+    padding-top: 80px;
+}
 `;
 
 export const MainPageSectionOne = styled(Box)`
-  margin-top: 20px;
-  margin-bottom: 20px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  text-align: center;
+margin-top: 20px;
+margin-bottom: 20px;
+display: flex;
+flex-direction: column;
+align-items: center;
+text-align: center;
 
-  @media (min-width: 768px) {
-    margin-top: 180px;
-    margin-bottom: 138px;
-  }
+@media ${device.tablet} {
+  margin-top: 180px;
+  margin-bottom: 138px;
+}
 `;
 
 export const HeaderH1 = styled.h1`
-  color: var(--color-dark);
-  font-size: 32px;
-  font-weight: 400;
-  line-height: 38.4px;
-  text-align: center;
+color: var(--color-dark);
+font-size: 32px;
+font-weight: 400;
+line-height: 38.4px;
+text-align: center;
 
-  @media (min-width: 768px) {
-    font-size: 64px;
-    line-height: 76.8px;
-  }
+@media ${device.tablet} {
+  font-size: 64px;
+  line-height: 76.8px;
+}
 `;
 
 
@@ -70,16 +70,16 @@ export const TailTelegram = styled.div`
 `;
 
 export const MainPageSectionTwo = styled(Box)`
+display: none;
+
+@media ${device.tablet} {
   background-image: url(${Miniature});
   height: 100vh;
   background-repeat: no-repeat;
   background-size: contain;
   background-position: center;
   margin-bottom: 100px;
-
-  @media (max-width: 768px) {
-    display: none;
-  }
+}
 `;
 
 export const MainPageSectionThree = styled(Box)`
