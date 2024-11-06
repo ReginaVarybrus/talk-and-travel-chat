@@ -306,7 +306,10 @@ export const UserInfoBox = styled.div`
 
 export const AboutUser = styled.div`
   display: flex;
-  margin: 22px 0;
+  padding: 22px 0;
+  border-top: solid 1px var(--color-grey-5);
+  border-bottom: solid 1px var(--color-grey-5);
+
   p {
     line-height: 24px;
     letter-spacing: 0.5px;
