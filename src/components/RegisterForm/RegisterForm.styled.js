@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import backgroundImage from '@/images/bg-png.png'
+import backgroundImage from '@/images/bg-png.png';
 
 export const RegisterFormBackground = styled.section`
   box-sizing: border-box;
@@ -8,7 +8,7 @@ export const RegisterFormBackground = styled.section`
   justify-content: center;
   align-items: center;
   min-height: 100vh;
-  
+
   @media (min-width: 767px) {
     background: url(${backgroundImage});
     background-size: cover;
@@ -30,6 +30,7 @@ export const RegisterFormContainer = styled.div`
 `;
 
 export const SignInFormStyles = styled.form`
+  position: relative;
   @media (min-width: 768px) {
     padding: 56px 120px;
   }
@@ -88,7 +89,7 @@ export const SignUpBtn = styled.button`
   box-shadow: 4px 2px 16px 0px rgba(136, 165, 191, 0.48);
   cursor: pointer;
   color: var(--white-color);
-  
+
   &:hover {
     background: var(--color-blue-5);
   }
@@ -105,42 +106,42 @@ export const SignUpBtn = styled.button`
 `;
 
 export const Separator = styled.hr`
-    position: relative;
-    border: 0;
-    margin: 24px 0;
-    display: flex;
-    justify-content: center;
-    font-size: 14px;
-    font-weight: 700;
-    line-height: 20px;
-    letter-spacing: 0px;
-    text-align: center;
-    
-    &::before {
-      content: '';
-      background: var(--color-grey-7);
-      position: absolute;
-      top: 50%;
-      width: 100%;
-      height: 1px;
-    }
-    
-    &::after {
-      content: 'or';
-      position: relative;
-      padding: 10px 24px;
-      color: var(--color-grey-7);
-      background-color: var(--white-color);
-      line-height: 1;
-    }
+  position: relative;
+  border: 0;
+  margin: 24px 0;
+  display: flex;
+  justify-content: center;
+  font-size: 14px;
+  font-weight: 700;
+  line-height: 20px;
+  letter-spacing: 0px;
+  text-align: center;
 
-    @media (min-width: 768px) {
-      &::after {
+  &::before {
+    content: '';
+    background: var(--color-grey-7);
+    position: absolute;
+    top: 50%;
+    width: 100%;
+    height: 1px;
+  }
+
+  &::after {
+    content: 'or';
+    position: relative;
+    padding: 10px 24px;
+    color: var(--color-grey-7);
+    background-color: var(--white-color);
+    line-height: 1;
+  }
+
+  @media (min-width: 768px) {
+    &::after {
       background-color: var(--color-grey-4);
     }
-      color: var(--color-grey-7);
-      margin: 32px 0;
-    }
+    color: var(--color-grey-7);
+    margin: 32px 0;
+  }
 `;
 
 export const ButtonBlock = styled.div`
@@ -154,9 +155,10 @@ export const ButtonBlock = styled.div`
   }
 `;
 
-
-
-
-
-
-
+export const TextForgotPassword = styled.p`
+  position: absolute;
+  bottom: 260px;
+  right: 125px;
+  color: var(--color-brand-blue);
+  font-size: 12px;
+`;

@@ -20,6 +20,7 @@ import {
   LoginLink as SignUpLink,
   SignUpBtn as LogInBtn,
   Separator,
+  TextForgotPassword,
 } from '@/components/RegisterForm/RegisterForm.styled';
 
 import ButtonFacebook from '@/components/Buttons/FaceBook/FaceBookButton';
@@ -71,7 +72,10 @@ const LoginForm = () => {
               name={value.general}
             />
           ))}
-          <LogInBtn type="submit">Log In</LogInBtn>
+          <TextForgotPassword>Forgot your password?</TextForgotPassword>
+          <LogInBtn style={{ marginTop: '32px' }} type="submit">
+            Log In
+          </LogInBtn>
           <Separator />
           <ButtonBlock>
             <ButtonGoogle type="button" />
