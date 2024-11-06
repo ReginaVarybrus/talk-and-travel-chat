@@ -4,6 +4,8 @@ import { useSelector } from 'react-redux';
 import { getUser } from '@/redux-store/selectors.js';
 import CountryInfo from '@/components/CountryInfo/CountryInfo';
 import { formatDateOfLastSeen } from '@/components/utils/dateUtil.js';
+import { axiosClient } from '@/services/api';
+import URLs from '@/constants/constants';
 import {
   ChatHeaderStyled,
   MobileHeaderStyled,
@@ -35,6 +37,8 @@ const ChatHeader = ({
   isShowJoinBtn,
 }) => {
   const [openModal, setOpenModal] = useState(false);
+  const [participants, setParticipants] = useState([]);
+  const [loading, setLoading] = useState(false);
   const currentUserName = useSelector(getUser)?.userName;
   const nameOfChat = isPrivateChat ? selectedCompanion.userName : chatName;
   const userStatus = listOfOnlineUsersStatuses.get(
@@ -78,8 +82,21 @@ const ChatHeader = ({
     return `${firstUser} and ${othersCount} others are typing...`;
   };
 
+  const fetchParticipants = async () => {
+    if (!chatId) return;
+    setLoading(true);
+    try {
+      const response = await axiosClient.get(URLs.getChatsParticipants(chatId));
+      setParticipants(response.data);
+    } catch (error) {
+      console.error('Error fetching participants:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
   const handleOpen = () => {
     if (!isPrivateChat) {
+      fetchParticipants();
       setOpenModal(true);
     }
   };
@@ -91,6 +108,7 @@ const ChatHeader = ({
   const handleBackToSearchBar = () => {
     setIsChatVisible(false);
   };
+
   return (
     <ChatHeaderStyled>
       <MobileHeaderStyled>
@@ -142,6 +160,8 @@ const ChatHeader = ({
         setIsShowJoinBtn={setIsShowJoinBtn}
         setIsChatVisible={setIsChatVisible}
         isShowJoinBtn={isShowJoinBtn}
+        participants={participants}
+        loading={loading}
       />
     </ChatHeaderStyled>
   );
