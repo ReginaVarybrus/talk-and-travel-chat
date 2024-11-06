@@ -6,19 +6,23 @@ export const schema = yup.object().shape({
     userName: yup
         .string()
         .transform(value => (value ? value.trim() : ''))
-        .min(2, 'name must be more then 1 symbol')
-        .max(30, 'to long')
-        .matches(/^[a-zA-Z0-9 ]{2,30}$/, 'invalid name')
-        .required('the field is empty'),
+        .min(2, 'User name must be between 2 and 16 characters.')
+        .max(30, 'User name must be between 2 and 16 characters.')
+        .matches(/^[a-zA-Z0-9 ]{2,16}$/, 'User name must be between 2 and 16 characters.')
+        .test(
+            'not-only-spaces',
+            'User name cannot consist of spaces only.',
+            value => value && value.trim() !== '' // Checks that the trimmed value is not empty
+        )
+        .required('User name must be between 2 and 16 characters.'),
     userEmail: yup
         .string()
         .transform(value => (value ? value.trim() : ''))
-        .email()
         .matches(
-            /^([a-z0-9_.-]+)@([a-z09_.-]+).([a-z]{2,6})$/,
-            'invalid email address'
+            /(?:[a-zA-Z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-zA-Z0-9!#$%&'*+/=?^_`{|}~-]+)*|"(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21\x23-\x5b\x5d-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])*")@(?:(?:[a-zA-Z0-9](?:[a-zA-Z0-9-]*[a-zA-Z0-9])?\.)+[a-zA-Z]{2,}|(?:\[(?:[01]?\d\d?|2[0-4]\d|25[0-5])\.(?:[01]?\d\d?|2[0-4]\d|25[0-5])\.(?:[01]?\d\d?|2[0-4]\d|25[0-5])\.(?:[01]?\d\d?|2[0-4]\d|25[0-5])\]))$/,
+            'Invalid email address format'
         )
-        .required('the field is empty'),
+        .required('The field is empty'),
     about: yup
         .string()
         .nullable()

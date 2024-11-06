@@ -6,7 +6,7 @@ export const schema = yup.object().shape({
         .transform(value => (value ? value.trim() : ''))
         .min(2, 'name must be more then 1 symbol')
         .max(30, 'to long')
-        .matches(/^[a-zA-Z0-9 ]{2,30}$/, 'invalid name')
+        .matches(/^[a-zA-Z0-9 ]{2,16}$/, 'invalid name')
         .required('the field is empty'),
     userEmail: yup
         .string()
