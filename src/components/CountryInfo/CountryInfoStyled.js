@@ -1,4 +1,5 @@
 import styled from 'styled-components';
+import { device } from '@/constants/mediaQueries';
 import { Box } from '@mui/material';
 
 export const BoxStyled = styled(Box)`
@@ -17,7 +18,7 @@ export const BoxStyled = styled(Box)`
   padding: 16px;
   width: 295px;
 
-  @media screen and (min-width: 768px) {
+  @media ${device.tablet} {
     width: 416px;
     padding: 32px;
     gap: 32px;
@@ -36,7 +37,7 @@ export const ContactsBoxStyled = styled.div`
   border-bottom: 1px solid rgb(222, 222, 222);
   padding-top: 16px;
   padding-bottom: 16px;
-  @media screen and (min-width: 768px) {
+  @media ${device.tablet} {
     padding-top: 32px;
     padding-bottom: 32px;
   }
@@ -49,7 +50,7 @@ export const ContactsList = styled.ul`
   box-shadow: inset 0px 1px 5px 0px rgba(0, 0, 0, 0.05);
   background: var(--color-grey-3);
 
-  @media screen and (min-width: 768px) {
+  @media ${device.tablet} {
     height: 260px;
   }
 
@@ -74,7 +75,7 @@ export const Flag = styled.img`
   height: 36px;
   padding: 6px 0;
 
-  @media screen and (min-width: 768px) {
+  @media ${device.tablet} {
     width: 100px;
     height: 75px;
     padding: 12.5px 0;
@@ -94,7 +95,7 @@ export const InfoBoxStyled = styled.div`
     font-size: 14px;
     color: var(--color-grey-9);
   }
-  @media screen and (min-width: 768px) {
+  @media ${device.tablet} {
     gap: 8px;
 
     h5 {
@@ -105,18 +106,20 @@ export const InfoBoxStyled = styled.div`
 `;
 
 export const Avatar = styled.div`
+  position: relative;
   width: 36px;
   height: 36px;
 
-  img {
-    width: 100%;
-    height: 100%;
-  }
-
-  @media screen and (min-width: 768px) {
+  @media ${device.tablet} {
     width: 48px;
     height: 48px;
   }
+`;
+
+export const ImgAvatar = styled.img`
+  width: 100%;
+  height: 100%;
+  border-radius: 4px;
 `;
 
 export const LetterAvatar = styled.div`
@@ -131,7 +134,7 @@ export const LetterAvatar = styled.div`
   background: var(--color-grey-6);
   color: var(--white-color);
 
-  @media screen and (min-width: 768px) {
+  @media ${device.tablet} {
     width: 48px;
     height: 48px;
   }
@@ -145,7 +148,7 @@ export const Item = styled.li`
   padding: 4px 8px;
   position: relative;
 
-  @media screen and (min-width: 768px) {
+  @media ${device.tablet} {
     height: 65px;
     padding: 8px;
   }
@@ -157,6 +160,7 @@ export const Item = styled.li`
     }
   }
 `;
+
 export const UserContactInfo = styled.div`
   display: flex;
   flex-direction: column;
@@ -179,7 +183,7 @@ export const UserContactInfo = styled.div`
     text-overflow: ellipsis;
   }
 
-  @media screen and (min-width: 768px) {
+  @media ${device.tablet} {
     width: 200px;
     gap: 8px;
 
@@ -189,6 +193,7 @@ export const UserContactInfo = styled.div`
     }
   }
 `;
+
 export const SendMessageBtn = styled.button`
   opacity: 0;
   visibility: hidden;
@@ -230,7 +235,7 @@ export const CloseBtn = styled.button`
     }
   }
 
-  @media screen and (min-width: 768px) {
+  @media ${device.tablet} {
     right: 14px;
     top: 17px;
   }
@@ -289,7 +294,7 @@ export const Subtitle = styled.p`
   font-size: 12px;
   font-weight: 700;
 
-  @media screen and (min-width: 768px) {
+  @media ${device.tablet} {
     font-size: 16px;
   }
 `;

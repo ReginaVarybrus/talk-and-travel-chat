@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 import { device } from '@/constants/mediaQueries';
 import { LuLogOut, LuMessagesSquare } from 'react-icons/lu';
-import { TbUser, TbUsers } from 'react-icons/tb';
+import { TbUsers } from 'react-icons/tb';
 
 export const iconProperties = (
   width = '24px',
@@ -40,8 +40,23 @@ export const Text = styled.p`
   color: var(--color-grey-9);
 `;
 
-export const UserIcon = styled(TbUser)`
-  ${iconProperties()};
+export const LetterAvatarStyled = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 48px;
+  height: 48px;
+  border-radius: 4px;
+  font-weight: 600;
+  font-size: 18px;
+  background: var(--color-grey-6);
+  color: var(--white-color);
+`;
+
+export const ImgAvatar = styled.img`
+  width: 48px;
+  height: 48px;
+  border-radius: 4px;
 `;
 
 export const RoomsIcon = styled(TbUsers)`

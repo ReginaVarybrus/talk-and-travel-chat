@@ -21,6 +21,7 @@ export const GlobalStyles = createGlobalStyle`
   --color-grey-10: #434343;
   --color-grey-11: #3d3d3d;
   --color-grey-12: #343434;
+  --color-grey-13: #79747E;
   --color-dark: #222222;
 
   --color-blue-1: #e9f0fb;
@@ -40,6 +41,7 @@ export const GlobalStyles = createGlobalStyle`
 body {
   font-family: "Roboto", sans-serif;
   margin: 0;
+  user-select: none;
 }
 
 ul {

@@ -4,21 +4,26 @@ import { useSelector } from 'react-redux';
 import { getUser } from '@/redux-store/selectors.js';
 import CountryInfo from '@/components/CountryInfo/CountryInfo';
 import { formatDateOfLastSeen } from '@/components/utils/dateUtil.js';
+import { axiosClient } from '@/services/api';
+import URLs from '@/constants/constants';
 import {
   ChatHeaderStyled,
   MobileHeaderStyled,
   DesktopHeaderStyled,
   MobileHeaderContentStyled,
   LetterAvatarStyled,
-  HeaderButton,
   BackIcon,
   FlagImg,
   OpenCountryInfoIcon,
+  HeaderButtonBack,
+  HeaderButtonOpenMenu,
+  FlagBoxStyled,
 } from './ChatHeaderStyled';
 
 const ChatHeader = ({
   chatName = 'Country name',
   chatData,
+  setChatData,
   participantsAmount,
   setParticipantsAmount,
   flagCode,
@@ -32,6 +37,8 @@ const ChatHeader = ({
   isShowJoinBtn,
 }) => {
   const [openModal, setOpenModal] = useState(false);
+  const [participants, setParticipants] = useState([]);
+  const [loading, setLoading] = useState(false);
   const currentUserName = useSelector(getUser)?.userName;
   const nameOfChat = isPrivateChat ? selectedCompanion.userName : chatName;
   const userStatus = listOfOnlineUsersStatuses.get(
@@ -75,8 +82,21 @@ const ChatHeader = ({
     return `${firstUser} and ${othersCount} others are typing...`;
   };
 
+  const fetchParticipants = async () => {
+    if (!chatId) return;
+    setLoading(true);
+    try {
+      const response = await axiosClient.get(URLs.getChatsParticipants(chatId));
+      setParticipants(response.data);
+    } catch (error) {
+      console.error('Error fetching participants:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
   const handleOpen = () => {
     if (!isPrivateChat) {
+      fetchParticipants();
       setOpenModal(true);
     }
   };
@@ -88,35 +108,38 @@ const ChatHeader = ({
   const handleBackToSearchBar = () => {
     setIsChatVisible(false);
   };
+
   return (
     <ChatHeaderStyled>
       <MobileHeaderStyled>
-        <HeaderButton onClick={handleBackToSearchBar}>
+        <HeaderButtonBack onClick={handleBackToSearchBar}>
           <BackIcon />
-        </HeaderButton>
-        <MobileHeaderContentStyled>
+        </HeaderButtonBack>
+        <MobileHeaderContentStyled onClick={handleOpen}>
           {isPrivateChat ? (
             <LetterAvatarStyled>{firstLetterOfName}</LetterAvatarStyled>
           ) : (
-            <FlagImg
-              loading="lazy"
-              width="36"
-              srcSet={`https://flagcdn.com/${flagCode}.svg 2x`}
-              src={`https://flagcdn.com/${flagCode}.svg`}
-              alt={`${flagCode} flag`}
-            />
-          )}
+            <FlagBoxStyled>
+              <FlagImg
+                loading="lazy"
+                width="36"
+                srcSet={`https://flagcdn.com/${flagCode}.svg 2x`}
+                src={`https://flagcdn.com/${flagCode}.svg`}
+                alt={`${flagCode} flag`}
+              />
 
-          <div>
-            <h5>{nameOfChat}</h5>
-            <p>{getMessage()}</p>
-          </div>
+              <div>
+                <h5>{nameOfChat}</h5>
+                <p>{getMessage()}</p>
+              </div>
+            </FlagBoxStyled>
+          )}
+          {!isPrivateChat && (
+            <HeaderButtonOpenMenu>
+              <OpenCountryInfoIcon />
+            </HeaderButtonOpenMenu>
+          )}
         </MobileHeaderContentStyled>
-        {!isPrivateChat && (
-          <HeaderButton onClick={handleOpen}>
-            <OpenCountryInfoIcon />
-          </HeaderButton>
-        )}
       </MobileHeaderStyled>
 
       <DesktopHeaderStyled onClick={handleOpen}>
@@ -126,15 +149,19 @@ const ChatHeader = ({
 
       <CountryInfo
         chatData={chatData}
+        setChatData={setChatData}
         isOpen={openModal}
         onClose={handleClose}
         countryName={chatName}
         participantsAmount={participantsAmount || 0}
         setParticipantsAmount={setParticipantsAmount}
+        listOfOnlineUsersStatuses={listOfOnlineUsersStatuses}
         chatId={chatId}
         setIsShowJoinBtn={setIsShowJoinBtn}
         setIsChatVisible={setIsChatVisible}
         isShowJoinBtn={isShowJoinBtn}
+        participants={participants}
+        loading={loading}
       />
     </ChatHeaderStyled>
   );

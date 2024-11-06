@@ -1,5 +1,5 @@
 import { useFormik } from 'formik';
-import { register } from '@/redux-store/AuthOperations/AuthOperations';
+import { register } from '@/redux-store/slices/AuthOperations';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { routesPath } from '@/routes/routesConfig';

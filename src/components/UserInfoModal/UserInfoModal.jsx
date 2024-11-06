@@ -25,7 +25,7 @@ import {
 const UserInfoModal = ({
   open,
   handleClose,
-  avatar,
+  userAvatarUrl,
   userName = 'User name',
   userEmail = 'email@gmail.com',
   about,
@@ -92,8 +92,11 @@ const UserInfoModal = ({
             <CloseIcon />
           </ButtonClose>
           <UserContactInfoStyled>
-            {avatar ? (
-              <ModalAvatar />
+            {userAvatarUrl ? (
+              <ModalAvatar
+                src={userAvatarUrl || undefined}
+                alt={`${userName}'s avatar`}
+              />
             ) : (
               <LetterAvatarStyled>{firstLetterOfName}</LetterAvatarStyled>
             )}
@@ -126,7 +129,7 @@ const UserInfoModal = ({
 UserInfoModal.propTypes = {
   open: PropTypes.bool,
   handleClose: PropTypes.func,
-  avatar: PropTypes.string,
+  userAvatarUrl: PropTypes.string,
   userName: PropTypes.string,
   userEmail: PropTypes.string,
   about: PropTypes.string,

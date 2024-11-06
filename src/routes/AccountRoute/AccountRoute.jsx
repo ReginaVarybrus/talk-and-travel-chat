@@ -5,7 +5,10 @@ import { useDispatch, useSelector } from 'react-redux';
 import Loader from '@/components/Loader/Loader';
 import { routesPath } from '@/routes/routesConfig';
 import { getUser } from '@/redux-store/selectors';
-import { updateUser } from '@/redux-store/UserOperations/UserOperations';
+import {
+  updateUser,
+  updateUsersAvatar,
+} from '@/redux-store/UserOperations/UserOperations';
 import { useWebSocket } from '@/hooks/useWebSocket.js';
 
 import {
@@ -25,7 +28,6 @@ import {
   LogoutButton,
   LogoutIcon,
 } from '@/routes/AccountRoute/AccountRouteStyled';
-import BasicButton from '@/components/Buttons/BasicButton/BasicButton';
 import InputField from '@/components/InputField/InputField';
 import {
   StyledLabel,
@@ -37,7 +39,10 @@ import {
   schema,
   formFields,
 } from '@/routes/AccountRoute/AccountRouteValidationSchema';
-import { logOut } from '@/redux-store/AuthOperations/AuthOperations';
+import { logOut } from '@/redux-store/slices/AuthOperations';
+import TextButton from '@/components/Buttons/TextButton/TextButton';
+import MediumOutlinedButton from '@/components/Buttons/MediumOutlined/MediumOutlinedButton';
+import MediumFilledButton from '@/components/Buttons/MediumFilledButton/MediumFilledButton';
 
 const AccountRoute = () => {
   // User details to display in Profile form are taken from Redux data.
@@ -45,10 +50,34 @@ const AccountRoute = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { handleDeactivateStopmClient } = useWebSocket();
-
   const [editMode, setEditMode] = useState(false);
   // This {loading} is used to trigger display of <Loader/> while updateUser performig.
   const [loading, setLoading] = useState(false);
+  // this avatarPreview is used to render Avatar when user tries to upload a new image.
+  const [avatarPreview, setAvatarPreview] = useState(null);
+  const [avatarBlob, setavatarBlob] = useState(null);
+  // handleAvatarChange catches the file picked by user
+  const handleAvatarChange = event => {
+    const file = event.target.files[0];
+    if (file) {
+      if (file.size > 2 * 1024 * 1024) {
+        console.error('File is too large. Please select a file under 2MB.');
+        return;
+      }
+      // Check the file type (e.g., allow only images)
+      if (!file.type.startsWith('image/')) {
+        console.error('Only image files are allowed.');
+        return;
+      }
+      setavatarBlob(file);
+      // Set preview URL for the selected image
+      setAvatarPreview(URL.createObjectURL(file));
+      // Reset the input value to allow reselecting the same file
+      event.target.value = null;
+    } else {
+      console.error('No file selected');
+    }
+  };
 
   const formik = useFormik({
     initialValues: user,
@@ -58,13 +87,26 @@ const AccountRoute = () => {
     onSubmit: async (values, { resetForm }) => {
       setLoading(true);
       try {
-        const resultAction = await dispatch(updateUser(values));
-        if (updateUser.fulfilled.match(resultAction)) {
+        let userUpdateResult;
+        if (avatarPreview) {
+          const [avatarUpdateResult, userResult] = await Promise.all([
+            dispatch(updateUsersAvatar(avatarBlob)),
+            dispatch(updateUser(values)),
+          ]);
+          if (!updateUsersAvatar.fulfilled.match(avatarUpdateResult)) {
+            console.error('Avatar Update Failed:', avatarUpdateResult.error);
+            return;
+          }
+          userUpdateResult = userResult;
+        } else {
+          userUpdateResult = await dispatch(updateUser(values));
+        }
+        if (updateUser.fulfilled.match(userUpdateResult)) {
           navigate(routesPath.ACCOUNT);
           resetForm();
           setEditMode(false);
         } else {
-          console.error('Update Failed:', resultAction.error);
+          console.error('Update Failed:', userUpdateResult.error);
         }
       } catch (error) {
         console.error('Something went wrong:', error);
@@ -73,31 +115,30 @@ const AccountRoute = () => {
       }
     },
   });
-
   // This const is to toggle the Profile form from view to edit.
   const toggleEditMode = () => {
     setEditMode(!editMode);
   };
-
   /* This const is to toggle the Profile form from edit to view 
   mode and restore the form values. */
   const cancelEdit = () => {
     formik.setValues(user);
+    formik.setErrors({});
+    setAvatarPreview(null);
     setEditMode(false);
   };
-
   /* On-fligth validation of ABOUT field to prevent user
-  from typing any symbols above maximum lenght set in scheme  */
+  from typing any symbols above maximum length set in scheme  */
   const handleChange = e => {
     if (e.target.value.length <= ABOUT_MAX_CHAR_LIMIT) {
       formik.handleChange(e);
     }
   };
-
+  /* on page render user data is selected from redux */
   useEffect(() => {
     formik.setValues(user);
   }, [user]);
-
+  /* when logout button pressed logout is performed */
   const handleLogOut = async () => {
     try {
       handleDeactivateStopmClient();
@@ -114,13 +155,23 @@ const AccountRoute = () => {
       </Header>
       <ProfileContainer>
         <AvatarBlock>
-          <Avatar />
+          <Avatar
+            src={
+              avatarPreview ||
+              `${user.avatarUrl}?lastmod=${new Date().getTime()}`
+            }
+            alt="User Avatar"
+          />
           {editMode && (
-            <BasicButton
-              sx={{ marginTop: '8px' }}
-              variant="transparent"
-              text="Change photo"
-            />
+            <>
+              <input
+                id="file-upload"
+                type="file"
+                style={{ display: 'none' }}
+                onChange={handleAvatarChange}
+              />
+              <TextButton htmlFor="file-upload" text="Change photo" />
+            </>
           )}
         </AvatarBlock>
         <InputBlock>
@@ -163,18 +214,16 @@ const AccountRoute = () => {
               )}
               {editMode && (
                 <ChoiceButtonBlock>
-                  <BasicButton
-                    sx={{ margin: '0' }}
-                    variant="outlined"
+                  <MediumOutlinedButton
+                    style={{ margin: '0' }}
                     text="Cancel"
                     handleClick={cancelEdit}
                   />
-                  <BasicButton
-                    sx={{ margin: '0' }}
+                  <MediumFilledButton
+                    style={{ margin: '0' }}
                     handleClick={formik.handleSubmit}
                     type="submit"
                     text="Update"
-                    variant="contained"
                   />
                 </ChoiceButtonBlock>
               )}

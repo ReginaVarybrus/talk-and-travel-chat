@@ -8,8 +8,7 @@ export const ChatStyled = styled.div`
   align-items: center;
   flex-direction: column;
   width: 100%;
-  height: 100vh;
-  max-height: 100vh;
+  height: calc(var(--vh, 1vh) * 100);
   background: var(--white-color);
   position: relative;
   overflow: hidden;
@@ -52,6 +51,7 @@ export const MessageBarWrapper = styled.footer`
   border-top: 1px solid var(--color-grey-6);
   width: 100%;
   transition: height 0.3s ease;
+  padding-bottom: env(safe-area-inset-bottom);
 `;
 
 export const MessageBar = styled.div`
@@ -171,4 +171,12 @@ export const NewMessagesNotification = styled.div`
     height: 16px;
     vertical-align: middle;
   }
+`;
+
+export const LoaderStyleBox = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 100%;
 `;
