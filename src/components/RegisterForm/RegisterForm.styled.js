@@ -16,6 +16,8 @@ export const RegisterFormBackground = styled.section`
 `;
 
 export const RegisterFormContainer = styled.div`
+  position: relative;
+
   text-align: center;
   @media (max-width: 767px) {
     max-width: 500px;
@@ -30,7 +32,6 @@ export const RegisterFormContainer = styled.div`
 `;
 
 export const SignInFormStyles = styled.form`
-  position: relative;
   @media (min-width: 768px) {
     padding: 56px 120px;
   }
@@ -159,7 +160,7 @@ export const ButtonBlock = styled.div`
   }
 `;
 
-export const TextForgotPassword = styled.p`
+export const TextForgotPassword = styled.button`
   position: absolute;
   bottom: 260px;
   right: 125px;
@@ -167,7 +168,8 @@ export const TextForgotPassword = styled.p`
   font-size: 12px;
   cursor: pointer;
   transition: all 0.3s;
-
+  border: none;
+  background: transparent;
   &:hover {
     color: var(--color-grey-7);
   }
