@@ -3,13 +3,13 @@ import swal from 'sweetalert';
 
 import { axiosClient } from '@/services/api';
 import { setUsers } from '@/redux-store/slices/userSlice';
-import ULRs from '@/constants/constants';
+import URLs from '@/constants/constants';
 
 export const fetchCurrentUser = createAsyncThunk(
   'user/fetch',
   async (userId, { dispatch }) => {
     try {
-      const response = await axiosClient.post(ULRs.currentUser, userId);
+      const response = await axiosClient.post(URLs.currentUser, userId);
       dispatch(setUsers(response.data));
       console.log('fetchCurrentUser:', response.data);
       return response.data;
@@ -21,7 +21,7 @@ export const fetchCurrentUser = createAsyncThunk(
 
 export const updateUser = createAsyncThunk('user/update', async user => {
   try {
-    const { data } = await axiosClient.put(ULRs.updateUser, user);
+    const { data } = await axiosClient.put(URLs.updateUser, user);
     return data;
   } catch (error) {
     throw new Error(error.message);

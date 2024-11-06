@@ -3,7 +3,7 @@ import { useMediaQuery } from 'react-responsive';
 import { device } from '@/constants/mediaQueries.js';
 import PropTypes from 'prop-types';
 import { useFetch } from '@/hooks/useFetch.js';
-import ULRs from '@/constants/constants';
+import URLs from '@/constants/constants';
 import { GeoJSON } from 'react-leaflet';
 import mapData from '@/data/countries.json';
 import BasicButton from '@/components/Buttons/BasicButton/BasicButton';
@@ -48,7 +48,7 @@ const ChatMap = ({
   const isDesktop = useMediaQuery({ query: device.tablet });
   const [selectedCountry, setSelectedCountry] = useState(null);
   const { responseData } = useFetch(
-    selectedCountry ? ULRs.getMainCountryChatByName(selectedCountry) : null
+    selectedCountry ? URLs.getMainCountryChatByName(selectedCountry) : null
   );
 
   const onEachCountry = (country, layer) => {

@@ -3,7 +3,7 @@ import { useOutletContext } from 'react-router-dom';
 import { useMediaQuery } from 'react-responsive';
 import { device } from '@/constants/mediaQueries.js';
 import { useFetch } from '@/hooks/useFetch.js';
-import ULRs from '@/constants/constants';
+import URLs from '@/constants/constants.js';
 import { Flag, ScrollBar } from '@/components/SearchInput/SearchInputStyled.js';
 import { useChatContext } from '@/providers/ChatProvider';
 import {
@@ -21,7 +21,7 @@ const RoomsList = () => {
   const [selectedCountry, setSelectedCountry] = useState(null);
 
   const { responseData } = useFetch(
-    selectedCountry ? ULRs.getMainCountryChatByName(selectedCountry) : null
+    selectedCountry ? URLs.getMainCountryChatByName(selectedCountry) : null
   );
 
   const {
@@ -64,8 +64,8 @@ const RoomsList = () => {
                   <Flag
                     loading="lazy"
                     width="48"
-                    srcSet={`https://flagcdn.com/w40/${room.country.flagCode}.png 2x`}
-                    src={`https://flagcdn.com/w20/${room.country.flagCode}.png`}
+                    srcSet={`https://flagcdn.com/${room.country.flagCode}.svg 2x`}
+                    src={`https://flagcdn.com/${room.country.flagCode}.svg`}
                     alt={`${room.country.flagCode} flag`}
                   />
                   <ChatName $isActive={room.name === selectedCountry}>

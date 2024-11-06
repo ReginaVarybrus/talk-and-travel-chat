@@ -7,7 +7,7 @@ import {
   useCallback,
 } from 'react';
 import { useFetch } from '@/hooks/useFetch';
-import ULRs from '@/constants/constants';
+import URLs from '@/constants/constants';
 import { axiosClient } from '@/services/api';
 import { useSelector } from 'react-redux';
 import { getIsLoggedIn } from '@/redux-store/selectors';
@@ -24,10 +24,10 @@ export const ChatProvider = ({ children }) => {
   const [unreadDMsCount, setUnreadDMsCount] = useState(0);
 
   const { responseData: roomsData } = useFetch(
-    isUserLoggedIn ? ULRs.userCountries : null
+    isUserLoggedIn ? URLs.userCountries : null
   );
   const { responseData: dmsData } = useFetch(
-    isUserLoggedIn ? ULRs.getPrivateChats : null
+    isUserLoggedIn ? URLs.getPrivateChats : null
   );
 
   useEffect(() => {
