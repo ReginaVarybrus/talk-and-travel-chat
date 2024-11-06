@@ -228,12 +228,6 @@ export const SendMessageBtn = styled.button`
   &:focus {
     background: var(--color-blue-5);
   }
-
-  @media ${device.tablet} {
-    font-size: 16px;
-    line-height: 19.2px;
-    letter-spacing: -0.36px;
-  }
 `;
 
 export const SearchInput = styled.input`
