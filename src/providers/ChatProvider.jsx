@@ -10,7 +10,7 @@ import { useFetch } from '@/hooks/useFetch';
 import URLs from '@/constants/constants';
 import { axiosClient } from '@/services/api';
 import { useSelector } from 'react-redux';
-import { getIsLoggedIn } from '@/redux-store/selectors';
+import { getIsLoggedIn, getToken } from '@/redux-store/selectors';
 
 const ChatContext = createContext();
 
@@ -18,6 +18,7 @@ export const useChatContext = () => useContext(ChatContext);
 
 export const ChatProvider = ({ children }) => {
   const isUserLoggedIn = useSelector(getIsLoggedIn);
+  const token = useSelector(getToken);
   const [subscriptionRooms, setSubscriptionRooms] = useState([]);
   const [dataUserChats, setDataUserChats] = useState([]);
   const [filteredPrivateChats, setFilteredPrivateChats] =
@@ -25,12 +26,20 @@ export const ChatProvider = ({ children }) => {
   const [unreadRoomsCount, setUnreadRoomsCount] = useState(0);
   const [unreadDMsCount, setUnreadDMsCount] = useState(0);
   const [searchedValue, setSearchedValue] = useState('');
+  const [isLoading, setIsLoading] = useState(true);
+  const checkLogin = !isLoading && isUserLoggedIn && token;
+
+  useEffect(() => {
+    if (isUserLoggedIn && token) {
+      setIsLoading(false);
+    }
+  }, [isUserLoggedIn, token]);
 
   const { responseData: roomsData } = useFetch(
-    isUserLoggedIn ? URLs.userCountries : null
+    checkLogin ? URLs.userCountries : null
   );
   const { responseData: dmsData } = useFetch(
-    isUserLoggedIn ? URLs.getPrivateChats : null
+    checkLogin ? URLs.getPrivateChats : null
   );
 
   useEffect(() => {
