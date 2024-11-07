@@ -15,8 +15,7 @@ export const register = createAsyncThunk(
       token.set(response.data.token);
       swal(
         'Success!',
-        // 'Letter with verification sent on your email',
-        'Welcome to our service, let`s start!',
+        'Letter with verification sent on your email',
         'success'
       );
       return response.data;
@@ -28,28 +27,28 @@ export const register = createAsyncThunk(
 
 export const logIn = createAsyncThunk(
   'auth/login',
-  async (userData, { dispatch, rejectWithValue }) => {
+  async (userData, { dispatch }) => {
     try {
       const response = await axiosClient.post(URLs.login, userData);
       dispatch(setUsers(response.data.userDto));
       token.set(response.data.token);
+      console.log(response.data);
       return response.data;
     } catch (e) {
       if (e.response.status === 400 || e.response.status === 401) {
-        swal('Error!', 'Email or password invalid', 'error');
-      } else if (e.response.status === 404) {
-        swal('Error!', 'Email is wrong', 'error');
-      } else {
-        swal('Error!', 'Login failed', 'error');
+        throw new Error(swal('Error!', e.response.data.message, 'error'));
       }
-      return rejectWithValue(e.response.data.message);
+      if (e.response.status === 404) {
+        throw new Error(swal('Error!', 'Email is wrong', 'error'));
+      }
+      throw new Error(swal('Error!', 'login failed', 'error'));
     }
   }
 );
 
 export const logOut = createAsyncThunk(
   'auth/logOut',
-  async (_, { dispatch }) => {
+  async (arg, { dispatch }) => {
     try {
       await axiosClient.post(URLs.logout);
       token.unset();

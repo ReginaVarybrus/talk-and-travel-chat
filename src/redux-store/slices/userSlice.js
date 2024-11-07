@@ -3,6 +3,7 @@ import
 {
   fetchCurrentUser,
   updateUser,
+  updateUsersAvatar
 } from '@/redux-store/UserOperations/UserOperations';
 
 const initialState = {
@@ -36,6 +37,7 @@ export const userSlice = createSlice({
   },
   extraReducers: builder =>
     builder
+      // TODO: update this call without userDto (by Demidas)
       .addCase(fetchCurrentUser.pending, handlePending)
       .addCase(fetchCurrentUser.rejected, handleRejected)
       .addCase(fetchCurrentUser.fulfilled, (state, action) => ({
@@ -52,7 +54,17 @@ export const userSlice = createSlice({
         ...state,
         ...action.payload,
       })
-      ),
+      )
+
+      .addCase(updateUsersAvatar.pending, handlePending)
+      .addCase(updateUsersAvatar.rejected, handleRejected)
+      .addCase(updateUsersAvatar.fulfilled, (state, action) =>
+      ({
+        ...state,
+        avatar: action.payload,
+      })
+      )
+
 });
 
 export const { setUsers, clearUser } = userSlice.actions;
