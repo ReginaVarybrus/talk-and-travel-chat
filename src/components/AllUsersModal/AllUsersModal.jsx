@@ -209,6 +209,7 @@ const AllUsersModal = ({ isOpen, onClose }) => {
                   <p>{userInfo.userEmail}</p>
                 </UserInfo>
               </UserContact>
+
               <AboutUser>
                 <InfoIcon />
                 <p>

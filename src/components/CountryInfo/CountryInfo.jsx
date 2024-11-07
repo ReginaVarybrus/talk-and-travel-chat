@@ -6,7 +6,6 @@ import { IoCloseOutline } from 'react-icons/io5';
 import { HiOutlineExclamationCircle } from 'react-icons/hi';
 import { FaRegMessage } from 'react-icons/fa6';
 import Modal from '@mui/material/Modal';
-import { useFetch } from '@/hooks/useFetch.js';
 import URLs from '@/constants/constants';
 import { useNavigate } from 'react-router-dom';
 import { useWebSocket } from '@/hooks/useWebSocket.js';
@@ -36,9 +35,11 @@ import {
   UserContactInfo,
   SendMessageBtn,
 } from './CountryInfoStyled.js';
+import Loader from '../Loader/Loader.jsx';
 
 const CountryInfo = ({
   chatData,
+  setChatData,
   isOpen,
   onClose,
   countryName,
@@ -48,6 +49,8 @@ const CountryInfo = ({
   setIsShowJoinBtn,
   setIsChatVisible,
   isShowJoinBtn,
+  participants,
+  loading,
 }) => {
   const isDesktop = useMediaQuery({ query: device.tablet });
   const currentUserId = useSelector(getUser)?.id;
@@ -104,8 +107,9 @@ const CountryInfo = ({
     if (!isDesktop) {
       setIsChatVisible(false);
     }
-    onClose();
     setIsShowJoinBtn(true);
+    setChatData(null);
+    onClose();
   };
 
   const handleJoinToChat = () => {
@@ -118,9 +122,6 @@ const CountryInfo = ({
     setParticipantsAmount(prevCount => prevCount + 1);
     onClose();
   };
-
-  const url = chatId && URLs.getChatsParticipants(chatId);
-  const { responseData: participants } = useFetch(url, '');
 
   if (!isOpen || !countryName || !chatId) {
     return null;
@@ -153,11 +154,12 @@ const CountryInfo = ({
             <p>{participantsAmount} members</p>
           </InfoBoxStyled>
         </HeaderStyled>
-
-        {!hasParticipants ? (
-          <Subtitle>There are no members here yet. Be the first.</Subtitle>
-        ) : (
-          <ContactsBoxStyled>
+        <ContactsBoxStyled>
+          {loading ? (
+            <Loader size={40} />
+          ) : !hasParticipants ? (
+            <Subtitle>There are no members here yet. Be the first.</Subtitle>
+          ) : (
             <ContactsList>
               {participants?.map(user => {
                 const userStatus = usersStatuses.find(
@@ -204,8 +206,8 @@ const CountryInfo = ({
                 );
               })}
             </ContactsList>
-          </ContactsBoxStyled>
-        )}
+          )}
+        </ContactsBoxStyled>
 
         <ButtonsBoxStyled>
           {isShowJoinBtn ? (
