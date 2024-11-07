@@ -19,6 +19,7 @@ import {
   HeaderButtonOpenMenu,
   FlagBoxStyled,
 } from './ChatHeaderStyled';
+import UserInfoModal from '../UserInfoModal/UserInfoModal';
 
 const ChatHeader = ({
   chatName = 'Country name',
@@ -36,9 +37,11 @@ const ChatHeader = ({
   isShowJoinBtn,
 }) => {
   const [openModal, setOpenModal] = useState(false);
+  const [openModalDMs, setOpenModalDMs] = useState(false);
   const [participants, setParticipants] = useState([]);
   const [loading, setLoading] = useState(false);
   const currentUserName = useSelector(getUser)?.userName;
+  const [userInfo, setUserInfo] = useState(null);
   const usersStatuses = useSelector(getUsersStatuses);
   const nameOfChat = isPrivateChat ? selectedCompanion.userName : chatName;
   const userStatus = usersStatuses.find(
@@ -94,15 +97,29 @@ const ChatHeader = ({
       setLoading(false);
     }
   };
+
+  const fetchUserInfo = async userId => {
+    try {
+      const userInfoResponse = await axiosClient.get(URLs.userInfo(userId));
+      setUserInfo(userInfoResponse.data);
+    } catch (error) {
+      console.error('Error fetching user info:', error);
+    }
+  };
+
   const handleOpen = () => {
     if (!isPrivateChat) {
       fetchParticipants();
       setOpenModal(true);
+    } else {
+      fetchUserInfo(selectedCompanion.id);
+      setOpenModalDMs(true);
     }
   };
 
   const handleClose = () => {
     setOpenModal(false);
+    setOpenModalDMs(false);
   };
 
   const handleBackToSearchBar = () => {
@@ -141,12 +158,10 @@ const ChatHeader = ({
           )}
         </MobileHeaderContentStyled>
       </MobileHeaderStyled>
-
       <DesktopHeaderStyled onClick={handleOpen}>
         <h5>{nameOfChat}</h5>
         <p>{getMessage()}</p>
       </DesktopHeaderStyled>
-
       <CountryInfo
         chatData={chatData}
         setChatData={setChatData}
@@ -161,6 +176,19 @@ const ChatHeader = ({
         isShowJoinBtn={isShowJoinBtn}
         participants={participants}
         loading={loading}
+      />
+      <UserInfoModal
+        open={openModalDMs}
+        handleClose={handleClose}
+        isPrivateChat={isPrivateChat}
+        chatId={chatId}
+        chatData={chatData}
+        setChatData={setChatData}
+        userAvatarUrl={userInfo?.avatarUrl}
+        userName={userInfo?.userName}
+        userEmail={userInfo?.userEmail}
+        about={userInfo?.about}
+        id={userInfo?.id}
       />
     </ChatHeaderStyled>
   );

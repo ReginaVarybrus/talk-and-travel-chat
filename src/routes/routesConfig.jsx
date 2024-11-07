@@ -1,6 +1,7 @@
 import { lazy } from 'react';
 import PrivateRoute from '@/routes/PrivateRoute';
 import { createBrowserRouter } from 'react-router-dom';
+import RestrictedRoute from './RestrictedRoute';
 
 const ROOT = import.meta.env.BASE_URL;
 
@@ -35,11 +36,21 @@ export const router = createBrowserRouter([
   },
   {
     path: routesPath.LOGIN,
-    Component: importComponent.LOGIN,
+    element: (
+      <RestrictedRoute
+        component={importComponent.LOGIN}
+        redirectTo={routesPath.ROOMS}
+      />
+    ),
   },
   {
     path: routesPath.REGISTER,
-    Component: importComponent.REGISTER,
+    element: (
+      <RestrictedRoute
+        component={importComponent.REGISTER}
+        redirectTo={routesPath.ROOMS}
+      />
+    ),
   },
   {
     path: routesPath.APP,

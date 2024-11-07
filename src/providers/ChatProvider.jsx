@@ -10,7 +10,7 @@ import { useFetch } from '@/hooks/useFetch';
 import URLs from '@/constants/constants';
 import { axiosClient } from '@/services/api';
 import { useSelector } from 'react-redux';
-import { getIsLoggedIn } from '@/redux-store/selectors';
+import { getIsLoggedIn, getToken } from '@/redux-store/selectors';
 
 const ChatContext = createContext();
 
@@ -18,6 +18,7 @@ export const useChatContext = () => useContext(ChatContext);
 
 export const ChatProvider = ({ children }) => {
   const isUserLoggedIn = useSelector(getIsLoggedIn);
+  const token = useSelector(getToken);
   const [subscriptionRooms, setSubscriptionRooms] = useState([]);
   const [dataUserChats, setDataUserChats] = useState([]);
   const [filteredPrivateChats, setFilteredPrivateChats] =
@@ -25,12 +26,20 @@ export const ChatProvider = ({ children }) => {
   const [unreadRoomsCount, setUnreadRoomsCount] = useState(0);
   const [unreadDMsCount, setUnreadDMsCount] = useState(0);
   const [searchedValue, setSearchedValue] = useState('');
+  const [isLoading, setIsLoading] = useState(true);
+  const checkLogin = !isLoading && isUserLoggedIn && token;
+
+  useEffect(() => {
+    if (isUserLoggedIn && token) {
+      setIsLoading(false);
+    }
+  }, [isUserLoggedIn, token]);
 
   const { responseData: roomsData } = useFetch(
-    isUserLoggedIn ? URLs.userCountries : null
+    checkLogin ? URLs.userCountries : null
   );
   const { responseData: dmsData } = useFetch(
-    isUserLoggedIn ? URLs.getPrivateChats : null
+    checkLogin ? URLs.getPrivateChats : null
   );
 
   useEffect(() => {
@@ -46,9 +55,10 @@ export const ChatProvider = ({ children }) => {
 
   useEffect(() => {
     if (dmsData) {
-      setDataUserChats(dmsData);
-      setFilteredPrivateChats(dmsData);
-      const totalUnreadDMs = dmsData.reduce(
+      const validChats = dmsData.filter(chat => chat.companion.id !== null);
+      setDataUserChats(validChats);
+      setFilteredPrivateChats(validChats);
+      const totalUnreadDMs = validChats.reduce(
         (acc, chat) => acc + chat.chat.unreadMessagesCount,
         0
       );
@@ -59,8 +69,11 @@ export const ChatProvider = ({ children }) => {
   const updateUserChats = async () => {
     try {
       const response = await axiosClient.get(URLs.getPrivateChats);
-      setDataUserChats(response.data);
-      setFilteredPrivateChats(response.data);
+      const validChats = response.data.filter(
+        chat => chat.companion && chat.companion.id !== null
+      );
+      setDataUserChats(validChats);
+      setFilteredPrivateChats(validChats);
     } catch (error) {
       console.error('Error updating user chats:', error);
     }
