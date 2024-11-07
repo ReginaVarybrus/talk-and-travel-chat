@@ -87,9 +87,7 @@ const LoginForm = () => {
                 name={value.general}
               />
             ))}
-            <LogInBtn style={{ marginTop: '32px' }} type="submit">
-              Log In
-            </LogInBtn>
+            <LogInBtn type="submit">Log In</LogInBtn>
             <Separator />
             <ButtonBlock>
               <ButtonGoogle type="button" />

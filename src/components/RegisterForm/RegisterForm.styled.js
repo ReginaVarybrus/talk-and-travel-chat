@@ -162,8 +162,9 @@ export const ButtonBlock = styled.div`
 
 export const TextForgotPassword = styled.button`
   position: absolute;
-  bottom: 260px;
-  right: 125px;
+  bottom: 20px;
+
+  right: 222px;
   color: var(--color-brand-blue);
   font-size: 12px;
   cursor: pointer;
