@@ -26,7 +26,7 @@ import {
 import ButtonFacebook from '@/components/Buttons/FaceBook/FaceBookButton';
 import ButtonGoogle from '@/components/Buttons/GoogleButton/GoogleButton';
 import { useState } from 'react';
-import CountryInfo from '../CountryInfo/CountryInfo';
+
 import RecoveryPassword from '../RecoveryPassword/RecoveryPassword';
 
 const initialValues = {};
