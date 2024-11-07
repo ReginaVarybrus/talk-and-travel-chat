@@ -4,7 +4,7 @@ import { isSameDay } from 'date-fns';
 import PropTypes from 'prop-types';
 import MessageItem from '@/components/MessageItem/MessageItem';
 import { MESSAGE_TYPES } from '@/constants/messageTypes.js';
-import { getUser } from '@/redux-store/selectors.js';
+import { getUser, getUsersStatuses } from '@/redux-store/selectors.js';
 import DateSeparator from '@/components/DateSeparator/DateSeparator.jsx';
 import { MessageListStyled } from './MessageListStyled.js';
 
@@ -12,11 +12,11 @@ const MessageList = ({
   messages,
   setIsUserTyping,
   setUsersTyping,
-  listOfOnlineUsersStatuses,
   unreadMessages,
   lastVisibleReadMessageRef,
 }) => {
   const currentUserName = useSelector(getUser)?.userName;
+  const usersStatuses = useSelector(getUsersStatuses);
 
   useEffect(() => {
     messages?.forEach(message => {
@@ -75,11 +75,11 @@ const MessageList = ({
       const isShownAvatar =
         message.type === MESSAGE_TYPES.TEXT && isLastMessage;
 
-      const userStatus = listOfOnlineUsersStatuses.get(
-        message.user.id.toString()
+      const userStatus = usersStatuses.find(
+        user => user.userId === message.user.id
       );
 
-      const isOnline = userStatus ? userStatus.isOnline : false;
+      const isOnline = userStatus ? userStatus.status.isOnline : false;
 
       const isLastVisibleReadMessage =
         index === sortedMessages.length - unreadMessages.length - 1;
@@ -95,7 +95,7 @@ const MessageList = ({
             content={message.content}
             userId={message.user?.id}
             userName={message.user?.userName}
-            userAvatarUrl={message.user?.avatarUrl}
+            userAvatarUrl={message.user?.avatar}
             date={message.creationDate}
             type={message.type}
             isShownAvatar={isShownAvatar}
@@ -115,7 +115,6 @@ MessageList.propTypes = {
   messages: PropTypes.array,
   setIsUserTyping: PropTypes.func,
   setUsersTyping: PropTypes.func,
-  listOfOnlineUsersStatuses: PropTypes.instanceOf(Map),
   unreadMessages: PropTypes.array,
   lastVisibleReadMessageRef: PropTypes.shape({
     current: PropTypes.instanceOf(Element),

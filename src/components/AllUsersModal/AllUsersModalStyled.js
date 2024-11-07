@@ -29,11 +29,9 @@ export const BoxStyled = styled(Box)`
 export const AvatarInList = styled.div`
   width: 36px;
   height: 36px;
-  background: var(--color-grey-6);
-  border-radius: 4px;
+
   img {
-    width: 100%;
-    height: 100%;
+    object-fit: cover;
     border-radius: 4px;
   }
 
@@ -47,6 +45,7 @@ export const AvatarImg = styled.img`
   min-width: 48px;
   height: 48px;
   border-radius: 8px;
+  object-fit: cover;
   @media ${device.tablet} {
     width: 100px;
     height: 100px;
@@ -58,7 +57,7 @@ export const AvatarInUserBlock = styled.div`
   height: 48px;
   background: var(--color-grey-6);
   border-radius: 8px;
-
+  object-fit: cover;
   @media ${device.tablet} {
     width: 100px;
     height: 100px;
@@ -82,6 +81,7 @@ export const LetterAvatar = styled.div`
     height: 48px;
   }
 `;
+
 export const LetterAvatarInUserBlock = styled.div`
   display: flex;
   justify-content: center;
@@ -227,12 +227,6 @@ export const SendMessageBtn = styled.button`
 
   &:focus {
     background: var(--color-blue-5);
-  }
-
-  @media ${device.tablet} {
-    font-size: 16px;
-    line-height: 19.2px;
-    letter-spacing: -0.36px;
   }
 `;
 

@@ -2,9 +2,12 @@ import { useState, useEffect } from 'react';
 import { useOutletContext } from 'react-router-dom';
 import { useFetch } from '@/hooks/useFetch.js';
 import URLs from '@/constants/constants';
+import { useDispatch, useSelector } from 'react-redux';
+import { fetchUsersOnlineStatuses } from '@/redux-store/UserOperations/UserOperations';
+import { updateUserStatus } from '@/redux-store/slices/userStatusesSlice';
+import { getUsersStatuses } from '@/redux-store/selectors.js';
 import SearchBar from '@/components/SearchBar/SearchBar';
 import Chat from '@/components/Chat/Chat';
-import { axiosClient } from '@/services/api';
 
 import { useWebSocket } from '@/hooks/useWebSocket.js';
 import { useChatContext } from '@/providers/ChatProvider.jsx';
@@ -12,18 +15,18 @@ import { useChatContext } from '@/providers/ChatProvider.jsx';
 import { ChatRouteStyled } from './ChatRouteStyled.js';
 
 const ChatRoute = () => {
+  const dispatch = useDispatch();
   const [chatData, setChatData] = useState({});
   const [isSubscribed, setIsSubscribed] = useState(false);
   const [isShowJoinBtn, setIsShowJoinBtn] = useState(false);
   const [participantsAmount, setParticipantsAmount] = useState(null);
   const [selectedCompanion, setSelectedCompanion] = useState(null);
-  const [listOfOnlineUsersStatuses, setListOfOnlineUsersStatuses] = useState(
-    new Map()
-  );
+  const listOfOnlineStatuses = useSelector(getUsersStatuses);
   const { responseData } = useFetch(URLs.userCountries);
   const {
     stompClient,
     subscribeToUsersStatuses,
+    // sendMessageOrEvent,
     unsubscribeFromUsersStatuses,
   } = useWebSocket();
 
@@ -40,10 +43,28 @@ const ChatRoute = () => {
   }, [responseData]);
 
   useEffect(() => {
+    dispatch(fetchUsersOnlineStatuses());
+  }, [dispatch]);
+
+  const handleStatusUpdate = receivedStatus => {
+    dispatch(
+      updateUserStatus({
+        userId: receivedStatus.userId,
+        status: {
+          isOnline: receivedStatus.isOnline,
+          lastSeenOn: receivedStatus.lastSeenOn || null,
+        },
+      })
+    );
+    console.log('received status:', receivedStatus);
+    console.log('list of statuses:', listOfOnlineStatuses);
+  };
+
+  useEffect(() => {
     if (stompClient?.connected) {
       const subscription = subscribeToUsersStatuses(
         URLs.usersOnlineStatus,
-        setListOfOnlineUsersStatuses
+        handleStatusUpdate
       );
 
       return () => {
@@ -54,28 +75,8 @@ const ChatRoute = () => {
     }
   }, [stompClient]);
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await axiosClient.get(URLs.getUsersOnlineStatusPath);
-        console.log('Map of online statuses:', response.data);
-        setListOfOnlineUsersStatuses(prevStatus => {
-          const updatedList = new Map(prevStatus);
-          Object.entries(response.data).forEach(([id, value]) => {
-            updatedList.set(id, value);
-          });
-          return updatedList;
-        });
-      } catch (error) {
-        console.error('Error fetching data:', error);
-      }
-    };
-
-    fetchData();
-  }, []);
-
   // const handleUserActiveEvent = () => {
-  //   sendMessageOrEvent(true, URLs.updateOnlineStatus);
+  //   sendMessageOrEvent({ isOnline: true }, URLs.updateOnlineStatus);
   // };
 
   // useUserActivity(handleUserActiveEvent);
@@ -88,7 +89,6 @@ const ChatRoute = () => {
         setIsShowJoinBtn={setIsShowJoinBtn}
         setSelectedCompanion={setSelectedCompanion}
         setParticipantsAmount={setParticipantsAmount}
-        listOfOnlineUsersStatuses={listOfOnlineUsersStatuses}
         isChatVisible={isChatVisible}
         setIsChatVisible={setIsChatVisible}
       />
@@ -104,7 +104,6 @@ const ChatRoute = () => {
         setSelectedCompanion={setSelectedCompanion}
         participantsAmount={participantsAmount}
         setParticipantsAmount={setParticipantsAmount}
-        listOfOnlineUsersStatuses={listOfOnlineUsersStatuses}
         isChatVisible={isChatVisible}
         setIsChatVisible={setIsChatVisible}
       />

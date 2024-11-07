@@ -1,11 +1,12 @@
 import { useState } from 'react';
 import PropTypes from 'prop-types';
 import { useSelector } from 'react-redux';
-import { getUser } from '@/redux-store/selectors.js';
-import CountryInfo from '@/components/CountryInfo/CountryInfo';
-import { formatDateOfLastSeen } from '@/components/utils/dateUtil.js';
 import { axiosClient } from '@/services/api';
 import URLs from '@/constants/constants';
+import { getUser, getUsersStatuses } from '@/redux-store/selectors.js';
+import CountryInfo from '@/components/CountryInfo/CountryInfo';
+import { formatDateOfLastSeen } from '@/components/utils/dateUtil.js';
+import UserInfoModal from '@/components/UserInfoModal/UserInfoModal';
 import {
   ChatHeaderStyled,
   MobileHeaderStyled,
@@ -33,19 +34,21 @@ const ChatHeader = ({
   chatId,
   setIsShowJoinBtn,
   setIsChatVisible,
-  listOfOnlineUsersStatuses,
   isShowJoinBtn,
 }) => {
   const [openModal, setOpenModal] = useState(false);
+  const [openModalDMs, setOpenModalDMs] = useState(false);
   const [participants, setParticipants] = useState([]);
   const [loading, setLoading] = useState(false);
   const currentUserName = useSelector(getUser)?.userName;
+  const [userInfo, setUserInfo] = useState(null);
+  const usersStatuses = useSelector(getUsersStatuses);
   const nameOfChat = isPrivateChat ? selectedCompanion.userName : chatName;
-  const userStatus = listOfOnlineUsersStatuses.get(
-    selectedCompanion?.id.toString()
+  const userStatus = usersStatuses.find(
+    user => user.userId === selectedCompanion?.id
   );
 
-  const isOnline = userStatus ? userStatus.isOnline : false;
+  const isOnline = userStatus ? userStatus.status.isOnline : false;
 
   const firstLetterOfName = selectedCompanion?.userName
     .substr(0, 1)
@@ -59,8 +62,8 @@ const ChatHeader = ({
       if (isPrivateChat && isOnline) {
         return 'online';
       }
-      if (isPrivateChat && userStatus.lastSeenOn) {
-        return formatDateOfLastSeen(userStatus.lastSeenOn);
+      if (isPrivateChat && userStatus.status.lastSeenOn) {
+        return formatDateOfLastSeen(userStatus.status.lastSeenOn);
       }
       if (isPrivateChat) {
         return '';
@@ -94,15 +97,29 @@ const ChatHeader = ({
       setLoading(false);
     }
   };
+
+  const fetchUserInfo = async userId => {
+    try {
+      const userInfoResponse = await axiosClient.get(URLs.userInfo(userId));
+      setUserInfo(userInfoResponse.data);
+    } catch (error) {
+      console.error('Error fetching user info:', error);
+    }
+  };
+
   const handleOpen = () => {
     if (!isPrivateChat) {
       fetchParticipants();
       setOpenModal(true);
+    } else {
+      fetchUserInfo(selectedCompanion.id);
+      setOpenModalDMs(true);
     }
   };
 
   const handleClose = () => {
     setOpenModal(false);
+    setOpenModalDMs(false);
   };
 
   const handleBackToSearchBar = () => {
@@ -141,12 +158,10 @@ const ChatHeader = ({
           )}
         </MobileHeaderContentStyled>
       </MobileHeaderStyled>
-
       <DesktopHeaderStyled onClick={handleOpen}>
         <h5>{nameOfChat}</h5>
         <p>{getMessage()}</p>
       </DesktopHeaderStyled>
-
       <CountryInfo
         chatData={chatData}
         setChatData={setChatData}
@@ -155,13 +170,25 @@ const ChatHeader = ({
         countryName={chatName}
         participantsAmount={participantsAmount || 0}
         setParticipantsAmount={setParticipantsAmount}
-        listOfOnlineUsersStatuses={listOfOnlineUsersStatuses}
         chatId={chatId}
         setIsShowJoinBtn={setIsShowJoinBtn}
         setIsChatVisible={setIsChatVisible}
         isShowJoinBtn={isShowJoinBtn}
         participants={participants}
         loading={loading}
+      />
+      <UserInfoModal
+        open={openModalDMs}
+        handleClose={handleClose}
+        isPrivateChat={isPrivateChat}
+        chatId={chatId}
+        chatData={chatData}
+        setChatData={setChatData}
+        userAvatarUrl={userInfo?.avatarUrl}
+        userName={userInfo?.userName}
+        userEmail={userInfo?.userEmail}
+        about={userInfo?.about}
+        id={userInfo?.id}
       />
     </ChatHeaderStyled>
   );
@@ -195,7 +222,6 @@ ChatHeader.propTypes = {
   chatId: PropTypes.number,
   setIsShowJoinBtn: PropTypes.func,
   setIsChatVisible: PropTypes.func,
-  listOfOnlineUsersStatuses: PropTypes.instanceOf(Map),
   isShowJoinBtn: PropTypes.bool,
 };
 

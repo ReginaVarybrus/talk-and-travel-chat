@@ -36,7 +36,6 @@ const Chat = ({
   setSelectedCompanion,
   participantsAmount,
   setParticipantsAmount,
-  listOfOnlineUsersStatuses,
   isChatVisible,
   setIsChatVisible,
 }) => {
@@ -344,7 +343,6 @@ const Chat = ({
 
   const handleScroll = e => {
     const { scrollHeight, clientHeight, scrollTop } = e.target;
-
     const isAtBottom = scrollTop + clientHeight >= scrollHeight - 10;
     const nearTop = scrollHeight + scrollTop <= clientHeight + 300;
 
@@ -477,7 +475,6 @@ const Chat = ({
         chatId={id}
         setIsShowJoinBtn={setIsShowJoinBtn}
         setIsChatVisible={setIsChatVisible}
-        listOfOnlineUsersStatuses={listOfOnlineUsersStatuses}
         isShowJoinBtn={isShowJoinBtn}
         setChatData={setChatData}
       />
@@ -497,7 +494,6 @@ const Chat = ({
             unreadMessages={unreadMessages}
             setIsUserTyping={setIsUserTyping}
             setUsersTyping={setUsersTyping}
-            listOfOnlineUsersStatuses={listOfOnlineUsersStatuses}
             lastVisibleReadMessageRef={lastVisibleReadMessageRef}
           />
         )}
