@@ -6,7 +6,7 @@ import { TextareaAutosize } from '@mui/material';
 const getNotificationColor = ({ $isErrorColor, $isSuccessColor }) => {
   if ($isErrorColor) return 'var(--color-error)';
   if ($isSuccessColor) return 'var(--color-success)';
-  return 'var (--color-grey-5)';
+  return 'var(--color-grey-13)';
 };
 
 const generalNotificationStyles = `
@@ -26,7 +26,7 @@ export const StyledLabel = styled.label`
   background: var(--white-color);
   padding: 0px 4px 0px 4px;
   margin: 0 12px;
-  color: 'var(--color-grey-6)';
+  color: var(--color-grey-9);
   font-size: 12px;
   line-height: 16px;
 `;
@@ -34,19 +34,29 @@ export const StyledLabel = styled.label`
 export const StyledInput = styled.input`
   box-sizing: border-box;
   width: 100%;
+  color: var(--color-dark);
+  font-family: "Roboto", sans-serif;
   font-size: 18px;
   line-height: 21.6px;
   height: 56px;
   border-radius: 8px;
-  outline: none;
-  border: 1px solid;
-  border-color: ${({ disabled }) =>
-    disabled ? 'transparent' : getNotificationColor};
+  border: 1px solid ${({ disabled }) => (disabled ? 'transparent' : getNotificationColor)};
   background-color: var(--white-color);
+
+    &:disabled {
+    color: var(--color-dark);
+    font-family: "Roboto", sans-serif;
+    font-size: 18px;
+    line-height: 21.6px;
+  }
 
   &:hover {
     border: 1px solid
       ${({ disabled }) => (disabled ? 'transparent' : 'var(--color-dark)')};
+  }
+  &:focus {
+    border: 1px solid var(--color-brand-blue);
+    outline: none;
   }
 
   &::placeholder {
@@ -65,7 +75,8 @@ export const StyledTextarea = styled(TextareaAutosize)`
   box-sizing: border-box;
   width: 100%;
   resize: none;
-
+  color: var(--color-dark);
+  font-family: "Roboto", sans-serif;
   font-size: 18px;
   line-height: 21.6px;
   overflow: auto !important;
@@ -76,9 +87,20 @@ export const StyledTextarea = styled(TextareaAutosize)`
   border-color: ${({ disabled }) =>
     disabled ? 'transparent' : getNotificationColor};
 
+  &:disabled {
+    color: var(--color-dark);
+    font-family: "Roboto", sans-serif;
+    font-size: 18px;
+    line-height: 21.6px;
+  }
+
   &:hover {
     border: 1px solid
       ${({ disabled }) => (disabled ? 'transparent' : 'var(--color-dark)')};
+  }
+  &:focus {
+    border: 1px solid var(--color-brand-blue);
+    outline: none;
   }
 
   &::placeholder {
