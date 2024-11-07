@@ -34,8 +34,6 @@ const UserInfoModal = ({
   const navigate = useNavigate();
   const { dataUserChats, updateUserChats } = useChatContext();
 
-  const firstLetterOfName = userName.substr(0, 1).toUpperCase();
-
   const checkExistingPrivateChat = companionId => {
     const isExist = dataUserChats?.find(
       chat => chat.companion.id === companionId
@@ -98,7 +96,9 @@ const UserInfoModal = ({
                 alt={`${userName}'s avatar`}
               />
             ) : (
-              <LetterAvatarStyled>{firstLetterOfName}</LetterAvatarStyled>
+              <LetterAvatarStyled>
+                {userName[0].toUpperCase()}
+              </LetterAvatarStyled>
             )}
 
             <UserInfo>

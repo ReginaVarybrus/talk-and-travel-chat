@@ -173,14 +173,14 @@ const CountryInfo = ({
                 return (
                   <Item key={user.id}>
                     <Avatar>
-                      {user.avatarUrl ? (
+                      {user.avatar ? (
                         <ImgAvatar
-                          src={user.avatarUrl}
+                          src={user.avatar.image50x50}
                           alt={`${user.userName}'s avatar`}
                         />
                       ) : (
                         <LetterAvatar>
-                          {user.userName.charAt(0).toUpperCase()}
+                          {user.userName[0].toUpperCase()}
                         </LetterAvatar>
                       )}
                       {isOnline && <Badge />}

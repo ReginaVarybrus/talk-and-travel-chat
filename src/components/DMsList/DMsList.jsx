@@ -103,9 +103,9 @@ const DMsList = () => {
                   >
                     <ChatNameStyled>
                       <Avatar>
-                        {companion.avatarUrl ? (
+                        {companion.avatar ? (
                           <ImgAvatar
-                            src={companion.avatarUrl || undefined}
+                            src={companion.avatar.image50x50 || undefined}
                             alt={`${companion.userName}'s avatar`}
                           />
                         ) : (
