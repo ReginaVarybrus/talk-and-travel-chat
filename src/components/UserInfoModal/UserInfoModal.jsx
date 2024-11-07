@@ -50,8 +50,6 @@ const UserInfoModal = ({
     setFilteredPrivateChats,
   } = useChatContext();
 
-  const firstLetterOfName = userName.substr(0, 1).toUpperCase();
-
   const openConfirmation = () => setConfirmOpen(true);
   const closeConfirmation = () => setConfirmOpen(false);
 
@@ -130,7 +128,9 @@ const UserInfoModal = ({
                   alt={`${userName}'s avatar`}
                 />
               ) : (
-                <LetterAvatarStyled>{firstLetterOfName}</LetterAvatarStyled>
+                <LetterAvatarStyled>
+                  {userName[0].toUpperCase()}
+                </LetterAvatarStyled>
               )}
 
               <UserInfo>
