@@ -55,9 +55,10 @@ export const ChatProvider = ({ children }) => {
 
   useEffect(() => {
     if (dmsData) {
-      setDataUserChats(dmsData);
-      setFilteredPrivateChats(dmsData);
-      const totalUnreadDMs = dmsData.reduce(
+      const validChats = dmsData.filter(chat => chat.companion.id !== null);
+      setDataUserChats(validChats);
+      setFilteredPrivateChats(validChats);
+      const totalUnreadDMs = validChats.reduce(
         (acc, chat) => acc + chat.chat.unreadMessagesCount,
         0
       );
@@ -68,8 +69,11 @@ export const ChatProvider = ({ children }) => {
   const updateUserChats = async () => {
     try {
       const response = await axiosClient.get(URLs.getPrivateChats);
-      setDataUserChats(response.data);
-      setFilteredPrivateChats(response.data);
+      const validChats = response.data.filter(
+        chat => chat.companion && chat.companion.id !== null
+      );
+      setDataUserChats(validChats);
+      setFilteredPrivateChats(validChats);
     } catch (error) {
       console.error('Error updating user chats:', error);
     }

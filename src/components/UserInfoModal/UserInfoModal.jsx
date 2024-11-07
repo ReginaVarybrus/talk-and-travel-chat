@@ -7,6 +7,8 @@ import { axiosClient } from '@/services/api';
 import { useNavigate } from 'react-router-dom';
 import { routesPath } from '@/routes/routesConfig';
 import { useChatContext } from '@/providers/ChatProvider';
+import { useWebSocket } from '@/hooks/useWebSocket';
+import { useState } from 'react';
 
 import {
   ModalWindowStyled,
@@ -20,6 +22,9 @@ import {
   AboutUser,
   InfoIcon,
   ButtonBlock,
+  ButtonLeave,
+  ConfirmBlock,
+  ConfirmModalStyled,
 } from './UserInfoModalStyled';
 
 const UserInfoModal = ({
@@ -30,16 +35,27 @@ const UserInfoModal = ({
   userEmail = 'email@gmail.com',
   about,
   id,
+  isPrivateChat,
+  chatId,
+  setChatData,
 }) => {
+  const [confirmOpen, setConfirmOpen] = useState(false);
   const navigate = useNavigate();
-  const { dataUserChats, updateUserChats } = useChatContext();
+  const { sendMessageOrEvent } = useWebSocket();
 
-  const firstLetterOfName = userName.substr(0, 1).toUpperCase();
+  const {
+    dataUserChats,
+    updateUserChats,
+
+    setFilteredPrivateChats,
+  } = useChatContext();
+
+  const openConfirmation = () => setConfirmOpen(true);
+  const closeConfirmation = () => setConfirmOpen(false);
 
   const checkExistingPrivateChat = companionId => {
-    const isExist = dataUserChats?.find(
-      chat => chat.companion.id === companionId
-    );
+    const validChats = dataUserChats.filter(chat => chat.companion.id !== null);
+    const isExist = validChats?.find(chat => chat.companion.id === companionId);
     return isExist ? isExist.chat.id : null;
   };
 
@@ -72,57 +88,104 @@ const UserInfoModal = ({
     }
   };
 
-  return (
-    <ModalWindowStyled
-      aria-labelledby="transition-modal-title"
-      aria-describedby="transition-modal-description"
-      open={open}
-      onClose={handleClose}
-      closeAfterTransition
-      slots={{ backdrop: Backdrop }}
-      slotProps={{
-        backdrop: {
-          timeout: 500,
-        },
-      }}
-    >
-      <Fade in={open}>
-        <InfoModalStyled>
-          <ButtonClose onClick={handleClose}>
-            <CloseIcon />
-          </ButtonClose>
-          <UserContactInfoStyled>
-            {userAvatarUrl ? (
-              <ModalAvatar
-                src={userAvatarUrl || undefined}
-                alt={`${userName}'s avatar`}
-              />
-            ) : (
-              <LetterAvatarStyled>{firstLetterOfName}</LetterAvatarStyled>
-            )}
+  const handleLeaveGroup = () => {
+    const dataEventToSend = {
+      chatId,
+    };
+    sendMessageOrEvent(dataEventToSend, URLs.leaveOutGroupChat);
+    setFilteredPrivateChats(prevRooms =>
+      prevRooms.filter(chat => chat.chat.id !== chatId)
+    );
+    setChatData(null);
+    handleClose();
+    closeConfirmation();
+  };
 
-            <UserInfo>
-              <h5>{userName}</h5>
-              <p>{userEmail}</p>
-            </UserInfo>
-          </UserContactInfoStyled>
-          <hr />
-          <AboutUser>
-            <InfoIcon />
-            <p>
-              {about ||
-                `${userName} hasn't added a description yet. But soon this space will be filled with interesting facts and stories.`}
-            </p>
-          </AboutUser>
-          <hr />
-          <ButtonBlock>
-            <SignUpBtn onClick={() => handleCreatePrivateChat(id)}>
-              Message
-            </SignUpBtn>
-          </ButtonBlock>
-        </InfoModalStyled>
-      </Fade>
-    </ModalWindowStyled>
+  return (
+    <>
+      <ModalWindowStyled
+        aria-labelledby="transition-modal-title"
+        aria-describedby="transition-modal-description"
+        open={open}
+        onClose={handleClose}
+        closeAfterTransition
+        slots={{ backdrop: Backdrop }}
+        slotProps={{
+          backdrop: {
+            timeout: 500,
+          },
+        }}
+      >
+        <Fade in={open}>
+          <InfoModalStyled>
+            <ButtonClose onClick={handleClose}>
+              <CloseIcon />
+            </ButtonClose>
+            <UserContactInfoStyled>
+              {userAvatarUrl ? (
+                <ModalAvatar
+                  src={userAvatarUrl || undefined}
+                  alt={`${userName}'s avatar`}
+                />
+              ) : (
+                <LetterAvatarStyled>
+                  {userName[0].toUpperCase()}
+                </LetterAvatarStyled>
+              )}
+
+              <UserInfo>
+                <h5>{userName}</h5>
+                <p>{userEmail}</p>
+              </UserInfo>
+            </UserContactInfoStyled>
+            <hr />
+            <AboutUser>
+              <InfoIcon />
+              <p>
+                {about ||
+                  `${userName} hasn't added a description yet. But soon this space will be filled with interesting facts and stories.`}
+              </p>
+            </AboutUser>
+            <hr />
+
+            {isPrivateChat ? (
+              <ButtonLeave onClick={openConfirmation}>Leave Chat</ButtonLeave>
+            ) : (
+              <ButtonBlock>
+                <SignUpBtn onClick={() => handleCreatePrivateChat(id)}>
+                  Message
+                </SignUpBtn>
+              </ButtonBlock>
+            )}
+          </InfoModalStyled>
+        </Fade>
+      </ModalWindowStyled>
+      <ModalWindowStyled
+        open={confirmOpen}
+        onClose={closeConfirmation}
+        closeAfterTransition
+        slots={{ backdrop: Backdrop }}
+        slotProps={{
+          backdrop: {
+            timeout: 500,
+          },
+        }}
+      >
+        <Fade in={confirmOpen}>
+          <ConfirmModalStyled>
+            <h5>Are you sure you want to leave the chat?</h5>
+            <ConfirmBlock>
+              <button className="confirm" onClick={handleLeaveGroup}>
+                Yes, leave
+              </button>
+              <button className="cancel" onClick={closeConfirmation}>
+                Cancel
+              </button>
+            </ConfirmBlock>
+          </ConfirmModalStyled>
+        </Fade>
+      </ModalWindowStyled>
+    </>
   );
 };
 
