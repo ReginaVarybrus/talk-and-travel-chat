@@ -44,7 +44,7 @@ const LoginForm = () => {
     validateOnChange: false,
     onSubmit: async (values, { resetForm }) => {
       try {
-        await dispatch(logIn(values));
+        await dispatch(logIn(values)).unwrap();
         await persistor.flush();
         navigate(routesPath.ROOMS);
         resetForm();
