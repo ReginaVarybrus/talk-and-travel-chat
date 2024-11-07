@@ -10,7 +10,7 @@ import URLs from '@/constants/constants';
 import { useNavigate } from 'react-router-dom';
 import { useWebSocket } from '@/hooks/useWebSocket.js';
 import { useSelector } from 'react-redux';
-import { getUser } from '@/redux-store/selectors.js';
+import { getUser, getUsersStatuses } from '@/redux-store/selectors.js';
 import { routesPath } from '@/routes/routesConfig.jsx';
 import { axiosClient } from '@/services/api.js';
 import { useChatContext } from '@/providers/ChatProvider';
@@ -44,7 +44,6 @@ const CountryInfo = ({
   onClose,
   countryName,
   participantsAmount,
-  listOfOnlineUsersStatuses,
   setParticipantsAmount,
   chatId,
   setIsShowJoinBtn,
@@ -55,6 +54,7 @@ const CountryInfo = ({
 }) => {
   const isDesktop = useMediaQuery({ query: device.tablet });
   const currentUserId = useSelector(getUser)?.id;
+  const usersStatuses = useSelector(getUsersStatuses);
   const { sendMessageOrEvent } = useWebSocket();
   const navigate = useNavigate();
   const { setSubscriptionRooms, dataUserChats, updateUserChats } =
@@ -162,23 +162,25 @@ const CountryInfo = ({
           ) : (
             <ContactsList>
               {participants?.map(user => {
-                const userStatus = listOfOnlineUsersStatuses.get(
-                  user.id.toString()
+                const userStatus = usersStatuses.find(
+                  userFind => userFind.userId === user.id
                 );
 
-                const isOnline = userStatus ? userStatus.isOnline : false;
+                const isOnline = userStatus
+                  ? userStatus.status.isOnline
+                  : false;
 
                 return (
                   <Item key={user.id}>
                     <Avatar>
-                      {user.avatarUrl ? (
+                      {user.avatar ? (
                         <ImgAvatar
-                          src={user.avatarUrl}
+                          src={user.avatar.image50x50}
                           alt={`${user.userName}'s avatar`}
                         />
                       ) : (
                         <LetterAvatar>
-                          {user.userName.charAt(0).toUpperCase()}
+                          {user.userName[0].toUpperCase()}
                         </LetterAvatar>
                       )}
                       {isOnline && <Badge />}

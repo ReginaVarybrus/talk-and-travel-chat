@@ -158,7 +158,7 @@ const AccountRoute = () => {
           <Avatar
             src={
               avatarPreview ||
-              `${user.avatar.image256x256}?lastmod=${new Date().getTime()}`
+              `${user.avatar?.image256x256}?lastmod=${new Date().getTime()}`
             }
             alt="User Avatar"
           />

@@ -175,10 +175,18 @@ const UserInfoModal = ({
           <ConfirmModalStyled>
             <h5>Are you sure you want to leave the chat?</h5>
             <ConfirmBlock>
-              <button className="confirm" onClick={handleLeaveGroup}>
+              <button
+                type="button"
+                className="confirm"
+                onClick={handleLeaveGroup}
+              >
                 Yes, leave
               </button>
-              <button className="cancel" onClick={closeConfirmation}>
+              <button
+                type="button"
+                className="cancel"
+                onClick={closeConfirmation}
+              >
                 Cancel
               </button>
             </ConfirmBlock>

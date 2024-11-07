@@ -21,7 +21,7 @@ import {
 } from './SideBarStyled';
 
 const SideBar = () => {
-  const { userName, avatarUrl } = useSelector(getUser) || {};
+  const { userName, avatar } = useSelector(getUser) || {};
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const location = useLocation();
@@ -58,9 +58,9 @@ const SideBar = () => {
           onClick={handleProfileOpen}
           $isActive={currentPage === routesPath.ACCOUNT}
         >
-          {avatarUrl ? (
+          {avatar ? (
             <ImgAvatar
-              src={avatarUrl || undefined}
+              src={avatar.image50x50 || undefined}
               alt={`${userName}'s avatar`}
             />
           ) : (

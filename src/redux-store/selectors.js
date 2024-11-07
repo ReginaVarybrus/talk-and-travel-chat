@@ -4,3 +4,4 @@ export const getToken = state => state.auth.token;
 export const getUser = state => state.user;
 export const getAvatar = state => state.user.avatar;
 
+export const getUsersStatuses = state => state.usersStatuses.statuses;

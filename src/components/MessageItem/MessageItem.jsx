@@ -71,7 +71,7 @@ const MessageItem = ({
           onClick={!isCurrentUser ? handleOpen : undefined}
         >
           <ImgAvatar
-            src={userAvatarUrl || undefined}
+            src={userAvatarUrl?.image50x50 || undefined}
             alt={`${userName}'s avatar`}
             $userAvatarUrl={userAvatarUrl}
           />
@@ -97,7 +97,7 @@ const MessageItem = ({
       <UserInfoModal
         open={open}
         handleClose={handleClose}
-        userAvatarUrl={userInfo?.avatarUrl}
+        userAvatarUrl={userInfo?.avatar?.image256x256}
         userName={userInfo?.userName}
         userEmail={userInfo?.userEmail}
         about={userInfo?.about}
