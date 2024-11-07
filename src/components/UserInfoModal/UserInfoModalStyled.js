@@ -28,6 +28,31 @@ export const InfoModalStyled = styled(Box)`
   }
 `;
 
+export const ConfirmModalStyled = styled(Box)`
+  box-sizing: border-box;
+  position: relative;
+  width: 227px;
+  padding: 24px;
+  margin: auto;
+  background: var(--white-color);
+  border-radius: 16px;
+  box-shadow: 0 2px 6px 2px rgba(0, 0, 0, 0.3);
+  z-index: 1;
+
+  @media ${device.tablet} {
+    width: 380px;
+    padding: 32px;
+
+    h5 {
+      margin-bottom: 32px;
+    }
+  }
+
+  h5 {
+    text-align: center;
+    margin-bottom: 24px;
+  }
+`;
 export const ButtonClose = styled.button`
   position: absolute;
   top: 20px;
@@ -67,6 +92,7 @@ export const ModalAvatar = styled.img`
   min-width: 48px;
   height: 48px;
   border-radius: 8px;
+  object-fit: cover;
   @media ${device.tablet} {
     width: 100px;
     height: 100px;
@@ -117,5 +143,65 @@ export const ButtonBlock = styled.div`
   }
   @media ${device.tablet} {
     margin: 23px 155px 0;
+  }
+`;
+
+export const ButtonLeave = styled.button`
+  margin: 0 auto;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 16px;
+  font-weight: 700;
+  background: var(--color-brand-blue);
+  box-shadow: 4px 2px 16px 0px rgba(136, 165, 191, 0.48);
+  cursor: pointer;
+  color: var(--white-color);
+  width: 136px;
+  height: 46px;
+  border: none;
+  border-radius: 8px;
+  outline: none;
+  transition: all 0.3s;
+  margin-top: 32px;
+  &:hover,
+  &:focus {
+    background: var(--color-blue-5);
+  }
+`;
+
+export const ConfirmBlock = styled.div`
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  gap: 45px;
+
+  button {
+    border-radius: 8px;
+    outline: none;
+    font-size: 14px;
+    font-weight: 700;
+    box-shadow: 4px 2px 16px 0px rgba(136, 165, 191, 0.48);
+    width: 95px;
+    height: 40px;
+    transition: all 0.3s;
+    cursor: pointer;
+  }
+  .confirm {
+    border: none;
+    background: var(--color-brand-blue);
+    color: var(--white-color);
+
+    &:hover {
+      background: var(--color-blue-5);
+    }
+  }
+  .cancel {
+    border: 1px solid #1976d2;
+    color: var(--color-grey-8);
+    background: var(--white-color);
+    &:hover {
+      background: var(--color-blue-1);
+    }
   }
 `;

@@ -17,7 +17,6 @@ const SearchBar = ({
   setIsShowJoinBtn,
   setSelectedCompanion,
   setParticipantsAmount,
-  listOfOnlineUsersStatuses,
   isChatVisible,
   setIsChatVisible,
 }) => {
@@ -65,7 +64,6 @@ const SearchBar = ({
             setSelectedCompanion,
             setIsChatVisible,
             setParticipantsAmount,
-            listOfOnlineUsersStatuses,
           }}
         />
       </div>

@@ -161,16 +161,16 @@ const AllUsersModal = ({ isOpen, onClose }) => {
                   <Item key={user.id}>
                     <UserName>
                       <AvatarInList>
-                        {user.avatarUrl ? (
+                        {user.avatar ? (
                           <img
-                            src={user.avatarUrl}
+                            src={user.avatar.image50x50}
                             alt={user.userName}
                             width="48"
                             height="48"
                           />
                         ) : (
                           <LetterAvatar>
-                            {user.userName.charAt(0).toUpperCase()}
+                            {user.userName[0].toUpperCase()}
                           </LetterAvatar>
                         )}
                       </AvatarInList>
@@ -193,14 +193,14 @@ const AllUsersModal = ({ isOpen, onClose }) => {
             <UserInfoBox>
               <UserContact>
                 <AvatarInUserBlock>
-                  {userInfo.avatarUrl ? (
+                  {userInfo.avatar ? (
                     <AvatarImg
-                      src={userInfo.avatarUrl}
+                      src={userInfo.avatar.image256x256}
                       alt={`${userInfo.userName}'s avatar`}
                     />
                   ) : (
                     <LetterAvatarInUserBlock>
-                      {userInfo.userName.charAt(0).toUpperCase()}
+                      {userInfo.userName[0].toUpperCase()}
                     </LetterAvatarInUserBlock>
                   )}
                 </AvatarInUserBlock>
