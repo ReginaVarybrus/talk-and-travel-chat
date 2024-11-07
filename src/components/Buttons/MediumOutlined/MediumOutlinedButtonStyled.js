@@ -3,7 +3,7 @@ import styled from 'styled-components';
 export const MediumOutlinedButtonStyled = styled.button`
 width: 92px;
 height: 36px;
-padding: 8px 24px;
+padding: 8px 20px;
 border-radius: 8px;
 border: 1px solid var(--color-brand-blue);
 color: var(--color-grey-8);

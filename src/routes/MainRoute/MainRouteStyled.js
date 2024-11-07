@@ -82,10 +82,10 @@ display: none;
 }
 `;
 
-export const MainPageSectionThree = styled(Box)`
+export const MainPageSectionThree = styled.div`
 `;
 
-export const SectionThreeContainer = styled(Box)`
+export const SectionThreeContainer = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
