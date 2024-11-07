@@ -36,7 +36,6 @@ export const userStatusesSlice = createSlice({
         state.error = action.payload;
       })
       .addCase(fetchUsersOnlineStatuses.fulfilled, (state, action) => {
-        console.log('Payload on fulfilled:', action.payload);
         state.statuses = action.payload;
         state.isLoading = false;
       }),
