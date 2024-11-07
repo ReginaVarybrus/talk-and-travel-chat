@@ -1,11 +1,12 @@
 import { useState } from 'react';
 import PropTypes from 'prop-types';
 import { useSelector } from 'react-redux';
+import { axiosClient } from '@/services/api';
+import URLs from '@/constants/constants';
 import { getUser, getUsersStatuses } from '@/redux-store/selectors.js';
 import CountryInfo from '@/components/CountryInfo/CountryInfo';
 import { formatDateOfLastSeen } from '@/components/utils/dateUtil.js';
-import { axiosClient } from '@/services/api';
-import URLs from '@/constants/constants';
+import UserInfoModal from '@/components/UserInfoModal/UserInfoModal';
 import {
   ChatHeaderStyled,
   MobileHeaderStyled,
@@ -19,7 +20,6 @@ import {
   HeaderButtonOpenMenu,
   FlagBoxStyled,
 } from './ChatHeaderStyled';
-import UserInfoModal from '../UserInfoModal/UserInfoModal';
 
 const ChatHeader = ({
   chatName = 'Country name',
