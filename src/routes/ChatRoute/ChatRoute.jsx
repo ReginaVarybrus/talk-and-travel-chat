@@ -21,6 +21,7 @@ const ChatRoute = () => {
   const [isShowJoinBtn, setIsShowJoinBtn] = useState(false);
   const [participantsAmount, setParticipantsAmount] = useState(null);
   const [selectedCompanion, setSelectedCompanion] = useState(null);
+  // const currentUserId = useSelector(getUser)?.id;
   const listOfOnlineStatuses = useSelector(getUsersStatuses);
   const { responseData } = useFetch(URLs.userCountries);
   const {
@@ -76,10 +77,10 @@ const ChatRoute = () => {
   }, [stompClient]);
 
   // const handleUserActiveEvent = () => {
-  //   sendMessageOrEvent({ isOnline: true }, URLs.updateOnlineStatus);
+  //   sendMessageOrEvent(true, URLs.updateOnlineStatus);
   // };
 
-  // useUserActivity(handleUserActiveEvent);
+  // useUserActivity(handleUserActiveEvent, currentUserId);
 
   return (
     <ChatRouteStyled>
