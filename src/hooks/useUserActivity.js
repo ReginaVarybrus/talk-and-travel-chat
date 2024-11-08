@@ -14,14 +14,14 @@ const useUserActivity = sendUpdateUserActivityEvent => {
     };
 
     const updateActivityEvents = [
-      // 'mousemove',
+      'mousemove',
       'keydown',
       // 'mousedown',
       // 'touchstart',
     ];
 
     updateActivityEvents.forEach(event =>
-      window.addEventListener(event, handleUpdateActivity(true))
+      window.addEventListener(event, () => handleUpdateActivity(true))
     );
 
     document.addEventListener('visibilitychange', () => {
