@@ -1,8 +1,8 @@
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import swal from 'sweetalert';
-
+import URLs from '@/constants/constants';
 import InputField from '@/components/InputField/InputField';
 import { axiosClient } from '@/services/api';
 import { routesPath } from '@/routes/routesConfig';
@@ -15,8 +15,9 @@ import {
 import { SignUpBtn } from '../RegisterForm/RegisterForm.styled';
 
 const ResetPassword = () => {
-  const { token } = useParams();
   const navigate = useNavigate();
+  const location = useLocation();
+  const token = new URLSearchParams(location.search).get('token');
 
   const formik = useFormik({
     initialValues: { password: '', repeatPassword: '' },
@@ -36,12 +37,14 @@ const ResetPassword = () => {
     }),
     onSubmit: async values => {
       try {
-        console.log(`Mock: token ${token}`);
-        // await axiosClient.put(`/user/password/${token}`, {
-        //   password: values.password,
-        // });
-        swal('Password successfully reset!', '', 'success');
-        navigate(routesPath.LOGIN);
+        const response = await axiosClient.patch(URLs.passwordRecovery, {
+          token,
+          newPassword: values.password,
+        });
+        if (response.status === 204) {
+          swal('Password successfully reset!', '', 'success');
+          navigate(routesPath.LOGIN);
+        }
       } catch (error) {
         console.error('Error resetting password:', error);
         swal('Failed to reset password. Please try again.', '', 'error');

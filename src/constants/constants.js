@@ -3,12 +3,12 @@ const URLs = {
   register: 'authentication/register',
   login: 'authentication/login',
   logout: 'authentication/logout',
+  passwordRecovery: 'authentication/password-recovery',
 
   // User operations
   currentUser: 'current',
   updateUser: 'users',
   usersAvatarUrl: `/v2/user/avatar`,
-  passwordRecovery: 'password-recovery',
 
   getCountries: 'v2/main-countries-chats',
   userInfo: userId => `users/${userId}`,

@@ -14,7 +14,7 @@ export const routesPath = {
   ROOMS: `/app/chat/rooms-chat/`,
   DMS: `/app/chat/dms-chat/`,
   ACCOUNT: `/app/account/`,
-  RESET_PASSWORD: '/password-recovery/:token',
+  RESET_PASSWORD: '/password-recovery',
 };
 
 const importComponent = {

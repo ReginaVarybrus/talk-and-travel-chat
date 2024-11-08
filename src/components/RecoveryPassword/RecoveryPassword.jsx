@@ -5,7 +5,6 @@ import Modal from '@mui/material/Modal';
 import { IoCloseOutline } from 'react-icons/io5';
 import swal from 'sweetalert';
 import { axiosClient } from '@/services/api';
-import axios from 'axios';
 import URLs from '@/constants/constants';
 import { BoxStyled, CloseBtn, Subtitle, Title } from './RecoveryPasswordStyled';
 import { SignUpBtn } from '../RegisterForm/RegisterForm.styled';
@@ -13,13 +12,17 @@ import { SignUpBtn } from '../RegisterForm/RegisterForm.styled';
 const RecoveryPassword = ({ isOpen, onClose }) => {
   const sendRecoveryEmail = async email => {
     try {
-      console.log(`Mock: sending recovery email to ${email}`);
-      swal(
-        'Check your email',
-        'We have sent you a recovery link. Please check your inbox',
-        'info'
-      );
-      onClose();
+      const response = await axiosClient.post(URLs.passwordRecovery, {
+        userEmail: email,
+      });
+      if (response.status === 202) {
+        swal(
+          'Check your email',
+          'We have sent you a recovery link. Please check your inbox',
+          'info'
+        );
+        onClose();
+      }
     } catch (error) {
       console.error('Mock error:', error);
       swal(
