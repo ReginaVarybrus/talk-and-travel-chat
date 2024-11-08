@@ -2,6 +2,7 @@ import {
   InputFieldStyled,
   StyledLabel,
   StyledInput,
+  TextareaStyled,
   StyledTextarea,
   ErrorStyled,
   SuccessStyled,
@@ -86,19 +87,22 @@ const InputField = ({
       )}
       {/* Conditionally render textarea or input basing on props.type */}
       {props.type === 'textarea' ? (
-        <StyledTextarea
-          id={props.general}
-          name={props.general}
-          type={props.type}
-          disabled={disabled}
-          onChange={onChange || formik.handleChange}
-          value={formik.values[props.general] || ''}
-          placeholder={props.placeholder}
-          maxLength={maxLength}
-          $isErrorColor={formik.errors[props.general]}
-          $isSuccessColor={formik.touched[props.general]}
-          $backgroundcolor={backgroundcolor}
-        />
+        <TextareaStyled>
+          <StyledTextarea
+            maxRows={5}
+            id={props.general}
+            name={props.general}
+            type={props.type}
+            disabled={disabled}
+            onChange={onChange || formik.handleChange}
+            value={formik.values[props.general] || ''}
+            placeholder={props.placeholder}
+            maxLength={maxLength}
+            $isErrorColor={formik.errors[props.general]}
+            $isSuccessColor={formik.touched[props.general]}
+            $backgroundcolor={backgroundcolor}
+          />
+        </TextareaStyled>
       ) : (
         <StyledInput
           autoComplete="off"

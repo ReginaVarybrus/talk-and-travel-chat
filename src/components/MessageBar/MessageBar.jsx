@@ -13,6 +13,7 @@ import {
   ButtonAttachFile,
   VisuallyHiddenInput,
   AttachmentIcon,
+  TextareaStyled,
   TextareaAutosize,
   ButtonSendMessage,
   SendIcon,
@@ -122,18 +123,21 @@ const MessageBar = ({
             <AttachmentIcon />
             <VisuallyHiddenInput type="file" />
           </ButtonAttachFile>
-          <TextareaAutosize
-            aria-label="empty textarea"
-            placeholder="Type here"
-            value={message}
-            onKeyUp={e => {
-              if (e.key === 'Enter' && !e.shiftKey && isMessageNotEmpty) {
-                handleSubmit(e);
-              }
-            }}
-            onChange={handleChange}
-            maxLength="1000"
-          />
+          <TextareaStyled>
+            <TextareaAutosize
+              maxRows={10}
+              aria-label="empty textarea"
+              placeholder="Type here"
+              value={message}
+              onKeyUp={e => {
+                if (e.key === 'Enter' && !e.shiftKey && isMessageNotEmpty) {
+                  handleSubmit(e);
+                }
+              }}
+              onChange={handleChange}
+              maxLength="1000"
+            />
+          </TextareaStyled>
           <ButtonSendMessage
             type="submit"
             value="Send"
