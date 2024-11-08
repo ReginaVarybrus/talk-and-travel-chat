@@ -30,6 +30,7 @@ export const HeaderStyled = styled.div`
   flex-direction: row;
   gap: 16px;
   align-items: center;
+  padding: 12.5px 0;
 `;
 
 export const ContactsBoxStyled = styled.div`
@@ -72,13 +73,13 @@ export const ContactsList = styled.ul`
 
 export const Flag = styled.img`
   width: 48px;
-  height: 36px;
+  height: 100%;
   padding: 6px 0;
+  border: 0.5px solid var(--color-grey-5);
+  padding: 0;
 
   @media ${device.tablet} {
     width: 100px;
-    height: 75px;
-    padding: 12.5px 0;
   }
 `;
 
