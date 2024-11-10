@@ -1,95 +1,21 @@
-// import { useEffect, useRef } from 'react';
-// import { useSelector } from 'react-redux';
-// import { getUsersStatuses } from '@/redux-store/selectors.js';
-// import PropTypes from 'prop-types';
-
-// const useUserActivity = (sendUpdateUserActivityEvent, userId) => {
-//   const usersStatuses = useSelector(getUsersStatuses);
-//   const userStatus = usersStatuses.find(user => user.userId === userId);
-//   const isOffline = userStatus ? !userStatus.status.isOnline : true;
-//   const hasSentOnlineEvent = useRef(false);
-
-//   useEffect(() => {
-//     const handleUpdateActivity = status => {
-//       if (isOffline && !hasSentOnlineEvent.current) {
-//         sendUpdateUserActivityEvent(status);
-//         hasSentOnlineEvent.current = true;
-//         console.log(' one of events sended');
-//       }
-//     };
-
-//     const updateActivityEvents = [
-//       'mousemove',
-//       'keydown',
-//       'mousedown',
-//       'touchstart',
-//     ];
-
-//     updateActivityEvents.forEach(event =>
-//       window.addEventListener(event, () => handleUpdateActivity(true))
-//     );
-
-//     document.addEventListener('visibilitychange', () => {
-//       console.log('visibility state', document.visibilityState);
-//       if (document.visibilityState === 'visible') {
-//         handleUpdateActivity(true);
-//       } else {
-//         handleUpdateActivity(false);
-//       }
-//     });
-
-//     return () => {
-//       updateActivityEvents.forEach(event =>
-//         window.removeEventListener(event, handleUpdateActivity)
-//       );
-//       document.removeEventListener('visibilitychange', handleUpdateActivity);
-//     };
-//   }, [sendUpdateUserActivityEvent, isOffline]);
-
-//   useEffect(() => {
-//     if (!isOffline) {
-//       hasSentOnlineEvent.current = false;
-//     }
-//   }, [isOffline]);
-
-//   return () => {};
-// };
-
-// useUserActivity.propTypes = {
-//   sendUpdateUserActivityEvent: PropTypes.func,
-// };
-
-// export default useUserActivity;
-
-import { useEffect, useRef } from 'react';
+import { useEffect, useCallback } from 'react';
 import { useSelector } from 'react-redux';
 import { getUsersStatuses } from '@/redux-store/selectors.js';
 import PropTypes from 'prop-types';
 
 const useUserActivity = (sendUpdateUserActivityEvent, userId) => {
-  // Отримуємо всі статуси користувачів з Redux store
   const usersStatuses = useSelector(getUsersStatuses);
-
-  // Знайдемо статус конкретного користувача
   const userStatus = usersStatuses.find(user => user.userId === userId);
-
-  // Якщо статус користувача не знайдено, вважаємо, що він офлайн
   const isOffline = userStatus ? !userStatus.status.isOnline : true;
 
-  // useRef для відслідковування того, чи була відправлена подія "online"
-  const hasSentOnlineEvent = useRef(false);
+  const handleUpdateActivity = useCallback(() => {
+    if (isOffline) {
+      sendUpdateUserActivityEvent();
+      console.log('User is now online, event sent');
+    }
+  }, [isOffline, sendUpdateUserActivityEvent]);
 
   useEffect(() => {
-    const handleUpdateActivity = status => {
-      // Якщо користувач офлайн і подія не була відправлена
-      if (isOffline && !hasSentOnlineEvent.current) {
-        sendUpdateUserActivityEvent(status);
-        hasSentOnlineEvent.current = true;
-        console.log('One of events sent');
-      }
-    };
-
-    // Перелік подій, які відслідковуються
     const updateActivityEvents = [
       'mousemove',
       'keydown',
@@ -97,38 +23,26 @@ const useUserActivity = (sendUpdateUserActivityEvent, userId) => {
       'touchstart',
     ];
 
-    // Додаємо обробники подій
     updateActivityEvents.forEach(event =>
-      window.addEventListener(event, () => handleUpdateActivity(true))
+      window.addEventListener(event, handleUpdateActivity)
     );
 
-    // Обробка події "visibilitychange"
-    document.addEventListener('visibilitychange', () => {
+    const visibilityChangeHandler = () => {
       console.log('Visibility state', document.visibilityState);
       if (document.visibilityState === 'visible') {
-        handleUpdateActivity(true);
-      } else {
-        handleUpdateActivity(false);
+        handleUpdateActivity();
       }
-    });
+    };
 
-    // Очистка подій при демонтажі компонента
+    document.addEventListener('visibilitychange', visibilityChangeHandler);
+
     return () => {
       updateActivityEvents.forEach(event =>
-        window.removeEventListener(event, () => handleUpdateActivity(true))
+        window.removeEventListener(event, handleUpdateActivity)
       );
-      document.removeEventListener('visibilitychange', () =>
-        handleUpdateActivity(true)
-      );
+      document.removeEventListener('visibilitychange', visibilityChangeHandler);
     };
-  }, [isOffline, sendUpdateUserActivityEvent]);
-
-  useEffect(() => {
-    // Якщо користувач онлайн, скидаємо стан
-    if (!isOffline) {
-      hasSentOnlineEvent.current = false;
-    }
-  }, [isOffline]);
+  }, [handleUpdateActivity]);
 
   return () => {};
 };
@@ -138,3 +52,68 @@ useUserActivity.propTypes = {
 };
 
 export default useUserActivity;
+
+// const useUserActivity = (sendUpdateUserActivityEvent, userId) => {
+//   const usersStatuses = useSelector(getUsersStatuses);
+//   const userStatus = usersStatuses.find(user => user.userId === userId);
+//   const isOffline = userStatus ? !userStatus.status.isOnline : true;
+//   const activityTimeoutRef = useRef(null); // таймер для обмеження
+
+//   const handleUpdateActivity = useCallback(() => {
+//     if (isOffline) {
+//       sendUpdateUserActivityEvent();
+//       console.log('User is now online, event sent');
+//     }
+//   }, [isOffline, sendUpdateUserActivityEvent]);
+
+//   const debouncedActivityHandler = useCallback(() => {
+//     // скидаємо попередній таймер, якщо він ще активний
+//     if (activityTimeoutRef.current) {
+//       clearTimeout(activityTimeoutRef.current);
+//     }
+//     // запускаємо новий таймер на 1 секунду
+//     activityTimeoutRef.current = setTimeout(handleUpdateActivity, 1000);
+//   }, [handleUpdateActivity]);
+
+//   useEffect(() => {
+//     const updateActivityEvents = [
+//       'mousemove',
+//       'keydown',
+//       'mousedown',
+//       'touchstart',
+//     ];
+
+//     // Використовуємо debouncedActivityHandler для обмеження частоти подій
+//     updateActivityEvents.forEach(event =>
+//       window.addEventListener(event, debouncedActivityHandler)
+//     );
+
+//     const visibilityChangeHandler = () => {
+//       console.log('Visibility state', document.visibilityState);
+//       if (document.visibilityState === 'visible') {
+//         handleUpdateActivity();
+//       }
+//     };
+
+//     document.addEventListener('visibilitychange', visibilityChangeHandler);
+
+//     return () => {
+//       updateActivityEvents.forEach(event =>
+//         window.removeEventListener(event, debouncedActivityHandler)
+//       );
+//       document.removeEventListener('visibilitychange', visibilityChangeHandler);
+//       // очищаємо таймер, якщо компонент демонтується
+//       if (activityTimeoutRef.current) {
+//         clearTimeout(activityTimeoutRef.current);
+//       }
+//     };
+//   }, [debouncedActivityHandler, handleUpdateActivity]);
+
+//   return () => {};
+// };
+
+// useUserActivity.propTypes = {
+//   sendUpdateUserActivityEvent: PropTypes.func,
+// };
+
+// export default useUserActivity;

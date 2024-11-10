@@ -5,13 +5,13 @@ import URLs from '@/constants/constants';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchUsersOnlineStatuses } from '@/redux-store/UserOperations/UserOperations';
 import { updateUserStatus } from '@/redux-store/slices/userStatusesSlice';
-import { getUsersStatuses } from '@/redux-store/selectors.js';
+import { getUser, getUsersStatuses } from '@/redux-store/selectors.js';
 import SearchBar from '@/components/SearchBar/SearchBar';
 import Chat from '@/components/Chat/Chat';
 
 import { useWebSocket } from '@/hooks/useWebSocket.js';
 import { useChatContext } from '@/providers/ChatProvider.jsx';
-// import useUserActivity from '@/hooks/useUserActivity.js';
+import useUserActivity from '@/hooks/useUserActivity.js';
 import { ChatRouteStyled } from './ChatRouteStyled.js';
 
 const ChatRoute = () => {
@@ -21,13 +21,13 @@ const ChatRoute = () => {
   const [isShowJoinBtn, setIsShowJoinBtn] = useState(false);
   const [participantsAmount, setParticipantsAmount] = useState(null);
   const [selectedCompanion, setSelectedCompanion] = useState(null);
-  // const currentUserId = useSelector(getUser)?.id;
+  const currentUserId = useSelector(getUser)?.id;
   const listOfOnlineStatuses = useSelector(getUsersStatuses);
   const { responseData } = useFetch(URLs.userCountries);
   const {
     stompClient,
     subscribeToUsersStatuses,
-    // sendMessageOrEvent,
+    sendMessageOrEvent,
     unsubscribeFromUsersStatuses,
   } = useWebSocket();
 
@@ -76,11 +76,11 @@ const ChatRoute = () => {
     }
   }, [stompClient]);
 
-  // const handleUserActiveEvent = () => {
-  //   sendMessageOrEvent(true, URLs.updateOnlineStatus);
-  // };
+  const handleUserActiveEvent = () => {
+    sendMessageOrEvent(true, URLs.updateOnlineStatus);
+  };
 
-  // useUserActivity(handleUserActiveEvent, currentUserId);
+  useUserActivity(handleUserActiveEvent, currentUserId);
 
   return (
     <ChatRouteStyled>
