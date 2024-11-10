@@ -16,6 +16,7 @@ import { axiosClient } from '@/services/api.js';
 import { useChatContext } from '@/providers/ChatProvider';
 
 import { Badge } from '@/components/MessageItem/MessageItemStyled.js';
+import Loader from '@/components//Loader/Loader.jsx';
 import {
   BoxStyled,
   ContactsList,
@@ -35,7 +36,6 @@ import {
   UserContactInfo,
   SendMessageBtn,
 } from './CountryInfoStyled.js';
-import Loader from '../Loader/Loader.jsx';
 
 const CountryInfo = ({
   chatData,

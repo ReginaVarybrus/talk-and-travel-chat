@@ -9,12 +9,11 @@ import { routesPath } from '@/routes/routesConfig';
 import { useChatContext } from '@/providers/ChatProvider';
 import { useWebSocket } from '@/hooks/useWebSocket';
 import { useState } from 'react';
-
+import { IoCloseOutline } from 'react-icons/io5';
+import { CloseBtn } from '@/components/CountryInfo/CountryInfoStyled.js';
 import {
   ModalWindowStyled,
   InfoModalStyled,
-  ButtonClose,
-  CloseIcon,
   UserContactInfoStyled,
   ModalAvatar,
   LetterAvatarStyled,
@@ -118,9 +117,9 @@ const UserInfoModal = ({
       >
         <Fade in={open}>
           <InfoModalStyled>
-            <ButtonClose onClick={handleClose}>
-              <CloseIcon />
-            </ButtonClose>
+            <CloseBtn onClick={handleClose}>
+              <IoCloseOutline />
+            </CloseBtn>
             <UserContactInfoStyled>
               {userAvatarUrl ? (
                 <ModalAvatar

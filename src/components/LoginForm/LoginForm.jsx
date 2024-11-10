@@ -20,10 +20,14 @@ import {
   LoginLink as SignUpLink,
   SignUpBtn as LogInBtn,
   Separator,
+  TextForgotPassword,
 } from '@/components/RegisterForm/RegisterForm.styled';
 
 import ButtonFacebook from '@/components/Buttons/FaceBook/FaceBookButton';
 import ButtonGoogle from '@/components/Buttons/GoogleButton/GoogleButton';
+import { useState } from 'react';
+
+import RecoveryPassword from '../RecoveryPassword/RecoveryPassword';
 
 const initialValues = {};
 Object.keys(formFields).forEach(key => {
@@ -31,11 +35,22 @@ Object.keys(formFields).forEach(key => {
 });
 
 const LoginForm = () => {
+  const [openModal, setOpenModal] = useState(false);
+
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
   const redirect = () => {
     navigate(routesPath.REGISTER);
+  };
+
+  const handleOpen = () => {
+    setOpenModal(true);
+    console.log('is open');
+  };
+
+  const handleClose = () => {
+    setOpenModal(false);
   };
 
   const formik = useFormik({
@@ -55,31 +70,37 @@ const LoginForm = () => {
   });
 
   return (
-    <LoginFormBackground>
-      <LoginFormContainer>
-        <LoginFormStyles onSubmit={formik.handleSubmit} autoComplete="off">
-          <LoginTitle>Welcome back</LoginTitle>
-          <LoginText>
-            Don`t have an account yet?{' '}
-            <SignUpLink onClick={redirect}>Sign up</SignUpLink>
-          </LoginText>
-          {Object.entries(formFields).map(([key, value]) => (
-            <InputField
-              key={key}
-              props={value}
-              formik={formik}
-              name={value.general}
-            />
-          ))}
-          <LogInBtn type="submit">Log In</LogInBtn>
-          <Separator />
-          <ButtonBlock>
-            <ButtonGoogle type="button" />
-            <ButtonFacebook type="button" />
-          </ButtonBlock>
-        </LoginFormStyles>
-      </LoginFormContainer>
-    </LoginFormBackground>
+    <>
+      <LoginFormBackground>
+        <LoginFormContainer>
+          <LoginFormStyles onSubmit={formik.handleSubmit} autoComplete="off">
+            <LoginTitle>Welcome back</LoginTitle>
+            <LoginText>
+              Don`t have an account yet?{' '}
+              <SignUpLink onClick={redirect}>Sign up</SignUpLink>
+            </LoginText>
+            {Object.entries(formFields).map(([key, value]) => (
+              <InputField
+                key={key}
+                props={value}
+                formik={formik}
+                name={value.general}
+              />
+            ))}
+            <LogInBtn type="submit">Log In</LogInBtn>
+            <Separator />
+            <ButtonBlock>
+              <ButtonGoogle type="button" />
+              <ButtonFacebook type="button" />
+            </ButtonBlock>
+          </LoginFormStyles>
+          <TextForgotPassword onClick={handleOpen}>
+            Forgot your password?
+          </TextForgotPassword>
+        </LoginFormContainer>
+      </LoginFormBackground>
+      <RecoveryPassword isOpen={openModal} onClose={handleClose} />
+    </>
   );
 };
 
