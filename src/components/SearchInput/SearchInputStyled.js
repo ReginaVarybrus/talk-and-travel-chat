@@ -92,6 +92,7 @@ export const Item = styled.li`
 export const Flag = styled.img`
   margin-right: 12px;
   max-height: 36px;
+  border: 0.5px solid var(--color-grey-5);
 `;
 
 export const ScrollBar = styled(SimpleBar)`

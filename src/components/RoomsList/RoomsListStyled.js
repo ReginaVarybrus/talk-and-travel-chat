@@ -93,6 +93,7 @@ export const Flag = styled.img`
   width: 32px;
   height: 24px;
   padding-right: 12px;
+  border: 0.5px solid var(--color-grey-5);
 `;
 
 export const ChatName = styled.h6`
