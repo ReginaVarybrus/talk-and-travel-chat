@@ -71,7 +71,7 @@ export const ResetPasswordBackground = styled.section`
   align-items: center;
   min-height: 100vh;
 
-  @media (min-width: 767px) {
+  @media ${device.tablet} {
     background: url(${backgroundImage});
     background-size: cover;
   }
@@ -80,7 +80,7 @@ export const ResetPasswordBackground = styled.section`
 export const ResetPasswordContainer = styled.div`
   max-width: 500px;
 
-  @media (min-width: 768px) {
+  @media ${device.tablet} {
     max-width: 600px;
     background: var(--color-grey-4);
     border-radius: 16px;

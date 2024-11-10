@@ -1,5 +1,6 @@
 import styled from 'styled-components';
 import backgroundImage from '@/images/bg-png.png';
+import { device } from '@/constants/mediaQueries';
 
 export const RegisterFormBackground = styled.section`
   box-sizing: border-box;
@@ -9,7 +10,7 @@ export const RegisterFormBackground = styled.section`
   align-items: center;
   min-height: 100vh;
 
-  @media (min-width: 767px) {
+  @media ${device.tablet} {
     background: url(${backgroundImage});
     background-size: cover;
   }
@@ -17,13 +18,11 @@ export const RegisterFormBackground = styled.section`
 
 export const RegisterFormContainer = styled.div`
   position: relative;
-
   text-align: center;
-  @media (max-width: 767px) {
-    max-width: 500px;
-    margin: 24px 36px;
-  }
-  @media (min-width: 768px) {
+  max-width: 500px;
+  margin: 24px 36px;
+
+  @media ${device.tablet} {
     max-width: 600px;
     background: var(--color-grey-4);
     border-radius: 16px;
@@ -32,7 +31,7 @@ export const RegisterFormContainer = styled.div`
 `;
 
 export const SignInFormStyles = styled.form`
-  @media (min-width: 768px) {
+  @media ${device.tablet} {
     padding: 56px 120px;
   }
 `;
@@ -40,16 +39,13 @@ export const SignInFormStyles = styled.form`
 export const SignInTitle = styled.h1`
   margin-bottom: 8px;
   font-weight: 600;
+  font-size: 24px;
+  line-height: 29px;
+  letter-spacing: 0em;
+  text-align: center;
+  margin-bottom: 8px;
 
-  @media (max-width: 767px) {
-    font-size: 24px;
-    line-height: 29px;
-    letter-spacing: 0em;
-    text-align: center;
-    margin-bottom: 8px;
-  }
-
-  @media (min-width: 768px) {
+  @media ${device.tablet} {
     font-size: 48px;
     line-height: 57.6px;
   }
@@ -57,11 +53,9 @@ export const SignInTitle = styled.h1`
 
 export const SignInText = styled.p`
   line-height: 19px;
-  @media (max-width: 767px) {
-    margin-bottom: 32px;
-  }
+  margin-bottom: 32px;
 
-  @media (min-width: 768px) {
+  @media ${device.tablet} {
     margin-bottom: 48px;
   }
 `;
@@ -103,7 +97,7 @@ export const SignUpBtn = styled.button`
     background: var(--color-blue-5);
   }
 
-  @media (min-width: 768px) {
+  @media ${device.tablet} {
     font-size: 16px;
     line-height: 19.2px;
     letter-spacing: -0.36px;
@@ -140,7 +134,7 @@ export const Separator = styled.hr`
     line-height: 1;
   }
 
-  @media (min-width: 768px) {
+  @media ${device.tablet} {
     &::after {
       background-color: var(--color-grey-4);
     }
@@ -163,7 +157,6 @@ export const ButtonBlock = styled.div`
 export const TextForgotPassword = styled.button`
   position: absolute;
   bottom: 20px;
-
   right: 222px;
   color: var(--color-brand-blue);
   font-size: 12px;
