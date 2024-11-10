@@ -70,6 +70,23 @@ export const ListItems = styled.ul`
 export const ChatNameBox = styled.div`
   display: flex;
   align-items: center;
+  width: 253px;
+
+  @media ${device.mobileM} {
+    width: 304px;
+  }
+
+  @media ${device.mobileL} {
+    width: 348px;
+  }
+
+  @media ${device.tablet} {
+    width: 180px;
+  }
+
+  @media ${device.laptop} {
+    width: 230px;
+  }
 `;
 
 export const Flag = styled.img`
