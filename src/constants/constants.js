@@ -3,6 +3,7 @@ const URLs = {
   register: 'authentication/register',
   login: 'authentication/login',
   logout: 'authentication/logout',
+  passwordRecovery: 'authentication/password-recovery',
 
   // User operations
   currentUser: 'current',
