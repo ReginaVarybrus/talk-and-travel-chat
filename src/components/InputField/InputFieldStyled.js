@@ -35,17 +35,18 @@ export const StyledInput = styled.input`
   box-sizing: border-box;
   width: 100%;
   color: var(--color-dark);
-  font-family: "Roboto", sans-serif;
+  font-family: 'Roboto', sans-serif;
   font-size: 18px;
   line-height: 21.6px;
   height: 56px;
   border-radius: 8px;
-  border: 1px solid ${({ disabled }) => (disabled ? 'transparent' : getNotificationColor)};
+  border: 1px solid
+    ${({ disabled }) => (disabled ? 'transparent' : getNotificationColor)};
   background-color: var(--white-color);
 
-    &:disabled {
+  &:disabled {
     color: var(--color-dark);
-    font-family: "Roboto", sans-serif;
+    font-family: 'Roboto', sans-serif;
     font-size: 18px;
     line-height: 21.6px;
   }
@@ -71,15 +72,21 @@ export const StyledInput = styled.input`
   }
 `;
 
+export const TextareaStyled = styled.div`
+  display: flex;
+  width: 100%;
+  border-radius: 8px;
+  overflow: hidden;
+`;
+
 export const StyledTextarea = styled(TextareaAutosize)`
   box-sizing: border-box;
   width: 100%;
   resize: none;
   color: var(--color-dark);
-  font-family: "Roboto", sans-serif;
+  font-family: 'Roboto', sans-serif;
   font-size: 18px;
   line-height: 21.6px;
-  overflow: auto !important;
   height: 56px;
   border-radius: 8px;
   border: 1px solid;
@@ -89,7 +96,7 @@ export const StyledTextarea = styled(TextareaAutosize)`
 
   &:disabled {
     color: var(--color-dark);
-    font-family: "Roboto", sans-serif;
+    font-family: 'Roboto', sans-serif;
     font-size: 18px;
     line-height: 21.6px;
   }
@@ -110,6 +117,21 @@ export const StyledTextarea = styled(TextareaAutosize)`
   @media screen and (min-width: 768px) {
     background-color: ${({ $backgroundcolor }) =>
       $backgroundcolor || 'var(--color-grey-4)'};
+  }
+
+  &::-webkit-scrollbar {
+    width: 2px;
+  }
+
+  &::-webkit-scrollbar-track {
+    background: var(--color-grey-6);
+    border-radius: 100px;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    height: 144px;
+    border-radius: 100px;
+    background: var(--color-grey-9);
   }
 `;
 

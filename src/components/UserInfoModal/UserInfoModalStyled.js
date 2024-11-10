@@ -1,7 +1,6 @@
 import styled from 'styled-components';
 import Box from '@mui/material/Box';
 import Modal from '@mui/material/Modal';
-import { IoCloseOutline } from 'react-icons/io5';
 import { LuInfo } from 'react-icons/lu';
 import { device } from '@/constants/mediaQueries';
 
@@ -52,21 +51,6 @@ export const ConfirmModalStyled = styled(Box)`
     text-align: center;
     margin-bottom: 24px;
   }
-`;
-export const ButtonClose = styled.button`
-  position: absolute;
-  top: 20px;
-  right: 20px;
-  display: flex;
-  background: none;
-  border: none;
-  cursor: pointer;
-  padding: 0;
-`;
-
-export const CloseIcon = styled(IoCloseOutline)`
-  width: 24px;
-  height: 24px;
 `;
 
 export const InfoIcon = styled(LuInfo)`
@@ -128,6 +112,8 @@ export const UserInfo = styled.div`
 export const AboutUser = styled.div`
   display: flex;
   margin: 22px 0;
+  word-break: break-all;
+  overflow-wrap: anywhere;
   p {
     line-height: 24px;
     letter-spacing: 0.5px;

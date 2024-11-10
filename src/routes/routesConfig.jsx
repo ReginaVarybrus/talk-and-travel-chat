@@ -14,6 +14,7 @@ export const routesPath = {
   ROOMS: `/app/chat/rooms-chat/`,
   DMS: `/app/chat/dms-chat/`,
   ACCOUNT: `/app/account/`,
+  RESET_PASSWORD: '/password-recovery',
 };
 
 const importComponent = {
@@ -26,6 +27,9 @@ const importComponent = {
   DMS: lazy(() => import('@/components/DMsList/DMsList')),
   ACCOUNT: lazy(() => import('@/routes/AccountRoute/AccountRoute')),
   ERROR_COMPONENT: lazy(() => import('@/routes/Page404/Page404')),
+  RESET_PASSWORD: lazy(
+    () => import('@/routes/ResetPasswordRoute/ResetPasswordRoute')
+  ),
 };
 
 export const router = createBrowserRouter([
@@ -51,6 +55,10 @@ export const router = createBrowserRouter([
         redirectTo={routesPath.ROOMS}
       />
     ),
+  },
+  {
+    path: routesPath.RESET_PASSWORD,
+    Component: importComponent.RESET_PASSWORD,
   },
   {
     path: routesPath.APP,
