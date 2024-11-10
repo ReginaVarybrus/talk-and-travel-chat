@@ -76,8 +76,8 @@ const ChatRoute = () => {
     }
   }, [stompClient]);
 
-  const handleUserActiveEvent = () => {
-    sendMessageOrEvent(true, URLs.updateOnlineStatus);
+  const handleUserActiveEvent = status => {
+    sendMessageOrEvent(status, URLs.updateOnlineStatus);
   };
 
   useUserActivity(handleUserActiveEvent, currentUserId);
