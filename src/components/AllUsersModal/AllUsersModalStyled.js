@@ -27,13 +27,9 @@ export const BoxStyled = styled(Box)`
 `;
 
 export const AvatarInList = styled.div`
+  position: relative;
   width: 36px;
   height: 36px;
-
-  img {
-    object-fit: cover;
-    border-radius: 4px;
-  }
 
   @media ${device.tablet} {
     width: 48px;

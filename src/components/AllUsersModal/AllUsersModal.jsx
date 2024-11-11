@@ -2,7 +2,7 @@ import Modal from '@mui/material/Modal';
 import { useEffect, useState } from 'react';
 import { IoCloseOutline } from 'react-icons/io5';
 import URLs from '@/constants/constants';
-import { getUser } from '@/redux-store/selectors';
+import { getUser, getUsersStatuses } from '@/redux-store/selectors';
 import { useNavigate } from 'react-router-dom';
 import { useFetch } from '@/hooks/useFetch';
 import { useSelector } from 'react-redux';
@@ -36,9 +36,12 @@ import {
   LetterAvatarInUserBlock,
   AvatarImg,
 } from './AllUsersModalStyled';
+import { ImgAvatar } from '../CountryInfo/CountryInfoStyled';
+import { Badge } from '../MessageItem/MessageItemStyled';
 
 const AllUsersModal = ({ isOpen, onClose }) => {
   const currentUserId = useSelector(getUser)?.id;
+  const usersStatuses = useSelector(getUsersStatuses);
   const [searchedValue, setSearchedValue] = useState('');
   const [filteredUsers, setFilteredUsers] = useState([]);
 
@@ -50,18 +53,18 @@ const AllUsersModal = ({ isOpen, onClose }) => {
   const [userInfo, setUserInfo] = useState({});
 
   useEffect(() => {
-    if (users && currentUserId) {
+    if (isOpen && users && currentUserId) {
       setFilteredUsers(users.filter(user => user.id !== currentUserId));
     }
-  }, [users, currentUserId]);
+  }, [isOpen, users, currentUserId]);
 
   useEffect(() => {
-    if (onClose) {
+    if (!isOpen) {
       setSearchedValue('');
-      setFilteredUsers(users);
+      setFilteredUsers([]);
       setOpenUserInfo(false);
     }
-  }, [onClose, users]);
+  }, [isOpen]);
 
   const checkExistingPrivateChat = id => {
     const isExist = dataUserChats?.find(chat => chat.companion.id === id);
@@ -166,34 +169,41 @@ const AllUsersModal = ({ isOpen, onClose }) => {
           {!openUserInfo ? (
             <UsersList>
               {filteredUsers && filteredUsers.length > 0 ? (
-                filteredUsers.map(user => (
-                  <Item key={user.id}>
-                    <UserName>
-                      <AvatarInList>
-                        {user.avatar ? (
-                          <img
-                            src={user.avatar.image50x50}
-                            alt={user.userName}
-                            width="48"
-                            height="48"
-                          />
-                        ) : (
-                          <LetterAvatar>
-                            {user.userName[0].toUpperCase()}
-                          </LetterAvatar>
-                        )}
-                      </AvatarInList>
-                      <h5>{user.userName}</h5>
-                    </UserName>
+                filteredUsers.map(user => {
+                  const userStatus = usersStatuses.find(
+                    userFind => userFind.userId === user.id
+                  );
+                  const isOnline = userStatus
+                    ? userStatus.status.isOnline
+                    : false;
+                  return (
+                    <Item key={user.id}>
+                      <UserName>
+                        <AvatarInList>
+                          {user.avatar ? (
+                            <ImgAvatar
+                              src={user.avatar.image50x50}
+                              alt={`${user.userName}'s avatar`}
+                            />
+                          ) : (
+                            <LetterAvatar>
+                              {user.userName[0].toUpperCase()}
+                            </LetterAvatar>
+                          )}
+                          {isOnline && <Badge />}
+                        </AvatarInList>
+                        <h5>{user.userName}</h5>
+                      </UserName>
 
-                    <MoreInfoBtn
-                      onClick={() => handleOpenUserInfo(user.id)}
-                      type="button"
-                    >
-                      More...
-                    </MoreInfoBtn>
-                  </Item>
-                ))
+                      <MoreInfoBtn
+                        onClick={() => handleOpenUserInfo(user.id)}
+                        type="button"
+                      >
+                        More...
+                      </MoreInfoBtn>
+                    </Item>
+                  );
+                })
               ) : (
                 <Subtitle>No companions found with this name</Subtitle>
               )}
