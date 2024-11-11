@@ -99,12 +99,21 @@ const AllUsersModal = ({ isOpen, onClose }) => {
   };
 
   const handleSearchChange = e => {
-    const value = e.target.value.toLowerCase();
+    const { value } = e.target;
     setSearchedValue(value);
+
     setFilteredUsers(
       users
         .filter(user => user.id !== currentUserId)
-        .filter(user => user.userName.toLowerCase().startsWith(value))
+        .filter(user => {
+          const fullName = user.userName.toLowerCase();
+          const [firstName, lastName] = fullName.split(' ');
+          return (
+            fullName.startsWith(value.toLowerCase()) ||
+            (firstName && firstName.startsWith(value.toLowerCase())) ||
+            (lastName && lastName.startsWith(value.toLowerCase()))
+          );
+        })
     );
   };
 
