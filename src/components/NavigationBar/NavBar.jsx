@@ -44,7 +44,9 @@ const NavBar = props => {
           margin-right: 10px;
           line-height: 16px;
           font-size: 12px;"
-          $desktopstyles="margin-right: 24px;"
+          $desktopstyles="
+          font-size: 16px;
+          margin-right: 24px;"
           text="Log In"
           handleClick={handleLoginOpen}
         />
@@ -52,6 +54,8 @@ const NavBar = props => {
           $mobilestyles="
           line-height: 16px;
           font-size: 12px;"
+          $desktopstyles="
+          font-size: 16px;"
           text="Get started — it’s free"
           handleClick={handleRegisterOpen}
         />

@@ -7,6 +7,7 @@ border-radius: 8px;
 border: none;
 background-color: transparent;
 cursor: pointer;
+font-family: "Roboto", sans-serif;
 font-size: 14px;
 font-weight: 400;
 line-height: 19.6px;

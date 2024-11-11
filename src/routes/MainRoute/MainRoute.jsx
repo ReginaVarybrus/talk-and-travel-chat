@@ -96,7 +96,8 @@ const MainRoute = () => {
           line-height: 16px;"
           text="Start chatting"
           handleClick={handleRegisterOpen}
-          $desktopstyles="font-weight: 700;"
+          $desktopstyles="
+          font-size: 16px;"
         />
         <Globe>
           <GlobeIcon $fillColor="var(--color-blue-1)" />
@@ -157,6 +158,7 @@ const MainRoute = () => {
             margin-top: 20px;
             "
             $desktopstyles="
+            font-size: 16px;
             margin-top: 40px;
             "
             text="Get started"
@@ -177,7 +179,9 @@ const MainRoute = () => {
           <BubbleContainer>
             {bubbleData.map(bubble => (
               <MainPageText
-                $mobilestyles="color: var(--white-color);"
+                $mobilestyles="
+                text-align: center;
+                color: var(--white-color);"
                 key={`${generateUniqueKey()}`}
               >
                 {bubble.text}
@@ -204,6 +208,8 @@ const MainRoute = () => {
           $mobilestyles="
           line-height: 16px;
           font-size: 12px;"
+          $desktopstyles="
+            font-size: 16px;"
           text="Register now"
           handleClick={handleRegisterOpen}
         />

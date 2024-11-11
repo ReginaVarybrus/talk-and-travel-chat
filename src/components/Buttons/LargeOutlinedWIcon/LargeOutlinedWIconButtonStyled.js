@@ -8,8 +8,9 @@ padding: 12px 24px;
 border-radius: 8px;
 border: 1px solid var(--color-brand-blue);
 color: var(--color-grey-8);
+font-family: "Roboto", sans-serif;
 font-weight: 700;
-line-height: 19.6px;
+line-height: 19.2px;
 text-align: center;
 font-size: 14px;
 background-color: transparent;
@@ -22,6 +23,7 @@ white-space: nowrap;
 }
 
 @media ${device.tablet} {
+  line-height: 19.2px;
   ${({ $desktopstyles }) => $desktopstyles};
 }
 
