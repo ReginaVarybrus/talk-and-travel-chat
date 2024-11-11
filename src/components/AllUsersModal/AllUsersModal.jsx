@@ -119,7 +119,6 @@ const AllUsersModal = ({ isOpen, onClose }) => {
         })
     );
   };
-
   const handleOpenUserInfo = async userId => {
     try {
       const userInfoResponse = await axiosClient.get(URLs.userInfo(userId));
