@@ -1,6 +1,6 @@
 import { createGlobalStyle } from 'styled-components';
 import { device } from '@/constants/mediaQueries';
-import 'simplebar-react/dist/simplebar.min.css';
+// import 'simplebar-react/dist/simplebar.min.css';
 
 export const GlobalStyles = createGlobalStyle`
 :root {

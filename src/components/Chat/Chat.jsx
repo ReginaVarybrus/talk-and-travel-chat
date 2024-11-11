@@ -514,6 +514,7 @@ const Chat = ({
             unreadMessages={unreadMessages}
             setIsUserTyping={setIsUserTyping}
             setUsersTyping={setUsersTyping}
+            setParticipantsAmount={setParticipantsAmount}
             lastVisibleReadMessageRef={lastVisibleReadMessageRef}
           />
         )}
