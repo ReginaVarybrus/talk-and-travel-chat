@@ -97,7 +97,7 @@ export const ChatProvider = ({ children }) => {
             0
           );
           setUnreadDMsCount(totalUnreadDMs);
-
+          setFilteredPrivateChats(updatedChats);
           return updatedChats;
         });
       } else {

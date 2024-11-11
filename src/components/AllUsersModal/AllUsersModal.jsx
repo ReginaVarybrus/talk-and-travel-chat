@@ -37,6 +37,8 @@ import {
   LetterAvatarInUserBlock,
   AvatarImg,
 } from './AllUsersModalStyled';
+import { ImgAvatar } from '../CountryInfo/CountryInfoStyled';
+// import { Badge } from '../MessageItem/MessageItemStyled';
 
 const AllUsersModal = ({ isOpen, onClose }) => {
   const currentUserId = useSelector(getUser)?.id;
@@ -52,18 +54,18 @@ const AllUsersModal = ({ isOpen, onClose }) => {
   const [userInfo, setUserInfo] = useState({});
 
   useEffect(() => {
-    if (users && currentUserId) {
+    if (isOpen && users && currentUserId) {
       setFilteredUsers(users.filter(user => user.id !== currentUserId));
     }
-  }, [users, currentUserId]);
+  }, [isOpen, users, currentUserId]);
 
   useEffect(() => {
-    if (onClose) {
+    if (!isOpen) {
       setSearchedValue('');
-      setFilteredUsers(users);
+      setFilteredUsers([]);
       setOpenUserInfo(false);
     }
-  }, [onClose, users]);
+  }, [isOpen]);
 
   const checkExistingPrivateChat = id => {
     const isExist = dataUserChats?.find(chat => chat.companion.id === id);
@@ -101,15 +103,23 @@ const AllUsersModal = ({ isOpen, onClose }) => {
   };
 
   const handleSearchChange = e => {
-    const value = e.target.value.toLowerCase();
+    const { value } = e.target;
     setSearchedValue(value);
+
     setFilteredUsers(
       users
         .filter(user => user.id !== currentUserId)
-        .filter(user => user.userName.toLowerCase().startsWith(value))
+        .filter(user => {
+          const fullName = user.userName.toLowerCase();
+          const [firstName, lastName] = fullName.split(' ');
+          return (
+            fullName.startsWith(value.toLowerCase()) ||
+            (firstName && firstName.startsWith(value.toLowerCase())) ||
+            (lastName && lastName.startsWith(value.toLowerCase()))
+          );
+        })
     );
   };
-
   const handleOpenUserInfo = async userId => {
     try {
       const userInfoResponse = await axiosClient.get(URLs.userInfo(userId));
@@ -173,7 +183,7 @@ const AllUsersModal = ({ isOpen, onClose }) => {
                       <UserName>
                         <AvatarInList>
                           {user.avatar ? (
-                            <img
+                            <ImgAvatar
                               src={user.avatar?.image50x50}
                               alt={user.userName}
                             />

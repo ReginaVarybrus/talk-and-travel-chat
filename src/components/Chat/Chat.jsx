@@ -460,6 +460,26 @@ const Chat = ({
     };
   }, []);
 
+  const handleScrollToBottom = () => {
+    if (messageBlockRef.current) {
+      messageBlockRef.current.scrollTo({
+        top: messageBlockRef.current.scrollHeight,
+        behavior: 'smooth',
+      });
+    }
+
+    if (unreadMessages.length > 0) {
+      const lastMessageId = unreadMessages[0].id;
+
+      debouncedMarkAsRead(id, lastMessageId);
+
+      updateUnreadMessagesCount(id, 0, isPrivateChat);
+      setUnreadMessages([]);
+      setUnreadCount(0);
+      setShowNewMessagesIndicator(false);
+    }
+  };
+
   return (
     <ChatStyled $isChatVisible={isChatVisible}>
       {!name && <ChatFirstLoading />}
@@ -503,7 +523,7 @@ const Chat = ({
           <button
             type="button"
             className="scroll-button"
-            onClick={scrollToBottom}
+            onClick={handleScrollToBottom}
             aria-label="Scroll to bottom"
           >
             <span aria-hidden="true">
