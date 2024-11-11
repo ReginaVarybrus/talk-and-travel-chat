@@ -38,7 +38,7 @@ import {
   AvatarImg,
 } from './AllUsersModalStyled';
 import { ImgAvatar } from '../CountryInfo/CountryInfoStyled';
-import { Badge } from '../MessageItem/MessageItemStyled';
+// import { Badge } from '../MessageItem/MessageItemStyled';
 
 const AllUsersModal = ({ isOpen, onClose }) => {
   const currentUserId = useSelector(getUser)?.id;
@@ -183,7 +183,7 @@ const AllUsersModal = ({ isOpen, onClose }) => {
                       <UserName>
                         <AvatarInList>
                           {user.avatar ? (
-                            <img
+                            <ImgAvatar
                               src={user.avatar?.image50x50}
                               alt={user.userName}
                             />
