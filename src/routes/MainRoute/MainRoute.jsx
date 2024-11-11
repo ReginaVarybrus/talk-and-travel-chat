@@ -1,6 +1,5 @@
 import { useNavigate } from 'react-router-dom';
 import Header from '@/components/Header/Header';
-import Footer from '@/components/Footer/Footer';
 
 import {
   MainPageLayout,
@@ -14,20 +13,22 @@ import {
   MainPageSectionThree,
   SectionThreeContainer,
   MainPageSectionFour,
+  BubbleContainer,
   SectionFourContainer,
   MainPageSectionFive,
+  MainPageText,
 } from '@/routes/MainRoute/MainRouteStyled';
-import { Typography } from '@mui/material';
 import { generateUniqueKey } from '@/services/uniqKeyGen';
 import GlobeIcon from '@/images/iconComponents/GlobeIcon';
 import StarIcon from '@/images/iconComponents/StarIcon';
 import TelegramIcon from '@/images/iconComponents/TelegramIcon';
 import TailTelegramIcon from '@/images/iconComponents/TailTelegramIcon';
-
-import BasicButton from '@/components/Buttons/BasicButton/BasicButton';
 import Bubble from '@/components/Buttons/Bubble/Bubble';
-
 import { routesPath } from '@/routes/routesConfig';
+import LargeFilledButton from '@/components/Buttons/LargeFilled/LargeFilledButton';
+import Miniature from '@/images/main_page_miniature.svg';
+import NavBar from '@/components/NavigationBar/NavBar';
+import LargeOutlinedButton from '@/components/Buttons/LargeOutlined/LargeOutlinedButton';
 
 const bubbleData = [
   {
@@ -83,23 +84,19 @@ const MainRoute = () => {
         <HeaderH1>
           <b>Travel</b> Without Limits
         </HeaderH1>
-        <Typography
-          sx={{
-            marginTop: '24px',
-            fontSize: '20px',
-            lineHeight: '24px',
-          }}
+        <MainPageText
+          $desktopstyles="margin: 24px 0 32px 0"
+          $mobilestyles="margin: 15px 0 25px 0"
         >
           Start chatting now and be a <br /> part of the global conversation!
-        </Typography>
-        <BasicButton
-          variant="contained"
-          color="primary"
-          sx={{
-            marginTop: '32px',
-          }}
+        </MainPageText>
+        <LargeFilledButton
+          $mobilestyles="
+          font-size: 12px;
+          line-height: 16px;"
           text="Start chatting"
           handleClick={handleRegisterOpen}
+          $desktopstyles="font-weight: 700;"
         />
         <Globe>
           <GlobeIcon $fillColor="var(--color-blue-1)" />
@@ -114,45 +111,54 @@ const MainRoute = () => {
           <TailTelegramIcon $fillColor="var(--color-blue-1)" />
         </TailTelegram>
       </MainPageSectionOne>
-      <MainPageSectionTwo />
+      <MainPageSectionTwo>
+        <img src={Miniature} alt="My Icon" />
+      </MainPageSectionTwo>
       <MainPageSectionThree id="about">
         <SectionThreeContainer display="flex">
-          <Typography
-            variant="h4"
-            sx={{
-              marginBottom: '20px',
-              fontSize: '40px',
-              lineHeight: '48px',
-              color: 'var(--white-color)',
-            }}
+          <MainPageText
+            $mobilestyles="
+              color: var(--color-grey-13);
+              margin-bottom: 10px;"
+            $desktopstyles="
+              color: var(--white-color);
+              margin-bottom: 20px;
+              font-size: 40px;
+              line-height: 48px;
+              "
           >
             What is <b>Talk & Travel?</b>
-          </Typography>
-          <Typography
-            sx={{
-              fontSize: '20px',
-              lineHeight: '24px',
-              color: 'var(--white-color)',
-            }}
+          </MainPageText>
+          <MainPageText
+            $mobilestyles="color: var(--color-grey-13);"
+            $desktopstyles="color: var(--white-color);"
           >
             Talk & Travel is the chat where everyone joins a vibrant community,
+            <br />
             connecting with fellow travelers to share tips, stories, and
+            <br />
             experiences from around the world.
-          </Typography>
-          <Typography
-            sx={{
-              fontSize: '20px',
-              lineHeight: '24px',
-              color: 'var(--white-color)',
-            }}
+          </MainPageText>
+          <MainPageText
+            $mobilestyles="color: var(--color-grey-13);"
+            $desktopstyles="color: var(--white-color);"
           >
             <br />
             Join specific countries or chat directly with your fellow explorers.
+            <br />
             Sign up now and start enjoying the journey!
-          </Typography>
-          <BasicButton
-            sx={{ marginTop: '40px' }}
-            variant="outlined"
+          </MainPageText>
+          <LargeOutlinedButton
+            $mobilestyles="
+            line-height: 16px;
+            font-size: 12px;
+            color: var(--color-dark);
+            background-color: var(--white-color);
+            margin-top: 20px;
+            "
+            $desktopstyles="
+            margin-top: 40px;
+            "
             text="Get started"
             handleClick={handleRegisterOpen}
           />
@@ -163,36 +169,46 @@ const MainRoute = () => {
           {bubbleData.map(bubble => (
             <Bubble
               key={`${generateUniqueKey()}`}
-              marginbottom={bubble.marginbottom}
-              left={bubble.left}
-              text={bubble.text}
+              $marginbottom={bubble.marginbottom}
+              $left={bubble.left}
+              $text={bubble.text}
             />
           ))}
+          <BubbleContainer>
+            {bubbleData.map(bubble => (
+              <MainPageText
+                $mobilestyles="color: var(--white-color);"
+                key={`${generateUniqueKey()}`}
+              >
+                {bubble.text}
+              </MainPageText>
+            ))}
+          </BubbleContainer>
         </SectionFourContainer>
       </MainPageSectionFour>
       <MainPageSectionFive>
-        <Typography
-          variant="h4"
-          sx={{
-            fontWeight: '600',
-            marginBottom: '20px',
-            fontSize: '40px',
-            lineHeight: '48px',
-          }}
+        <HeaderH1
+          $mobilestyles="
+            font-size: 26px;
+            line-height: 22px;
+          "
+          $desktopstyles="
+            font-weight: 600;
+            font-size: 40px;
+            line-height: 48px;
+          "
         >
           Let’s get it started!
-        </Typography>
-        <BasicButton
-          variant="contained"
-          color="primary"
-          sx={{
-            marginTop: '32px',
-          }}
+        </HeaderH1>
+        <LargeFilledButton
+          $mobilestyles="
+          line-height: 16px;
+          font-size: 12px;"
           text="Register now"
           handleClick={handleRegisterOpen}
         />
       </MainPageSectionFive>
-      <Footer />
+      <NavBar $navBarType="footer" />
     </MainPageLayout>
   );
 };

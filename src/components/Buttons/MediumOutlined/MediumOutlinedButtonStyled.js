@@ -1,7 +1,7 @@
+import { device } from '@/constants/mediaQueries';
 import styled from 'styled-components';
 
 export const MediumOutlinedButtonStyled = styled.button`
-width: 92px;
 height: 36px;
 padding: 8px 20px;
 border-radius: 8px;
@@ -14,13 +14,15 @@ font-size: 14px;
 background-color: transparent;
 cursor: pointer;
 white-space: nowrap;
+  ${({ $mobilestyles }) => $mobilestyles};
+
 
 &:hover {
     font-weight: 700;
     background-color: var(--color-blue-1);
 }
 
-@media (max-width: 768px) {
-    width: 142px;
+@media ${device.tablet} {
+  ${({ $desktopstyles }) => $desktopstyles};
   }
 `

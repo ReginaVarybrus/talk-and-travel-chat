@@ -1,7 +1,7 @@
+import { device } from '@/constants/mediaQueries';
 import styled from 'styled-components';
 
 export const MediumFilledButtonStyled = styled.button`
-width: 92px;
 height: 36px;
 padding: 8px 20px;
 border-radius: 8px;
@@ -14,12 +14,13 @@ font-size: 14px;
 background-color: var(--color-brand-blue);
 cursor: pointer;
 white-space: nowrap;
+  ${({ $mobilestyles }) => $mobilestyles};
 
 &:hover {
     background-color: var(--color-blue-5);
 }
 
-@media (max-width: 768px) {
-    width: 142px;
+@media ${device.tablet} {
+  ${({ $desktopstyles }) => $desktopstyles};
   }
 `

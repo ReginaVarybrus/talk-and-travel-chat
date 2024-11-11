@@ -1,7 +1,16 @@
 import { LargeFilledButtonStyled } from '@/components/Buttons/LargeFilled/LargeFilledButtonStyled';
 
-const LargeFilledButton = ({ text, handleClick }) => (
-  <LargeFilledButtonStyled onClick={handleClick}>
+const LargeFilledButton = ({
+  text,
+  handleClick,
+  $mobilestyles,
+  $desktopstyles,
+}) => (
+  <LargeFilledButtonStyled
+    onClick={handleClick}
+    $mobilestyles={$mobilestyles}
+    $desktopstyles={$desktopstyles}
+  >
     {text}
   </LargeFilledButtonStyled>
 );

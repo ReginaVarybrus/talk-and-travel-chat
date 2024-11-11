@@ -1,3 +1,4 @@
+import { device } from '@/constants/mediaQueries';
 import styled from 'styled-components';
 
 export const LargeOutlinedWIconButtonStyled = styled.button`
@@ -14,8 +15,14 @@ font-size: 14px;
 background-color: transparent;
 cursor: pointer;
 white-space: nowrap;
+    ${({ $mobilestyles }) => $mobilestyles};
 
 &:hover {
     background-color: var(--color-blue-1);
 }
+
+@media ${device.tablet} {
+  ${({ $desktopstyles }) => $desktopstyles};
+}
+
 `
