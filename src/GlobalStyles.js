@@ -102,14 +102,6 @@ svg{
   padding: 0;
 }
 
-// TapBar custom styles
-
-.css-gy4i07-MuiPaper-root {
-  height: 100px;
-  align-content: center;
-}
-  
-
 // MapStyles
 
 .leaflet-container {

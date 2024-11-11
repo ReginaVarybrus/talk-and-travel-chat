@@ -43,11 +43,11 @@ export const MessageBlock = styled.div`
   transition: height 0.3s ease;
 
   &::-webkit-scrollbar {
-    width: 2px;
+    width: 4px;
   }
 
   &::-webkit-scrollbar-track {
-    background: var(--color-grey-6);
+    background: var(--color-grey-5);
     border-radius: 100px;
   }
 
