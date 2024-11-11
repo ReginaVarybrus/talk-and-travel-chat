@@ -1,49 +1,70 @@
-import { useEffect, useRef } from 'react';
+import { useEffect, useCallback, useRef } from 'react';
+import { useSelector } from 'react-redux';
+import { getUsersStatuses } from '@/redux-store/selectors.js';
 import PropTypes from 'prop-types';
 
-const useUserActivity = sendUpdateUserActivityEvent => {
-  const isUserOffline = useRef(true);
+const useUserActivity = (sendUpdateUserActivityEvent, userId) => {
+  const usersStatuses = useSelector(getUsersStatuses);
+  const userStatus = usersStatuses.find(user => user.userId === userId);
+  const isOffline = userStatus ? !userStatus.status.isOnline : true;
+  const activityTimeoutRef = useRef(null);
+
+  const handleUpdateActivity = useCallback(
+    status => {
+      if (isOffline === status) {
+        sendUpdateUserActivityEvent(status);
+      }
+    },
+    [isOffline, sendUpdateUserActivityEvent]
+  );
+
+  const debouncedActivityHandler = useCallback(() => {
+    if (activityTimeoutRef.current) {
+      clearTimeout(activityTimeoutRef.current);
+    }
+    activityTimeoutRef.current = setTimeout(
+      () => handleUpdateActivity(true),
+      500
+    );
+  }, [handleUpdateActivity]);
 
   useEffect(() => {
-    const handleUpdateActivity = status => {
-      if (isUserOffline.current) {
-        sendUpdateUserActivityEvent(status);
-        isUserOffline.current = false;
-      }
-      // console.log('event sended');
-    };
-
     const updateActivityEvents = [
-      // 'mousemove',
+      'mousemove',
+      'click',
+      'scroll',
       'keydown',
-      // 'mousedown',
-      // 'touchstart',
+      'mousedown',
+      'touchstart',
     ];
 
     updateActivityEvents.forEach(event =>
-      window.addEventListener(event, handleUpdateActivity(true))
+      window.addEventListener(event, debouncedActivityHandler)
     );
 
-    document.addEventListener('visibilitychange', () => {
-      // console.log('visibility state', document.visibilityState);
+    const visibilityChangeHandler = () => {
       if (document.visibilityState === 'visible') {
         handleUpdateActivity(true);
       } else {
         handleUpdateActivity(false);
       }
-    });
+    };
+
+    document.addEventListener('visibilitychange', visibilityChangeHandler);
 
     return () => {
       updateActivityEvents.forEach(event =>
-        window.removeEventListener(event, handleUpdateActivity)
+        window.removeEventListener(event, debouncedActivityHandler)
       );
-      document.removeEventListener('visibilitychange', handleUpdateActivity);
-    };
-  }, [sendUpdateUserActivityEvent, isUserOffline]);
+      document.removeEventListener('visibilitychange', visibilityChangeHandler);
 
-  return () => {
-    isUserOffline.current = true;
-  };
+      if (activityTimeoutRef.current) {
+        clearTimeout(activityTimeoutRef.current);
+      }
+    };
+  }, [debouncedActivityHandler, handleUpdateActivity]);
+
+  return () => {};
 };
 
 useUserActivity.propTypes = {

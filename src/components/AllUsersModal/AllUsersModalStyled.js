@@ -28,6 +28,7 @@ export const BoxStyled = styled(Box)`
 
 export const AvatarInList = styled.div`
   position: relative;
+  position: relative;
   width: 36px;
   height: 36px;
 

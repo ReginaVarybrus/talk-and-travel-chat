@@ -10,6 +10,7 @@ import { routesPath } from '@/routes/routesConfig.jsx';
 import { useChatContext } from '@/providers/ChatProvider';
 import { axiosClient } from '@/services/api';
 import { BiArrowBack } from 'react-icons/bi';
+import { Badge } from '@/components/MessageItem/MessageItemStyled';
 import {
   BoxStyled,
   CloseBtn,
@@ -172,17 +173,19 @@ const AllUsersModal = ({ isOpen, onClose }) => {
                   const userStatus = usersStatuses.find(
                     userFind => userFind.userId === user.id
                   );
+
                   const isOnline = userStatus
                     ? userStatus.status.isOnline
                     : false;
+
                   return (
                     <Item key={user.id}>
                       <UserName>
                         <AvatarInList>
                           {user.avatar ? (
-                            <ImgAvatar
-                              src={user.avatar.image50x50}
-                              alt={`${user.userName}'s avatar`}
+                            <img
+                              src={user.avatar?.image50x50}
+                              alt={user.userName}
                             />
                           ) : (
                             <LetterAvatar>
