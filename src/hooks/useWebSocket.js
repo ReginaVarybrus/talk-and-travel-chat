@@ -1,8 +1,5 @@
 import { useRef, useEffect } from 'react';
 import { useStompClient } from 'react-stomp-hooks';
-// import { useDispatch } from 'react-redux';
-// import { updateUserStatus } from '@/redux-store/slices/userStatusesSlice';
-// import URLs from '@/constants/constants.js';
 
 export const useWebSocket = () => {
   const stompClient = useStompClient();
