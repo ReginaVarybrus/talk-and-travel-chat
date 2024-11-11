@@ -49,8 +49,15 @@ const UserInfoModal = ({
     setFilteredPrivateChats,
   } = useChatContext();
 
-  const openConfirmation = () => setConfirmOpen(true);
-  const closeConfirmation = () => setConfirmOpen(false);
+  const openConfirmation = () => {
+    setConfirmOpen(true);
+    document.activeElement?.blur();
+  };
+
+  const closeConfirmation = () => {
+    setConfirmOpen(false);
+    document.activeElement?.blur();
+  };
 
   const checkExistingPrivateChat = companionId => {
     const validChats = dataUserChats.filter(chat => chat.companion.id !== null);
