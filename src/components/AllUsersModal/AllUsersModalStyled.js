@@ -28,15 +28,9 @@ export const BoxStyled = styled(Box)`
 
 export const AvatarInList = styled.div`
   position: relative;
+  position: relative;
   width: 36px;
   height: 36px;
-
-  img {
-    object-fit: cover;
-    border-radius: 4px;
-    width: 100%;
-    height: 100%;
-  }
 
   @media ${device.tablet} {
     width: 48px;
@@ -205,7 +199,7 @@ export const UserName = styled.div`
 `;
 
 export const SendMessageBtn = styled.button`
-  margin: 0 auto;
+  margin: 23px auto 0 auto;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -287,7 +281,6 @@ export const Title = styled.h3`
 `;
 
 export const UserInfoBox = styled.div`
-  height: 250px;
   border-radius: 8px;
   box-shadow: inset 0px 1px 5px 0px rgba(0, 0, 0, 0.05);
   background: var(--color-grey-3);
@@ -295,10 +288,6 @@ export const UserInfoBox = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-
-  @media ${device.tablet} {
-    height: 325px;
-  }
 `;
 
 export const AboutUser = styled.div`
@@ -342,9 +331,8 @@ export const MoreInfoBtn = styled.button`
 export const UserContact = styled.div`
   display: flex;
   align-items: center;
-  gap h5 {
-    margin-bottom: 8px;
-  }
+  gap: 8px;
+  margin-bottom: 32px;
   p {
     font-size: 14px;
     color: var(--color-grey-9);

@@ -15,12 +15,19 @@ const SearchInputDMs = () => {
   } = useChatContext();
 
   const handleSearchChange = e => {
-    const value = e.target.value.toLowerCase();
+    const { value } = e.target;
     setSearchedValue(value);
+
     setFilteredPrivateChats(
-      dataUserChats.filter(chat =>
-        chat.companion.userName.toLowerCase().startsWith(value)
-      )
+      dataUserChats.filter(chat => {
+        const fullName = chat.companion.userName.toLowerCase();
+        const [firstName, lastName] = fullName.split(' ');
+        return (
+          fullName.startsWith(value.toLowerCase()) ||
+          (firstName && firstName.startsWith(value.toLowerCase())) ||
+          (lastName && lastName.startsWith(value.toLowerCase()))
+        );
+      })
     );
   };
 

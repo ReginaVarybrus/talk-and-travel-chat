@@ -111,7 +111,10 @@ MessageItem.propTypes = {
   content: PropTypes.string,
   userId: PropTypes.number,
   userName: PropTypes.string,
-  userAvatarUrl: PropTypes.string,
+  userAvatarUrl: PropTypes.shape({
+    image50x50: PropTypes.string,
+    image256x256: PropTypes.string,
+  }),
   date: PropTypes.string,
   type: PropTypes.string,
   isShownAvatar: PropTypes.bool,

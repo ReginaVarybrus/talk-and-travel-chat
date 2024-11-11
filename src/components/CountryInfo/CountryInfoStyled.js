@@ -38,6 +38,7 @@ export const ContactsBoxStyled = styled.div`
   border-bottom: 1px solid rgb(222, 222, 222);
   padding-top: 16px;
   padding-bottom: 16px;
+
   @media ${device.tablet} {
     padding-top: 32px;
     padding-bottom: 32px;
@@ -88,21 +89,12 @@ export const InfoBoxStyled = styled.div`
   flex-direction: column;
   gap: 4px;
 
-  h5 {
-    font-size: 16px;
-    font-weight: 700;
-  }
   p {
-    font-size: 14px;
     color: var(--color-grey-9);
   }
+
   @media ${device.tablet} {
     gap: 8px;
-
-    h5 {
-      font-size: 18px;
-      font-weight: 600;
-    }
   }
 `;
 
@@ -154,13 +146,6 @@ export const Item = styled.li`
     height: 65px;
     padding: 8px;
   }
-
-  &:hover {
-    button {
-      opacity: 1;
-      visibility: visible;
-    }
-  }
 `;
 
 export const UserContactInfo = styled.div`
@@ -178,7 +163,6 @@ export const UserContactInfo = styled.div`
     text-overflow: ellipsis;
   }
   p {
-    font-size: 14px;
     color: var(--color-grey-9);
     white-space: nowrap;
     overflow: hidden;
@@ -197,8 +181,6 @@ export const UserContactInfo = styled.div`
 `;
 
 export const SendMessageBtn = styled.button`
-  opacity: 0;
-  visibility: hidden;
   background: none;
   border: none;
   cursor: pointer;
@@ -211,8 +193,20 @@ export const SendMessageBtn = styled.button`
     transition: all 0.3s ease;
   }
 
-  &:hover svg {
+  &:hover,
+  &:focus,
+  &:active svg {
     fill: var(--color-blue-3);
+  }
+
+  @media (hover: hover) {
+    opacity: 0;
+    visibility: hidden;
+
+    ${Item}:hover & {
+      opacity: 1;
+      visibility: visible;
+    }
   }
 `;
 
@@ -228,10 +222,12 @@ export const CloseBtn = styled.button`
     stroke: var(--color-grey-9);
     width: 27px;
     height: 27px;
-    transition: stroke 0.3s;
+    transition: all 0.3s ease;
   }
 
-  &:hover {
+  &:hover,
+  &:focus,
+  &:active {
     svg {
       stroke: var(--color-blue-3);
     }
@@ -262,11 +258,22 @@ export const ExitOrJoinBtn = styled.button`
   font-size: 14px;
   font-weight: 700;
   color: var(--color-grey-9);
+  transition: all 0.3s ease;
 
   svg {
     width: 20px;
     height: 20px;
     stroke: var(--color-grey-9);
+    transition: all 0.3s ease;
+  }
+
+  &:hover,
+  &:focus,
+  &:active {
+    color: var(--color-blue-3);
+    svg {
+      stroke: var(--color-blue-3);
+    }
   }
 `;
 
