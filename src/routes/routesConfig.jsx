@@ -36,7 +36,7 @@ export const router = createBrowserRouter([
   {
     path: routesPath.MAIN,
     Component: importComponent.MAIN,
-    errorElement: importComponent.ERROR_COMPONENT,
+    errorElement: <importComponent.ERROR_COMPONENT />,
   },
   {
     path: routesPath.LOGIN,
