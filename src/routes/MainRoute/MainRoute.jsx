@@ -1,5 +1,4 @@
 import { useNavigate } from 'react-router-dom';
-import Header from '@/components/Header/Header';
 
 import {
   MainPageLayout,
@@ -29,6 +28,7 @@ import LargeFilledButton from '@/components/Buttons/LargeFilled/LargeFilledButto
 import Miniature from '@/images/main_page_miniature.svg';
 import NavBar from '@/components/NavigationBar/NavBar';
 import LargeOutlinedButton from '@/components/Buttons/LargeOutlined/LargeOutlinedButton';
+import useNavBarVisibility from '@/components/NavigationBar/useNavBarVisibility';
 
 const bubbleData = [
   {
@@ -76,7 +76,7 @@ const MainRoute = () => {
 
   return (
     <MainPageLayout>
-      <Header />
+      <NavBar isvisible={useNavBarVisibility()} $navBarType="header" />
       <MainPageSectionOne>
         <HeaderH1>
           <b>Talk</b> Without Borders

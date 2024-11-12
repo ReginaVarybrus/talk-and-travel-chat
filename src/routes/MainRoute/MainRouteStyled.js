@@ -141,15 +141,16 @@ export const SectionThreeContainer = styled.div`
 export const MainPageSectionFour = styled.section`
 
 @media ${device.tablet} {
-  gap: 5px;
-  display: flex;
-  padding: 100px 120px;
 }
 `;
 
 export const SectionFourContainer = styled.div`
+@media ${device.tablet} {  
   display: flex;
   flex-direction: column;
+  align-items: flex-start;
+  margin: 100px 120px;
+}
 `;
 
 
@@ -171,11 +172,11 @@ line-height: 24px;
 `
 
 export const MainPageSectionFive = styled.section`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  padding: 20px;
-  gap: 10px;
+display: flex;
+flex-direction: column;
+align-items: center;
+padding: 20px;
+gap: 10px;
   
 @media ${device.tablet} {
   padding-top: 100px;

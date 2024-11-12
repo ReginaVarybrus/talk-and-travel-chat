@@ -2,6 +2,7 @@ import styled from 'styled-components';
 import { device } from '@/constants/mediaQueries';
 
 export const NavBarLayout = styled.nav`
+box-sizing: border-box;
 display: flex;
 justify-content: space-between;
 position: static;
@@ -20,7 +21,8 @@ ${(props) =>
   transition: top 0.4s;
   background-color: var(--white-color);
   border-bottom: 1px solid var(--color-blue-1);
-
+  padding: 0 120px;
+  
   ${(props) =>
     props.$navBarType === 'header' &&
     `
@@ -53,7 +55,7 @@ display: none;
     color: var(--color-dark);
     display: block;
     font-size: 18px;
-  }
+  } 
 `;
 
 export const MainPageNavRight = styled.div`
@@ -62,7 +64,7 @@ align-items: center;
 padding: 10px;
 
   @media ${device.tablet} {  
-    padding: 18.5px 120px 18.5px 0;
+    padding: 18.5px 0;
   }
 }
 `;
@@ -73,7 +75,7 @@ padding: 10px;
 width: 100%;
 
   @media ${device.tablet} {  
-    padding: 16px 0 16px 120px;
+    padding: 16px 0;
     align-items: center;
   }
 `;
