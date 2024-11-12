@@ -120,11 +120,11 @@ export const StyledTextarea = styled(TextareaAutosize)`
   }
 
   &::-webkit-scrollbar {
-    width: 2px;
+    width: 4px;
   }
 
   &::-webkit-scrollbar-track {
-    background: var(--color-grey-6);
+    background: var(--color-grey-5);
     border-radius: 100px;
   }
 
