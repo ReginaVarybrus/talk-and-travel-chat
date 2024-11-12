@@ -7,11 +7,10 @@ import URLs from '@/constants/constants';
 import { useFetch } from '@/hooks/useFetch';
 import { formatDate } from '@/components/utils/dateUtil.js';
 import { getUsersStatuses } from '@/redux-store/selectors.js';
-import { ScrollBar } from '@/components/SearchInput/SearchInputStyled.js';
 import {
   ListStyled,
   Text,
-  ListItems,
+  ListItemsStyled,
 } from '@/components/RoomsList/RoomsListStyled.js';
 import { useChatContext } from '@/providers/ChatProvider';
 import {
@@ -74,78 +73,71 @@ const DMsList = () => {
   return (
     <ListStyled>
       {filteredPrivateChats.length ? (
-        <ListItems>
-          <ScrollBar>
-            {filteredPrivateChats
-              .sort((a, b) => {
-                const dateA = a.lastMessage
-                  ? new Date(a.lastMessage.creationDate)
-                  : new Date(0);
-                const dateB = b.lastMessage
-                  ? new Date(b.lastMessage.creationDate)
-                  : new Date(0);
-                return dateB - dateA;
-              })
-              .map(({ chat, companion, lastMessage }) => {
-                const userStatus = usersStatuses.find(
-                  user => user.userId === companion.id
-                );
+        <ListItemsStyled>
+          {filteredPrivateChats
+            .sort((a, b) => {
+              const dateA = a.lastMessage
+                ? new Date(a.lastMessage.creationDate)
+                : new Date(0);
+              const dateB = b.lastMessage
+                ? new Date(b.lastMessage.creationDate)
+                : new Date(0);
+              return dateB - dateA;
+            })
+            .map(({ chat, companion, lastMessage }) => {
+              const userStatus = usersStatuses.find(
+                user => user.userId === companion.id
+              );
 
-                const isOnline = userStatus
-                  ? userStatus.status.isOnline
-                  : false;
+              const isOnline = userStatus ? userStatus.status.isOnline : false;
 
-                return (
-                  <Item
-                    key={chat.id}
-                    onClick={() => handleOpenChat(chat.id, companion)}
-                    $isActive={selectedChat && chat.id === selectedChat}
-                  >
-                    <ChatNameStyled>
-                      <Avatar>
-                        {companion.avatar ? (
-                          <ImgAvatar
-                            src={companion.avatar.image50x50 || undefined}
-                            alt={`${companion.userName}'s avatar`}
-                          />
-                        ) : (
-                          <LetterAvatarStyled>
-                            {companion.userName[0].toUpperCase()}
-                          </LetterAvatarStyled>
-                        )}
-                        {isOnline && <Badge />}
-                      </Avatar>
-                      <ChatName>
-                        <NameAndDayBox>
-                          <CompanionName
+              return (
+                <Item
+                  key={chat.id}
+                  onClick={() => handleOpenChat(chat.id, companion)}
+                  $isActive={selectedChat && chat.id === selectedChat}
+                >
+                  <ChatNameStyled>
+                    <Avatar>
+                      {companion.avatar ? (
+                        <ImgAvatar
+                          src={companion.avatar.image50x50 || undefined}
+                          alt={`${companion.userName}'s avatar`}
+                        />
+                      ) : (
+                        <LetterAvatarStyled>
+                          {companion.userName[0].toUpperCase()}
+                        </LetterAvatarStyled>
+                      )}
+                      {isOnline && <Badge />}
+                    </Avatar>
+                    <ChatName>
+                      <NameAndDayBox>
+                        <CompanionName
+                          $isActive={selectedChat && chat.id === selectedChat}
+                        >
+                          {companion.userName}
+                        </CompanionName>
+                        <p>
+                          {lastMessage && formatDate(lastMessage.creationDate)}
+                        </p>
+                      </NameAndDayBox>
+                      <MessageAndCountBox>
+                        <p>{lastMessage && lastMessage.content}</p>
+                        {chat.unreadMessagesCount > 0 && (
+                          <UnreadMessagesCount
                             $isActive={selectedChat && chat.id === selectedChat}
                           >
-                            {companion.userName}
-                          </CompanionName>
-                          <p>
-                            {lastMessage &&
-                              formatDate(lastMessage.creationDate)}
-                          </p>
-                        </NameAndDayBox>
-                        <MessageAndCountBox>
-                          <p>{lastMessage && lastMessage.content}</p>
-                          {chat.unreadMessagesCount > 0 && (
-                            <UnreadMessagesCount
-                              $isActive={
-                                selectedChat && chat.id === selectedChat
-                              }
-                            >
-                              {chat.unreadMessagesCount}
-                            </UnreadMessagesCount>
-                          )}
-                        </MessageAndCountBox>
-                      </ChatName>
-                    </ChatNameStyled>
-                  </Item>
-                );
-              })}
-          </ScrollBar>
-        </ListItems>
+                            {chat.unreadMessagesCount}
+                          </UnreadMessagesCount>
+                        )}
+                      </MessageAndCountBox>
+                    </ChatName>
+                  </ChatNameStyled>
+                </Item>
+              );
+            })}
+        </ListItemsStyled>
       ) : (
         <Text>
           {searchedValue

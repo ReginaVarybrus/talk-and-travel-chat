@@ -1,6 +1,5 @@
 import { createGlobalStyle } from 'styled-components';
 import { device } from '@/constants/mediaQueries';
-import 'simplebar-react/dist/simplebar.min.css';
 
 export const GlobalStyles = createGlobalStyle`
 :root {
@@ -101,14 +100,6 @@ svg{
   margin: 0;
   padding: 0;
 }
-
-// TapBar custom styles
-
-.css-gy4i07-MuiPaper-root {
-  height: 100px;
-  align-content: center;
-}
-  
 
 // MapStyles
 
