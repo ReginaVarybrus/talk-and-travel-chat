@@ -141,7 +141,7 @@ const UserInfoModal = ({
 
               <UserInfo>
                 <h5>{userName}</h5>
-                <p>{userEmail}</p>
+                <p title={userEmail}>{userEmail}</p>
               </UserInfo>
             </UserContactInfoStyled>
             <hr />

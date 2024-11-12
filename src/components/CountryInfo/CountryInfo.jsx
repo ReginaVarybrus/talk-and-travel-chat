@@ -187,7 +187,7 @@ const CountryInfo = ({
                     </Avatar>
                     <UserContactInfo>
                       <h5>{user.userName}</h5>
-                      <p>{user.userEmail}</p>
+                      <p title={user.userEmail}>{user.userEmail}</p>
                     </UserContactInfo>
                     {user.id !== currentUserId && (
                       <SendMessageBtn
