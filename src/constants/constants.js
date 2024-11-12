@@ -4,6 +4,7 @@ const URLs = {
   login: 'authentication/login',
   logout: 'authentication/logout',
   passwordRecovery: 'authentication/password-recovery',
+  verifyEmail: 'authentication/registration-confirmation',
 
   // User operations
   currentUser: 'current',
