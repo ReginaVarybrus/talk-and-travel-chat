@@ -57,25 +57,56 @@ export const Text = styled.p`
   color: var(--color-grey-9);
 `;
 
-export const ListItems = styled.ul`
+export const ListItemsStyled = styled.ul`
+  max-height: calc(100vh - 279px);
   width: 100vw;
+  overflow-y: auto;
+
+  &::-webkit-scrollbar {
+    width: 4px;
+  }
+
+  &::-webkit-scrollbar-track {
+    background: var(--color-grey-5);
+    border-radius: 100px;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    height: 144px;
+    border-radius: 100px;
+    background: var(--color-grey-9);
+  }
+
   @media ${device.tablet} {
     width: 248px;
+    max-height: calc(100vh - 229px);
   }
   @media ${device.laptop} {
     width: 298px;
+    max-height: calc(100vh - 229px);
   }
 `;
 
 export const ChatNameBox = styled.div`
   display: flex;
   align-items: center;
-`;
+  width: 253px;
 
-export const Flag = styled.img`
-  width: 32px;
-  height: 24px;
-  padding-right: 12px;
+  @media ${device.mobileM} {
+    width: 304px;
+  }
+
+  @media ${device.mobileL} {
+    width: 348px;
+  }
+
+  @media ${device.tablet} {
+    width: 180px;
+  }
+
+  @media ${device.laptop} {
+    width: 230px;
+  }
 `;
 
 export const ChatName = styled.h6`

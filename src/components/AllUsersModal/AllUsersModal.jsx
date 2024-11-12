@@ -2,7 +2,7 @@ import Modal from '@mui/material/Modal';
 import { useEffect, useState } from 'react';
 import { IoCloseOutline } from 'react-icons/io5';
 import URLs from '@/constants/constants';
-import { getUser } from '@/redux-store/selectors';
+import { getUser, getUsersStatuses } from '@/redux-store/selectors';
 import { useNavigate } from 'react-router-dom';
 import { useFetch } from '@/hooks/useFetch';
 import { useSelector } from 'react-redux';
@@ -10,6 +10,7 @@ import { routesPath } from '@/routes/routesConfig.jsx';
 import { useChatContext } from '@/providers/ChatProvider';
 import { axiosClient } from '@/services/api';
 import { BiArrowBack } from 'react-icons/bi';
+import { Badge } from '@/components/MessageItem/MessageItemStyled';
 import {
   BoxStyled,
   CloseBtn,
@@ -36,9 +37,12 @@ import {
   LetterAvatarInUserBlock,
   AvatarImg,
 } from './AllUsersModalStyled';
+import { ImgAvatar } from '../CountryInfo/CountryInfoStyled';
+// import { Badge } from '../MessageItem/MessageItemStyled';
 
 const AllUsersModal = ({ isOpen, onClose }) => {
   const currentUserId = useSelector(getUser)?.id;
+  const usersStatuses = useSelector(getUsersStatuses);
   const [searchedValue, setSearchedValue] = useState('');
   const [filteredUsers, setFilteredUsers] = useState([]);
 
@@ -50,18 +54,18 @@ const AllUsersModal = ({ isOpen, onClose }) => {
   const [userInfo, setUserInfo] = useState({});
 
   useEffect(() => {
-    if (users && currentUserId) {
+    if (isOpen && users && currentUserId) {
       setFilteredUsers(users.filter(user => user.id !== currentUserId));
     }
-  }, [users, currentUserId]);
+  }, [isOpen, users, currentUserId]);
 
   useEffect(() => {
-    if (onClose) {
+    if (!isOpen) {
       setSearchedValue('');
-      setFilteredUsers(users);
+      setFilteredUsers([]);
       setOpenUserInfo(false);
     }
-  }, [onClose, users]);
+  }, [isOpen]);
 
   const checkExistingPrivateChat = id => {
     const isExist = dataUserChats?.find(chat => chat.companion.id === id);
@@ -99,15 +103,23 @@ const AllUsersModal = ({ isOpen, onClose }) => {
   };
 
   const handleSearchChange = e => {
-    const value = e.target.value.toLowerCase();
+    const { value } = e.target;
     setSearchedValue(value);
+
     setFilteredUsers(
       users
         .filter(user => user.id !== currentUserId)
-        .filter(user => user.userName.toLowerCase().startsWith(value))
+        .filter(user => {
+          const fullName = user.userName.toLowerCase();
+          const [firstName, lastName] = fullName.split(' ');
+          return (
+            fullName.startsWith(value.toLowerCase()) ||
+            (firstName && firstName.startsWith(value.toLowerCase())) ||
+            (lastName && lastName.startsWith(value.toLowerCase()))
+          );
+        })
     );
   };
-
   const handleOpenUserInfo = async userId => {
     try {
       const userInfoResponse = await axiosClient.get(URLs.userInfo(userId));
@@ -157,34 +169,43 @@ const AllUsersModal = ({ isOpen, onClose }) => {
           {!openUserInfo ? (
             <UsersList>
               {filteredUsers && filteredUsers.length > 0 ? (
-                filteredUsers.map(user => (
-                  <Item key={user.id}>
-                    <UserName>
-                      <AvatarInList>
-                        {user.avatar ? (
-                          <img
-                            src={user.avatar.image50x50}
-                            alt={user.userName}
-                            width="48"
-                            height="48"
-                          />
-                        ) : (
-                          <LetterAvatar>
-                            {user.userName[0].toUpperCase()}
-                          </LetterAvatar>
-                        )}
-                      </AvatarInList>
-                      <h5>{user.userName}</h5>
-                    </UserName>
+                filteredUsers.map(user => {
+                  const userStatus = usersStatuses.find(
+                    userFind => userFind.userId === user.id
+                  );
 
-                    <MoreInfoBtn
-                      onClick={() => handleOpenUserInfo(user.id)}
-                      type="button"
-                    >
-                      More...
-                    </MoreInfoBtn>
-                  </Item>
-                ))
+                  const isOnline = userStatus
+                    ? userStatus.status.isOnline
+                    : false;
+
+                  return (
+                    <Item key={user.id}>
+                      <UserName>
+                        <AvatarInList>
+                          {user.avatar ? (
+                            <ImgAvatar
+                              src={user.avatar?.image50x50}
+                              alt={user.userName}
+                            />
+                          ) : (
+                            <LetterAvatar>
+                              {user.userName[0].toUpperCase()}
+                            </LetterAvatar>
+                          )}
+                          {isOnline && <Badge />}
+                        </AvatarInList>
+                        <h5>{user.userName}</h5>
+                      </UserName>
+
+                      <MoreInfoBtn
+                        onClick={() => handleOpenUserInfo(user.id)}
+                        type="button"
+                      >
+                        More...
+                      </MoreInfoBtn>
+                    </Item>
+                  );
+                })
               ) : (
                 <Subtitle>No companions found with this name</Subtitle>
               )}

@@ -41,6 +41,21 @@ export const MessageBlock = styled.div`
   width: 100%;
   background: var(--color-grey-3);
   transition: height 0.3s ease;
+
+  &::-webkit-scrollbar {
+    width: 4px;
+  }
+
+  &::-webkit-scrollbar-track {
+    background: var(--color-grey-5);
+    border-radius: 100px;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    height: 144px;
+    border-radius: 100px;
+    background: var(--color-grey-9);
+  }
 `;
 
 export const MessageBarWrapper = styled.footer`

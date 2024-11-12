@@ -32,6 +32,9 @@ export const formatDateOfLastSeen = dateString => {
 
   if (isToday(messageDate)) {
     const minutesDifference = differenceInMinutes(currentTime, messageDate);
+    if (minutesDifference === 0) {
+      return 'last seen just now';
+    }
     if (minutesDifference < 60) {
       return `last seen ${minutesDifference} minute${minutesDifference !== 1 ? 's' : ''} ago`;
     }

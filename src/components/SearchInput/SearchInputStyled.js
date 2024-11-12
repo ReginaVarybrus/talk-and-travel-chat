@@ -1,5 +1,4 @@
 import styled from 'styled-components';
-import SimpleBar from 'simplebar-react';
 import { device } from '@/constants/mediaQueries';
 import { FiSearch } from 'react-icons/fi';
 
@@ -53,6 +52,23 @@ export const ListItemsStyled = styled.div`
   margin-bottom: 48px;
   background: var(--white-color);
   z-index: 10;
+  overflow-y: auto;
+
+  &::-webkit-scrollbar {
+    width: 4px;
+  }
+
+  &::-webkit-scrollbar-track {
+    background: var(--color-grey-5);
+    border-radius: 100px;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    height: 144px;
+    border-radius: 100px;
+    background: var(--color-grey-9);
+  }
+
   @media ${device.tablet} {
     left: -16px;
     width: 248px;
@@ -60,6 +76,7 @@ export const ListItemsStyled = styled.div`
   }
   @media ${device.laptop} {
     width: 298px;
+    height: calc(100vh - 229px);
   }
 `;
 
@@ -92,13 +109,7 @@ export const Item = styled.li`
 export const Flag = styled.img`
   margin-right: 12px;
   max-height: 36px;
-`;
-
-export const ScrollBar = styled(SimpleBar)`
-  max-height: calc(100vh - 279px);
-  @media ${device.tablet} {
-    max-height: calc(100vh - 229px);
-  }
+  border: 0.5px solid var(--color-grey-5);
 `;
 
 export const Text = styled.p`

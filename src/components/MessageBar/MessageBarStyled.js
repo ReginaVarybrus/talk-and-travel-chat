@@ -29,18 +29,26 @@ export const MessageInputs = styled.form`
   margin: 32px;
 `;
 
-export const TextareaAutosize = styled(BaseTextareaAutosize)`
-  box-sizing: border-box;
+export const TextareaStyled = styled.div`
+  display: flex;
   width: 100%;
   max-height: 200px;
   margin-left: 16px;
   margin-right: 16px;
+  border-radius: 8px;
+  overflow: hidden;
+`;
+
+export const TextareaAutosize = styled(BaseTextareaAutosize)`
+  box-sizing: border-box;
+  width: 100%;
+  max-height: 200px;
   font-size: 0.875rem;
   font-weight: 400;
   line-height: 1.5;
   padding: 13.2px 16px;
-  border-radius: 8px;
   color: var(--color-grey-8);
+  border-radius: 8px;
   border: 1px solid var(--color-grey-6);
   resize: none;
   outline: none;
@@ -57,6 +65,21 @@ export const TextareaAutosize = styled(BaseTextareaAutosize)`
     &::placeholder {
       color: transparent;
     }
+  }
+
+  &::-webkit-scrollbar {
+    width: 4px;
+  }
+
+  &::-webkit-scrollbar-track {
+    background: var(--color-grey-5);
+    border-radius: 100px;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    height: 144px;
+    border-radius: 100px;
+    background: var(--color-grey-9);
   }
 `;
 

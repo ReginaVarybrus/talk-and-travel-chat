@@ -20,8 +20,16 @@ export const userStatusesSlice = createSlice({
 
       if (userIndex !== -1) {
         state.statuses[userIndex].status.isOnline = status.isOnline;
+        state.statuses[userIndex].status.lastSeenOn =
+          status.lastSeenOn || new Date().toISOString();
       } else {
-        state.statuses.push({ userId, status });
+        state.statuses.push({
+          userId,
+          status: {
+            isOnline: status.isOnline,
+            lastSeenOn: status.lastSeenOn || new Date().toISOString(),
+          },
+        });
       }
     },
   },

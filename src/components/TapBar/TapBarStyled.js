@@ -11,6 +11,10 @@ export const TapBarStyled = styled(Box)`
   @media ${device.tablet} {
     display: none;
   }
+
+  .css-16lloyr-MuiBottomNavigation-root {
+    height: 100px;
+  }
 `;
 
 export const TapBarButton = styled(BottomNavigationAction)`

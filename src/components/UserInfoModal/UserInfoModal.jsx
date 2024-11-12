@@ -9,12 +9,11 @@ import { routesPath } from '@/routes/routesConfig';
 import { useChatContext } from '@/providers/ChatProvider';
 import { useWebSocket } from '@/hooks/useWebSocket';
 import { useState } from 'react';
-
+import { IoCloseOutline } from 'react-icons/io5';
+import { CloseBtn } from '@/components/CountryInfo/CountryInfoStyled.js';
 import {
   ModalWindowStyled,
   InfoModalStyled,
-  ButtonClose,
-  CloseIcon,
   UserContactInfoStyled,
   ModalAvatar,
   LetterAvatarStyled,
@@ -50,8 +49,15 @@ const UserInfoModal = ({
     setFilteredPrivateChats,
   } = useChatContext();
 
-  const openConfirmation = () => setConfirmOpen(true);
-  const closeConfirmation = () => setConfirmOpen(false);
+  const openConfirmation = () => {
+    setConfirmOpen(true);
+    document.activeElement?.blur();
+  };
+
+  const closeConfirmation = () => {
+    setConfirmOpen(false);
+    document.activeElement?.blur();
+  };
 
   const checkExistingPrivateChat = companionId => {
     const validChats = dataUserChats.filter(chat => chat.companion.id !== null);
@@ -118,9 +124,9 @@ const UserInfoModal = ({
       >
         <Fade in={open}>
           <InfoModalStyled>
-            <ButtonClose onClick={handleClose}>
-              <CloseIcon />
-            </ButtonClose>
+            <CloseBtn onClick={handleClose}>
+              <IoCloseOutline />
+            </CloseBtn>
             <UserContactInfoStyled>
               {userAvatarUrl ? (
                 <ModalAvatar
