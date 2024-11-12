@@ -515,6 +515,7 @@ const Chat = ({
             setIsUserTyping={setIsUserTyping}
             setUsersTyping={setUsersTyping}
             lastVisibleReadMessageRef={lastVisibleReadMessageRef}
+            isPrivateChat={isPrivateChat}
           />
         )}
       </MessageBlock>

@@ -29,6 +29,7 @@ const MessageItem = ({
   type,
   isShownAvatar,
   isOnline,
+  isPrivateChat,
 }) => {
   const [open, setOpen] = useState(false);
   const [userInfo, setUserInfo] = useState({});
@@ -45,9 +46,10 @@ const MessageItem = ({
   const messageTypeLeave = type === MESSAGE_TYPES.LEAVE;
 
   const handleOpen = async () => {
-    if (isCurrentUser) {
+    if (isCurrentUser || isPrivateChat) {
       return;
     }
+
     try {
       const userInfoResponse = await axiosClient.get(URLs.userInfo(userId));
       setUserInfo(userInfoResponse.data);
@@ -68,7 +70,8 @@ const MessageItem = ({
       {checkToShowAvatar && (
         <Avatar
           $isCurrentUser={isCurrentUser}
-          onClick={!isCurrentUser ? handleOpen : undefined}
+          $isPrivateChat={isPrivateChat}
+          onClick={!isCurrentUser && !isPrivateChat ? handleOpen : undefined}
         >
           <ImgAvatar
             src={userAvatarUrl?.image50x50 || undefined}
