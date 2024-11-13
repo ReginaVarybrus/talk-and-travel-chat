@@ -1,9 +1,9 @@
-import { verifyEmail } from '@/redux-store/slices/AuthOperations';
 import { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import { useNavigate, useLocation } from 'react-router-dom';
+import { verifyEmail } from '@/redux-store/slices/AuthOperations';
+import { routesPath } from '@/routes/routesConfig';
 import Loader from '@/components/Loader/Loader';
-import { routesPath } from '../routesConfig';
 
 const VerificationRoute = () => {
   const dispatch = useDispatch();
