@@ -44,7 +44,11 @@ export const authSlice = createSlice({
       })
       .addCase(verifyEmail.pending, handlePending)
       .addCase(verifyEmail.rejected, handleRejected)
-      .addCase(verifyEmail.fulfilled, state => {}),
+      .addCase(verifyEmail.fulfilled, (state, action) => {
+        state.token = action.payload.token;
+        state.isLoggedIn = true;
+        state.error = null;
+      }),
 });
 
 export default authSlice.reducer;

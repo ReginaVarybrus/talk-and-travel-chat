@@ -2,6 +2,7 @@ import { verifyEmail } from '@/redux-store/slices/AuthOperations';
 import { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import { useNavigate, useLocation } from 'react-router-dom';
+import Loader from '@/components/Loader/Loader';
 import { routesPath } from '../routesConfig';
 
 const VerificationRoute = () => {
@@ -10,8 +11,7 @@ const VerificationRoute = () => {
   const location = useLocation();
 
   useEffect(() => {
-    const params = new URLSearchParams(location.search);
-    const token = params.get('token');
+    const token = new URLSearchParams(location.search).get('token');
 
     if (token) {
       dispatch(verifyEmail(token))
@@ -27,7 +27,8 @@ const VerificationRoute = () => {
       navigate(routesPath.LOGIN);
     }
   }, [dispatch, navigate, location]);
-  return <div>VerificationRoute</div>;
+
+  return <Loader />;
 };
 
 export default VerificationRoute;
