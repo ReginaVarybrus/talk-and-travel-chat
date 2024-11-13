@@ -29,6 +29,7 @@ const SearchInput = ({
   setIsShowJoinBtn,
   setIsChatVisible,
   setParticipantsAmount,
+  setChatOpenedTime,
 }) => {
   const isDesktop = useMediaQuery({ query: device.tablet });
   const navigate = useNavigate();
@@ -104,9 +105,11 @@ const SearchInput = ({
     fetchCountryList();
     setShowItem(!showItem);
   };
+
   const handleCountryClick = country => {
     const countryName = country.name;
     setSelectedCountry(countryName);
+    setChatOpenedTime(new Date());
     const nameOfCountry = subscriptionRooms.find(
       item => item.name === countryName
     );
@@ -197,6 +200,7 @@ SearchInput.propTypes = {
   setIsShowJoinBtn: PropTypes.func,
   setIsChatVisible: PropTypes.func,
   setParticipantsAmount: PropTypes.func,
+  setChatOpenedTime: PropTypes.func,
 };
 
 export default SearchInput;

@@ -15,6 +15,7 @@ const MessageList = ({
   unreadMessages,
   setParticipantsAmount,
   lastVisibleReadMessageRef,
+  chatOpenedTime,
 }) => {
   const currentUserName = useSelector(getUser)?.userName;
   const usersStatuses = useSelector(getUsersStatuses);
@@ -46,16 +47,6 @@ const MessageList = ({
       }
     });
   }, [messages, setIsUserTyping, setUsersTyping, currentUserName]);
-
-  useEffect(() => {
-    messages?.forEach(message => {
-      if (message.type === messageTypeJoin) {
-        setParticipantsAmount(prevCount => prevCount + 1);
-      } else if (message.type === messageTypeLeave) {
-        setParticipantsAmount(prevCount => (prevCount > 0 ? prevCount - 1 : 0));
-      }
-    });
-  }, [messages]);
 
   const renderMessagesWithDateSeparator = () => {
     const sortedMessages = messages
@@ -116,7 +107,8 @@ const MessageList = ({
             type={message.type}
             isShownAvatar={isShownAvatar}
             isOnline={isOnline}
-            // setParticipantsAmount={setParticipantsAmount}
+            setParticipantsAmount={setParticipantsAmount}
+            chatOpenedTime={chatOpenedTime}
           />
         </div>
       );
@@ -136,6 +128,7 @@ MessageList.propTypes = {
   lastVisibleReadMessageRef: PropTypes.shape({
     current: PropTypes.instanceOf(Element),
   }),
+  chatOpenedTime: PropTypes.string,
 };
 
 export default MessageList;

@@ -30,6 +30,7 @@ const RoomsList = () => {
     setIsShowJoinBtn,
     setIsChatVisible,
     setParticipantsAmount,
+    setChatOpenedTime,
   } = useOutletContext();
   const { subscriptionRooms } = useChatContext();
 
@@ -44,6 +45,7 @@ const RoomsList = () => {
   const handleOpenCountryRoom = countryName => {
     setSelectedCountry(countryName);
     setIsShowJoinBtn(false);
+    setChatOpenedTime(new Date());
     if (!isDesktop) {
       setIsChatVisible(true);
     }
