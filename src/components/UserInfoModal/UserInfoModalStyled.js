@@ -104,8 +104,18 @@ export const LetterAvatarStyled = styled.div`
 export const UserInfo = styled.div`
   margin-left: 16px;
 
+  max-width: 155px;
+
+  @media ${device.mobileM} {
+    max-width: 205px;
+  }
+  @media ${device.tablet} {
+    max-width: 255px;
+  }
   p {
-    word-break: break-all;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
 `;
 
