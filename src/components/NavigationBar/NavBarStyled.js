@@ -14,6 +14,7 @@ ${(props) =>
   }
 
 @media ${device.tablet} {
+box-sizing: border-box;
   display: flex;
   top: 0;
   height: 80px;
@@ -72,8 +73,6 @@ padding: 10px;
 export const MainPageNavLeft = styled.div`
 display: flex;
 padding: 10px;
-width: 100%;
-
   @media ${device.tablet} {  
     padding: 16px 0;
     align-items: center;

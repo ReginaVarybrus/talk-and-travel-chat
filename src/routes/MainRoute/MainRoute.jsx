@@ -28,42 +28,42 @@ import LargeFilledButton from '@/components/Buttons/LargeFilled/LargeFilledButto
 import Miniature from '@/images/main_page_miniature.svg';
 import NavBar from '@/components/NavigationBar/NavBar';
 import LargeOutlinedButton from '@/components/Buttons/LargeOutlined/LargeOutlinedButton';
-import useNavBarVisibility from '@/components/NavigationBar/useNavBarVisibility';
+import Header from '@/components/HeaderMainPage/Header';
 
 const bubbleData = [
   {
     marginbottom: '20px',
-    left: '0%',
+    $desktopstyles: 'left: 0%;',
     text: 'Meet friends and expand your network.',
   },
   {
     marginbottom: '40px',
-    left: '53%',
     text: 'Save time by avoiding endless web searches.',
+    $desktopstyles: 'right: calc(-100% + 568px);',
   },
   {
     marginbottom: '60px',
-    left: '17%',
+    $desktopstyles: 'left: 17%',
     text: 'Engage in lively discussions.',
   },
   {
     marginbottom: '60px',
-    left: '47%',
     text: 'Access exclusive deals, insider tips.',
+    $desktopstyles: 'right: calc(-88% + 464px)',
   },
   {
     marginbottom: '30px',
-    left: '12%',
     text: 'Uncover hidden details and gain local insights.',
+    $desktopstyles: 'left: 6%',
   },
   {
     marginbottom: '40px',
-    left: '55%',
     text: 'Share your own experiences and insights.',
+    $desktopstyles: 'right: calc(-100% + 528px)',
   },
   {
     marginbottom: '0',
-    left: '0',
+    $desktopstyles: 'left: 0',
     text: 'Connect anytime, from your laptop or phone.',
   },
 ];
@@ -76,7 +76,7 @@ const MainRoute = () => {
 
   return (
     <MainPageLayout>
-      <NavBar isvisible={useNavBarVisibility()} $navBarType="header" />
+      <Header />
       <MainPageSectionOne>
         <HeaderH1>
           <b>Talk</b> Without Borders
@@ -172,7 +172,7 @@ const MainRoute = () => {
             <Bubble
               key={`${generateUniqueKey()}`}
               $marginbottom={bubble.marginbottom}
-              $left={bubble.left}
+              $desktopstyles={bubble.$desktopstyles}
               $text={bubble.text}
             />
           ))}

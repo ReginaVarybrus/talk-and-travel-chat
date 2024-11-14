@@ -13,13 +13,13 @@ margin-bottom: ${props => props.$marginbottom};
 
 @media ${device.tablet} {
   position: relative;
-  left: ${props => props.$left};
+  ${({ $desktopstyles }) => $desktopstyles};
   border-radius: 107px;
   padding: 16px;
   font-size: 24px;
   line-height: 28.8px;
   display: flex;
-  align-items: flex-end;
+  align-items: center;
   gap: 16px;
 }
   

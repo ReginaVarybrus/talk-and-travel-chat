@@ -54,7 +54,6 @@ font-size: 14px;
 }
 `
 
-
 export const Globe = styled.div`
 display: none;
 
@@ -139,9 +138,6 @@ export const SectionThreeContainer = styled.div`
 `;
 
 export const MainPageSectionFour = styled.section`
-
-@media ${device.tablet} {
-}
 `;
 
 export const SectionFourContainer = styled.div`
@@ -153,7 +149,6 @@ export const SectionFourContainer = styled.div`
 }
 `;
 
-
 export const BubbleContainer = styled.div`
 display: flex;
 flex-direction: column;
@@ -164,7 +159,6 @@ border-radius: 8px;
 background-color: var(--color-brand-blue);
 font-size: 14px;
 line-height: 24px;
-
 
 @media ${device.tablet} {
   display: none;
