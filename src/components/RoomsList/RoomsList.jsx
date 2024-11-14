@@ -4,13 +4,13 @@ import { useMediaQuery } from 'react-responsive';
 import { device } from '@/constants/mediaQueries.js';
 import { useFetch } from '@/hooks/useFetch.js';
 import URLs from '@/constants/constants.js';
-import { Flag, ScrollBar } from '@/components/SearchInput/SearchInputStyled.js';
+import { Flag } from '@/components/SearchInput/SearchInputStyled.js';
 import { useChatContext } from '@/providers/ChatProvider';
 import {
   ListStyled,
   Item,
   Text,
-  ListItems,
+  ListItemsStyled,
   UnreadMessagesCount,
   ChatNameBox,
   ChatName,
@@ -54,37 +54,33 @@ const RoomsList = () => {
   return (
     <ListStyled>
       {subscriptionRooms.length ? (
-        <ListItems>
-          <ScrollBar>
-            {subscriptionRooms.map(room => (
-              <Item
-                key={room.country.flagCode}
-                onClick={() => handleOpenCountryRoom(room.name)}
-                $isActive={room.name === selectedCountry}
-              >
-                <ChatNameBox>
-                  <Flag
-                    loading="lazy"
-                    width="48"
-                    srcSet={`https://flagcdn.com/${room.country.flagCode}.svg 2x`}
-                    src={`https://flagcdn.com/${room.country.flagCode}.svg`}
-                    alt={`${room.country.flagCode} flag`}
-                  />
-                  <ChatName $isActive={room.name === selectedCountry}>
-                    {room.name}
-                  </ChatName>
-                </ChatNameBox>
-                {room.unreadMessagesCount > 0 && (
-                  <UnreadMessagesCount
-                    $isActive={room.name === selectedCountry}
-                  >
-                    {room.unreadMessagesCount}
-                  </UnreadMessagesCount>
-                )}
-              </Item>
-            ))}
-          </ScrollBar>
-        </ListItems>
+        <ListItemsStyled>
+          {subscriptionRooms.map(room => (
+            <Item
+              key={room.country.flagCode}
+              onClick={() => handleOpenCountryRoom(room.name)}
+              $isActive={room.name === selectedCountry}
+            >
+              <ChatNameBox>
+                <Flag
+                  loading="lazy"
+                  width="48"
+                  srcSet={`https://flagcdn.com/${room.country.flagCode}.svg 2x`}
+                  src={`https://flagcdn.com/${room.country.flagCode}.svg`}
+                  alt={`${room.country.flagCode} flag`}
+                />
+                <ChatName $isActive={room.name === selectedCountry}>
+                  {room.name}
+                </ChatName>
+              </ChatNameBox>
+              {room.unreadMessagesCount > 0 && (
+                <UnreadMessagesCount $isActive={room.name === selectedCountry}>
+                  {room.unreadMessagesCount}
+                </UnreadMessagesCount>
+              )}
+            </Item>
+          ))}
+        </ListItemsStyled>
       ) : (
         <Text>
           There are no rooms in the list.

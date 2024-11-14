@@ -15,6 +15,7 @@ const MessageList = ({
   unreadMessages,
   setParticipantsAmount,
   lastVisibleReadMessageRef,
+  isPrivateChat,
   chatOpenedTime,
 }) => {
   const currentUserName = useSelector(getUser)?.userName;
@@ -107,6 +108,7 @@ const MessageList = ({
             type={message.type}
             isShownAvatar={isShownAvatar}
             isOnline={isOnline}
+            isPrivateChat={isPrivateChat}
             setParticipantsAmount={setParticipantsAmount}
             chatOpenedTime={chatOpenedTime}
           />

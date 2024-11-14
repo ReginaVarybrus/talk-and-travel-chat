@@ -142,7 +142,7 @@ const Chat = ({
 
       return content;
     } catch (error) {
-      console.error('Error fetching messages:', error);
+      console.error('Error fetching messages:', error.message);
     } finally {
       isFetchingRead.current = false;
     }
@@ -517,6 +517,7 @@ const Chat = ({
             setUsersTyping={setUsersTyping}
             setParticipantsAmount={setParticipantsAmount}
             lastVisibleReadMessageRef={lastVisibleReadMessageRef}
+            isPrivateChat={isPrivateChat}
             chatOpenedTime={chatOpenedTime}
           />
         )}

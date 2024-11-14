@@ -1,8 +1,14 @@
 import styled from 'styled-components';
+import Modal from '@mui/material/Modal';
 import { Box } from '@mui/material';
 import { FiSearch } from 'react-icons/fi';
 import { LuInfo } from 'react-icons/lu';
 import { device } from '@/constants/mediaQueries';
+
+export const ModalWindowStyled = styled(Modal)`
+  display: grid;
+  place-items: center;
+`;
 
 export const BoxStyled = styled(Box)`
   position: absolute;
@@ -18,10 +24,13 @@ export const BoxStyled = styled(Box)`
     0px 2px 6px 2px rgba(0, 0, 0, 0.15),
     0px 1px 2px 0px rgba(0, 0, 0, 0.3);
   padding: 16px;
-  width: 395px;
+  width: 279px;
 
+  @media ${device.mobileM} {
+    width: 327px;
+  }
   @media ${device.tablet} {
-    width: 466px;
+    width: 480px;
     padding: 32px;
   }
 `;
@@ -144,11 +153,11 @@ export const UsersList = styled.ul`
   }
 
   &::-webkit-scrollbar {
-    width: 2px;
+    width: 4px;
   }
 
   &::-webkit-scrollbar-track {
-    background: var(--color-grey-6);
+    background: var(--color-grey-5);
     border-radius: 100px;
   }
 
@@ -278,6 +287,15 @@ export const Subtitle = styled.h5`
 export const Title = styled.h3`
   text-align: center;
   padding-top: 15px;
+  font-size: 16px;
+
+  @media ${device.mobileM} {
+    font-size: 20px;
+  }
+
+  @media ${device.tablet} {
+    font-size: 24px;
+  }
 `;
 
 export const UserInfoBox = styled.div`
@@ -333,17 +351,33 @@ export const UserContact = styled.div`
   align-items: center;
   gap: 8px;
   margin-bottom: 32px;
+
   p {
     font-size: 14px;
     color: var(--color-grey-9);
   }
+
+  @media ${device.tablet} {
+    gap: 16px;
+    h5 {
+      margin-bottom: 8px;
+    }
+  }
 `;
 
 export const UserInfo = styled.div`
-  margin-left: 16px;
+  max-width: 155px;
 
+  @media ${device.mobileM} {
+    max-width: 205px;
+  }
+  @media ${device.tablet} {
+    max-width: 255px;
+  }
   p {
-    word-break: break-all;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
 `;
 

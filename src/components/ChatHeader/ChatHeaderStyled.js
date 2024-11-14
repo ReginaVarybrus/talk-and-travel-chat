@@ -107,7 +107,12 @@ export const MobileHeaderContentStyled = styled.div`
     }
   }
 `;
-
+export const MobileAvatarImg = styled.img`
+  width: 36px;
+  height: 36px;
+  border-radius: 4px;
+  object-fit: cover;
+`;
 export const LetterAvatarStyled = styled.div`
   display: flex;
   justify-content: center;

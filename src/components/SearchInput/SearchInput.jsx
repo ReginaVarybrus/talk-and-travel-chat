@@ -17,7 +17,6 @@ import {
   ListItemsStyled,
   Item,
   Flag,
-  ScrollBar,
   Text,
   NameAndCountStyleBox,
 } from './SearchInputStyled';
@@ -154,40 +153,38 @@ const SearchInput = ({
       <IconSearch />
       {showItem && (
         <ListItemsStyled>
-          <ScrollBar>
-            {isFetching ? (
-              <Loader size={40} />
-            ) : !filterCountries.length ? (
-              <Text>
-                Sorry, the room for this country does not exist, try creating
-                one yourself
-              </Text>
-            ) : (
-              <>
-                {filterCountries.map(country => (
-                  <Item
-                    key={country.id}
-                    onClick={() => handleCountryClick(country)}
-                  >
-                    <NameAndCountStyleBox>
-                      <Flag
-                        loading="lazy"
-                        width="48"
-                        srcSet={`https://flagcdn.com/${country.country.flagCode.toLowerCase()}.svg 2x`}
-                        src={`https://flagcdn.com/${country.country.flagCode.toLowerCase()}.svg`}
-                        alt={`${country.name} flag`}
-                      />
-                      <p>{country.name}</p>
-                    </NameAndCountStyleBox>
-                    <span>
-                      <TbUsers />
-                      {country.usersCount}
-                    </span>
-                  </Item>
-                ))}
-              </>
-            )}
-          </ScrollBar>
+          {isFetching ? (
+            <Loader size={40} />
+          ) : !filterCountries.length ? (
+            <Text>
+              Sorry, the room for this country does not exist, try creating one
+              yourself
+            </Text>
+          ) : (
+            <>
+              {filterCountries.map(country => (
+                <Item
+                  key={country.id}
+                  onClick={() => handleCountryClick(country)}
+                >
+                  <NameAndCountStyleBox>
+                    <Flag
+                      loading="lazy"
+                      width="48"
+                      srcSet={`https://flagcdn.com/${country.country.flagCode.toLowerCase()}.svg 2x`}
+                      src={`https://flagcdn.com/${country.country.flagCode.toLowerCase()}.svg`}
+                      alt={`${country.name} flag`}
+                    />
+                    <p>{country.name}</p>
+                  </NameAndCountStyleBox>
+                  <span>
+                    <TbUsers />
+                    {country.usersCount}
+                  </span>
+                </Item>
+              ))}
+            </>
+          )}
         </ListItemsStyled>
       )}
     </AutocompleteInputStyled>
