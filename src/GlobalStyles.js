@@ -21,14 +21,15 @@ export const GlobalStyles = createGlobalStyle`
   --color-grey-11: #3d3d3d;
   --color-grey-12: #343434;
   --color-grey-13: #79747E;
+  --color-grey-14: #49454F;
   --color-dark: #222222;
 
+  --color-brand-blue: #256ad2;
   --color-blue-1: #e9f0fb;
   --color-blue-2: #cbdbf4;
   --color-blue-3: #a1bfec;
   --color-blue-4: #76a1e3;
   --color-blue-5: #4c85da;
-  --color-brand-blue: #256ad2;
   --color-blue-7: #1f5ab3;
   --color-blue-8: #1a4b95;
   --color-blue-9: #153c78;
