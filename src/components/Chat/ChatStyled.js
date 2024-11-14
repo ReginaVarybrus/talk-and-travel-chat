@@ -39,7 +39,7 @@ export const MessageBlock = styled.div`
   flex: 1;
   overflow-y: auto;
   width: 100%;
-  height: 100%;
+  height: calc(var(--vh, 1vh) * 100 - 67px-112px);
   background: var(--color-grey-3);
   transition: height 0.3s ease;
   padding-top: 67px;

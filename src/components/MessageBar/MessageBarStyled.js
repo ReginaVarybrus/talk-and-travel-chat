@@ -6,6 +6,8 @@ import { FiSend } from 'react-icons/fi';
 
 export const MessageBarStyled = styled.footer`
   width: 100%;
+  position: fixed;
+  bottom: 0;
   box-sizing: border-box;
   overflow-y: auto;
   min-height: 112px;
@@ -13,6 +15,7 @@ export const MessageBarStyled = styled.footer`
   background: var(--white-color);
   border-top: 1px solid var(--color-grey-6);
   transition: height 0.3s ease;
+  z-index: 10;
 `;
 
 export const ButtonJoinWrapper = styled.div`
