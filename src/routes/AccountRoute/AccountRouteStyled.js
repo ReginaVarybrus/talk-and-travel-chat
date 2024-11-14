@@ -4,16 +4,17 @@ import { LuLogOut, LuPencil, LuX } from 'react-icons/lu';
 import { device } from '@/constants/mediaQueries';
 
 export const ProfileStyled = styled.section`
-    padding: 16px 24px 0 24px;
-    border-left: none;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    background-color: var(--color-grey-3);
-  min-  height: calc(calc(100vh - 56px) - 100px);
+  padding: 16px 24px 0 24px;
+  border-left: none;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background-color: var(--color-grey-3);
+  height: calc(100vh - 100px);
 
   @media ${device.tablet} {
     display: block;
+    height: 100vh;
     padding: 0;
     border-left: 1px solid var(--color-grey-6);
   }

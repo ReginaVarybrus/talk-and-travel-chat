@@ -26,7 +26,6 @@ const MessageBar = ({
   setIsShowJoinBtn,
   isUserTyping,
   setIsUserTyping,
-  // setParticipantsAmount,
   scrollToBottom,
 }) => {
   const [message, setMessage] = useState('');
@@ -96,7 +95,6 @@ const MessageBar = ({
     sendMessageOrEvent(dataEventToSend, URLs.joinToGroupChat);
     setIsShowJoinBtn(false);
     setSubscriptionRooms(prevRooms => [...prevRooms, chatData]);
-    // setParticipantsAmount(prevCount => prevCount + 1);
   };
 
   useEffect(() => {
@@ -171,7 +169,6 @@ MessageBar.propTypes = {
   setIsShowJoinBtn: PropTypes.func,
   isUserTyping: PropTypes.bool,
   setIsUserTyping: PropTypes.func,
-  // setParticipantsAmount: PropTypes.func,
   scrollToBottom: PropTypes.func,
 };
 
