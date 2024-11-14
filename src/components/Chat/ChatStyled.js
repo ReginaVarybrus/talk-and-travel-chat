@@ -39,8 +39,10 @@ export const MessageBlock = styled.div`
   flex: 1;
   overflow-y: auto;
   width: 100%;
+  height: 100%;
   background: var(--color-grey-3);
   transition: height 0.3s ease;
+  padding-top: 67px;
 
   &::-webkit-scrollbar {
     width: 4px;
@@ -55,6 +57,9 @@ export const MessageBlock = styled.div`
     height: 144px;
     border-radius: 100px;
     background: var(--color-grey-9);
+  }
+  @media ${device.tablet} {
+    padding-top: 0;
   }
 `;
 

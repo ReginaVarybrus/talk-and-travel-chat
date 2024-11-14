@@ -14,6 +14,7 @@ const MessageList = ({
   setUsersTyping,
   unreadMessages,
   lastVisibleReadMessageRef,
+  isPrivateChat,
 }) => {
   const currentUserName = useSelector(getUser)?.userName;
   const usersStatuses = useSelector(getUsersStatuses);
@@ -100,6 +101,7 @@ const MessageList = ({
             type={message.type}
             isShownAvatar={isShownAvatar}
             isOnline={isOnline}
+            isPrivateChat={isPrivateChat}
           />
         </div>
       );
