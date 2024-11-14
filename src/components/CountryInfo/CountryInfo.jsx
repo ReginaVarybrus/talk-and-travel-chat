@@ -44,7 +44,7 @@ const CountryInfo = ({
   onClose,
   countryName,
   participantsAmount,
-  setParticipantsAmount,
+  // setParticipantsAmount,
   chatId,
   setIsShowJoinBtn,
   setIsChatVisible,
@@ -103,7 +103,7 @@ const CountryInfo = ({
     setSubscriptionRooms(prevRooms =>
       prevRooms.filter(room => room.name !== countryName)
     );
-    setParticipantsAmount(prevCount => (prevCount > 0 ? prevCount - 1 : 0));
+    // setParticipantsAmount(prevCount => (prevCount > 0 ? prevCount - 1 : 0));
     if (!isDesktop) {
       setIsChatVisible(false);
     }
@@ -119,7 +119,7 @@ const CountryInfo = ({
     sendMessageOrEvent(dataEventToSend, URLs.joinToGroupChat);
     setIsShowJoinBtn(false);
     setSubscriptionRooms(prevRooms => [...prevRooms, chatData]);
-    setParticipantsAmount(prevCount => prevCount + 1);
+    // setParticipantsAmount(prevCount => prevCount + 1);
     onClose();
   };
 

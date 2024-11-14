@@ -5,7 +5,7 @@ import URLs from '@/constants/constants';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchUsersOnlineStatuses } from '@/redux-store/UserOperations/UserOperations';
 import { updateUserStatus } from '@/redux-store/slices/userStatusesSlice';
-import { getUser, getUsersStatuses } from '@/redux-store/selectors.js';
+import { getUser } from '@/redux-store/selectors.js';
 import SearchBar from '@/components/SearchBar/SearchBar';
 import Chat from '@/components/Chat/Chat';
 
@@ -21,8 +21,8 @@ const ChatRoute = () => {
   const [isShowJoinBtn, setIsShowJoinBtn] = useState(false);
   const [participantsAmount, setParticipantsAmount] = useState(null);
   const [selectedCompanion, setSelectedCompanion] = useState(null);
+  const [chatOpenedTime, setChatOpenedTime] = useState(null);
   const currentUserId = useSelector(getUser)?.id;
-  const listOfOnlineStatuses = useSelector(getUsersStatuses);
   const { responseData } = useFetch(URLs.userCountries);
   const {
     stompClient,
@@ -57,8 +57,6 @@ const ChatRoute = () => {
         },
       })
     );
-    console.log('received status:', receivedStatus);
-    console.log('list of statuses:', listOfOnlineStatuses);
   };
 
   useEffect(() => {
@@ -92,6 +90,7 @@ const ChatRoute = () => {
         setParticipantsAmount={setParticipantsAmount}
         isChatVisible={isChatVisible}
         setIsChatVisible={setIsChatVisible}
+        setChatOpenedTime={setChatOpenedTime}
       />
 
       <Chat
@@ -107,6 +106,7 @@ const ChatRoute = () => {
         setParticipantsAmount={setParticipantsAmount}
         isChatVisible={isChatVisible}
         setIsChatVisible={setIsChatVisible}
+        chatOpenedTime={chatOpenedTime}
       />
     </ChatRouteStyled>
   );
