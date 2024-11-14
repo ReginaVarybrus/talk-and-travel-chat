@@ -1,7 +1,12 @@
 import URLs from '@/constants/constants';
 import axios from 'axios';
 
-const urlToOmit = [URLs.login, URLs.register, URLs.passwordRecovery];
+const urlToOmit = [
+  URLs.login,
+  URLs.register,
+  URLs.passwordRecovery,
+  URLs.verifyEmail,
+];
 
 const axiosClient = axios.create({
   baseURL: `${import.meta.env.VITE_APP_API_URL}/api/`,

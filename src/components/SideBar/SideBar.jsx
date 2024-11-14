@@ -58,7 +58,7 @@ const SideBar = () => {
           onClick={handleProfileOpen}
           $isActive={currentPage === routesPath.ACCOUNT}
         >
-          {avatar ? (
+          {avatar?.image50x50 ? (
             <ImgAvatar
               src={avatar.image50x50 || undefined}
               alt={`${userName}'s avatar`}

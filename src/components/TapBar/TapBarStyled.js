@@ -8,12 +8,14 @@ import { iconProperties } from '@/components/SideBar/SideBarStyled';
 export const TapBarStyled = styled(Box)`
   display: ${({ $isChatVisible }) => ($isChatVisible ? 'none' : 'block')};
   z-index: 1;
-  @media ${device.tablet} {
-    display: none;
+
+  .css-16lloyr-MuiBottomNavigation-root,
+  .css-de1c49 {
+    height: 100px;
   }
 
-  .css-16lloyr-MuiBottomNavigation-root {
-    height: 100px;
+  @media ${device.tablet} {
+    display: none;
   }
 `;
 

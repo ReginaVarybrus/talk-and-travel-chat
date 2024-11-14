@@ -1,4 +1,3 @@
-import Modal from '@mui/material/Modal';
 import { useEffect, useState } from 'react';
 import { IoCloseOutline } from 'react-icons/io5';
 import URLs from '@/constants/constants';
@@ -36,9 +35,9 @@ import {
   UserContact,
   LetterAvatarInUserBlock,
   AvatarImg,
+  ModalWindowStyled,
 } from './AllUsersModalStyled';
 import { ImgAvatar } from '../CountryInfo/CountryInfoStyled';
-// import { Badge } from '../MessageItem/MessageItemStyled';
 
 const AllUsersModal = ({ isOpen, onClose }) => {
   const currentUserId = useSelector(getUser)?.id;
@@ -133,7 +132,7 @@ const AllUsersModal = ({ isOpen, onClose }) => {
     setOpenUserInfo(false);
   };
   return (
-    <Modal
+    <ModalWindowStyled
       aria-labelledby="country-info-title"
       aria-describedby="country-info-description"
       open={isOpen}
@@ -182,9 +181,9 @@ const AllUsersModal = ({ isOpen, onClose }) => {
                     <Item key={user.id}>
                       <UserName>
                         <AvatarInList>
-                          {user.avatar ? (
+                          {user.avatar?.image50x50 ? (
                             <ImgAvatar
-                              src={user.avatar?.image50x50}
+                              src={user.avatar.image50x50}
                               alt={user.userName}
                             />
                           ) : (
@@ -227,7 +226,7 @@ const AllUsersModal = ({ isOpen, onClose }) => {
                 </AvatarInUserBlock>
                 <UserInfo>
                   <h5>{userInfo.userName}</h5>
-                  <p>{userInfo.userEmail}</p>
+                  <p title={userInfo.userEmail}>{userInfo.userEmail}</p>
                 </UserInfo>
               </UserContact>
 
@@ -254,7 +253,7 @@ const AllUsersModal = ({ isOpen, onClose }) => {
           )}
         </MainBoxStyled>
       </BoxStyled>
-    </Modal>
+    </ModalWindowStyled>
   );
 };
 

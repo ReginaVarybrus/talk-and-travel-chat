@@ -41,7 +41,7 @@ const RegisterForm = () => {
       try {
         await dispatch(register(values));
         await persistor.flush();
-        navigate(routesPath.ROOMS);
+
         resetForm();
       } catch (error) {
         console.error('Registration failed:', error);

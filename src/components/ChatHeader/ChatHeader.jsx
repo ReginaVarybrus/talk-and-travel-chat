@@ -19,6 +19,7 @@ import {
   HeaderButtonBack,
   HeaderButtonOpenMenu,
   FlagBoxStyled,
+  MobileAvatarImg,
 } from './ChatHeaderStyled';
 
 const ChatHeader = ({
@@ -49,10 +50,6 @@ const ChatHeader = ({
   );
 
   const isOnline = userStatus ? userStatus.status.isOnline : false;
-
-  const firstLetterOfName = selectedCompanion?.userName
-    .substr(0, 1)
-    .toUpperCase();
 
   const getMessage = () => {
     const usersTypingWithoutCurrent = usersTyping.filter(
@@ -134,7 +131,16 @@ const ChatHeader = ({
         </HeaderButtonBack>
         <MobileHeaderContentStyled onClick={handleOpen}>
           {isPrivateChat ? (
-            <LetterAvatarStyled>{firstLetterOfName}</LetterAvatarStyled>
+            selectedCompanion.avatar ? (
+              <MobileAvatarImg
+                src={selectedCompanion.avatar?.image50x50}
+                alt={selectedCompanion.userName}
+              />
+            ) : (
+              <LetterAvatarStyled>
+                {selectedCompanion.userName[0].toUpperCase()}
+              </LetterAvatarStyled>
+            )
           ) : (
             <FlagBoxStyled>
               <FlagImg
@@ -144,18 +150,15 @@ const ChatHeader = ({
                 src={`https://flagcdn.com/${flagCode}.svg`}
                 alt={`${flagCode} flag`}
               />
-
-              <div>
-                <h5>{nameOfChat}</h5>
-                <p>{getMessage()}</p>
-              </div>
             </FlagBoxStyled>
           )}
-          {!isPrivateChat && (
-            <HeaderButtonOpenMenu>
-              <OpenCountryInfoIcon />
-            </HeaderButtonOpenMenu>
-          )}
+          <div>
+            <h5>{nameOfChat}</h5>
+            <p>{getMessage()}</p>
+          </div>
+          <HeaderButtonOpenMenu>
+            <OpenCountryInfoIcon />
+          </HeaderButtonOpenMenu>
         </MobileHeaderContentStyled>
       </MobileHeaderStyled>
       <DesktopHeaderStyled onClick={handleOpen}>
@@ -184,7 +187,7 @@ const ChatHeader = ({
         chatId={chatId}
         chatData={chatData}
         setChatData={setChatData}
-        userAvatarUrl={userInfo?.avatarUrl}
+        userAvatarUrl={userInfo?.avatar?.image256x256}
         userName={userInfo?.userName}
         userEmail={userInfo?.userEmail}
         about={userInfo?.about}

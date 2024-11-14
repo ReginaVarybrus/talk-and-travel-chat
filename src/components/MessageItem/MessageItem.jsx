@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { getUser } from '@/redux-store/selectors';
 import URLs from '@/constants/constants';
@@ -29,6 +29,9 @@ const MessageItem = ({
   type,
   isShownAvatar,
   isOnline,
+  isPrivateChat,
+  setParticipantsAmount,
+  chatOpenedTime,
 }) => {
   const [open, setOpen] = useState(false);
   const [userInfo, setUserInfo] = useState({});
@@ -44,10 +47,24 @@ const MessageItem = ({
   const messageTypeJoin = type === MESSAGE_TYPES.JOIN;
   const messageTypeLeave = type === MESSAGE_TYPES.LEAVE;
 
+  useEffect(() => {
+    const messageDate = new Date(date);
+    const openedDate = new Date(chatOpenedTime);
+
+    if (chatOpenedTime && messageDate > openedDate) {
+      if (messageTypeJoin) {
+        setParticipantsAmount(prevCount => prevCount + 1);
+      } else if (messageTypeLeave) {
+        setParticipantsAmount(prevCount => (prevCount > 0 ? prevCount - 1 : 0));
+      }
+    }
+  }, [type, setParticipantsAmount, date, chatOpenedTime]);
+
   const handleOpen = async () => {
-    if (isCurrentUser) {
+    if (isCurrentUser || isPrivateChat) {
       return;
     }
+
     try {
       const userInfoResponse = await axiosClient.get(URLs.userInfo(userId));
       setUserInfo(userInfoResponse.data);
@@ -68,14 +85,15 @@ const MessageItem = ({
       {checkToShowAvatar && (
         <Avatar
           $isCurrentUser={isCurrentUser}
-          onClick={!isCurrentUser ? handleOpen : undefined}
+          $isPrivateChat={isPrivateChat}
+          onClick={!isCurrentUser && !isPrivateChat ? handleOpen : undefined}
         >
           <ImgAvatar
             src={userAvatarUrl?.image50x50 || undefined}
             alt={`${userName}'s avatar`}
             $userAvatarUrl={userAvatarUrl}
           />
-          {!userAvatarUrl && (
+          {!userAvatarUrl?.image50x50 && (
             <LetterAvatarStyled>{userName[0].toUpperCase()}</LetterAvatarStyled>
           )}
           {isOnline && <Badge />}
@@ -118,6 +136,9 @@ MessageItem.propTypes = {
   date: PropTypes.string,
   type: PropTypes.string,
   isShownAvatar: PropTypes.bool,
+  isOnline: PropTypes.bool,
+  setParticipantsAmount: PropTypes.func,
+  chatOpenedTime: PropTypes.string,
 };
 
 export default MessageItem;

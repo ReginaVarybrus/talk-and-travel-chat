@@ -2,26 +2,25 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import swal from 'sweetalert';
 
-import { token, axiosClient } from '@/services/api';
+import { token as authToken, axiosClient } from '@/services/api';
 import { clearUser, setUsers } from '@/redux-store/slices/userSlice';
 import URLs from '@/constants/constants';
 
 export const register = createAsyncThunk(
   'auth/register',
-  async (userData, { dispatch }) => {
+  async (userData, { rejectWithValue }) => {
     try {
       const response = await axiosClient.post(URLs.register, userData);
-      dispatch(setUsers(response.data.userDto));
-      token.set(response.data.token);
+
       swal(
         'Success!',
-        // 'Letter with verification sent on your email',
-        'Welcome to our service, let`s start!',
+        'Please check your email for a confirmation link to complete the registration.',
         'success'
       );
       return response.data;
     } catch (e) {
-      swal('Error!', e.response.message, 'error');
+      swal('Error!', e.response.data.message || 'Registration failed', 'error');
+      return rejectWithValue(e.response.data.message);
     }
   }
 );
@@ -32,8 +31,8 @@ export const logIn = createAsyncThunk(
     try {
       const response = await axiosClient.post(URLs.login, userData);
       dispatch(setUsers(response.data.userDto));
-      token.set(response.data.token);
-      console.log(response.data);
+      authToken.set(response.data.token);
+
       return response.data;
     } catch (e) {
       if (e.response.status === 400 || e.response.status === 401) {
@@ -53,10 +52,34 @@ export const logOut = createAsyncThunk(
   async (_, { dispatch }) => {
     try {
       await axiosClient.post(URLs.logout);
-      token.unset();
+      authToken.unset();
       dispatch(clearUser());
     } catch (error) {
       throw new Error(error.message);
+    }
+  }
+);
+
+export const verifyEmail = createAsyncThunk(
+  'auth/verifyEmail',
+  async (verificationToken, { dispatch, rejectWithValue }) => {
+    try {
+      const response = await axiosClient.post(URLs.verifyEmail, {
+        token: verificationToken,
+      });
+      const { token, userDto } = response.data;
+      authToken.set(token);
+      dispatch(setUsers(userDto));
+
+      swal(
+        'Success!',
+        'Your email has been confirmed. Welcome to the app!',
+        'success'
+      );
+      return response.data;
+    } catch (error) {
+      swal('Error!', 'Verification failed. Please try again.', 'error');
+      return rejectWithValue(error.response.data.message);
     }
   }
 );

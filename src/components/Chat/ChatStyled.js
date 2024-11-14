@@ -1,6 +1,7 @@
 import styled from 'styled-components';
 import { device } from '@/constants/mediaQueries';
 import Button from '@mui/material/Button';
+
 import { TextareaAutosize as BaseTextareaAutosize } from '@mui/material';
 
 export const ChatStyled = styled.div`
@@ -39,9 +40,15 @@ export const MessageBlock = styled.div`
   flex: 1;
   overflow-y: auto;
   width: 100%;
+  height: calc(100vh - 67px - 112px);
   background: var(--color-grey-3);
   transition: height 0.3s ease;
 
+  @media (max-width: 768px) {
+    padding-top: 67px;
+    padding-bottom: 116px;
+    height: calc(var(--vh, 1vh) * 100 - 67px - 112px);
+  }
   &::-webkit-scrollbar {
     width: 4px;
   }
@@ -56,6 +63,10 @@ export const MessageBlock = styled.div`
     border-radius: 100px;
     background: var(--color-grey-9);
   }
+
+  @media ${device.tablet} {
+    padding-top: 0;
+  }
 `;
 
 export const MessageBarWrapper = styled.footer`
@@ -64,7 +75,6 @@ export const MessageBarWrapper = styled.footer`
   max-height: 444px;
   background: var(--white-color);
   border-top: 1px solid var(--color-grey-6);
-  width: 100%;
   transition: height 0.3s ease;
   padding-bottom: env(safe-area-inset-bottom);
 `;

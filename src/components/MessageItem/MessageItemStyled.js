@@ -35,7 +35,8 @@ export const Avatar = styled.div`
   position: relative;
   width: 48px;
   height: 48px;
-  cursor: ${({ $isCurrentUser }) => ($isCurrentUser ? 'default' : 'pointer')};
+  cursor: ${({ $isCurrentUser, $isPrivateChat }) =>
+    $isCurrentUser || $isPrivateChat ? 'default' : 'pointer'};
 `;
 
 export const LetterAvatarStyled = styled.div`

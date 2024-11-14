@@ -6,14 +6,21 @@ import { FiSend } from 'react-icons/fi';
 
 export const MessageBarStyled = styled.footer`
   width: 100%;
+  position: static;
   box-sizing: border-box;
   overflow-y: auto;
-  min-height: 112px;
-  max-height: 444px;
+  // min-height: 112px;
+  // max-height: 444px;
   background: var(--white-color);
   border-top: 1px solid var(--color-grey-6);
-  width: 100%;
   transition: height 0.3s ease;
+  z-index: 10;
+
+  @media (max-width: 768px) {
+    position: fixed;
+    bottom: 0;
+    height: auto;
+  }
 `;
 
 export const ButtonJoinWrapper = styled.div`
@@ -26,13 +33,13 @@ export const MessageInputs = styled.form`
   display: flex;
   justify-content: space-between;
   align-items: end;
-  margin: 32px;
+  padding: 32px;
 `;
 
 export const TextareaStyled = styled.div`
   display: flex;
   width: 100%;
-  max-height: 200px;
+  // max-height: 200px;
   margin-left: 16px;
   margin-right: 16px;
   border-radius: 8px;
@@ -42,7 +49,7 @@ export const TextareaStyled = styled.div`
 export const TextareaAutosize = styled(BaseTextareaAutosize)`
   box-sizing: border-box;
   width: 100%;
-  max-height: 200px;
+  // max-height: 200px;
   font-size: 0.875rem;
   font-weight: 400;
   line-height: 1.5;
@@ -56,7 +63,6 @@ export const TextareaAutosize = styled(BaseTextareaAutosize)`
   &::placeholder {
     font-size: 16px;
     font-weight: 400;
-    line-height: 19px;
     color: var(--color-grey-7);
   }
 
