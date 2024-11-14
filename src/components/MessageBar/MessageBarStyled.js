@@ -65,7 +65,6 @@ export const TextareaAutosize = styled(BaseTextareaAutosize)`
     font-size: 16px;
     font-weight: 400;
     color: var(--color-grey-7);
-    padding-bottom: 2px;
   }
 
   &:focus {
