@@ -15,12 +15,16 @@ export const routesPath = {
   DMS: `/app/chat/dms-chat/`,
   ACCOUNT: `/app/account/`,
   RESET_PASSWORD: '/password-recovery',
+  VERIFY_EMAIL: '/registration-confirmation',
 };
 
 const importComponent = {
   MAIN: lazy(() => import('@/routes/MainRoute/MainRoute')),
   LOGIN: lazy(() => import('@/routes/LoginRoute/LoginRoute')),
   REGISTER: lazy(() => import('@/routes/RegisterRoute/RegisterRoute')),
+  VERIFY_EMAIL: lazy(
+    () => import('@/routes/VerificationRoute/VerificationRoute')
+  ),
   LAYOUT: lazy(() => import('@/components/Layout/Layout')),
   CHAT: lazy(() => import('@/routes/ChatRoute/ChatRoute')),
   ROOMS: lazy(() => import('@/components/RoomsList/RoomsList')),
@@ -35,8 +39,12 @@ const importComponent = {
 export const router = createBrowserRouter([
   {
     path: routesPath.MAIN,
-    Component: importComponent.MAIN,
+    element: <importComponent.MAIN />,
     errorElement: <importComponent.ERROR_COMPONENT />,
+  },
+  {
+    path: routesPath.VERIFY_EMAIL,
+    element: <importComponent.VERIFY_EMAIL />,
   },
   {
     path: routesPath.LOGIN,
@@ -58,7 +66,7 @@ export const router = createBrowserRouter([
   },
   {
     path: routesPath.RESET_PASSWORD,
-    Component: importComponent.RESET_PASSWORD,
+    element: <importComponent.RESET_PASSWORD />,
   },
   {
     path: routesPath.APP,
@@ -71,21 +79,21 @@ export const router = createBrowserRouter([
     children: [
       {
         path: routesPath.CHAT,
-        Component: importComponent.CHAT,
+        element: <importComponent.CHAT />,
         children: [
           {
             path: routesPath.ROOMS,
-            Component: importComponent.ROOMS,
+            element: <importComponent.ROOMS />,
           },
           {
             path: routesPath.DMS,
-            Component: importComponent.DMS,
+            element: <importComponent.DMS />,
           },
         ],
       },
       {
         path: routesPath.ACCOUNT,
-        Component: importComponent.ACCOUNT,
+        element: <importComponent.ACCOUNT />,
       },
     ],
   },
