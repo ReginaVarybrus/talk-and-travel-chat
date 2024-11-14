@@ -1,5 +1,8 @@
 import styled from 'styled-components';
 import { device } from '@/constants/mediaQueries';
+import Button from '@mui/material/Button';
+
+import { TextareaAutosize as BaseTextareaAutosize } from '@mui/material';
 
 export const ChatStyled = styled.div`
   display: ${({ $isChatVisible }) => ($isChatVisible ? 'flex' : 'none')};
@@ -44,7 +47,7 @@ export const MessageBlock = styled.div`
   @media (max-width: 768px) {
     padding-top: 67px;
     padding-bottom: 116px;
-    height: calc(var(--vh, 1vh) * 100 - 67px - 112px;
+    height: calc(var(--vh, 1vh) * 100 - 67px - 112px);
   }
   &::-webkit-scrollbar {
     width: 4px;
