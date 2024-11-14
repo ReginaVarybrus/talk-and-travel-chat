@@ -3,7 +3,8 @@ import { AiOutlineCheck } from 'react-icons/ai';
 
 import { TextareaAutosize } from '@mui/material';
 
-const getNotificationColor = ({ $isErrorColor, $isSuccessColor }) => {
+const getNotificationColor = ({ $isErrorColor, $isSuccessColor }) =>
+{
   if ($isErrorColor) return 'var(--color-error)';
   if ($isSuccessColor) return 'var(--color-success)';
   return 'var(--color-grey-13)';
@@ -61,14 +62,14 @@ export const StyledInput = styled.input`
   }
 
   &::placeholder {
-    color: 'var(--color-grey-6)';
+    color: 'var(--color-grey-14)';
   }
   padding-left: 16px;
   padding-right: ${({ type }) => (type === 'password' ? '48px' : '16px')};
 
   @media screen and (min-width: 768px) {
     background-color: ${({ $backgroundcolor }) =>
-      $backgroundcolor || 'var(--color-grey-4)'};
+    $backgroundcolor || 'var(--color-grey-4)'};
   }
 `;
 
@@ -116,7 +117,7 @@ export const StyledTextarea = styled(TextareaAutosize)`
 
   @media screen and (min-width: 768px) {
     background-color: ${({ $backgroundcolor }) =>
-      $backgroundcolor || 'var(--color-grey-4)'};
+    $backgroundcolor || 'var(--color-grey-4)'};
   }
 
   &::-webkit-scrollbar {

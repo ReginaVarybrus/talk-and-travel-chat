@@ -1,15 +1,26 @@
+import { device } from '@/constants/mediaQueries';
 import styled from 'styled-components';
 
 export const BubbleStyled = styled.div`
+display: none;
+font-size: 14px;
+line-height: 24px;
+border-radius: 8px;
+gap: 5px;
+border: 1px solid var(--color-brand-blue);
+padding: 5px;
+margin-bottom: ${props => props.$marginbottom};
+
+@media ${device.tablet} {
   position: relative;
-  left: ${props => props.$left};
-  border: 1px solid var(--color-brand-blue);
+  ${({ $desktopstyles }) => $desktopstyles};
   border-radius: 107px;
   padding: 16px;
   font-size: 24px;
   line-height: 28.8px;
-  margin-bottom: ${props => props.$marginbottom};
   display: flex;
-  align-items: flex-end;
+  align-items: center;
   gap: 16px;
+}
+  
 `;
