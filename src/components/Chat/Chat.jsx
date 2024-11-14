@@ -437,12 +437,7 @@ const Chat = ({
       const vh = window.visualViewport
         ? window.visualViewport.height
         : window.innerHeight;
-      const messageBarHeight = 112;
       document.documentElement.style.setProperty('--vh', `${vh * 0.01}px`);
-      document.documentElement.style.setProperty(
-        '--message-bar-height',
-        `${messageBarHeight}px`
-      );
     };
 
     adjustViewportHeight();
