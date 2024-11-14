@@ -13,18 +13,26 @@ const MessageList = ({
   setIsUserTyping,
   setUsersTyping,
   unreadMessages,
+  setParticipantsAmount,
   lastVisibleReadMessageRef,
   isPrivateChat,
+  chatOpenedTime,
 }) => {
   const currentUserName = useSelector(getUser)?.userName;
   const usersStatuses = useSelector(getUsersStatuses);
+
+  const messageTypeStartTyping = MESSAGE_TYPES.START_TYPING;
+  const messageTypeStopTyping = MESSAGE_TYPES.STOP_TYPING;
+  const messageTypeText = MESSAGE_TYPES.TEXT;
+  const messageTypeJoin = MESSAGE_TYPES.JOIN;
+  const messageTypeLeave = MESSAGE_TYPES.LEAVE;
 
   useEffect(() => {
     messages?.forEach(message => {
       const currentUser = message.user?.userName;
 
       if (
-        message.type === MESSAGE_TYPES.START_TYPING &&
+        message.type === messageTypeStartTyping &&
         currentUser !== currentUserName
       ) {
         setUsersTyping(prevUsers => {
@@ -33,7 +41,7 @@ const MessageList = ({
           }
           return prevUsers;
         });
-      } else if (message.type === MESSAGE_TYPES.STOP_TYPING) {
+      } else if (message.type === messageTypeStopTyping) {
         setUsersTyping(prevUsers =>
           prevUsers.filter(userName => userName !== currentUser)
         );
@@ -52,9 +60,9 @@ const MessageList = ({
         index > 0 ? new Date(sortedMessages[index - 1].creationDate) : null;
 
       const isDisplayableMessage =
-        message.type === MESSAGE_TYPES.TEXT ||
-        message.type === MESSAGE_TYPES.JOIN ||
-        message.type === MESSAGE_TYPES.LEAVE;
+        message.type === messageTypeText ||
+        message.type === messageTypeJoin ||
+        message.type === messageTypeLeave;
 
       const showDateSeparator =
         isDisplayableMessage &&
@@ -64,7 +72,7 @@ const MessageList = ({
 
       let nextUserMessage = null;
       for (let i = index + 1; i < sortedMessages.length; i += 1) {
-        if (sortedMessages[i].type === MESSAGE_TYPES.TEXT) {
+        if (sortedMessages[i].type === messageTypeText) {
           nextUserMessage = sortedMessages[i];
           break;
         }
@@ -73,8 +81,7 @@ const MessageList = ({
       const isLastMessage =
         !nextUserMessage || nextUserMessage.user?.id !== message.user?.id;
 
-      const isShownAvatar =
-        message.type === MESSAGE_TYPES.TEXT && isLastMessage;
+      const isShownAvatar = message.type === messageTypeText && isLastMessage;
 
       const userStatus = usersStatuses.find(
         user => user.userId === message.user.id
@@ -102,6 +109,8 @@ const MessageList = ({
             isShownAvatar={isShownAvatar}
             isOnline={isOnline}
             isPrivateChat={isPrivateChat}
+            setParticipantsAmount={setParticipantsAmount}
+            chatOpenedTime={chatOpenedTime}
           />
         </div>
       );
@@ -121,6 +130,7 @@ MessageList.propTypes = {
   lastVisibleReadMessageRef: PropTypes.shape({
     current: PropTypes.instanceOf(Element),
   }),
+  chatOpenedTime: PropTypes.string,
 };
 
 export default MessageList;

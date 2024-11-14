@@ -38,6 +38,7 @@ const Chat = ({
   setParticipantsAmount,
   isChatVisible,
   setIsChatVisible,
+  chatOpenedTime,
 }) => {
   const userId = useSelector(getUser)?.id;
   const { id, name, chatType, country } = chatData || {};
@@ -514,8 +515,10 @@ const Chat = ({
             unreadMessages={unreadMessages}
             setIsUserTyping={setIsUserTyping}
             setUsersTyping={setUsersTyping}
+            setParticipantsAmount={setParticipantsAmount}
             lastVisibleReadMessageRef={lastVisibleReadMessageRef}
             isPrivateChat={isPrivateChat}
+            chatOpenedTime={chatOpenedTime}
           />
         )}
       </MessageBlock>
@@ -586,6 +589,7 @@ Chat.propTypes = {
   setParticipantsAmount: PropTypes.func,
   isChatVisible: PropTypes.bool,
   setIsChatVisible: PropTypes.func,
+  chatOpenedTime: PropTypes.string,
 };
 
 export default Chat;

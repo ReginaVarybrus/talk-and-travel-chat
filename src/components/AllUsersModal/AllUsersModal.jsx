@@ -181,9 +181,9 @@ const AllUsersModal = ({ isOpen, onClose }) => {
                     <Item key={user.id}>
                       <UserName>
                         <AvatarInList>
-                          {user.avatar ? (
+                          {user.avatar?.image50x50 ? (
                             <ImgAvatar
-                              src={user.avatar?.image50x50}
+                              src={user.avatar.image50x50}
                               alt={user.userName}
                             />
                           ) : (
