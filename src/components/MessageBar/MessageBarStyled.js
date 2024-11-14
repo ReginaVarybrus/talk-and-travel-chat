@@ -12,7 +12,6 @@ export const MessageBarStyled = styled.footer`
   max-height: 444px;
   background: var(--white-color);
   border-top: 1px solid var(--color-grey-6);
-  width: 100%;
   transition: height 0.3s ease;
 `;
 
