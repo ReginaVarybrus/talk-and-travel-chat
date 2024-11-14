@@ -80,37 +80,7 @@ export const MessageBar = styled.div`
   justify-content: space-between;
   align-items: end;
   margin: 32px;
-`;
-
-export const TextareaAutosize = styled(BaseTextareaAutosize)`
-  box-sizing: border-box;
-  width: 100%;
-  max-height: 200px;
-  margin-left: 16px;
-  margin-right: 16px;
-  font-size: 0.875rem;
-  font-weight: 400;
-  line-height: 1.5;
-  padding: 13.2px 16px;
-  border-radius: 8px;
-  color: var(--color-grey-8);
-  border: 1px solid var(--color-grey-6);
-  resize: none;
-  outline: none;
-
-  &::placeholder {
-    font-size: 16px;
-    font-weight: 400;
-    line-height: 19px;
-    color: var(--color-grey-7);
-  }
-
-  &:focus {
-    border: 1px solid var(--color-grey-8);
-    &::placeholder {
-      color: transparent;
-    }
-  }
+  //
 `;
 
 export const ButtonAttachFile = styled(Button)`
