@@ -8,7 +8,9 @@ import {
   MainPageNavLeft,
 } from '@/components/NavigationBar/NavBarStyled';
 import { routesPath } from '@/routes/routesConfig';
-import BasicButton from '@/components/Buttons/BasicButton/BasicButton';
+import SmallLogo from '@/images/iconComponents/SmallLogo';
+import LargeFilledButton from '../Buttons/LargeFilled/LargeFilledButton';
+import LargeOutlinedButton from '../Buttons/LargeOutlined/LargeOutlinedButton';
 
 const NavBar = props => {
   const { $navBarType, isvisible } = props;
@@ -26,23 +28,34 @@ const NavBar = props => {
   return (
     <NavBarLayout $navBarType={$navBarType} $isvisible={isvisible}>
       <MainPageNavLeft>
-        <StyledSmallLogo
-          width="48px"
-          height="48px"
-          fillColor="var(--color-brand-blue)"
-        />
+        <StyledSmallLogo>
+          <SmallLogo
+            width="48px"
+            height="48px"
+            fillColor="var(--color-brand-blue)"
+          />
+        </StyledSmallLogo>
         <AnchorLink href="#about">About chat</AnchorLink>
         <AnchorLink href="#benefits">Benefits</AnchorLink>
       </MainPageNavLeft>
       <MainPageNavRight>
-        <BasicButton
-          variant="outlined"
+        <LargeOutlinedButton
+          $mobilestyles="
+          margin-right: 10px;
+          line-height: 16px;
+          font-size: 12px;"
+          $desktopstyles="
+          font-size: 16px;
+          margin-right: 24px;"
           text="Log In"
           handleClick={handleLoginOpen}
         />
-        <BasicButton
-          variant="contained"
-          color="primary"
+        <LargeFilledButton
+          $mobilestyles="
+          line-height: 16px;
+          font-size: 12px;"
+          $desktopstyles="
+          font-size: 16px;"
           text="Get started — it’s free"
           handleClick={handleRegisterOpen}
         />

@@ -150,18 +150,15 @@ const ChatHeader = ({
                 src={`https://flagcdn.com/${flagCode}.svg`}
                 alt={`${flagCode} flag`}
               />
-
-              <div>
-                <h5>{nameOfChat}</h5>
-                <p>{getMessage()}</p>
-              </div>
             </FlagBoxStyled>
           )}
-          {!isPrivateChat && (
-            <HeaderButtonOpenMenu>
-              <OpenCountryInfoIcon />
-            </HeaderButtonOpenMenu>
-          )}
+          <div>
+            <h5>{nameOfChat}</h5>
+            <p>{getMessage()}</p>
+          </div>
+          <HeaderButtonOpenMenu>
+            <OpenCountryInfoIcon />
+          </HeaderButtonOpenMenu>
         </MobileHeaderContentStyled>
       </MobileHeaderStyled>
       <DesktopHeaderStyled onClick={handleOpen}>
