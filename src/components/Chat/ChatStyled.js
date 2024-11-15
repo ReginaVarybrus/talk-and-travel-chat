@@ -9,7 +9,7 @@ export const ChatStyled = styled.div`
   align-items: center;
   flex-direction: column;
   width: 100%;
-  height: calc(var(--vh, 1vh) * 100);
+  height: 100vh;
   background: var(--white-color);
   position: relative;
   overflow: hidden;
@@ -40,15 +40,9 @@ export const MessageBlock = styled.div`
   flex: 1;
   overflow-y: auto;
   width: 100%;
-  height: calc(100vh - 67px - 112px);
   background: var(--color-grey-3);
   transition: height 0.3s ease;
 
-  @media (max-width: 768px) {
-    padding-top: 67px;
-    padding-bottom: 116px;
-    height: calc(var(--vh, 1vh) * 100 - 67px - 112px);
-  }
   &::-webkit-scrollbar {
     width: 4px;
   }
@@ -62,10 +56,6 @@ export const MessageBlock = styled.div`
     height: 144px;
     border-radius: 100px;
     background: var(--color-grey-9);
-  }
-
-  @media ${device.tablet} {
-    padding-top: 0;
   }
 `;
 

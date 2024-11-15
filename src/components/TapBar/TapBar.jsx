@@ -44,13 +44,13 @@ const TapBar = ({ isChatVisible }) => {
   };
 
   return (
-    <TapBarStyled sx={{ pb: 7 }} ref={ref} $isChatVisible={isChatVisible}>
+    <TapBarStyled ref={ref} $isChatVisible={isChatVisible}>
       <CssBaseline />
       <Paper
         sx={{ position: 'fixed', bottom: 0, left: 0, right: 0 }}
         elevation={3}
       >
-        <BottomNavigation showLabels value={value}>
+        <BottomNavigation sx={{ height: '100px' }} showLabels value={value}>
           <TapBarButton
             label="DMs"
             icon={<DMsIcon />}

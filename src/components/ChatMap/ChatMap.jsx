@@ -7,6 +7,8 @@ import URLs from '@/constants/constants';
 import { GeoJSON } from 'react-leaflet';
 import mapData from '@/data/countries.json';
 import BasicButton from '@/components/Buttons/BasicButton/BasicButton';
+import Popover from '@mui/material/Popover';
+import Typography from '@mui/material/Typography';
 import 'leaflet/dist/leaflet.css';
 
 import {
@@ -47,10 +49,27 @@ const ChatMap = ({
 }) => {
   const isDesktop = useMediaQuery({ query: device.tablet });
   const [selectedCountry, setSelectedCountry] = useState(null);
+  const [hoveredCountry, setHoveredCountry] = useState(null);
+  const [anchorPosition, setAnchorPosition] = useState(null);
   const { responseData } = useFetch(
     selectedCountry ? URLs.getMainCountryChatByName(selectedCountry) : null
   );
 
+  // Popover functions
+  const handlePopoverOpen = (event, countryName) => {
+    setAnchorPosition({
+      mouseX: event.originalEvent.clientX + 10,
+      mouseY: event.originalEvent.clientY + 10,
+    });
+    setHoveredCountry(countryName);
+  };
+
+  const handlePopoverClose = () => {
+    setAnchorPosition(null);
+    setHoveredCountry(null);
+  };
+
+  // Loop by countries
   const onEachCountry = (country, layer) => {
     const colorIndex = Math.floor(Math.random() * color.length);
     layer.options.fillColor = color[colorIndex];
@@ -66,11 +85,13 @@ const ChatMap = ({
         e.target.setStyle({
           color: 'var(--white-color)',
         });
+        handlePopoverOpen(e, e.target.feature.properties.admin);
       },
       mouseout: e => {
         e.target.setStyle({
           color: 'var(--color-dark)',
         });
+        handlePopoverClose();
       },
     });
   };
@@ -120,6 +141,30 @@ const ChatMap = ({
           </ShowCountryStyled>
         )}
       </MapStyled>
+
+      <Popover
+        id="mouse-over-popover"
+        sx={{ pointerEvents: 'none' }}
+        open={Boolean(anchorPosition)}
+        anchorReference="anchorPosition"
+        anchorPosition={
+          anchorPosition
+            ? { top: anchorPosition.mouseY, left: anchorPosition.mouseX }
+            : undefined
+        }
+        anchorOrigin={{
+          vertical: 'bottom',
+          horizontal: 'left',
+        }}
+        transformOrigin={{
+          vertical: 'top',
+          horizontal: 'left',
+        }}
+        onClose={handlePopoverClose}
+        disableRestoreFocus
+      >
+        <Typography sx={{ p: 1.5 }}>{hoveredCountry}</Typography>
+      </Popover>
     </ChatMapStyled>
   );
 };
