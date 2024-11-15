@@ -91,6 +91,7 @@ const MessageBar = ({
 
     sendMessageOrEvent(dataMessageToSend, URLs.sendMessage);
     setMessage('');
+    setIsMaxLimit(false);
     handleStopTyping();
     clearTimeout(typingStopTimeoutRef.current);
 
