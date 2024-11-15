@@ -156,15 +156,20 @@ export const ButtonBlock = styled.div`
 
 export const TextForgotPassword = styled.button`
   position: absolute;
-  bottom: 20px;
-  right: 222px;
+  bottom: -35px;
+  right: 75px;
   color: var(--color-brand-blue);
   font-size: 12px;
   cursor: pointer;
-  transition: all 0.3s;
+  transition: color 0.3s;
   border: none;
   background: transparent;
+
   &:hover {
     color: var(--color-grey-7);
+  }
+  @media ${device.tablet} {
+    bottom: 20px;
+    right: 222px;
   }
 `;
