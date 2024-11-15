@@ -25,6 +25,7 @@ import {
   NewMessagesNotification,
   LoaderStyleBox,
 } from './ChatStyled';
+import ScrollToBottomButton from '../Buttons/ScrollToBottomButton/ScrollToBottomButton';
 
 const Chat = ({
   chatData,
@@ -519,6 +520,7 @@ const Chat = ({
           />
         )}
       </MessageBlock>
+      <ScrollToBottomButton targetRef={messageBlockRef} />
       {showNewMessagesIndicator && (
         <NewMessagesNotification>
           <button
