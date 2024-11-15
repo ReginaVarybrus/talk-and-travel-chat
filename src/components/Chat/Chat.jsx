@@ -433,33 +433,33 @@ const Chat = ({
     }
   }, [id, unreadMessages, updateUnreadMessagesCount]);
 
-  useEffect(() => {
-    const adjustViewportHeight = () => {
-      const vh = window.visualViewport
-        ? window.visualViewport.height
-        : window.innerHeight;
-      document.documentElement.style.setProperty('--vh', `${vh * 0.01}px`);
-    };
+  // useEffect(() => {
+  //   const adjustViewportHeight = () => {
+  //     const vh = window.visualViewport
+  //       ? window.visualViewport.height
+  //       : window.innerHeight;
+  //     document.documentElement.style.setProperty('--vh', `${vh * 0.01}px`);
+  //   };
 
-    adjustViewportHeight();
+  //   adjustViewportHeight();
 
-    if (window.visualViewport) {
-      window.visualViewport.addEventListener('resize', adjustViewportHeight);
-    } else {
-      window.addEventListener('resize', adjustViewportHeight);
-    }
+  //   if (window.visualViewport) {
+  //     window.visualViewport.addEventListener('resize', adjustViewportHeight);
+  //   } else {
+  //     window.addEventListener('resize', adjustViewportHeight);
+  //   }
 
-    return () => {
-      if (window.visualViewport) {
-        window.visualViewport.removeEventListener(
-          'resize',
-          adjustViewportHeight
-        );
-      } else {
-        window.removeEventListener('resize', adjustViewportHeight);
-      }
-    };
-  }, []);
+  //   return () => {
+  //     if (window.visualViewport) {
+  //       window.visualViewport.removeEventListener(
+  //         'resize',
+  //         adjustViewportHeight
+  //       );
+  //     } else {
+  //       window.removeEventListener('resize', adjustViewportHeight);
+  //     }
+  //   };
+  // }, []);
 
   const handleScrollToBottom = () => {
     if (messageBlockRef.current) {
