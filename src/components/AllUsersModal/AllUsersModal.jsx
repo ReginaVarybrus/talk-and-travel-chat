@@ -206,7 +206,7 @@ const AllUsersModal = ({ isOpen, onClose }) => {
                   );
                 })
               ) : (
-                <Subtitle>No companions found with this name</Subtitle>
+                <Subtitle>No contacts found with this name</Subtitle>
               )}
             </UsersList>
           ) : (

@@ -37,7 +37,7 @@ const SearchInputDMs = () => {
         type="text"
         value={searchedValue}
         onChange={handleSearchChange}
-        placeholder="Search companion..."
+        placeholder="Search contact..."
       />
       <IconSearch />
     </AutocompleteInputStyled>

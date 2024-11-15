@@ -50,7 +50,7 @@ const SearchBar = ({
           <SearchInputDMs />
 
           <ButtonMapOpen onClick={handleOpenModal}>
-            Search new companion
+            Search new contact
           </ButtonMapOpen>
         </>
       )}
