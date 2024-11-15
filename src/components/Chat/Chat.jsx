@@ -591,7 +591,7 @@ Chat.propTypes = {
   setParticipantsAmount: PropTypes.func,
   isChatVisible: PropTypes.bool,
   setIsChatVisible: PropTypes.func,
-  chatOpenedTime: PropTypes.string,
+  chatOpenedTime: PropTypes.instanceOf(Date),
 };
 
 export default Chat;
