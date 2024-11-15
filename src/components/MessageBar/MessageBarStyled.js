@@ -34,6 +34,7 @@ export const MessageInputs = styled.form`
   justify-content: space-between;
   align-items: end;
   padding: 32px;
+  position: relative;
 `;
 
 export const TextareaStyled = styled.div`
@@ -136,4 +137,22 @@ export const SendIcon = styled(FiSend)`
   width: 24px;
   height: 24px;
   stroke: var(--color-grey-9);
+`;
+
+export const MaxLimitPopup = styled.div`
+  position: absolute;
+  bottom: 5px;
+  left: 50%;
+  transform: translateX(-50%);
+
+  background-color: var(--color-grey-2);
+  color: var(--color-error);
+  padding: 3px;
+  font-size: 12px;
+  text-align: center;
+  border-radius: 4px;
+  width: 220px;
+  box-shadow:
+    0px 2px 4px 2px rgba(0, 0, 0, 0.1),
+    0px 1px 2px 0px rgba(0, 0, 0, 0.1);
 `;
