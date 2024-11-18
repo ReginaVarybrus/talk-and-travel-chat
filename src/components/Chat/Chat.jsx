@@ -17,6 +17,7 @@ import MessageBar from '@/components/MessageBar/MessageBar';
 import ChatFirstLoading from '@/components/ChatFirstLoading/ChatFirstLoading';
 import Loader from '@/components/Loader/Loader';
 import { useChatContext } from '@/providers/ChatProvider';
+import ScrollToBottomButton from '@/components/Buttons/ScrollToBottomButton/ScrollToBottomButton';
 import {
   ChatStyled,
   MessageBlock,
@@ -25,7 +26,6 @@ import {
   NewMessagesNotification,
   LoaderStyleBox,
 } from './ChatStyled';
-import ScrollToBottomButton from '../Buttons/ScrollToBottomButton/ScrollToBottomButton';
 
 const Chat = ({
   chatData,
