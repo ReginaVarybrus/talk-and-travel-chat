@@ -26,12 +26,13 @@ const ChatRoute = () => {
   const { responseData } = useFetch(URLs.userCountries);
   const {
     stompClient,
+    subscribeToMessages,
     subscribeToUsersStatuses,
     sendMessageOrEvent,
     unsubscribeFromUsersStatuses,
   } = useWebSocket();
 
-  const { setSubscriptionRooms } = useChatContext();
+  const { subscriptionRooms, setSubscriptionRooms } = useChatContext();
 
   const context = useOutletContext();
   const isChatVisible = context?.isChatVisible;
@@ -41,11 +42,18 @@ const ChatRoute = () => {
     if (responseData) {
       setSubscriptionRooms(responseData);
     }
+    console.log('subscription rooms', subscriptionRooms);
   }, [responseData]);
 
   useEffect(() => {
     dispatch(fetchUsersOnlineStatuses());
   }, [dispatch]);
+
+  useEffect(() => {
+    subscriptionRooms.forEach(id => {
+      subscribeToMessages(id);
+    });
+  }, [subscriptionRooms]);
 
   const handleStatusUpdate = receivedStatus => {
     dispatch(
