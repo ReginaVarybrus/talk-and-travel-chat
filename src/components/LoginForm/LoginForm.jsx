@@ -62,6 +62,7 @@ const LoginForm = () => {
         await dispatch(logIn(values)).unwrap();
         await persistor.flush();
         navigate(routesPath.ROOMS);
+
         resetForm();
       } catch (error) {
         console.error('Login failed:', error);

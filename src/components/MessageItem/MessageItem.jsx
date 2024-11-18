@@ -138,7 +138,7 @@ MessageItem.propTypes = {
   isShownAvatar: PropTypes.bool,
   isOnline: PropTypes.bool,
   setParticipantsAmount: PropTypes.func,
-  chatOpenedTime: PropTypes.string,
+  chatOpenedTime: PropTypes.instanceOf(Date),
 };
 
 export default MessageItem;

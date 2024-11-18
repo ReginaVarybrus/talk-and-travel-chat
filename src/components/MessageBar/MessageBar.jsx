@@ -17,6 +17,7 @@ import {
   TextareaAutosize,
   ButtonSendMessage,
   SendIcon,
+  MaxLimitPopup,
 } from './MessageBarStyled';
 
 const MessageBar = ({
@@ -29,9 +30,10 @@ const MessageBar = ({
   scrollToBottom,
 }) => {
   const [message, setMessage] = useState('');
+  const [isMaxLimit, setIsMaxLimit] = useState(false);
   const { setSubscriptionRooms } = useChatContext();
   const typingStopTimeoutRef = useRef(null);
-
+  const MAX_CHAR_LIMIT = 1000;
   const { stompClient, sendMessageOrEvent } = useWebSocket();
   const isMessageNotEmpty = Boolean(message?.trim().length);
   const isGroupChat = chatData?.chatType === CHAT_TYPES.GROUP;
@@ -53,7 +55,12 @@ const MessageBar = ({
   };
 
   const handleChange = ({ target: { value } }) => {
-    setMessage(value);
+    if (value.length >= MAX_CHAR_LIMIT) {
+      setIsMaxLimit(true);
+    } else {
+      setIsMaxLimit(false);
+    }
+    setMessage(value.slice(0, MAX_CHAR_LIMIT));
 
     handleStartTyping();
 
@@ -83,6 +90,7 @@ const MessageBar = ({
 
     sendMessageOrEvent(dataMessageToSend, URLs.sendMessage);
     setMessage('');
+    setIsMaxLimit(false);
     handleStopTyping();
     clearTimeout(typingStopTimeoutRef.current);
 
@@ -99,8 +107,8 @@ const MessageBar = ({
 
   useEffect(() => {
     setMessage('');
+    setIsMaxLimit(false);
   }, [chatId]);
-
   return (
     <MessageBarStyled>
       {isShowJoinBtn && isGroupChat ? (
@@ -133,8 +141,13 @@ const MessageBar = ({
                 }
               }}
               onChange={handleChange}
-              maxLength="1000"
+              maxLength={MAX_CHAR_LIMIT}
             />
+            {isMaxLimit && (
+              <MaxLimitPopup>
+                You&apos;ve reached the character limit!
+              </MaxLimitPopup>
+            )}
           </TextareaStyled>
           <ButtonSendMessage
             type="submit"

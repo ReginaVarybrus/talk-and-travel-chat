@@ -54,7 +54,7 @@ export const HeaderButtonOpenMenu = styled.button`
 `;
 
 export const MobileHeaderStyled = styled.div`
-  position: fixed;
+  position: sticky;
   top: 0;
   display: flex;
   justify-content: center;

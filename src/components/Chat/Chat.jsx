@@ -17,6 +17,7 @@ import MessageBar from '@/components/MessageBar/MessageBar';
 import ChatFirstLoading from '@/components/ChatFirstLoading/ChatFirstLoading';
 import Loader from '@/components/Loader/Loader';
 import { useChatContext } from '@/providers/ChatProvider';
+import ScrollToBottomButton from '@/components/Buttons/ScrollToBottomButton/ScrollToBottomButton';
 import {
   ChatStyled,
   MessageBlock,
@@ -522,6 +523,7 @@ const Chat = ({
           />
         )}
       </MessageBlock>
+      <ScrollToBottomButton targetRef={messageBlockRef} />
       {showNewMessagesIndicator && (
         <NewMessagesNotification>
           <button
@@ -589,7 +591,7 @@ Chat.propTypes = {
   setParticipantsAmount: PropTypes.func,
   isChatVisible: PropTypes.bool,
   setIsChatVisible: PropTypes.func,
-  chatOpenedTime: PropTypes.string,
+  chatOpenedTime: PropTypes.instanceOf(Date),
 };
 
 export default Chat;

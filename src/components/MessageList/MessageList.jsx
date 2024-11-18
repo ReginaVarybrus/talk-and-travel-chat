@@ -130,7 +130,7 @@ MessageList.propTypes = {
   lastVisibleReadMessageRef: PropTypes.shape({
     current: PropTypes.instanceOf(Element),
   }),
-  chatOpenedTime: PropTypes.string,
+  chatOpenedTime: PropTypes.instanceOf(Date),
 };
 
 export default MessageList;

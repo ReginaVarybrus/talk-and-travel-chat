@@ -141,7 +141,7 @@ const DMsList = () => {
       ) : (
         <Text>
           {searchedValue
-            ? 'No companions found with this name'
+            ? 'No contacts found with this name'
             : 'There are no chats in the list. Start a conversation and it will be shown here'}
         </Text>
       )}
