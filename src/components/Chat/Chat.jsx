@@ -59,6 +59,7 @@ const Chat = ({
     useState(false);
   const [messagesToMarkAsRead, setMessagesToMarkAsRead] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [replyToMessage, setReplyToMessage] = useState(null);
 
   const lastVisibleReadMessageRef = useRef(null);
   const messageBlockRef = useRef(null);
@@ -520,6 +521,7 @@ const Chat = ({
             lastVisibleReadMessageRef={lastVisibleReadMessageRef}
             isPrivateChat={isPrivateChat}
             chatOpenedTime={chatOpenedTime}
+            setReplyToMessage={setReplyToMessage}
           />
         )}
       </MessageBlock>
@@ -558,6 +560,8 @@ const Chat = ({
         setParticipantsAmount={setParticipantsAmount}
         scrollToBottom={scrollToBottom}
         setShowNewMessagesIndicator={setShowNewMessagesIndicator}
+        setReplyToMessage={setReplyToMessage}
+        replyToMessage={replyToMessage}
       />
     </ChatStyled>
   );

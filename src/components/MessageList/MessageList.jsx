@@ -17,6 +17,7 @@ const MessageList = ({
   lastVisibleReadMessageRef,
   isPrivateChat,
   chatOpenedTime,
+  setReplyToMessage,
 }) => {
   const currentUserName = useSelector(getUser)?.userName;
   const usersStatuses = useSelector(getUsersStatuses);
@@ -100,6 +101,7 @@ const MessageList = ({
           {showDateSeparator && <DateSeparator date={currentMessageDate} />}
           <MessageItem
             key={message.id || message.creationDate}
+            replyMessageId={message.id}
             content={message.content}
             userId={message.user?.id}
             userName={message.user?.userName}
@@ -111,6 +113,7 @@ const MessageList = ({
             isPrivateChat={isPrivateChat}
             setParticipantsAmount={setParticipantsAmount}
             chatOpenedTime={chatOpenedTime}
+            onReply={setReplyToMessage}
           />
         </div>
       );

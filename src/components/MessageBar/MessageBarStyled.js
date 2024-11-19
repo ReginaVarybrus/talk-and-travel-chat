@@ -3,6 +3,7 @@ import Button from '@mui/material/Button';
 import { TextareaAutosize as BaseTextareaAutosize } from '@mui/material';
 import { GrAttachment } from 'react-icons/gr';
 import { FiSend } from 'react-icons/fi';
+import { device } from '@/constants/mediaQueries';
 
 export const MessageBarStyled = styled.footer`
   width: 100%;
@@ -26,7 +27,6 @@ export const MessageInputs = styled.form`
   display: flex;
   justify-content: space-between;
   align-items: end;
-  padding: 32px;
   position: relative;
 `;
 
@@ -148,4 +148,53 @@ export const MaxLimitPopup = styled.div`
   box-shadow:
     0px 2px 4px 2px rgba(0, 0, 0, 0.1),
     0px 1px 2px 0px rgba(0, 0, 0, 0.1);
+`;
+
+export const ReplyMessageBox = styled.div`
+  position: relative;
+  padding: 8px;
+  background-color: var(--color-grey-4);
+  margin-bottom: 16px;
+  border-radius: 8px;
+  width: 250px;
+  h6 {
+    font-size: 14px;
+    color: var(--color-brand-blue);
+  }
+  p {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  button {
+    right: 5px;
+    top: 5px;
+    svg {
+      width: 20px;
+      height: 20px;
+    }
+  }
+
+  @media ${device.mobileM} {
+    width: 280px;
+    h6 {
+      font-size: 16px;
+    }
+  }
+
+  @media ${device.mobileL} {
+    width: 340px;
+  }
+
+  @media (min-width: 800px) {
+    width: 380px;
+  }
+  @media ${device.laptop} {
+    width: 550px;
+  }
+`;
+
+export const MessageInputBox = styled.div`
+  padding: 32px;
 `;

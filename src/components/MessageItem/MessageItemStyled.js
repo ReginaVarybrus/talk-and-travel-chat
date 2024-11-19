@@ -3,7 +3,7 @@ import { device } from '@/constants/mediaQueries';
 
 export const MessageItemStyled = styled.li`
   display: flex;
-  align-items: end;
+  align-items: center;
   margin-left: 32px;
   margin-bottom: ${({ $isShownAvatar }) => ($isShownAvatar ? '16px' : '8px')};
 
@@ -18,6 +18,8 @@ export const MessageContentStyled = styled.div`
   max-width: 190px;
   padding: 16px;
   border-radius: 8px;
+  position: relative;
+
   margin-left: ${({ $isShownAvatar }) => ($isShownAvatar ? '16px' : '64px')};
   background: ${({ $backgroundMessage }) =>
     $backgroundMessage ? 'var(--white-color)' : 'var(--color-blue-1)'};
@@ -105,4 +107,13 @@ export const Badge = styled.div`
     transform: translate(-50%, -50%);
     background: var(--color-badge);
   }
+`;
+
+export const ButtonReply = styled.button`
+  position: absolute;
+  bottom: 0px;
+  right: 10px;
+  border: none;
+  background-color: transparent;
+  color: var(--color-blue-3);
 `;

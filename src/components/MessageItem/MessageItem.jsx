@@ -7,6 +7,7 @@ import { MESSAGE_TYPES } from '@/constants/messageTypes.js';
 import PropTypes from 'prop-types';
 import UserInfoModal from '@/components/UserInfoModal/UserInfoModal';
 import { timeStampConverter } from '@/components/utils/timeUtil.js';
+import { FaReply } from 'react-icons/fa6';
 
 import {
   MessageItemStyled,
@@ -18,6 +19,7 @@ import {
   ContentJoinOrLeave,
   Time,
   Badge,
+  ButtonReply,
 } from './MessageItemStyled';
 
 const MessageItem = ({
@@ -32,9 +34,12 @@ const MessageItem = ({
   isPrivateChat,
   setParticipantsAmount,
   chatOpenedTime,
+  onReply,
+  replyMessageId,
 }) => {
   const [open, setOpen] = useState(false);
   const [userInfo, setUserInfo] = useState({});
+
   const currentUserId = useSelector(getUser)?.id;
   const time = timeStampConverter(date);
   const isCurrentUser = userId === currentUserId;
@@ -80,6 +85,14 @@ const MessageItem = ({
   const checkToShowAvatar = messageTypeText && userId && isShownAvatar;
   const handleClose = () => setOpen(false);
 
+  const handleReplyClick = () => {
+    if (onReply) {
+      onReply({
+        id: replyMessageId,
+        content,
+      });
+    }
+  };
   return (
     <MessageItemStyled $isShownAvatar={isShownAvatar}>
       {checkToShowAvatar && (
@@ -107,6 +120,9 @@ const MessageItem = ({
         >
           <ContentMessage>{content || `message`}</ContentMessage>
           <Time>{time || 'time'}</Time>
+          <ButtonReply onClick={handleReplyClick}>
+            <FaReply />
+          </ButtonReply>
         </MessageContentStyled>
       )}
       {(messageTypeJoin || messageTypeLeave) && (
