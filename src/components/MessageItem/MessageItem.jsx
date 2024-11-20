@@ -20,6 +20,9 @@ import {
   Time,
   Badge,
   ButtonReply,
+  ReplyingMessage,
+  MessageBox,
+  NameBox,
 } from './MessageItemStyled';
 
 const MessageItem = ({
@@ -36,6 +39,7 @@ const MessageItem = ({
   chatOpenedTime,
   onReply,
   replyMessageId,
+  isReplying,
 }) => {
   const [open, setOpen] = useState(false);
   const [userInfo, setUserInfo] = useState({});
@@ -118,11 +122,24 @@ const MessageItem = ({
           $backgroundMessage={isCurrentUser}
           $isShownAvatar={isShownAvatar}
         >
-          <ContentMessage>{content || `message`}</ContentMessage>
-          <Time>{time || 'time'}</Time>
-          <ButtonReply onClick={handleReplyClick}>
-            <FaReply />
-          </ButtonReply>
+          {isReplying && (
+            <ReplyingMessage $backgroundMessage={isCurrentUser}>
+              <NameBox>
+                <FaReply /> <h5>Harry Potter</h5>
+              </NameBox>
+              <p>
+                Hello world, it is a best message in the world from best wizard
+                and i want tell you i love borsch.
+              </p>
+            </ReplyingMessage>
+          )}
+          <MessageBox>
+            <ContentMessage>{content || `message`}</ContentMessage>
+            <Time>{time || 'time'}</Time>
+            <ButtonReply onClick={handleReplyClick}>
+              <FaReply />
+            </ButtonReply>
+          </MessageBox>
         </MessageContentStyled>
       )}
       {(messageTypeJoin || messageTypeLeave) && (

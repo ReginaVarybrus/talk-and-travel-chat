@@ -114,6 +114,7 @@ const MessageList = ({
             setParticipantsAmount={setParticipantsAmount}
             chatOpenedTime={chatOpenedTime}
             onReply={setReplyToMessage}
+            isReplying={!!message.repliedMessageId}
           />
         </div>
       );
