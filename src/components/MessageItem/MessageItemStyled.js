@@ -66,7 +66,7 @@ export const ContentMessage = styled.p`
   word-break: break-all;
   white-space: pre-wrap;
   color: var(--color-dark);
-
+  user-select: text;
   @media ${device.tablet} {
     font-size: 16px;
   }

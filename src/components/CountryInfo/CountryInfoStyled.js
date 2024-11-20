@@ -153,6 +153,7 @@ export const UserContactInfo = styled.div`
   flex-direction: column;
   width: 140px;
   gap: 4px;
+  user-select: text;
 
   h5 {
     font-size: 14px;
