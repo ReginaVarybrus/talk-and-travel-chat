@@ -3,7 +3,7 @@ import { useMediaQuery } from 'react-responsive';
 import { device } from '@/constants/mediaQueries.js';
 import { LuLogOut, LuLogIn } from 'react-icons/lu';
 import { IoCloseOutline } from 'react-icons/io5';
-import { HiOutlineExclamationCircle } from 'react-icons/hi';
+
 import { FaRegMessage } from 'react-icons/fa6';
 import Modal from '@mui/material/Modal';
 import URLs from '@/constants/constants';
@@ -30,7 +30,6 @@ import {
   InfoBoxStyled,
   HeaderStyled,
   ExitOrJoinBtn,
-  ReportBtn,
   Subtitle,
   LetterAvatar,
   UserContactInfo,
@@ -221,10 +220,6 @@ const CountryInfo = ({
               Leave group
             </ExitOrJoinBtn>
           )}
-          <ReportBtn>
-            <HiOutlineExclamationCircle />
-            Report
-          </ReportBtn>
         </ButtonsBoxStyled>
       </BoxStyled>
     </Modal>

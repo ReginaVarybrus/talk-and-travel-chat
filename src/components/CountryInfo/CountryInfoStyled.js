@@ -278,26 +278,6 @@ export const ExitOrJoinBtn = styled.button`
   }
 `;
 
-export const ReportBtn = styled.button`
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  gap: 12px;
-  padding: 8px 16px;
-  background: none;
-  border: none;
-  cursor: pointer;
-  font-size: 14px;
-  font-weight: 700;
-  color: var(--color-error);
-
-  svg {
-    width: 20px;
-    height: 20px;
-    stroke: var(--color-error);
-  }
-`;
-
 export const Subtitle = styled.p`
   text-align: center;
   padding: 20px 0;
