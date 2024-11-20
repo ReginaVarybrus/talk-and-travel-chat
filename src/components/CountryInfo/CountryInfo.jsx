@@ -175,7 +175,7 @@ const CountryInfo = ({
                     <Avatar>
                       {user.avatar ? (
                         <ImgAvatar
-                          src={user.avatar.image50x50}
+                          src={`${user.avatar?.image50x50}?lastmod=${new Date().getTime()}`}
                           alt={`${user.userName}'s avatar`}
                         />
                       ) : (

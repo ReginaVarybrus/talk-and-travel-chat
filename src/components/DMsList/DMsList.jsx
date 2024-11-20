@@ -101,7 +101,10 @@ const DMsList = () => {
                     <Avatar>
                       {companion.avatar ? (
                         <ImgAvatar
-                          src={companion.avatar.image50x50 || undefined}
+                          src={
+                            `${companion.avatar?.image50x50}?lastmod=${new Date().getTime()}` ||
+                            undefined
+                          }
                           alt={`${companion.userName}'s avatar`}
                         />
                       ) : (
