@@ -111,9 +111,16 @@ export const Badge = styled.div`
 
 export const ButtonReply = styled.button`
   position: absolute;
-  bottom: 0px;
-  right: 10px;
+  top: 4px;
+  right: 12px;
   border: none;
   background-color: transparent;
   color: var(--color-blue-3);
+  cursor: pointer;
+  transition: all 0.3s ease;
+  &:hover,
+  &:focus,
+  &:active {
+    color: var(--color-blue-4);
+  }
 `;
