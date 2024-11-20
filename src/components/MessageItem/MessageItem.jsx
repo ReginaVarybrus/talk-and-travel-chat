@@ -39,7 +39,7 @@ const MessageItem = ({
   chatOpenedTime,
   onReply,
   replyMessageId,
-  isReplying,
+  repliedMessage,
 }) => {
   const [open, setOpen] = useState(false);
   const [userInfo, setUserInfo] = useState({});
@@ -94,6 +94,7 @@ const MessageItem = ({
       onReply({
         id: replyMessageId,
         content,
+        userName,
       });
     }
   };
@@ -125,15 +126,12 @@ const MessageItem = ({
           $backgroundMessage={isCurrentUser}
           $isShownAvatar={isShownAvatar}
         >
-          {isReplying && (
+          {repliedMessage && (
             <ReplyingMessage $backgroundMessage={isCurrentUser}>
               <NameBox>
-                <FaReply /> <h5>Harry Potter</h5>
+                <FaReply /> <h5>{repliedMessage.user.userName}</h5>
               </NameBox>
-              <p>
-                Hello world, it is a best message in the world from best wizard
-                and i want tell you i love borsch.
-              </p>
+              <p>{repliedMessage.content}</p>
             </ReplyingMessage>
           )}
           <MessageBox>

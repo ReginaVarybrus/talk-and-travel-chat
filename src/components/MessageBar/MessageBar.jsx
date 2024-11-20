@@ -95,7 +95,6 @@ const MessageBar = ({
       chatId,
       repliedMessageId: replyToMessage?.id || null,
     };
-
     sendMessageOrEvent(dataMessageToSend, URLs.sendMessage);
     setMessage('');
     setIsMaxLimit(false);
@@ -143,7 +142,7 @@ const MessageBar = ({
         <MessageInputBox>
           {replyToMessage && (
             <ReplyMessageBox className="reply-preview">
-              <h6>Reply to UserName </h6>
+              <h6>Reply to {replyToMessage.userName} </h6>
               <p>{replyToMessage.content}</p>
               <CloseBtn onClick={handleCancelReply}>
                 <IoCloseOutline />

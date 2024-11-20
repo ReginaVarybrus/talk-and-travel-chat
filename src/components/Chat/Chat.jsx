@@ -241,7 +241,7 @@ const Chat = ({
       setShowNewMessagesIndicator(false);
       setMessagesToMarkAsRead([]);
       setHasInitialScrolled(false);
-
+      setReplyToMessage(null);
       if (currentChatId && messagesToMarkAsRead.length > 0) {
         const lastMessageId =
           messagesToMarkAsRead[messagesToMarkAsRead.length - 1];
