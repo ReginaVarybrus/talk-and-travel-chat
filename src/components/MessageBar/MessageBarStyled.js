@@ -27,7 +27,6 @@ export const MessageInputs = styled.form`
   display: flex;
   justify-content: space-between;
   align-items: end;
-  position: relative;
 `;
 
 export const TextareaStyled = styled.div`
@@ -197,4 +196,5 @@ export const ReplyMessageBox = styled.div`
 
 export const MessageInputBox = styled.div`
   padding: 32px;
+  position: relative;
 `;

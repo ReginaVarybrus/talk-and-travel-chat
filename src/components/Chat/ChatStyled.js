@@ -1,8 +1,5 @@
 import styled from 'styled-components';
 import { device } from '@/constants/mediaQueries';
-import Button from '@mui/material/Button';
-
-import { TextareaAutosize as BaseTextareaAutosize } from '@mui/material';
 
 export const ChatStyled = styled.div`
   display: ${({ $isChatVisible }) => ($isChatVisible ? 'flex' : 'none')};
@@ -68,7 +65,9 @@ export const MessageBar = styled.div`
 
 export const NewMessagesNotification = styled.div`
   position: absolute;
-  bottom: 130px;
+  top: -38px;
+  left: 50%;
+  transform: translateX(-50%);
   font-size: 12px;
   background-color: var(--color-blue-5);
   padding: 4px 8px;
@@ -120,4 +119,9 @@ export const LoaderStyleBox = styled.div`
   align-items: center;
   width: 100%;
   height: 100%;
+`;
+
+export const PositionBox = styled.div`
+  width: 100%;
+  position: relative;
 `;

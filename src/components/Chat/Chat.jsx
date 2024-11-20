@@ -25,6 +25,7 @@ import {
   Logo,
   NewMessagesNotification,
   LoaderStyleBox,
+  PositionBox,
 } from './ChatStyled';
 
 const Chat = ({
@@ -525,44 +526,46 @@ const Chat = ({
           />
         )}
       </MessageBlock>
-      <ScrollToBottomButton targetRef={messageBlockRef} />
-      {showNewMessagesIndicator && (
-        <NewMessagesNotification>
-          <button
-            type="button"
-            className="scroll-button"
-            onClick={handleScrollToBottom}
-            aria-label="Scroll to bottom"
-          >
-            <span aria-hidden="true">
-              <IoIosArrowDown />
-            </span>
-            <span>{unreadCount} new messages</span>
-          </button>
-          <div className="divider" />
+      <PositionBox>
+        <ScrollToBottomButton targetRef={messageBlockRef} />
+        {showNewMessagesIndicator && (
+          <NewMessagesNotification>
+            <button
+              type="button"
+              className="scroll-button"
+              onClick={handleScrollToBottom}
+              aria-label="Scroll to bottom"
+            >
+              <span aria-hidden="true">
+                <IoIosArrowDown />
+              </span>
+              <span>{unreadCount} new messages</span>
+            </button>
+            <div className="divider" />
 
-          <button
-            type="button"
-            onClick={() => setShowNewMessagesIndicator(false)}
-            aria-label="Close notification"
-          >
-            <IoClose />
-          </button>
-        </NewMessagesNotification>
-      )}
-      <MessageBar
-        chatId={id}
-        chatData={chatData}
-        isShowJoinBtn={isShowJoinBtn}
-        setIsShowJoinBtn={setIsShowJoinBtn}
-        isUserTyping={isUserTyping}
-        setIsUserTyping={setIsUserTyping}
-        setParticipantsAmount={setParticipantsAmount}
-        scrollToBottom={scrollToBottom}
-        setShowNewMessagesIndicator={setShowNewMessagesIndicator}
-        setReplyToMessage={setReplyToMessage}
-        replyToMessage={replyToMessage}
-      />
+            <button
+              type="button"
+              onClick={() => setShowNewMessagesIndicator(false)}
+              aria-label="Close notification"
+            >
+              <IoClose />
+            </button>
+          </NewMessagesNotification>
+        )}
+        <MessageBar
+          chatId={id}
+          chatData={chatData}
+          isShowJoinBtn={isShowJoinBtn}
+          setIsShowJoinBtn={setIsShowJoinBtn}
+          isUserTyping={isUserTyping}
+          setIsUserTyping={setIsUserTyping}
+          setParticipantsAmount={setParticipantsAmount}
+          scrollToBottom={scrollToBottom}
+          setShowNewMessagesIndicator={setShowNewMessagesIndicator}
+          setReplyToMessage={setReplyToMessage}
+          replyToMessage={replyToMessage}
+        />
+      </PositionBox>
     </ChatStyled>
   );
 };
