@@ -153,6 +153,7 @@ export const UserContactInfo = styled.div`
   flex-direction: column;
   width: 140px;
   gap: 4px;
+  user-select: text;
 
   h5 {
     font-size: 14px;
@@ -274,26 +275,6 @@ export const ExitOrJoinBtn = styled.button`
     svg {
       stroke: var(--color-blue-3);
     }
-  }
-`;
-
-export const ReportBtn = styled.button`
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  gap: 12px;
-  padding: 8px 16px;
-  background: none;
-  border: none;
-  cursor: pointer;
-  font-size: 14px;
-  font-weight: 700;
-  color: var(--color-error);
-
-  svg {
-    width: 20px;
-    height: 20px;
-    stroke: var(--color-error);
   }
 `;
 

@@ -103,8 +103,8 @@ export const LetterAvatarStyled = styled.div`
 
 export const UserInfo = styled.div`
   margin-left: 16px;
-
   max-width: 155px;
+  user-select: text;
 
   @media ${device.mobileM} {
     max-width: 205px;
@@ -112,6 +112,7 @@ export const UserInfo = styled.div`
   @media ${device.tablet} {
     max-width: 255px;
   }
+
   p {
     white-space: nowrap;
     overflow: hidden;
@@ -127,6 +128,7 @@ export const AboutUser = styled.div`
   p {
     line-height: 24px;
     letter-spacing: 0.5px;
+    user-select: text;
   }
 `;
 

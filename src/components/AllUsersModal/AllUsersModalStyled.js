@@ -317,6 +317,7 @@ export const AboutUser = styled.div`
   p {
     line-height: 24px;
     letter-spacing: 0.5px;
+    user-select: text;
   }
 `;
 
@@ -367,6 +368,7 @@ export const UserContact = styled.div`
 
 export const UserInfo = styled.div`
   max-width: 155px;
+  user-select: text;
 
   @media ${device.mobileM} {
     max-width: 205px;

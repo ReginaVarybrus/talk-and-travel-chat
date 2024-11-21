@@ -7,6 +7,7 @@ import { MESSAGE_TYPES } from '@/constants/messageTypes.js';
 import PropTypes from 'prop-types';
 import UserInfoModal from '@/components/UserInfoModal/UserInfoModal';
 import { timeStampConverter } from '@/components/utils/timeUtil.js';
+import { FaReply } from 'react-icons/fa6';
 
 import {
   MessageItemStyled,
@@ -18,6 +19,10 @@ import {
   ContentJoinOrLeave,
   Time,
   Badge,
+  ButtonReply,
+  ReplyingMessage,
+  MessageBox,
+  NameBox,
 } from './MessageItemStyled';
 
 const MessageItem = ({
@@ -32,9 +37,14 @@ const MessageItem = ({
   isPrivateChat,
   setParticipantsAmount,
   chatOpenedTime,
+  onReply,
+  replyMessageId,
+  repliedMessage,
+  fetchMessageById,
 }) => {
   const [open, setOpen] = useState(false);
   const [userInfo, setUserInfo] = useState({});
+
   const currentUserId = useSelector(getUser)?.id;
   const time = timeStampConverter(date);
   const isCurrentUser = userId === currentUserId;
@@ -80,6 +90,35 @@ const MessageItem = ({
   const checkToShowAvatar = messageTypeText && userId && isShownAvatar;
   const handleClose = () => setOpen(false);
 
+  const handleReplyClick = () => {
+    if (onReply) {
+      onReply({
+        id: replyMessageId,
+        content,
+        userName,
+      });
+    }
+  };
+  const handleScrollToRepliedMessage = () => {
+    if (repliedMessage) {
+      const repliedMessageElement = document.getElementById(
+        `message-${repliedMessage.id}`
+      );
+      if (repliedMessageElement) {
+        repliedMessageElement.scrollIntoView({
+          behavior: 'smooth',
+          block: 'center',
+        });
+        repliedMessageElement.classList.add('highlight');
+        setTimeout(() => {
+          repliedMessageElement.classList.remove('highlight');
+        }, 1000);
+      } else if (fetchMessageById) {
+        fetchMessageById(repliedMessage.id);
+      }
+    }
+  };
+
   return (
     <MessageItemStyled $isShownAvatar={isShownAvatar}>
       {checkToShowAvatar && (
@@ -89,7 +128,10 @@ const MessageItem = ({
           onClick={!isCurrentUser && !isPrivateChat ? handleOpen : undefined}
         >
           <ImgAvatar
-            src={userAvatarUrl?.image50x50 || undefined}
+            src={
+              `${userAvatarUrl?.image50x50}?lastmod=${new Date().getTime()}` ||
+              undefined
+            }
             alt={`${userName}'s avatar`}
             $userAvatarUrl={userAvatarUrl}
           />
@@ -105,8 +147,24 @@ const MessageItem = ({
           $backgroundMessage={isCurrentUser}
           $isShownAvatar={isShownAvatar}
         >
-          <ContentMessage>{content || `message`}</ContentMessage>
-          <Time>{time || 'time'}</Time>
+          {repliedMessage && (
+            <ReplyingMessage
+              $backgroundMessage={isCurrentUser}
+              onClick={handleScrollToRepliedMessage}
+            >
+              <NameBox>
+                <FaReply /> <h5>{repliedMessage.user.userName}</h5>
+              </NameBox>
+              <p>{repliedMessage.content}</p>
+            </ReplyingMessage>
+          )}
+          <MessageBox>
+            <ContentMessage>{content || `message`}</ContentMessage>
+            <Time>{time || 'time'}</Time>
+            <ButtonReply onClick={handleReplyClick}>
+              <FaReply />
+            </ButtonReply>
+          </MessageBox>
         </MessageContentStyled>
       )}
       {(messageTypeJoin || messageTypeLeave) && (

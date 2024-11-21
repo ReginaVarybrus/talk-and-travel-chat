@@ -13,11 +13,11 @@ export const MessageItemStyled = styled.li`
 `;
 
 export const MessageContentStyled = styled.div`
-  display: flex;
-  align-items: end;
   max-width: 190px;
   padding: 16px;
   border-radius: 8px;
+  position: relative;
+
   margin-left: ${({ $isShownAvatar }) => ($isShownAvatar ? '16px' : '64px')};
   background: ${({ $backgroundMessage }) =>
     $backgroundMessage ? 'var(--white-color)' : 'var(--color-blue-1)'};
@@ -66,7 +66,7 @@ export const ContentMessage = styled.p`
   word-break: break-all;
   white-space: pre-wrap;
   color: var(--color-dark);
-
+  user-select: text;
   @media ${device.tablet} {
     font-size: 16px;
   }
@@ -104,5 +104,70 @@ export const Badge = styled.div`
     left: 50%;
     transform: translate(-50%, -50%);
     background: var(--color-badge);
+  }
+`;
+
+export const ButtonReply = styled.button`
+  position: absolute;
+  top: 3px;
+  right: 3px;
+  border: none;
+  background-color: transparent;
+  color: var(--color-blue-3);
+  cursor: pointer;
+  transition: all 0.3s ease;
+
+  &:hover,
+  &:focus,
+  &:active {
+    color: var(--color-blue-4);
+  }
+
+  @media (hover: hover) {
+    opacity: 0;
+    visibility: hidden;
+
+    ${MessageContentStyled}:hover & {
+      opacity: 1;
+      visibility: visible;
+    }
+  }
+`;
+
+export const ReplyingMessage = styled.div`
+  background: ${({ $backgroundMessage }) =>
+    $backgroundMessage ? 'var(--color-blue-1)' : 'var(--color-grey-2)'};
+  padding: 4px 8px;
+  margin-bottom: 8px;
+  border-radius: 8px;
+  cursor: pointer;
+  p {
+    font-size: 11px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    color: var(--color-grey-8);
+  }
+`;
+
+export const MessageBox = styled.div`
+  display: flex;
+  align-items: end;
+  justify-content: space-between;
+`;
+
+export const NameBox = styled.div`
+  display: flex;
+  gap: 4px;
+  align-items: center;
+  h5 {
+    color: var(--color-blue-5);
+    font-weight: 800;
+    font-size: 12px;
+  }
+  svg {
+    color: var(--color-blue-5);
+    width: 11px;
+    height: 11px;
   }
 `;
