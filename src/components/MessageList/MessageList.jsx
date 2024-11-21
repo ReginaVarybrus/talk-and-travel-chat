@@ -6,7 +6,7 @@ import MessageItem from '@/components/MessageItem/MessageItem';
 import { MESSAGE_TYPES } from '@/constants/messageTypes.js';
 import { getUser, getUsersStatuses } from '@/redux-store/selectors.js';
 import DateSeparator from '@/components/DateSeparator/DateSeparator.jsx';
-import { MessageListStyled } from './MessageListStyled.js';
+import { HighlightedMessage, MessageListStyled } from './MessageListStyled.js';
 
 const MessageList = ({
   messages,
@@ -93,10 +93,11 @@ const MessageList = ({
       const isLastVisibleReadMessage =
         index === sortedMessages.length - unreadMessages.length - 1;
       return (
-        <div
+        <HighlightedMessage
           key={message.id || message.creationDate}
           ref={isLastVisibleReadMessage ? lastVisibleReadMessageRef : null}
           data-message-id={message.id}
+          id={`message-${message.id}`}
         >
           {showDateSeparator && <DateSeparator date={currentMessageDate} />}
           <MessageItem
@@ -116,7 +117,7 @@ const MessageList = ({
             onReply={setReplyToMessage}
             repliedMessage={message.repliedMessage}
           />
-        </div>
+        </HighlightedMessage>
       );
     });
   };

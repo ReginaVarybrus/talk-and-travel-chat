@@ -98,6 +98,22 @@ const MessageItem = ({
       });
     }
   };
+  const handleScrollToRepliedMessage = () => {
+    const repliedMessageElement = document.getElementById(
+      `message-${repliedMessage.id}`
+    );
+
+    if (repliedMessageElement) {
+      repliedMessageElement.scrollIntoView({
+        behavior: 'smooth',
+        block: 'center',
+      });
+      repliedMessageElement.classList.add('highlight');
+      setTimeout(() => {
+        repliedMessageElement.classList.remove('highlight');
+      }, 1000);
+    }
+  };
   return (
     <MessageItemStyled $isShownAvatar={isShownAvatar}>
       {checkToShowAvatar && (
@@ -127,7 +143,10 @@ const MessageItem = ({
           $isShownAvatar={isShownAvatar}
         >
           {repliedMessage && (
-            <ReplyingMessage $backgroundMessage={isCurrentUser}>
+            <ReplyingMessage
+              $backgroundMessage={isCurrentUser}
+              onClick={handleScrollToRepliedMessage}
+            >
               <NameBox>
                 <FaReply /> <h5>{repliedMessage.user.userName}</h5>
               </NameBox>
