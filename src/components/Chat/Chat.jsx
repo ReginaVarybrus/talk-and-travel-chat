@@ -115,7 +115,10 @@ const Chat = ({
   };
 
   const fetchReadMessages = async (pageNumber = 0) => {
-    if (isFetchingRead.current) return;
+    if (isFetchingRead.current) {
+      console.warn('Already fetching messages. Skipping.');
+      return [];
+    }
     isFetchingRead.current = true;
 
     try {
@@ -140,6 +143,7 @@ const Chat = ({
       }
 
       setMessages(prevMessages => [...content, ...prevMessages]);
+
       setPage(pageData.number + 1);
       setHasMore(pageData.number + 1 < pageData.totalPages);
 
@@ -150,7 +154,6 @@ const Chat = ({
       isFetchingRead.current = false;
     }
   };
-
   const scrollToLastVisibleReadMessage = () => {
     if (!messageBlockRef.current || !lastVisibleReadMessageRef.current) return;
 
@@ -158,6 +161,44 @@ const Chat = ({
       behavior: 'auto',
       block: 'end',
     });
+  };
+
+  const fetchMessageById = async (messageId, currentPage = page) => {
+    if (isFetching.current) return;
+    isFetching.current = true;
+
+    try {
+      const targetMessage = messages.find(msg => msg.id === messageId);
+
+      if (targetMessage) {
+        const targetElement = document.getElementById(`message-${messageId}`);
+        if (targetElement) {
+          targetElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
+          targetElement.classList.add('highlight');
+          setTimeout(() => targetElement.classList.remove('highlight'), 1000);
+        }
+        isFetching.current = false;
+        return;
+      }
+
+      if (hasMore) {
+        const newMessages = await fetchReadMessages(currentPage);
+
+        if (!newMessages || newMessages.length === 0) {
+          console.warn('No more messages to load.');
+          isFetching.current = false;
+          return;
+        }
+
+        await fetchMessageById(messageId, currentPage + 1);
+      } else {
+        console.warn('Message not found after loading all available pages.');
+      }
+    } catch (error) {
+      console.error('Error fetching message by ID:', error);
+    } finally {
+      isFetching.current = false;
+    }
   };
 
   const fetchUnreadMessages = async (pageNumber = 0) => {
@@ -523,6 +564,7 @@ const Chat = ({
             isPrivateChat={isPrivateChat}
             chatOpenedTime={chatOpenedTime}
             setReplyToMessage={setReplyToMessage}
+            fetchMessageById={fetchMessageById}
           />
         )}
       </MessageBlock>

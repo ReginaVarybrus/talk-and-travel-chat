@@ -18,6 +18,7 @@ const MessageList = ({
   isPrivateChat,
   chatOpenedTime,
   setReplyToMessage,
+  fetchMessageById,
 }) => {
   const currentUserName = useSelector(getUser)?.userName;
   const usersStatuses = useSelector(getUsersStatuses);
@@ -116,6 +117,7 @@ const MessageList = ({
             chatOpenedTime={chatOpenedTime}
             onReply={setReplyToMessage}
             repliedMessage={message.repliedMessage}
+            fetchMessageById={fetchMessageById}
           />
         </HighlightedMessage>
       );

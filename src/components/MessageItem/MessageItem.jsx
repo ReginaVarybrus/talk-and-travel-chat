@@ -40,6 +40,7 @@ const MessageItem = ({
   onReply,
   replyMessageId,
   repliedMessage,
+  fetchMessageById,
 }) => {
   const [open, setOpen] = useState(false);
   const [userInfo, setUserInfo] = useState({});
@@ -99,21 +100,25 @@ const MessageItem = ({
     }
   };
   const handleScrollToRepliedMessage = () => {
-    const repliedMessageElement = document.getElementById(
-      `message-${repliedMessage.id}`
-    );
-
-    if (repliedMessageElement) {
-      repliedMessageElement.scrollIntoView({
-        behavior: 'smooth',
-        block: 'center',
-      });
-      repliedMessageElement.classList.add('highlight');
-      setTimeout(() => {
-        repliedMessageElement.classList.remove('highlight');
-      }, 1000);
+    if (repliedMessage) {
+      const repliedMessageElement = document.getElementById(
+        `message-${repliedMessage.id}`
+      );
+      if (repliedMessageElement) {
+        repliedMessageElement.scrollIntoView({
+          behavior: 'smooth',
+          block: 'center',
+        });
+        repliedMessageElement.classList.add('highlight');
+        setTimeout(() => {
+          repliedMessageElement.classList.remove('highlight');
+        }, 1000);
+      } else if (fetchMessageById) {
+        fetchMessageById(repliedMessage.id);
+      }
     }
   };
+
   return (
     <MessageItemStyled $isShownAvatar={isShownAvatar}>
       {checkToShowAvatar && (
