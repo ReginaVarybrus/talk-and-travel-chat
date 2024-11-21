@@ -140,7 +140,7 @@ export const ReplyingMessage = styled.div`
   padding: 4px 8px;
   margin-bottom: 8px;
   border-radius: 8px;
-
+  cursor: pointer;
   p {
     font-size: 11px;
     white-space: nowrap;

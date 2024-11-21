@@ -163,21 +163,28 @@ const Chat = ({
     });
   };
 
-  const fetchMessageById = async (messageId, currentPage = page) => {
-    if (isFetching.current) return;
-    isFetching.current = true;
+  const scrollToMessageElement = messageId => {
+    setTimeout(() => {
+      const targetElement = document.getElementById(`message-${messageId}`);
+      if (targetElement) {
+        targetElement.scrollIntoView({
+          behavior: 'smooth',
+          block: 'center',
+        });
+        targetElement.classList.add('highlight');
+        setTimeout(() => targetElement.classList.remove('highlight'), 1000);
+      } else {
+        console.warn('Message element not found in DOM.');
+      }
+    }, 100);
+  };
 
+  const fetchMessageById = async (messageId, currentPage = page) => {
     try {
-      const targetMessage = messages.find(msg => msg.id === messageId);
+      let targetMessage = messages.find(msg => msg.id === messageId);
 
       if (targetMessage) {
-        const targetElement = document.getElementById(`message-${messageId}`);
-        if (targetElement) {
-          targetElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
-          targetElement.classList.add('highlight');
-          setTimeout(() => targetElement.classList.remove('highlight'), 1000);
-        }
-        isFetching.current = false;
+        scrollToMessageElement(messageId);
         return;
       }
 
@@ -185,19 +192,29 @@ const Chat = ({
         const newMessages = await fetchReadMessages(currentPage);
 
         if (!newMessages || newMessages.length === 0) {
-          console.warn('No more messages to load.');
-          isFetching.current = false;
+          return;
+        }
+
+        setMessages(prevMessages => {
+          const uniqueMessages = newMessages.filter(
+            newMsg => !prevMessages.some(msg => msg.id === newMsg.id)
+          );
+          return [...prevMessages, ...uniqueMessages];
+        });
+
+        targetMessage = [...messages, ...newMessages].find(
+          msg => msg.id === messageId
+        );
+
+        if (targetMessage) {
+          scrollToMessageElement(messageId);
           return;
         }
 
         await fetchMessageById(messageId, currentPage + 1);
-      } else {
-        console.warn('Message not found after loading all available pages.');
       }
     } catch (error) {
-      console.error('Error fetching message by ID:', error);
-    } finally {
-      isFetching.current = false;
+      console.error('Error in fetchMessageById:', error);
     }
   };
 
