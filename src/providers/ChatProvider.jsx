@@ -27,6 +27,10 @@ export const ChatProvider = ({ children }) => {
   const [unreadDMsCount, setUnreadDMsCount] = useState(0);
   const [searchedValue, setSearchedValue] = useState('');
   const [isLoading, setIsLoading] = useState(true);
+  // new states
+  // const [unreadGroupMessagesCount, setUnreadGroupMessagesCount] = useState([]);
+  // const [unreadDMsMessagesCount, setUnreadDMsMessagesCount] = useState([]);
+
   const checkLogin = !isLoading && isUserLoggedIn && token;
 
   useEffect(() => {
@@ -50,6 +54,14 @@ export const ChatProvider = ({ children }) => {
         0
       );
       setUnreadRoomsCount(totalUnreadRooms);
+
+      // set unread message count to Rooms
+      // const unreadGroupMessagesState = roomsData.map(chat => ({
+      //   id: chat.id,
+      //   unreadMessagesCount: chat.unreadMessagesCount,
+      // }));
+
+      // setUnreadGroupMessagesCount(unreadGroupMessagesState);
     }
   }, [roomsData]);
 
@@ -63,6 +75,14 @@ export const ChatProvider = ({ children }) => {
         0
       );
       setUnreadDMsCount(totalUnreadDMs);
+
+      // set unread message count to DMs
+      // const unreadDMsMessagesState = roomsData.map(chat => ({
+      //   id: chat.id,
+      //   unreadMessagesCount: chat.unreadMessagesCount,
+      // }));
+
+      // setUnreadDMsMessagesCount(unreadDMsMessagesState);
     }
   }, [dmsData]);
 
@@ -120,6 +140,7 @@ export const ChatProvider = ({ children }) => {
     },
     []
   );
+
   const value = useMemo(
     () => ({
       subscriptionRooms,
@@ -134,6 +155,11 @@ export const ChatProvider = ({ children }) => {
       setFilteredPrivateChats,
       searchedValue,
       setSearchedValue,
+
+      // unreadGroupMessagesCount,
+      // unreadDMsMessagesCount,
+      // setUnreadGroupMessagesCount,
+      // setUnreadDMsMessagesCount,
     }),
     [
       subscriptionRooms,

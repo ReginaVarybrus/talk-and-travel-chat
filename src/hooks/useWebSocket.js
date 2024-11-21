@@ -17,7 +17,7 @@ export const useWebSocket = () => {
     if (isClientConnected() && !subscriptions.current[type]) {
       const subscription = stompClient.subscribe(endpoint, response => {
         const parsedData = JSON.parse(response.body);
-        callback(parsedData);
+        callback(parsedData, endpoint);
       });
       subscriptions.current[type] = subscription;
       return subscription;
