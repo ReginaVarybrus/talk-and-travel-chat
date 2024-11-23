@@ -154,6 +154,7 @@ const Chat = ({
       isFetchingRead.current = false;
     }
   };
+
   const scrollToLastVisibleReadMessage = () => {
     if (!messageBlockRef.current || !lastVisibleReadMessageRef.current) return;
 
