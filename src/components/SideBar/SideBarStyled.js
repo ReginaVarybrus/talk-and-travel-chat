@@ -37,7 +37,7 @@ export const Text = styled.p`
   text-align: center;
   line-height: 20px;
   letter-spacing: -0.011em;
-  word-break: break-all;
+  word-break: break-word;
   color: var(--color-grey-9);
 `;
 
