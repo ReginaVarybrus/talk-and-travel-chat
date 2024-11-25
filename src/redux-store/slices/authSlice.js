@@ -1,5 +1,12 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { register, logIn, logOut, verifyEmail } from './AuthOperations.js';
+import {
+  register,
+  logIn,
+  logOut,
+  verifyEmail,
+  logInWithFacebook,
+  logInWithGoogle,
+} from './AuthOperations.js';
 
 const initialState = {
   token: null,
@@ -17,6 +24,12 @@ const handleRejected = (state, action) => {
   state.error = action.payload;
 };
 
+const handleFulfilledLogin = (state, action) => {
+  state.token = action.payload.token;
+  state.isLoggedIn = true;
+  state.error = null;
+};
+
 export const authSlice = createSlice({
   name: 'auth',
   initialState,
@@ -30,11 +43,8 @@ export const authSlice = createSlice({
 
       .addCase(logIn.pending, handlePending)
       .addCase(logIn.rejected, handleRejected)
-      .addCase(logIn.fulfilled, (state, action) => {
-        state.token = action.payload.token;
-        state.isLoggedIn = true;
-        state.error = null;
-      })
+      .addCase(logIn.fulfilled, handleFulfilledLogin)
+
       .addCase(logOut.pending, handlePending)
       .addCase(logOut.rejected, handleRejected)
       .addCase(logOut.fulfilled, state => {
@@ -42,13 +52,18 @@ export const authSlice = createSlice({
         state.isLoggedIn = false;
         state.error = null;
       })
+
       .addCase(verifyEmail.pending, handlePending)
       .addCase(verifyEmail.rejected, handleRejected)
-      .addCase(verifyEmail.fulfilled, (state, action) => {
-        state.token = action.payload.token;
-        state.isLoggedIn = true;
-        state.error = null;
-      }),
+      .addCase(verifyEmail.fulfilled, handleFulfilledLogin)
+
+      .addCase(logInWithFacebook.pending, handlePending)
+      .addCase(logInWithFacebook.rejected, handleRejected)
+      .addCase(logInWithFacebook.fulfilled, handleFulfilledLogin)
+
+      .addCase(logInWithGoogle.pending, handlePending)
+      .addCase(logInWithGoogle.rejected, handleRejected)
+      .addCase(logInWithGoogle.fulfilled, handleFulfilledLogin),
 });
 
 export default authSlice.reducer;

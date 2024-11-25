@@ -1,7 +1,9 @@
 const URLs = {
   // Auth
   register: 'authentication/register',
+  registerWithSocial: 'authentication/social/register',
   login: 'authentication/login',
+  loginWithSocial: 'authentication/social/login',
   logout: 'authentication/logout',
   passwordRecovery: 'authentication/password-recovery',
   verifyEmail: 'authentication/registration-confirmation',
