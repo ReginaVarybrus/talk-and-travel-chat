@@ -37,6 +37,7 @@ const MessageBar = ({
 }) => {
   const [message, setMessage] = useState('');
   const [isMaxLimit, setIsMaxLimit] = useState(false);
+  const [selectedFile, setSelectedFile] = useState(null);
 
   const { setSubscriptionRooms } = useChatContext();
   const typingStopTimeoutRef = useRef(null);
@@ -78,6 +79,43 @@ const MessageBar = ({
     typingStopTimeoutRef.current = setTimeout(() => {
       handleStopTyping();
     }, 1500);
+  };
+
+  // Attachment image feature
+  const handleFileChange = event => {
+    const file = event.target.files[0];
+    if (file) {
+      setSelectedFile(file);
+    }
+  };
+
+  // Attachment image feature
+  const handleUpload = async () => {
+    if (!selectedFile) return alert('Please select a file first!');
+
+    const formData = new FormData();
+    formData.append('file', selectedFile);
+    formData.append('content', 'Uploaded an image'); // Текст повідомлення
+    formData.append('chatId', chatId);
+    formData.append('attachmentType', 'IMAGE');
+
+    try {
+      const response = await axios.post(
+        `/api/chats/${chatId}/message`,
+        formData,
+        {
+          headers: {
+            'Content-Type': 'multipart/form-data',
+          },
+        }
+      );
+
+      if (response.status === 202) {
+        console.log('Image uploaded successfully:', response.data);
+      }
+    } catch (error) {
+      console.error('Error uploading file:', error);
+    }
   };
 
   const handleSubmit = e => {
@@ -141,7 +179,7 @@ const MessageBar = ({
       ) : (
         <MessageInputBox>
           {replyToMessage && (
-            <ReplyMessageBox className="reply-preview">
+            <ReplyMessageBox>
               <h6>Reply to {replyToMessage.userName} </h6>
               <p>{replyToMessage.content}</p>
               <CloseBtn onClick={handleCancelReply}>
@@ -150,7 +188,14 @@ const MessageBar = ({
             </ReplyMessageBox>
           )}
           <MessageInputs onSubmit={handleSubmit}>
-            <ButtonAttachFile component="label" variant="contained">
+            <ButtonAttachFile
+              component="label"
+              variant="contained"
+              type="file"
+              accept="image/*"
+              onChange={handleFileChange}
+              multiple
+            >
               <AttachmentIcon />
               <VisuallyHiddenInput type="file" />
             </ButtonAttachFile>
@@ -178,7 +223,7 @@ const MessageBar = ({
               type="submit"
               value="Send"
               $isMessageNotEmpty={isMessageNotEmpty}
-              disabled={!isMessageNotEmpty}
+              disabled={!isMessageNotEmpty || !selectedFile}
             >
               <SendIcon />
             </ButtonSendMessage>
