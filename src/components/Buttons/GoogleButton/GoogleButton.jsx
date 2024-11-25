@@ -12,10 +12,24 @@ const ButtonGoogle = () => {
   const dispatch = useDispatch();
 
   const handleCredentialResponse = response => {
-    console.log('Google Credential Response:', response);
-    const tokenData = JSON.parse(atob(response.credential.split('.')[1]));
-    console.log('Parsed Token Data:', tokenData);
-    dispatch(logInWithGoogle(tokenData));
+    try {
+      console.log('Google Credential Response:', response);
+      const tokenData = JSON.parse(atob(response.credential.split('.')[1]));
+      console.log('Parsed Token Data:', tokenData);
+
+      if (!tokenData.email || !tokenData.name) {
+        throw new Error('Missing email or name in token data');
+      }
+
+      if (!tokenData.email_verified) {
+        console.error('Email is not verified');
+        return;
+      }
+
+      dispatch(logInWithGoogle(tokenData));
+    } catch (error) {
+      console.error('Error parsing token data or dispatching login:', error);
+    }
   };
 
   useEffect(() => {
