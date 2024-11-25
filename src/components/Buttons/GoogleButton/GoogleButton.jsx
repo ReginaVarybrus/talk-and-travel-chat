@@ -15,13 +15,21 @@ const ButtonGoogle = () => {
     try {
       console.log('Google Credential Response:', response);
 
-      if (!response.credential) {
-        throw new Error('Credential is missing in the response');
+      const jwtParts = response.credential.split('.');
+      if (jwtParts.length !== 3) {
+        throw new Error('Invalid JWT structure');
       }
 
-      console.log('Raw Credential Token:', response.credential);
+      const decodeBase64Url = str =>
+        decodeURIComponent(
+          atob(str.replace(/-/g, '+').replace(/_/g, '/'))
+            .split('')
+            .map(c => `%${`00${c.charCodeAt(0).toString(16)}`.slice(-2)}`)
+            .join('')
+        );
 
-      const tokenData = JSON.parse(atob(response.credential.split('.')[1]));
+      const tokenData = JSON.parse(decodeBase64Url(jwtParts[1]));
+
       console.log('Parsed Token Data:', tokenData);
 
       if (!tokenData.email || !tokenData.name) {
@@ -44,6 +52,7 @@ const ButtonGoogle = () => {
       google.accounts.id.initialize({
         client_id:
           '853304957930-2cclc0tr0hs9l4m918bgoeg51t8ca5u5.apps.googleusercontent.com',
+
         callback: handleCredentialResponse,
       });
     } else {
