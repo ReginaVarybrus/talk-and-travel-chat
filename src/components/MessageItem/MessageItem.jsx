@@ -4,6 +4,7 @@ import { getUser } from '@/redux-store/selectors';
 import URLs from '@/constants/constants';
 import { axiosClient } from '@/services/api';
 import { MESSAGE_TYPES } from '@/constants/messageTypes.js';
+import { ATTACHMENT_TYPES } from '@/constants/attachmentTypes.js';
 import PropTypes from 'prop-types';
 import UserInfoModal from '@/components/UserInfoModal/UserInfoModal';
 import { timeStampConverter } from '@/components/utils/timeUtil.js';
@@ -23,6 +24,7 @@ import {
   ReplyingMessage,
   MessageBox,
   NameBox,
+  AttachmentImage,
 } from './MessageItemStyled';
 
 const MessageItem = ({
@@ -32,6 +34,7 @@ const MessageItem = ({
   userAvatarUrl,
   date,
   type,
+  attachment,
   isShownAvatar,
   isOnline,
   isPrivateChat,
@@ -56,6 +59,7 @@ const MessageItem = ({
   const messageTypeText = type === MESSAGE_TYPES.TEXT;
   const messageTypeJoin = type === MESSAGE_TYPES.JOIN;
   const messageTypeLeave = type === MESSAGE_TYPES.LEAVE;
+  const attachmentTypeImage = type === ATTACHMENT_TYPES.IMAGE;
 
   useEffect(() => {
     const messageDate = new Date(date);
@@ -143,10 +147,8 @@ const MessageItem = ({
       )}
 
       {messageTypeText && (
-        <MessageContentStyled
-          $backgroundMessage={isCurrentUser}
-          $isShownAvatar={isShownAvatar}
-        >
+        <>
+          {' '}
           {repliedMessage && (
             <ReplyingMessage
               $backgroundMessage={isCurrentUser}
@@ -158,18 +160,53 @@ const MessageItem = ({
               <p>{repliedMessage.content}</p>
             </ReplyingMessage>
           )}
-          <MessageBox>
-            <ContentMessage>{content || `message`}</ContentMessage>
-            <Time>{time || 'time'}</Time>
-            <ButtonReply onClick={handleReplyClick}>
-              <FaReply />
-            </ButtonReply>
-          </MessageBox>
-        </MessageContentStyled>
+          {attachment && attachmentTypeImage ? (
+            <MessageBox>
+              <AttachmentImage
+                src={attachment.thumbnailImageUrl}
+                alt="attachment file"
+              />
+              <Time>{time || 'time'}</Time>
+              <ButtonReply onClick={handleReplyClick}>
+                <FaReply />
+              </ButtonReply>
+            </MessageBox>
+          ) : (
+            <MessageContentStyled
+              $backgroundMessage={isCurrentUser}
+              $isShownAvatar={isShownAvatar}
+            >
+              <MessageBox>
+                <ContentMessage>{content || `message`}</ContentMessage>
+                <Time>{time || 'time'}</Time>
+                <ButtonReply onClick={handleReplyClick}>
+                  <FaReply />
+                </ButtonReply>
+              </MessageBox>
+            </MessageContentStyled>
+          )}
+        </>
       )}
+
       {(messageTypeJoin || messageTypeLeave) && (
         <ContentJoinOrLeave>{content || `message`}</ContentJoinOrLeave>
       )}
+
+      {/* {messageTypeText && attachmentTypeImage && (
+        <MessageBox>
+          <ContentMessage>
+            <AttachmentImage
+              src={attachment?.thumbnailImageUrl}
+              alt="attachment file"
+            />
+          </ContentMessage>
+          <Time>{time || 'time'}</Time>
+          <ButtonReply onClick={handleReplyClick}>
+            <FaReply />
+          </ButtonReply>
+        </MessageBox>
+      )} */}
+
       <UserInfoModal
         open={open}
         handleClose={handleClose}

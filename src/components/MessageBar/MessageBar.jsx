@@ -4,6 +4,8 @@ import URLs from '@/constants/constants';
 import { CHAT_TYPES } from '@/constants/chatTypes';
 import { useWebSocket } from '@/hooks/useWebSocket.js';
 import BasicButton from '@/components/Buttons/BasicButton/BasicButton';
+import ModalAttachFile from '@/components/ModalAttachFile/ModalAttachFile';
+import { CloseBtn } from '@/components//AllUsersModal/AllUsersModalStyled';
 import { useChatContext } from '@/providers/ChatProvider';
 import { IoCloseOutline } from 'react-icons/io5';
 
@@ -22,7 +24,6 @@ import {
   ReplyMessageBox,
   MessageInputBox,
 } from './MessageBarStyled';
-import { CloseBtn } from '../AllUsersModal/AllUsersModalStyled';
 
 const MessageBar = ({
   chatId,
@@ -37,6 +38,7 @@ const MessageBar = ({
 }) => {
   const [message, setMessage] = useState('');
   const [isMaxLimit, setIsMaxLimit] = useState(false);
+  const [open, setOpen] = useState(false);
   const [selectedFile, setSelectedFile] = useState(null);
 
   const { setSubscriptionRooms } = useChatContext();
@@ -85,37 +87,15 @@ const MessageBar = ({
   const handleFileChange = event => {
     const file = event.target.files[0];
     if (file) {
+      console.log('selected file', file);
       setSelectedFile(file);
+      setOpen(true);
     }
-  };
-
-  // Attachment image feature
-  const handleUpload = async () => {
-    if (!selectedFile) return alert('Please select a file first!');
-
-    const formData = new FormData();
-    formData.append('file', selectedFile);
-    formData.append('content', 'Uploaded an image'); // Текст повідомлення
-    formData.append('chatId', chatId);
-    formData.append('attachmentType', 'IMAGE');
-
-    try {
-      const response = await axios.post(
-        `/api/chats/${chatId}/message`,
-        formData,
-        {
-          headers: {
-            'Content-Type': 'multipart/form-data',
-          },
-        }
-      );
-
-      if (response.status === 202) {
-        console.log('Image uploaded successfully:', response.data);
-      }
-    } catch (error) {
-      console.error('Error uploading file:', error);
-    }
+    // if (selectedFile) {
+    //   setOpen(true);
+    // } else {
+    //   alert('Please select a file first!');
+    // }
   };
 
   const handleSubmit = e => {
@@ -161,6 +141,8 @@ const MessageBar = ({
     setMessage('');
     setIsMaxLimit(false);
   }, [chatId]);
+
+  const handleClose = () => setOpen(false);
 
   return (
     <MessageBarStyled>
@@ -230,6 +212,13 @@ const MessageBar = ({
           </MessageInputs>
         </MessageInputBox>
       )}
+      <ModalAttachFile
+        open={open}
+        handleClose={handleClose}
+        selectedFile={selectedFile}
+        chatId={chatId}
+        src={selectedFile ? URL.createObjectURL(selectedFile) : ''}
+      />
     </MessageBarStyled>
   );
 };

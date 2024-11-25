@@ -171,3 +171,8 @@ export const NameBox = styled.div`
     height: 11px;
   }
 `;
+
+export const AttachmentImage = styled.img`
+  width: 100px;
+  height: 100px;
+`;
