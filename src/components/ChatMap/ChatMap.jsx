@@ -9,8 +9,10 @@ import mapData from '@/data/countries.json';
 import BasicButton from '@/components/Buttons/BasicButton/BasicButton';
 import Popover from '@mui/material/Popover';
 import Typography from '@mui/material/Typography';
+import { IoCloseOutline } from 'react-icons/io5';
 import 'leaflet/dist/leaflet.css';
 
+import { CloseBtn } from '@/components/CountryInfo/CountryInfoStyled.js';
 import {
   ChatMapStyled,
   MapStyled,
@@ -140,31 +142,36 @@ const ChatMap = ({
             />
           </ShowCountryStyled>
         )}
+        <CloseBtn onClick={closeMap}>
+          <IoCloseOutline />
+        </CloseBtn>
       </MapStyled>
 
-      <Popover
-        id="mouse-over-popover"
-        sx={{ pointerEvents: 'none' }}
-        open={Boolean(anchorPosition)}
-        anchorReference="anchorPosition"
-        anchorPosition={
-          anchorPosition
-            ? { top: anchorPosition.mouseY, left: anchorPosition.mouseX }
-            : undefined
-        }
-        anchorOrigin={{
-          vertical: 'bottom',
-          horizontal: 'left',
-        }}
-        transformOrigin={{
-          vertical: 'top',
-          horizontal: 'left',
-        }}
-        onClose={handlePopoverClose}
-        disableRestoreFocus
-      >
-        <Typography sx={{ p: 1.5 }}>{hoveredCountry}</Typography>
-      </Popover>
+      {isDesktop && (
+        <Popover
+          id="mouse-over-popover"
+          sx={{ pointerEvents: 'none' }}
+          open={Boolean(anchorPosition)}
+          anchorReference="anchorPosition"
+          anchorPosition={
+            anchorPosition
+              ? { top: anchorPosition.mouseY, left: anchorPosition.mouseX }
+              : undefined
+          }
+          anchorOrigin={{
+            vertical: 'bottom',
+            horizontal: 'left',
+          }}
+          transformOrigin={{
+            vertical: 'top',
+            horizontal: 'left',
+          }}
+          onClose={handlePopoverClose}
+          disableRestoreFocus
+        >
+          <Typography sx={{ p: 1.5 }}>{hoveredCountry}</Typography>
+        </Popover>
+      )}
     </ChatMapStyled>
   );
 };
