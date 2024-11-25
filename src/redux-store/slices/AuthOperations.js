@@ -86,27 +86,28 @@ export const verifyEmail = createAsyncThunk(
 
 export const logInWithGoogle = createAsyncThunk(
   'auth/logInWithGoogle',
-  async (googleData, { rejectWithValue }) => {
-    console.log('Google Data:', googleData);
+  async (googleData, { dispatch, rejectWithValue }) => {
     try {
       const response = await axiosClient.post(URLs.loginWithSocial, {
         userEmail: googleData.email,
       });
-      console.log('Login response:', response.data);
+
+      dispatch(setUsers(response.data.userDto));
+
       return response.data;
     } catch (err) {
-      console.error('Login error:', err);
       if (err.response?.status === 404) {
-        console.log('User not found, registering...');
         await axiosClient.post(URLs.registerWithSocial, {
           userName: googleData.name,
           userEmail: googleData.email,
         });
-        const retryResponse = await axiosClient.post(URLs.loginWithSocial, {
+        const response = await axiosClient.post(URLs.loginWithSocial, {
           userEmail: googleData.email,
         });
-        console.log('Retry login response:', retryResponse.data);
-        return retryResponse.data;
+
+        dispatch(setUsers(response.data.userDto));
+
+        return response.data;
       }
       return rejectWithValue(err.response?.data.message || 'Login failed');
     }
