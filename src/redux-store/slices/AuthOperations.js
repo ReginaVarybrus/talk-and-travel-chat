@@ -83,3 +83,55 @@ export const verifyEmail = createAsyncThunk(
     }
   }
 );
+
+export const logInWithGoogle = createAsyncThunk(
+  'auth/logInWithGoogle',
+  async (googleData, { rejectWithValue }) => {
+    try {
+      const response = await axiosClient.post(URLs.loginWithSocial, {
+        userEmail: googleData.email,
+      });
+      return response.data;
+    } catch (err) {
+      if (err.response?.status === 404) {
+        await axiosClient.post(URLs.registerWithSocial, {
+          userName: googleData.name,
+          userEmail: googleData.email,
+        });
+        return axiosClient
+          .post(URLs.loginWithSocial, {
+            userEmail: googleData.email,
+          })
+          .then(res => res.data);
+      }
+      return rejectWithValue(err.response?.data.message || 'Login failed');
+    }
+  }
+);
+
+export const logInWithFacebook = createAsyncThunk(
+  'auth/logInWithFacebook',
+  async (facebookData, { rejectWithValue }) => {
+    try {
+      const response = await axiosClient.post(URLs.loginWithSocial, {
+        userEmail: facebookData.email,
+      });
+      return response.data;
+    } catch (err) {
+      if (err.response?.status === 404) {
+        // Если пользователь не зарегистрирован, выполните регистрацию
+        await axiosClient.post(URLs.registerWithSocial, {
+          userName: facebookData.name,
+          userEmail: facebookData.email,
+        });
+        // Повторите попытку авторизации после регистрации
+        return axiosClient
+          .post(URLs.loginWithSocial, {
+            userEmail: facebookData.email,
+          })
+          .then(res => res.data);
+      }
+      return rejectWithValue(err.response?.data.message || 'Login failed');
+    }
+  }
+);
