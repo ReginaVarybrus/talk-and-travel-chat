@@ -36,7 +36,7 @@ export const ChatProvider = ({ children }) => {
   }, [isUserLoggedIn, token]);
 
   const { responseData: roomsData } = useFetch(
-    checkLogin ? URLs.userCountries : null
+    checkLogin ? URLs.getUserCountriesChats : null
   );
   const { responseData: dmsData } = useFetch(
     checkLogin ? URLs.getPrivateChats : null
