@@ -14,6 +14,13 @@ const ButtonGoogle = () => {
   const handleCredentialResponse = response => {
     try {
       console.log('Google Credential Response:', response);
+
+      if (!response.credential) {
+        throw new Error('Credential is missing in the response');
+      }
+
+      console.log('Raw Credential Token:', response.credential);
+
       const tokenData = JSON.parse(atob(response.credential.split('.')[1]));
       console.log('Parsed Token Data:', tokenData);
 
