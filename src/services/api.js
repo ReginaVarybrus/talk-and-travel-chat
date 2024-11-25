@@ -6,6 +6,8 @@ const urlToOmit = [
   URLs.register,
   URLs.passwordRecovery,
   URLs.verifyEmail,
+  URLs.registerWithSocial,
+  URLs.loginWithSocial,
 ];
 
 const axiosClient = axios.create({
@@ -17,9 +19,9 @@ const axiosClient = axios.create({
 
 axiosClient.interceptors.request.use(
   config => {
+    console.log('Request config:', config);
     let authData;
     try {
-      // Get token from local storage and check if it had been retrieved.
       authData = JSON.parse(localStorage.getItem('persist:auth'));
     } catch (e) {
       console.error('Error parsing auth data from local storage', e);
@@ -27,8 +29,12 @@ axiosClient.interceptors.request.use(
     }
     const token = authData ? authData?.token?.replace(/"/g, '') : null;
     const isAuthUrl = urlToOmit.includes(config.url);
+
+    console.log('Is Auth URL:', isAuthUrl);
+
     if (!isAuthUrl) {
       config.headers.Authorization = `Bearer ${token}`;
+      console.log('Added Authorization header:', config.headers.Authorization);
       return config;
     }
     delete config.headers.Authorization;

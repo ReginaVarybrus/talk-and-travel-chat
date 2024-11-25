@@ -87,22 +87,26 @@ export const verifyEmail = createAsyncThunk(
 export const logInWithGoogle = createAsyncThunk(
   'auth/logInWithGoogle',
   async (googleData, { rejectWithValue }) => {
+    console.log('Google Data:', googleData);
     try {
       const response = await axiosClient.post(URLs.loginWithSocial, {
         userEmail: googleData.email,
       });
+      console.log('Login response:', response.data);
       return response.data;
     } catch (err) {
+      console.error('Login error:', err);
       if (err.response?.status === 404) {
+        console.log('User not found, registering...');
         await axiosClient.post(URLs.registerWithSocial, {
           userName: googleData.name,
           userEmail: googleData.email,
         });
-        return axiosClient
-          .post(URLs.loginWithSocial, {
-            userEmail: googleData.email,
-          })
-          .then(res => res.data);
+        const retryResponse = await axiosClient.post(URLs.loginWithSocial, {
+          userEmail: googleData.email,
+        });
+        console.log('Retry login response:', retryResponse.data);
+        return retryResponse.data;
       }
       return rejectWithValue(err.response?.data.message || 'Login failed');
     }
@@ -112,24 +116,26 @@ export const logInWithGoogle = createAsyncThunk(
 export const logInWithFacebook = createAsyncThunk(
   'auth/logInWithFacebook',
   async (facebookData, { rejectWithValue }) => {
+    console.log('Facebook Data:', facebookData);
     try {
       const response = await axiosClient.post(URLs.loginWithSocial, {
         userEmail: facebookData.email,
       });
+      console.log('Login response:', response.data);
       return response.data;
     } catch (err) {
+      console.error('Login error:', err);
       if (err.response?.status === 404) {
-        // Если пользователь не зарегистрирован, выполните регистрацию
+        console.log('User not found, registering...');
         await axiosClient.post(URLs.registerWithSocial, {
           userName: facebookData.name,
           userEmail: facebookData.email,
         });
-        // Повторите попытку авторизации после регистрации
-        return axiosClient
-          .post(URLs.loginWithSocial, {
-            userEmail: facebookData.email,
-          })
-          .then(res => res.data);
+        const retryResponse = await axiosClient.post(URLs.loginWithSocial, {
+          userEmail: facebookData.email,
+        });
+        console.log('Retry login response:', retryResponse.data);
+        return retryResponse.data;
       }
       return rejectWithValue(err.response?.data.message || 'Login failed');
     }

@@ -12,7 +12,9 @@ const ButtonGoogle = () => {
   const dispatch = useDispatch();
 
   const handleCredentialResponse = response => {
+    console.log('Google Credential Response:', response);
     const tokenData = JSON.parse(atob(response.credential.split('.')[1]));
+    console.log('Parsed Token Data:', tokenData);
     dispatch(logInWithGoogle(tokenData));
   };
 
@@ -30,7 +32,7 @@ const ButtonGoogle = () => {
 
   const triggerGoogleSignIn = () => {
     if (window.google) {
-      google.accounts.id.prompt(); // Показывает popup для авторизации
+      google.accounts.id.prompt();
     } else {
       console.error('Google API is not loaded');
     }
