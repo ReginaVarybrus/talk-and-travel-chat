@@ -99,7 +99,7 @@ export const logInWithGoogle = createAsyncThunk(
       return response.data;
     } catch (err) {
       console.error('Login failed, error response:', err.response);
-      if (err.response?.status === 404) {
+      if (err.response?.status === 401 || err.response?.status === 404) {
         console.log('User not found, attempting registration...');
         await axiosClient.post(URLs.registerWithSocial, {
           userName: googleData.name,
