@@ -240,10 +240,12 @@ export const SearchInput = styled.input`
   box-sizing: border-box;
   min-width: 100%;
   height: 35px;
+  font-size: 16px;
 
   padding: 1px 10px 0 40px;
   border: 1px solid var(--color-grey-7);
   border-radius: 4px;
+
   &::placeholder {
     font-size: 16px;
     font-weight: 400;
