@@ -14,6 +14,7 @@ export const AutocompleteInput = styled.input`
   box-sizing: border-box;
   min-width: 100%;
   height: 35px;
+  font-size: 16px;
   margin-bottom: 25px;
   padding: 1px 10px 0 40px;
   border: 1px solid var(--color-grey-7);
@@ -21,7 +22,6 @@ export const AutocompleteInput = styled.input`
   &::placeholder {
     font-size: 16px;
     font-weight: 400;
-    line-height: 19px;
     color: var(--color-grey-7);
     margin-top: 20px;
   }

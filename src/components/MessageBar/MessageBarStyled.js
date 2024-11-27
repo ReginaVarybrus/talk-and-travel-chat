@@ -43,7 +43,7 @@ export const TextareaAutosize = styled(BaseTextareaAutosize)`
   box-sizing: border-box;
   width: 100%;
   max-height: 200px;
-  font-size: 0.875rem;
+  font-size: 16px;
   font-weight: 400;
   line-height: 1.5;
   padding: 13.2px 16px;

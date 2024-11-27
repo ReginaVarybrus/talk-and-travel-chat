@@ -19,7 +19,6 @@ const axiosClient = axios.create({
 
 axiosClient.interceptors.request.use(
   config => {
-    console.log('Request config:', config);
     let authData;
     try {
       authData = JSON.parse(localStorage.getItem('persist:auth'));
