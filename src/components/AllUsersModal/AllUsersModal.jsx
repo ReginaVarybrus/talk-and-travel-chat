@@ -183,7 +183,7 @@ const AllUsersModal = ({ isOpen, onClose }) => {
                         <AvatarInList>
                           {user.avatar?.image50x50 ? (
                             <ImgAvatar
-                              src={user.avatar.image50x50}
+                              src={`${user.avatar?.image50x50}?lastmod=${new Date().getTime()}`}
                               alt={user.userName}
                             />
                           ) : (

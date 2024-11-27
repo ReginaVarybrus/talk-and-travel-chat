@@ -6,7 +6,7 @@ import MessageItem from '@/components/MessageItem/MessageItem';
 import { MESSAGE_TYPES } from '@/constants/messageTypes.js';
 import { getUser, getUsersStatuses } from '@/redux-store/selectors.js';
 import DateSeparator from '@/components/DateSeparator/DateSeparator.jsx';
-import { MessageListStyled } from './MessageListStyled.js';
+import { HighlightedMessage, MessageListStyled } from './MessageListStyled.js';
 
 const MessageList = ({
   messages,
@@ -17,6 +17,8 @@ const MessageList = ({
   lastVisibleReadMessageRef,
   isPrivateChat,
   chatOpenedTime,
+  setReplyToMessage,
+  fetchMessageById,
 }) => {
   const currentUserName = useSelector(getUser)?.userName;
   const usersStatuses = useSelector(getUsersStatuses);
@@ -93,14 +95,16 @@ const MessageList = ({
       const isLastVisibleReadMessage =
         index === sortedMessages.length - unreadMessages.length - 1;
       return (
-        <div
+        <HighlightedMessage
           key={message.id || message.creationDate}
           ref={isLastVisibleReadMessage ? lastVisibleReadMessageRef : null}
           data-message-id={message.id}
+          id={`message-${message.id}`}
         >
           {showDateSeparator && <DateSeparator date={currentMessageDate} />}
           <MessageItem
             key={message.id || message.creationDate}
+            replyMessageId={message.id}
             content={message.content}
             userId={message.user?.id}
             userName={message.user?.userName}
@@ -112,8 +116,11 @@ const MessageList = ({
             isPrivateChat={isPrivateChat}
             setParticipantsAmount={setParticipantsAmount}
             chatOpenedTime={chatOpenedTime}
+            onReply={setReplyToMessage}
+            repliedMessage={message.repliedMessage}
+            fetchMessageById={fetchMessageById}
           />
-        </div>
+        </HighlightedMessage>
       );
     });
   };

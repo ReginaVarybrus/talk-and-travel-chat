@@ -25,6 +25,7 @@ import {
   Logo,
   NewMessagesNotification,
   LoaderStyleBox,
+  PositionBox,
 } from './ChatStyled';
 
 const Chat = ({
@@ -59,6 +60,7 @@ const Chat = ({
     useState(false);
   const [messagesToMarkAsRead, setMessagesToMarkAsRead] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [replyToMessage, setReplyToMessage] = useState(null);
 
   const lastVisibleReadMessageRef = useRef(null);
   const messageBlockRef = useRef(null);
@@ -113,7 +115,10 @@ const Chat = ({
   };
 
   const fetchReadMessages = async (pageNumber = 0) => {
-    if (isFetchingRead.current) return;
+    if (isFetchingRead.current) {
+      console.warn('Already fetching messages. Skipping.');
+      return [];
+    }
     isFetchingRead.current = true;
 
     try {
@@ -138,6 +143,7 @@ const Chat = ({
       }
 
       setMessages(prevMessages => [...content, ...prevMessages]);
+
       setPage(pageData.number + 1);
       setHasMore(pageData.number + 1 < pageData.totalPages);
 
@@ -156,6 +162,61 @@ const Chat = ({
       behavior: 'auto',
       block: 'end',
     });
+  };
+
+  const scrollToMessageElement = messageId => {
+    setTimeout(() => {
+      const targetElement = document.getElementById(`message-${messageId}`);
+      if (targetElement) {
+        targetElement.scrollIntoView({
+          behavior: 'smooth',
+          block: 'center',
+        });
+        targetElement.classList.add('highlight');
+        setTimeout(() => targetElement.classList.remove('highlight'), 1000);
+      } else {
+        console.warn('Message element not found in DOM.');
+      }
+    }, 100);
+  };
+
+  const fetchMessageById = async (messageId, currentPage = page) => {
+    try {
+      let targetMessage = messages.find(msg => msg.id === messageId);
+
+      if (targetMessage) {
+        scrollToMessageElement(messageId);
+        return;
+      }
+
+      if (hasMore) {
+        const newMessages = await fetchReadMessages(currentPage);
+
+        if (!newMessages || newMessages.length === 0) {
+          return;
+        }
+
+        setMessages(prevMessages => {
+          const uniqueMessages = newMessages.filter(
+            newMsg => !prevMessages.some(msg => msg.id === newMsg.id)
+          );
+          return [...prevMessages, ...uniqueMessages];
+        });
+
+        targetMessage = [...messages, ...newMessages].find(
+          msg => msg.id === messageId
+        );
+
+        if (targetMessage) {
+          scrollToMessageElement(messageId);
+          return;
+        }
+
+        await fetchMessageById(messageId, currentPage + 1);
+      }
+    } catch (error) {
+      console.error('Error in fetchMessageById:', error);
+    }
   };
 
   const fetchUnreadMessages = async (pageNumber = 0) => {
@@ -240,7 +301,7 @@ const Chat = ({
       setShowNewMessagesIndicator(false);
       setMessagesToMarkAsRead([]);
       setHasInitialScrolled(false);
-
+      setReplyToMessage(null);
       if (currentChatId && messagesToMarkAsRead.length > 0) {
         const lastMessageId =
           messagesToMarkAsRead[messagesToMarkAsRead.length - 1];
@@ -520,45 +581,51 @@ const Chat = ({
             lastVisibleReadMessageRef={lastVisibleReadMessageRef}
             isPrivateChat={isPrivateChat}
             chatOpenedTime={chatOpenedTime}
+            setReplyToMessage={setReplyToMessage}
+            fetchMessageById={fetchMessageById}
           />
         )}
       </MessageBlock>
-      <ScrollToBottomButton targetRef={messageBlockRef} />
-      {showNewMessagesIndicator && (
-        <NewMessagesNotification>
-          <button
-            type="button"
-            className="scroll-button"
-            onClick={handleScrollToBottom}
-            aria-label="Scroll to bottom"
-          >
-            <span aria-hidden="true">
-              <IoIosArrowDown />
-            </span>
-            <span>{unreadCount} new messages</span>
-          </button>
-          <div className="divider" />
+      <PositionBox>
+        <ScrollToBottomButton targetRef={messageBlockRef} />
+        {showNewMessagesIndicator && (
+          <NewMessagesNotification>
+            <button
+              type="button"
+              className="scroll-button"
+              onClick={handleScrollToBottom}
+              aria-label="Scroll to bottom"
+            >
+              <span aria-hidden="true">
+                <IoIosArrowDown />
+              </span>
+              <span>{unreadCount} new messages</span>
+            </button>
+            <div className="divider" />
 
-          <button
-            type="button"
-            onClick={() => setShowNewMessagesIndicator(false)}
-            aria-label="Close notification"
-          >
-            <IoClose />
-          </button>
-        </NewMessagesNotification>
-      )}
-      <MessageBar
-        chatId={id}
-        chatData={chatData}
-        isShowJoinBtn={isShowJoinBtn}
-        setIsShowJoinBtn={setIsShowJoinBtn}
-        isUserTyping={isUserTyping}
-        setIsUserTyping={setIsUserTyping}
-        setParticipantsAmount={setParticipantsAmount}
-        scrollToBottom={scrollToBottom}
-        setShowNewMessagesIndicator={setShowNewMessagesIndicator}
-      />
+            <button
+              type="button"
+              onClick={() => setShowNewMessagesIndicator(false)}
+              aria-label="Close notification"
+            >
+              <IoClose />
+            </button>
+          </NewMessagesNotification>
+        )}
+        <MessageBar
+          chatId={id}
+          chatData={chatData}
+          isShowJoinBtn={isShowJoinBtn}
+          setIsShowJoinBtn={setIsShowJoinBtn}
+          isUserTyping={isUserTyping}
+          setIsUserTyping={setIsUserTyping}
+          setParticipantsAmount={setParticipantsAmount}
+          scrollToBottom={scrollToBottom}
+          setShowNewMessagesIndicator={setShowNewMessagesIndicator}
+          setReplyToMessage={setReplyToMessage}
+          replyToMessage={replyToMessage}
+        />
+      </PositionBox>
     </ChatStyled>
   );
 };

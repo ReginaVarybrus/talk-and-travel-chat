@@ -83,3 +83,58 @@ export const verifyEmail = createAsyncThunk(
     }
   }
 );
+
+export const logInWithGoogle = createAsyncThunk(
+  'auth/logInWithGoogle',
+  async (googleData, { dispatch, rejectWithValue }) => {
+    try {
+      const response = await axiosClient.post(URLs.loginWithSocial, {
+        userEmail: googleData.email,
+      });
+      dispatch(setUsers(response.data.userDto));
+      return response.data;
+    } catch (err) {
+      if (err.response?.status === 401 || err.response?.status === 404) {
+        await axiosClient.post(URLs.registerWithSocial, {
+          userName: googleData.name,
+          userEmail: googleData.email,
+        });
+        const response = await axiosClient.post(URLs.loginWithSocial, {
+          userEmail: googleData.email,
+        });
+        dispatch(setUsers(response.data.userDto));
+        return response.data;
+      }
+      return rejectWithValue(err.response?.data.message || 'Login failed');
+    }
+  }
+);
+
+export const logInWithFacebook = createAsyncThunk(
+  'auth/logInWithFacebook',
+  async (facebookData, { rejectWithValue }) => {
+    console.log('Facebook Data:', facebookData);
+    try {
+      const response = await axiosClient.post(URLs.loginWithSocial, {
+        userEmail: facebookData.email,
+      });
+      console.log('Login response:', response.data);
+      return response.data;
+    } catch (err) {
+      console.error('Login error:', err);
+      if (err.response?.status === 404) {
+        console.log('User not found, registering...');
+        await axiosClient.post(URLs.registerWithSocial, {
+          userName: facebookData.name,
+          userEmail: facebookData.email,
+        });
+        const retryResponse = await axiosClient.post(URLs.loginWithSocial, {
+          userEmail: facebookData.email,
+        });
+        console.log('Retry login response:', retryResponse.data);
+        return retryResponse.data;
+      }
+      return rejectWithValue(err.response?.data.message || 'Login failed');
+    }
+  }
+);

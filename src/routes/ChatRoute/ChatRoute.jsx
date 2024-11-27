@@ -24,7 +24,7 @@ const ChatRoute = () => {
   const [selectedCompanion, setSelectedCompanion] = useState(null);
   const [chatOpenedTime, setChatOpenedTime] = useState(null);
   const currentUserId = useSelector(getUser)?.id;
-  const { responseData } = useFetch(URLs.userCountries);
+  const { responseData } = useFetch(URLs.getUserCountriesChats);
   const {
     stompClient,
     subscribeToMessages,

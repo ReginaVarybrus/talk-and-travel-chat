@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { IoIosArrowDown } from 'react-icons/io';
-import { ScrollButton } from './ScrollToBottonButonStyles';
+import { ScrollButton } from './ScrollToBottomButonStyles';
 
 const ScrollToBottomButton = ({ targetRef }) => {
   const [isScrollButtonVisible, setIsScrollButtonVisible] = useState(false);

@@ -5,6 +5,7 @@ import { CHAT_TYPES } from '@/constants/chatTypes';
 import { useWebSocket } from '@/hooks/useWebSocket.js';
 import BasicButton from '@/components/Buttons/BasicButton/BasicButton';
 import { useChatContext } from '@/providers/ChatProvider';
+import { IoCloseOutline } from 'react-icons/io5';
 
 import {
   MessageBarStyled,
@@ -18,7 +19,10 @@ import {
   ButtonSendMessage,
   SendIcon,
   MaxLimitPopup,
+  ReplyMessageBox,
+  MessageInputBox,
 } from './MessageBarStyled';
+import { CloseBtn } from '../AllUsersModal/AllUsersModalStyled';
 
 const MessageBar = ({
   chatId,
@@ -28,9 +32,12 @@ const MessageBar = ({
   isUserTyping,
   setIsUserTyping,
   scrollToBottom,
+  replyToMessage,
+  setReplyToMessage,
 }) => {
   const [message, setMessage] = useState('');
   const [isMaxLimit, setIsMaxLimit] = useState(false);
+
   const { setSubscriptionRooms } = useChatContext();
   const typingStopTimeoutRef = useRef(null);
   const MAX_CHAR_LIMIT = 1000;
@@ -86,17 +93,24 @@ const MessageBar = ({
     const dataMessageToSend = {
       content: message.trim(),
       chatId,
+      repliedMessageId: replyToMessage?.id || null,
     };
-
     sendMessageOrEvent(dataMessageToSend, URLs.sendMessage);
     setMessage('');
     setIsMaxLimit(false);
+    setReplyToMessage(null);
     handleStopTyping();
     clearTimeout(typingStopTimeoutRef.current);
 
     setTimeout(() => {
       scrollToBottom();
     }, 500);
+  };
+
+  const handleCancelReply = () => {
+    if (replyToMessage) {
+      setReplyToMessage(null);
+    }
   };
 
   const handleJoinClick = () => {
@@ -109,6 +123,7 @@ const MessageBar = ({
     setMessage('');
     setIsMaxLimit(false);
   }, [chatId]);
+
   return (
     <MessageBarStyled>
       {isShowJoinBtn && isGroupChat ? (
@@ -124,40 +139,51 @@ const MessageBar = ({
           />
         </ButtonJoinWrapper>
       ) : (
-        <MessageInputs onSubmit={handleSubmit}>
-          <ButtonAttachFile component="label" variant="contained">
-            <AttachmentIcon />
-            <VisuallyHiddenInput type="file" />
-          </ButtonAttachFile>
-          <TextareaStyled>
-            <TextareaAutosize
-              maxRows={10}
-              aria-label="empty textarea"
-              placeholder="Type here"
-              value={message}
-              onKeyUp={e => {
-                if (e.key === 'Enter' && !e.shiftKey && isMessageNotEmpty) {
-                  handleSubmit(e);
-                }
-              }}
-              onChange={handleChange}
-              maxLength={MAX_CHAR_LIMIT}
-            />
-            {isMaxLimit && (
-              <MaxLimitPopup>
-                You&apos;ve reached the character limit!
-              </MaxLimitPopup>
-            )}
-          </TextareaStyled>
-          <ButtonSendMessage
-            type="submit"
-            value="Send"
-            $isMessageNotEmpty={isMessageNotEmpty}
-            disabled={!isMessageNotEmpty}
-          >
-            <SendIcon />
-          </ButtonSendMessage>
-        </MessageInputs>
+        <MessageInputBox>
+          {replyToMessage && (
+            <ReplyMessageBox className="reply-preview">
+              <h6>Reply to {replyToMessage.userName} </h6>
+              <p>{replyToMessage.content}</p>
+              <CloseBtn onClick={handleCancelReply}>
+                <IoCloseOutline />
+              </CloseBtn>
+            </ReplyMessageBox>
+          )}
+          <MessageInputs onSubmit={handleSubmit}>
+            <ButtonAttachFile component="label" variant="contained">
+              <AttachmentIcon />
+              <VisuallyHiddenInput type="file" />
+            </ButtonAttachFile>
+            <TextareaStyled>
+              <TextareaAutosize
+                maxRows={10}
+                aria-label="empty textarea"
+                placeholder="Type here"
+                value={message}
+                onKeyUp={e => {
+                  if (e.key === 'Enter' && !e.shiftKey && isMessageNotEmpty) {
+                    handleSubmit(e);
+                  }
+                }}
+                onChange={handleChange}
+                maxLength={MAX_CHAR_LIMIT}
+              />
+              {isMaxLimit && (
+                <MaxLimitPopup>
+                  You&apos;ve reached the character limit!
+                </MaxLimitPopup>
+              )}
+            </TextareaStyled>
+            <ButtonSendMessage
+              type="submit"
+              value="Send"
+              $isMessageNotEmpty={isMessageNotEmpty}
+              disabled={!isMessageNotEmpty}
+            >
+              <SendIcon />
+            </ButtonSendMessage>
+          </MessageInputs>
+        </MessageInputBox>
       )}
     </MessageBarStyled>
   );
