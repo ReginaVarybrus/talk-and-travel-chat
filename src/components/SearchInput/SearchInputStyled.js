@@ -12,7 +12,7 @@ export const AutocompleteInputStyled = styled.div`
 
 export const AutocompleteInput = styled.input`
   box-sizing: border-box;
-  min-width: 100%;
+  width: 100%;
   height: 35px;
   font-size: 16px;
   margin-bottom: 25px;

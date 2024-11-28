@@ -63,7 +63,7 @@ export const ImgAvatar = styled.img`
 export const ContentMessage = styled.p`
   text-align: start;
   font-size: 14px;
-  word-break: break-all;
+  word-break: break-word;
   white-space: pre-wrap;
   color: var(--color-dark);
   user-select: text;
