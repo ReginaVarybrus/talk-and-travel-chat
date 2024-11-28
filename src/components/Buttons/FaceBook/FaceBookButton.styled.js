@@ -1,6 +1,5 @@
 import styled from 'styled-components';
-import FBLogo from '@/images/icons/FBLogo.svg'
-
+import { MdFacebook } from 'react-icons/md';
 
 export const FacebookButton = styled.button`
   width: 100%;
@@ -14,7 +13,8 @@ export const FacebookButton = styled.button`
   justify-content: center;
   gap: 8px;
   cursor: pointer;
-  
+  transition: all 0.3s ease;
+
   span {
     font-size: 14px;
     font-weight: 700;
@@ -22,22 +22,20 @@ export const FacebookButton = styled.button`
     letter-spacing: 0em;
     text-align: center;
   }
-  
+
   &:hover {
     background-color: var(--color-blue-1);
   }
 
   @media (min-width: 768px) {
-      background-color: var(--color-grey-4);
-    }
+    background-color: var(--color-grey-4);
+  }
 `;
 
-export const FacebookLogoSVG = styled.svg`
+export const FacebookLogoSVG = styled(MdFacebook)`
   width: 20px;
   height: 20px;
   min-width: 20px;
   min-height: 20px;
-  background-image: url(${FBLogo});
-  background-repeat: no-repeat;
-  background-size: contain;
+  color: var(--color-brand-blue);
 `;

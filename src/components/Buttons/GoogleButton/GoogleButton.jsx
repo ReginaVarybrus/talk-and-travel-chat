@@ -5,7 +5,6 @@ import {
 } from '@/components/Buttons/GoogleButton/GoogleButton.styled';
 import { useDispatch } from 'react-redux';
 import { logInWithGoogle } from '@/redux-store/slices/AuthOperations';
-
 /* global google */
 
 const ButtonGoogle = () => {
@@ -13,8 +12,6 @@ const ButtonGoogle = () => {
 
   const handleCredentialResponse = response => {
     try {
-      console.log('Google Credential Response:', response);
-
       const jwtParts = response.credential.split('.');
       if (jwtParts.length !== 3) {
         throw new Error('Invalid JWT structure');
@@ -29,8 +26,6 @@ const ButtonGoogle = () => {
         );
 
       const tokenData = JSON.parse(decodeBase64Url(jwtParts[1]));
-
-      console.log('Parsed Token Data:', tokenData);
 
       if (!tokenData.email || !tokenData.name) {
         throw new Error('Missing email or name in token data');
