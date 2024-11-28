@@ -46,7 +46,6 @@ const LoginForm = () => {
 
   const handleOpen = () => {
     setOpenModal(true);
-    console.log('is open');
   };
 
   const handleClose = () => {

@@ -8,6 +8,7 @@ const urlToOmit = [
   URLs.verifyEmail,
   URLs.registerWithSocial,
   URLs.loginWithSocial,
+  URLs.checkExistEmail,
 ];
 
 const axiosClient = axios.create({
