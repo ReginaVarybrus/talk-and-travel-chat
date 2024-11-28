@@ -1,7 +1,6 @@
 /* eslint-disable consistent-return */
 import { createAsyncThunk } from '@reduxjs/toolkit';
-import swal from 'sweetalert';
-
+import Swal from 'sweetalert2';
 import { token as authToken, axiosClient } from '@/services/api';
 import { clearUser, setUsers } from '@/redux-store/slices/userSlice';
 import URLs from '@/constants/constants';
@@ -28,15 +27,23 @@ export const register = createAsyncThunk(
   async (userData, { rejectWithValue }) => {
     try {
       const response = await axiosClient.post(URLs.register, userData);
+      Swal.fire({
+        title: 'Success!',
+        text: 'Please check your email for a confirmation link to complete the registration.',
+        icon: 'success',
+        showConfirmButton: false,
+        timer: 2000,
+      });
 
-      swal(
-        'Success!',
-        'Please check your email for a confirmation link to complete the registration.',
-        'success'
-      );
       return response.data;
     } catch (e) {
-      swal('Error!', e.response.data.message || 'Registration failed', 'error');
+      Swal.fire({
+        title: 'Error!',
+        text: 'Failed registration. Please try again.',
+        icon: 'error',
+        showConfirmButton: false,
+        timer: 2000,
+      });
       return rejectWithValue(e.response.data.message);
     }
   }
@@ -49,15 +56,35 @@ export const logIn = createAsyncThunk(
       const response = await axiosClient.post(URLs.login, userData);
       dispatch(setUsers(response.data.userDto));
       authToken.set(response.data.token);
-
+      Swal.fire({
+        text: 'Success login.',
+        icon: 'success',
+        showConfirmButton: false,
+        timer: 1500,
+      });
       return response.data;
     } catch (e) {
       if (e.response.status === 400 || e.response.status === 401) {
-        swal('Error!', 'Email or password invalid', 'error');
+        Swal.fire({
+          text: 'Email or password invalid',
+          icon: 'error',
+          showConfirmButton: false,
+          timer: 2000,
+        });
       } else if (e.response.status === 404) {
-        swal('Error!', 'Email is wrong', 'error');
+        Swal.fire({
+          text: 'Email is wrong.',
+          icon: 'error',
+          showConfirmButton: false,
+          timer: 2000,
+        });
       } else {
-        swal('Error!', 'Login failed', 'error');
+        Swal.fire({
+          text: 'Login failed. Please try again.',
+          icon: 'error',
+          showConfirmButton: false,
+          timer: 2000,
+        });
       }
       return rejectWithValue(e.response.data.message);
     }
@@ -88,14 +115,20 @@ export const verifyEmail = createAsyncThunk(
       authToken.set(token);
       dispatch(setUsers(userDto));
 
-      swal(
-        'Success!',
-        'Your email has been confirmed. Welcome to the app!',
-        'success'
-      );
+      Swal.fire({
+        text: 'Your email has been confirmed. Welcome to the app!',
+        icon: 'success',
+        showConfirmButton: false,
+        timer: 2000,
+      });
       return response.data;
     } catch (error) {
-      swal('Error!', 'Verification failed. Please try again.', 'error');
+      Swal.fire({
+        text: 'Verification failed. Please try again.',
+        icon: 'error',
+        showConfirmButton: false,
+        timer: 2000,
+      });
       return rejectWithValue(error.response.data.message);
     }
   }
@@ -109,6 +142,12 @@ export const logInWithGoogle = createAsyncThunk(
         userEmail: googleData.email,
       });
       dispatch(setUsers(response.data.userDto));
+      Swal.fire({
+        text: 'Success login.',
+        icon: 'success',
+        showConfirmButton: false,
+        timer: 1500,
+      });
       return response.data;
     } catch (err) {
       if (err.response?.status === 401 || err.response?.status === 404) {
@@ -118,6 +157,12 @@ export const logInWithGoogle = createAsyncThunk(
         });
         const response = await axiosClient.post(URLs.loginWithSocial, {
           userEmail: googleData.email,
+        });
+        Swal.fire({
+          text: 'Success registration.',
+          icon: 'success',
+          showConfirmButton: false,
+          timer: 1500,
         });
         dispatch(setUsers(response.data.userDto));
         return response.data;
