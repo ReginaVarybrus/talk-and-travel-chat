@@ -6,11 +6,12 @@ import {
   useEffect,
   useCallback,
 } from 'react';
-import { useFetch } from '@/hooks/useFetch';
-import URLs from '@/constants/constants';
 import { axiosClient } from '@/services/api';
+import URLs from '@/constants/constants';
 import { useSelector } from 'react-redux';
 import { getIsLoggedIn, getToken } from '@/redux-store/selectors';
+import { useWebSocket } from '@/hooks/useWebSocket';
+import { MESSAGE_TYPES } from '@/constants/messageTypes';
 
 const ChatContext = createContext();
 
@@ -21,125 +22,181 @@ export const ChatProvider = ({ children }) => {
   const token = useSelector(getToken);
   const [subscriptionRooms, setSubscriptionRooms] = useState([]);
   const [dataUserChats, setDataUserChats] = useState([]);
-  const [filteredPrivateChats, setFilteredPrivateChats] =
-    useState(dataUserChats);
+
   const [unreadRoomsCount, setUnreadRoomsCount] = useState(0);
   const [unreadDMsCount, setUnreadDMsCount] = useState(0);
   const [searchedValue, setSearchedValue] = useState('');
-  const [isLoading, setIsLoading] = useState(true);
-  // new states
-  // const [unreadGroupMessagesCount, setUnreadGroupMessagesCount] = useState([]);
-  // const [unreadDMsMessagesCount, setUnreadDMsMessagesCount] = useState([]);
+  const [loading, setLoading] = useState({ rooms: false, dms: false });
 
-  const checkLogin = !isLoading && isUserLoggedIn && token;
+  const { subscribeToMessages, unsubscribeFromMessages } = useWebSocket();
 
+  const isLoggedIn = isUserLoggedIn && token;
+
+  // Fetch Rooms and DMs
   useEffect(() => {
-    if (isUserLoggedIn && token) {
-      setIsLoading(false);
-    }
-  }, [isUserLoggedIn, token]);
+    if (!isLoggedIn) return;
 
-  const { responseData: roomsData } = useFetch(
-    checkLogin ? URLs.getUserCountriesChats : null
-  );
-  const { responseData: dmsData } = useFetch(
-    checkLogin ? URLs.getPrivateChats : null
-  );
+    const fetchChats = async () => {
+      setLoading(prev => ({ ...prev, rooms: true, dms: true }));
 
-  useEffect(() => {
-    if (roomsData) {
-      setSubscriptionRooms(roomsData);
-      const totalUnreadRooms = roomsData.reduce(
-        (acc, room) => acc + room.unreadMessagesCount,
-        0
-      );
-      setUnreadRoomsCount(totalUnreadRooms);
+      try {
+        // Fetch rooms
+        const roomsResponse = await axiosClient.get(URLs.getUserCountriesChats);
+        setSubscriptionRooms(roomsResponse.data);
 
-      // set unread message count to Rooms
-      // const unreadGroupMessagesState = roomsData.map(chat => ({
-      //   id: chat.id,
-      //   unreadMessagesCount: chat.unreadMessagesCount,
-      // }));
+        const totalUnreadRooms = roomsResponse.data.reduce(
+          (acc, room) => acc + room.unreadMessagesCount,
+          0
+        );
+        setUnreadRoomsCount(totalUnreadRooms);
 
-      // setUnreadGroupMessagesCount(unreadGroupMessagesState);
-    }
-  }, [roomsData]);
+        // Fetch DMs
+        const dmsResponse = await axiosClient.get(URLs.getPrivateChats);
+        const validChats = dmsResponse.data.filter(
+          chat => chat.companion?.id !== null
+        );
+        setDataUserChats(validChats);
 
-  useEffect(() => {
-    if (dmsData) {
-      const validChats = dmsData.filter(chat => chat.companion.id !== null);
-      setDataUserChats(validChats);
-      setFilteredPrivateChats(validChats);
-      const totalUnreadDMs = validChats.reduce(
-        (acc, chat) => acc + chat.chat.unreadMessagesCount,
-        0
-      );
-      setUnreadDMsCount(totalUnreadDMs);
+        const totalUnreadDMs = validChats.reduce(
+          (acc, chat) => acc + chat.chat.unreadMessagesCount,
+          0
+        );
+        setUnreadDMsCount(totalUnreadDMs);
+      } catch (error) {
+        console.error('Error fetching chats:', error);
+      } finally {
+        setLoading(prev => ({ ...prev, rooms: false, dms: false }));
+      }
+    };
 
-      // set unread message count to DMs
-      // const unreadDMsMessagesState = roomsData.map(chat => ({
-      //   id: chat.id,
-      //   unreadMessagesCount: chat.unreadMessagesCount,
-      // }));
+    fetchChats();
+  }, [isLoggedIn]);
 
-      // setUnreadDMsMessagesCount(unreadDMsMessagesState);
-    }
-  }, [dmsData]);
-
-  const updateUserChats = async () => {
-    try {
-      const response = await axiosClient.get(URLs.getPrivateChats);
-      const validChats = response.data.filter(
-        chat => chat.companion && chat.companion.id !== null
-      );
-      setDataUserChats(validChats);
-      setFilteredPrivateChats(validChats);
-    } catch (error) {
-      console.error('Error updating user chats:', error);
-    }
-  };
-
+  // Update unread messages count
   const updateUnreadMessagesCount = useCallback(
     (chatId, unreadCount, isPrivate) => {
       if (isPrivate) {
-        setDataUserChats(prevChats => {
-          const updatedChats = prevChats.map(chat =>
+        setDataUserChats(prevChats =>
+          prevChats.map(chat =>
             chat.chat.id === chatId
               ? {
                   ...chat,
                   chat: { ...chat.chat, unreadMessagesCount: unreadCount },
                 }
               : chat
-          );
-
-          const totalUnreadDMs = updatedChats.reduce(
-            (acc, chat) => acc + chat.chat.unreadMessagesCount,
-            0
-          );
-          setUnreadDMsCount(totalUnreadDMs);
-          setFilteredPrivateChats(updatedChats);
-          return updatedChats;
-        });
+          )
+        );
       } else {
-        setSubscriptionRooms(prevRooms => {
-          const updatedRooms = prevRooms.map(room =>
+        setSubscriptionRooms(prevRooms =>
+          prevRooms.map(room =>
             room.id === chatId
               ? { ...room, unreadMessagesCount: unreadCount }
               : room
-          );
-
-          const totalUnreadRooms = updatedRooms.reduce(
-            (acc, room) => acc + room.unreadMessagesCount,
-            0
-          );
-          setUnreadRoomsCount(totalUnreadRooms);
-
-          return updatedRooms;
-        });
+          )
+        );
       }
+      setUnreadDMsCount(prev =>
+        dataUserChats.reduce(
+          (acc, chat) => acc + chat.chat.unreadMessagesCount,
+          0
+        )
+      );
+
+      setUnreadRoomsCount(prev =>
+        subscriptionRooms.reduce(
+          (acc, room) => acc + room.unreadMessagesCount,
+          0
+        )
+      );
     },
-    []
+    [dataUserChats, subscriptionRooms]
   );
+
+  // Manage subscriptions
+  useEffect(() => {
+    if (!isLoggedIn) return;
+
+    const subscriptions = new Map();
+
+    const handleNewMessage = (chatId, isPrivate, message) => {
+      if (message.type === MESSAGE_TYPES.TEXT) {
+        setDataUserChats(prevChats =>
+          prevChats.map(chat =>
+            chat.chat.id === chatId
+              ? {
+                  ...chat,
+                  chat: {
+                    ...chat.chat,
+                    unreadMessagesCount: chat.chat.unreadMessagesCount + 1,
+                  },
+                }
+              : chat
+          )
+        );
+
+        setSubscriptionRooms(prevRooms =>
+          prevRooms.map(room =>
+            room.id === chatId
+              ? {
+                  ...room,
+                  unreadMessagesCount: room.unreadMessagesCount + 1,
+                }
+              : room
+          )
+        );
+
+        // Пересчёт общего числа непрочитанных сообщений
+        const totalUnreadDMs = dataUserChats.reduce(
+          (acc, chat) => acc + chat.chat.unreadMessagesCount,
+          0
+        );
+        setUnreadDMsCount(totalUnreadDMs);
+
+        const totalUnreadRooms = subscriptionRooms.reduce(
+          (acc, room) => acc + room.unreadMessagesCount,
+          0
+        );
+        setUnreadRoomsCount(totalUnreadRooms);
+      }
+    };
+
+    // Подписываемся на групповые чаты
+    subscriptionRooms.forEach(room => {
+      if (!subscriptions.has(room.id)) {
+        const subscription = subscribeToMessages(
+          `/notify/chat/${room.id}/messages`,
+          message => handleNewMessage(room.id, false, message)
+        );
+        subscriptions.set(room.id, subscription);
+      }
+    });
+
+    // Подписываемся на приватные чаты
+    dataUserChats.forEach(chat => {
+      if (!subscriptions.has(chat.chat.id)) {
+        const subscription = subscribeToMessages(
+          `/notify/chat/${chat.chat.id}/messages`,
+          message => handleNewMessage(chat.chat.id, true, message)
+        );
+        subscriptions.set(chat.chat.id, subscription);
+      }
+    });
+
+    return () => {
+      // Убираем все подписки при размонтировании
+      subscriptions.forEach((_, chatId) => {
+        unsubscribeFromMessages(chatId);
+      });
+    };
+  }, [isLoggedIn, subscriptionRooms, dataUserChats, updateUnreadMessagesCount]);
+
+  useEffect(() => {
+    console.log('DataUserChats updated:', dataUserChats);
+  }, [dataUserChats]);
+
+  useEffect(() => {
+    console.log('SubscriptionRooms updated:', subscriptionRooms);
+  }, [subscriptionRooms]);
 
   const value = useMemo(
     () => ({
@@ -147,26 +204,20 @@ export const ChatProvider = ({ children }) => {
       setSubscriptionRooms,
       dataUserChats,
       setDataUserChats,
+      // filteredPrivateChats,
+
       unreadRoomsCount,
       unreadDMsCount,
       updateUnreadMessagesCount,
-      updateUserChats,
-      filteredPrivateChats,
-      setFilteredPrivateChats,
       searchedValue,
       setSearchedValue,
-
-      // unreadGroupMessagesCount,
-      // unreadDMsMessagesCount,
-      // setUnreadGroupMessagesCount,
-      // setUnreadDMsMessagesCount,
     }),
     [
       subscriptionRooms,
       dataUserChats,
-      filteredPrivateChats,
       unreadRoomsCount,
       unreadDMsCount,
+      searchedValue,
     ]
   );
 

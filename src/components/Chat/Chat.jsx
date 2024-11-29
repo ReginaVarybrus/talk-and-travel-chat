@@ -76,7 +76,7 @@ const Chat = ({
     unsubscribeFromMessages,
   } = useWebSocket();
 
-  const { updateUnreadMessagesCount } = useChatContext();
+  const { updateUnreadMessagesCount, unreadRoomsCount } = useChatContext();
 
   const debouncedMarkAsRead = useRef(
     debounce(async (chatId, lastMessageId) => {
@@ -281,6 +281,7 @@ const Chat = ({
       setIsLoading(false);
     }
   };
+
   useEffect(() => {
     if (unreadMessages.length > 0) {
       setUnreadCount(unreadMessages.length);
@@ -328,43 +329,43 @@ const Chat = ({
     }
   };
 
-  useEffect(() => {
-    if (isSubscribed && id) {
-      subscribeToMessages(URLs.subscriptionToMessages(id), newMessage => {
-        setMessages(prevMessages => [...prevMessages, newMessage]);
+  // useEffect(() => {
+  //   if (isSubscribed && id) {
+  //     subscribeToMessages(URLs.subscriptionToMessages(id), newMessage => {
+  //       setMessages(prevMessages => [...prevMessages, newMessage]);
 
-        if (newMessage.type === MESSAGE_TYPES.TEXT && messageBlockRef.current) {
-          const isAtBottom =
-            messageBlockRef.current.scrollTop +
-              messageBlockRef.current.clientHeight >=
-            messageBlockRef.current.scrollHeight - 10;
-          if (isAtBottom) {
-            messageBlockRef.current.scrollTo({
-              top: messageBlockRef.current.scrollHeight,
-              behavior: 'smooth',
-            });
-            setMessagesToMarkAsRead(prev => [...prev, newMessage.id]);
-          } else if (newMessage.user.id !== userId) {
-            setUnreadMessages(prev => [...prev, newMessage]);
-            setShowNewMessagesIndicator(true);
-          }
-          if (newMessage.user.id === userId) {
-            setMessagesToMarkAsRead(prev => [...prev, newMessage.id]);
-          }
-        }
-      });
+  //       if (newMessage.type === MESSAGE_TYPES.TEXT && messageBlockRef.current) {
+  //         const isAtBottom =
+  //           messageBlockRef.current.scrollTop +
+  //             messageBlockRef.current.clientHeight >=
+  //           messageBlockRef.current.scrollHeight - 10;
+  //         if (isAtBottom) {
+  //           messageBlockRef.current.scrollTo({
+  //             top: messageBlockRef.current.scrollHeight,
+  //             behavior: 'smooth',
+  //           });
+  //           setMessagesToMarkAsRead(prev => [...prev, newMessage.id]);
+  //         } else if (newMessage.user.id !== userId) {
+  //           setUnreadMessages(prev => [...prev, newMessage]);
+  //           setShowNewMessagesIndicator(true);
+  //         }
+  //         if (newMessage.user.id === userId) {
+  //           setMessagesToMarkAsRead(prev => [...prev, newMessage.id]);
+  //         }
+  //       }
+  //     });
 
-      if (!isPrivateChat && selectedCompanion) {
-        setSelectedCompanion(null);
-      }
+  //     if (!isPrivateChat && selectedCompanion) {
+  //       setSelectedCompanion(null);
+  //     }
 
-      subscribeToUserErrors(URLs.subscriptionToUserErrors(userId), setChatData);
+  //     subscribeToUserErrors(URLs.subscriptionToUserErrors(userId), setChatData);
 
-      return () => {
-        unsubscribeFromMessages();
-      };
-    }
-  }, [id, isSubscribed, setChatData]);
+  //     return () => {
+  //       unsubscribeFromMessages();
+  //     };
+  //   }
+  // }, [id, isSubscribed, setChatData]);
 
   useEffect(() => {
     if (messagesToMarkAsRead.length > 0) {

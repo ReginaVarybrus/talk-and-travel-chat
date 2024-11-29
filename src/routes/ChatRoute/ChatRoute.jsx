@@ -24,18 +24,18 @@ const ChatRoute = () => {
   const [selectedCompanion, setSelectedCompanion] = useState(null);
   const [chatOpenedTime, setChatOpenedTime] = useState(null);
   const currentUserId = useSelector(getUser)?.id;
-  const { responseData } = useFetch(URLs.getUserCountriesChats);
+  // const { responseData } = useFetch(URLs.getUserCountriesChats);
   const {
     stompClient,
-    subscribeToMessages,
-    unsubscribeFromMessages,
+    // subscribeToMessages,
+    // unsubscribeFromMessages,
     subscribeToUsersStatuses,
     sendMessageOrEvent,
     unsubscribeFromUsersStatuses,
   } = useWebSocket();
 
   const {
-    // filteredPrivateChats,
+    filteredPrivateChats,
     subscriptionRooms,
     setSubscriptionRooms,
     // setDataUserChats,
@@ -50,12 +50,12 @@ const ChatRoute = () => {
   const isChatVisible = context?.isChatVisible;
   const setIsChatVisible = context?.setIsChatVisible;
 
-  useEffect(() => {
-    if (responseData) {
-      setSubscriptionRooms(responseData);
-    }
-    console.log('subscription rooms', subscriptionRooms);
-  }, [responseData]);
+  // useEffect(() => {
+  //   if (responseData) {
+  //     setSubscriptionRooms(responseData);
+  //   }
+  //   console.log('subscription rooms', subscriptionRooms);
+  // }, [responseData]);
 
   useEffect(() => {
     dispatch(fetchUsersOnlineStatuses());
@@ -84,32 +84,32 @@ const ChatRoute = () => {
   //   }
   // };
 
-  const handleUnreadRoomsMessagesUpdate = (message, endpoint) => {
-    const match = endpoint.match(/\/chat\/(\d+)\/messages/);
-    const chatId = match ? parseInt(match[1], 10) : null;
+  // const handleUnreadRoomsMessagesUpdate = (message, endpoint) => {
+  //   const match = endpoint.match(/\/chat\/(\d+)\/messages/);
+  //   const chatId = match ? parseInt(match[1], 10) : null;
 
-    if (!chatId) {
-      console.error(`Failed to extract chatId from endpoint: ${endpoint}`);
-      return;
-    }
+  //   if (!chatId) {
+  //     console.error(`Failed to extract chatId from endpoint: ${endpoint}`);
+  //     return;
+  //   }
 
-    if (message.type === MESSAGE_TYPES.TEXT) {
-      setSubscriptionRooms(prevRooms =>
-        prevRooms.map(chat =>
-          chat.id === chatId
-            ? {
-                ...chat,
-                unreadMessagesCount: (chat.unreadMessagesCount || 0) + 1,
-              }
-            : chat
-        )
-      );
-    }
+  //   if (message.type === MESSAGE_TYPES.TEXT) {
+  //     setSubscriptionRooms(prevRooms =>
+  //       prevRooms.map(chat =>
+  //         chat.id === chatId
+  //           ? {
+  //               ...chat,
+  //               unreadMessagesCount: (chat.unreadMessagesCount || 0) + 1,
+  //             }
+  //           : chat
+  //       )
+  //     );
+  //   }
 
-    if (message.type === MESSAGE_TYPES.TEXT) {
-      setUnreadRoomsCount(prevCount => (prevCount || 0) + 1);
-    }
-  };
+  //   if (message.type === MESSAGE_TYPES.TEXT) {
+  //     setUnreadRoomsCount(prevCount => (prevCount || 0) + 1);
+  //   }
+  // };
 
   // const handleUnreadDMsMessagesUpdate = (message, endpoint) => {
   //   const match = endpoint.match(/\/chat\/(\d+)\/messages/);
@@ -159,26 +159,26 @@ const ChatRoute = () => {
   //   }, [chats, handleUpdate]);
   // };
 
-  useEffect(() => {
-    const previousRooms = new Set();
+  // useEffect(() => {
+  //   const previousRooms = new Set();
 
-    subscriptionRooms.forEach(chat => {
-      if (!previousRooms.has(chat.id)) {
-        subscribeToMessages(chat.id, handleUnreadRoomsMessagesUpdate);
-        previousRooms.add(chat.id);
-      }
-    });
+  //   subscriptionRooms.forEach(chat => {
+  //     if (!previousRooms.has(chat.id)) {
+  //       subscribeToMessages(chat.id, handleUnreadRoomsMessagesUpdate);
+  //       previousRooms.add(chat.id);
+  //     }
+  //   });
 
-    return () => {
-      const currentIds = new Set(subscriptionRooms.map(chat => chat.id));
-      previousRooms.forEach(id => {
-        if (!currentIds.has(id)) {
-          unsubscribeFromMessages(id);
-          previousRooms.delete(id);
-        }
-      });
-    };
-  }, [subscriptionRooms]);
+  //   return () => {
+  //     const currentIds = new Set(subscriptionRooms.map(chat => chat.id));
+  //     previousRooms.forEach(id => {
+  //       if (!currentIds.has(id)) {
+  //         unsubscribeFromMessages(id);
+  //         previousRooms.delete(id);
+  //       }
+  //     });
+  //   };
+  // }, [subscriptionRooms]);
 
   // useEffect(() => {
   //   const previousDMs = new Set();
@@ -258,7 +258,7 @@ const ChatRoute = () => {
       <Chat
         chatData={chatData}
         setChatData={setChatData}
-        setSubscriptionRooms={setSubscriptionRooms}
+        // setSubscriptionRooms={setSubscriptionRooms}
         isSubscribed={isSubscribed}
         isShowJoinBtn={isShowJoinBtn}
         setIsShowJoinBtn={setIsShowJoinBtn}

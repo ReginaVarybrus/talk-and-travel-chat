@@ -29,11 +29,11 @@ axiosClient.interceptors.request.use(
     const token = authData ? authData?.token?.replace(/"/g, '') : null;
     const isAuthUrl = urlToOmit.includes(config.url);
 
-    console.log('Is Auth URL:', isAuthUrl);
+    // console.log('Is Auth URL:', isAuthUrl);
 
     if (!isAuthUrl) {
       config.headers.Authorization = `Bearer ${token}`;
-      console.log('Added Authorization header:', config.headers.Authorization);
+      // console.log('Added Authorization header:', config.headers.Authorization);
       return config;
     }
     delete config.headers.Authorization;

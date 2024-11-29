@@ -52,7 +52,7 @@ export const fetchUsersOnlineStatuses = createAsyncThunk(
   async () => {
     try {
       const response = await axiosClient.get(URLs.getUsersOnlineStatusPath);
-      console.log('Original response data:', response.data);
+      // console.log('Original response data:', response.data);
       return Object.entries(response.data).map(([userId, userData]) => ({
         userId: Number(userId),
         status: {

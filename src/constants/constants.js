@@ -34,20 +34,14 @@ const URLs = {
   subscriptionToUserErrors: userId => `/notify/user/${userId}/errors`,
   getCountries: 'v2/main-countries-chats',
   getUserCountriesChats: '/v2/user/public-chats',
-  getPrivateChats: 'v2/user/private-chats',
-  createPrivateChat: 'chats/private',
-  getAllUsers: 'v2/users',
 
   // WS endpoints
-  subscriptionToMessages: chatId => `/notify/chat/${chatId}/messages`,
-  subscriptionToUserErrors: userId => `/notify/user/${userId}/errors`,
   usersOnlineStatus: '/notify/users/onlineStatus',
   sendMessage: '/request/chat/messages',
   joinToGroupChat: '/request/chat/events.joinChat',
   leaveOutGroupChat: '/request/chat/events.leaveChat',
   startTyping: '/request/chat/events.startTyping',
   stopTyping: '/request/chat/events.stopTyping',
-  usersOnlineStatus: '/notify/users/onlineStatus',
   updateOnlineStatus: '/request/auth-user/events.updateOnlineStatus',
 };
 

@@ -5,16 +5,10 @@ import { getToken } from '@/redux-store/selectors.js';
 const WebSocketProvider = ({ children }) => {
   const token = useSelector(getToken);
 
-  if (!token) {
-    return children;
-  }
-
   return (
     <StompSessionProvider
       url={`${import.meta.env.VITE_APP_API_WS_URL}/ws/`}
-      connectHeaders={{
-        Authorization: `Bearer ${token}`,
-      }}
+      connectHeaders={token ? { Authorization: `Bearer ${token}` } : {}}
       reconnectDelay={5000}
     >
       {children}

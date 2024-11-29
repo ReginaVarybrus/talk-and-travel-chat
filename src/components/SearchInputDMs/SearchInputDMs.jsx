@@ -7,28 +7,11 @@ import {
 } from '../SearchInput/SearchInputStyled';
 
 const SearchInputDMs = () => {
-  const {
-    dataUserChats,
-    setFilteredPrivateChats,
-    searchedValue,
-    setSearchedValue,
-  } = useChatContext();
+  const { searchedValue, setSearchedValue } = useChatContext();
 
   const handleSearchChange = e => {
     const { value } = e.target;
     setSearchedValue(value);
-
-    setFilteredPrivateChats(
-      dataUserChats.filter(chat => {
-        const fullName = chat.companion.userName.toLowerCase();
-        const [firstName, lastName] = fullName.split(' ');
-        return (
-          fullName.startsWith(value.toLowerCase()) ||
-          (firstName && firstName.startsWith(value.toLowerCase())) ||
-          (lastName && lastName.startsWith(value.toLowerCase()))
-        );
-      })
-    );
   };
 
   return (
