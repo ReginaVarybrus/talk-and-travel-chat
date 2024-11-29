@@ -184,7 +184,6 @@ export const UserContactInfo = styled.div`
 export const SendMessageBtn = styled.button`
   background: none;
   border: none;
-  cursor: pointer;
   transition: all 0.3s ease;
 
   svg {
@@ -217,7 +216,6 @@ export const CloseBtn = styled.button`
   top: 9px;
   background: none;
   border: none;
-  cursor: pointer;
 
   svg {
     stroke: var(--color-grey-9);
@@ -255,7 +253,6 @@ export const ExitOrJoinBtn = styled.button`
   padding: 8px 16px;
   background: none;
   border: none;
-  cursor: pointer;
   font-size: 14px;
   font-weight: 700;
   color: var(--color-grey-9);

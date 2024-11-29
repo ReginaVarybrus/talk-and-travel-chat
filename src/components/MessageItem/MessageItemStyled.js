@@ -114,7 +114,6 @@ export const ButtonReply = styled.button`
   border: none;
   background-color: transparent;
   color: var(--color-blue-3);
-  cursor: pointer;
   transition: all 0.3s ease;
 
   &:hover,

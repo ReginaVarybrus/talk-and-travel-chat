@@ -6,8 +6,8 @@ import Modal from '@mui/material/Modal';
 import { IoCloseOutline } from 'react-icons/io5';
 import { axiosClient } from '@/services/api';
 import URLs from '@/constants/constants';
+import { SignUpBtn } from '@/routes/RegisterRoute/RegisterRouteStyled';
 import { BoxStyled, CloseBtn, Subtitle, Title } from './RecoveryPasswordStyled';
-import { SignUpBtn } from '../RegisterForm/RegisterForm.styled';
 
 const RecoveryPassword = ({ isOpen, onClose }) => {
   const sendRecoveryEmail = async email => {

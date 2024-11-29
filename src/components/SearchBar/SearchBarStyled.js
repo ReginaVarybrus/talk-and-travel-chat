@@ -44,7 +44,6 @@ export const ButtonMapOpen = styled.button`
   color: var(--color-grey-8);
   border-radius: 4px;
   border: 1px solid var(--color-brand-blue);
-  cursor: pointer;
   &:hover {
     background: var(--color-blue-1);
   }

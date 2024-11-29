@@ -1,5 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { fetchUsersOnlineStatuses } from '@/redux-store/UserOperations/UserOperations';
+import { fetchUsersOnlineStatuses } from '@/redux-store/user/userOperations';
 
 const initialState = {
   statuses: [],

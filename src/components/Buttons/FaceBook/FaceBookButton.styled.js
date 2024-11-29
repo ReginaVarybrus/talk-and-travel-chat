@@ -12,7 +12,6 @@ export const FacebookButton = styled.button`
   display: flex;
   justify-content: center;
   gap: 8px;
-  cursor: pointer;
   transition: all 0.3s ease;
 
   span {

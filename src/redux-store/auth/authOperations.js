@@ -2,7 +2,7 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import Swal from 'sweetalert2';
 import { token as authToken, axiosClient } from '@/services/api';
-import { clearUser, setUsers } from '@/redux-store/slices/userSlice';
+import { clearUser, setUsers } from '@/redux-store/user/userSlice';
 import URLs from '@/constants/constants';
 
 export const checkEmailExists = createAsyncThunk(

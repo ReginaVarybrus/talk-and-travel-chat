@@ -8,7 +8,7 @@ import { getUser } from '@/redux-store/selectors';
 import {
   updateUser,
   updateUsersAvatar,
-} from '@/redux-store/UserOperations/UserOperations';
+} from '@/redux-store/user/userOperations';
 import { useWebSocket } from '@/hooks/useWebSocket.js';
 
 import {
@@ -39,7 +39,7 @@ import {
   schema,
   formFields,
 } from '@/routes/AccountRoute/AccountRouteValidationSchema';
-import { logOut } from '@/redux-store/slices/AuthOperations';
+import { logOut } from '@/redux-store/auth/authOperations';
 import TextButton from '@/components/Buttons/TextButton/TextButton';
 import MediumOutlinedButton from '@/components/Buttons/MediumOutlined/MediumOutlinedButton';
 import MediumFilledButton from '@/components/Buttons/MediumFilledButton/MediumFilledButton';

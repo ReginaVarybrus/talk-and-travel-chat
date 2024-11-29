@@ -23,7 +23,6 @@ export const HeaderButtonBack = styled.button`
   padding: 0;
   background: none;
   border: none;
-  cursor: pointer;
   color: var(--color-grey-9);
   transition: color 0.3s;
 
@@ -44,7 +43,6 @@ export const HeaderButtonOpenMenu = styled.button`
   padding: 0;
   background: none;
   border: none;
-  cursor: pointer;
   color: var(--color-grey-9);
   transition: color 0.3s;
 
@@ -113,6 +111,7 @@ export const MobileAvatarImg = styled.img`
   border-radius: 4px;
   object-fit: cover;
 `;
+
 export const LetterAvatarStyled = styled.div`
   display: flex;
   justify-content: center;

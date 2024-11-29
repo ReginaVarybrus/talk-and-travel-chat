@@ -4,7 +4,7 @@ import {
   GoogleLogoSVG,
 } from '@/components/Buttons/GoogleButton/GoogleButton.styled';
 import { useDispatch } from 'react-redux';
-import { logInWithGoogle } from '@/redux-store/slices/AuthOperations';
+import { logInWithGoogle } from '@/redux-store/auth/authOperations';
 /* global google */
 
 const ButtonGoogle = () => {

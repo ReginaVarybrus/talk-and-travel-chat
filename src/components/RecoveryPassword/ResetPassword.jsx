@@ -6,13 +6,13 @@ import URLs from '@/constants/constants';
 import InputField from '@/components/InputField/InputField';
 import { axiosClient } from '@/services/api';
 import { routesPath } from '@/routes/routesConfig';
+import { SignUpBtn } from '@/routes/RegisterRoute/RegisterRouteStyled';
 import {
   ResetPasswordBackground,
   ResetPasswordContainer,
   SubtitleResetPage,
   TitleResetPage,
 } from './RecoveryPasswordStyled';
-import { SignUpBtn } from '../RegisterForm/RegisterForm.styled';
 
 const ResetPassword = () => {
   const navigate = useNavigate();

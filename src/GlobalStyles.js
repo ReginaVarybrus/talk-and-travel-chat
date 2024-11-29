@@ -42,6 +42,7 @@ body {
   font-family: "Roboto", sans-serif;
   margin: 0;
   user-select: none;
+    box-sizing: border-box;
 }
 
 ul {
@@ -95,6 +96,10 @@ p {
   @media ${device.tablet} {
     font-size: 16px;
   }
+}
+
+button {
+  cursor: pointer;
 }
 
 svg{
