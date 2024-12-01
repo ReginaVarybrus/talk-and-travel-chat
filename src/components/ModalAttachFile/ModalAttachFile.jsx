@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import Backdrop from '@mui/material/Backdrop';
 import Fade from '@mui/material/Fade';
 import PropTypes from 'prop-types';
@@ -5,38 +6,33 @@ import URLs from '@/constants/constants';
 import { axiosClient } from '@/services/api';
 import { IoCloseOutline } from 'react-icons/io5';
 import { CloseBtn } from '@/components/CountryInfo/CountryInfoStyled.js';
+import ConfirmBlock from '@/components/ConfirmBlock/ConfirmBlock.jsx';
+import Loader from '@/components/Loader/Loader';
 import {
   ModalWindowStyled,
   InfoModalStyled,
-  ConfirmBlock,
 } from '@/components/UserInfoModal/UserInfoModalStyled.js';
 
-import { PreSendImage } from './ModalAttachFileStyled.js';
+import { SendedImage, LoaderStyleBox } from './ModalAttachFileStyled.js';
 
 const ModalAttachFile = ({ open, handleClose, selectedFile, chatId, src }) => {
+  const [isLoading, setIsLoading] = useState(false);
   // Attachment image feature
   const handleUpload = async () => {
     if (!selectedFile) return alert('Please select a file first!');
 
-    const dataToSend = {
-      content: 'Uploaded an image',
-      chatId,
-      // repliedMessageId : number,
-      attachmentType: 'IMAGE',
-      file: selectedFile,
-    };
+    setIsLoading(true);
 
-    // const formData = new FormData();
-    // formData.append('content', 'Uploaded an image');
-    // formData.append('chatId', chatId);
-    // formData.append('attachmentType', 'IMAGE');
-    // formData.append('file', selectedFile);
+    const formData = new FormData();
+    formData.append('content', 'Image');
+    formData.append('chatId', chatId);
+    formData.append('attachmentType', 'IMAGE');
+    formData.append('file', selectedFile);
 
     try {
       const response = await axiosClient.post(
         URLs.getMessages(chatId),
-        dataToSend,
-        // formData,
+        formData,
         {
           headers: {
             'Content-Type': 'multipart/form-data',
@@ -49,6 +45,9 @@ const ModalAttachFile = ({ open, handleClose, selectedFile, chatId, src }) => {
       }
     } catch (error) {
       console.error('Error uploading file:', error);
+    } finally {
+      setIsLoading(false);
+      handleClose();
     }
   };
 
@@ -73,17 +72,21 @@ const ModalAttachFile = ({ open, handleClose, selectedFile, chatId, src }) => {
           </CloseBtn>
           <h5>Send an image</h5>
 
-          <hr />
-          <PreSendImage src={src} alt="sended file" />
-          <hr />
-          <ConfirmBlock>
-            <button type="button" className="confirm" onClick={handleUpload}>
-              Yes, send
-            </button>
-            <button type="button" className="cancel" onClick={handleClose}>
-              Cancel
-            </button>
-          </ConfirmBlock>
+          <hr style={{ margin: '24px 0' }} />
+          {isLoading ? (
+            <LoaderStyleBox>
+              <Loader size={50} />
+            </LoaderStyleBox>
+          ) : (
+            <SendedImage src={src} alt="sended file" />
+          )}
+          <hr style={{ margin: '24px 0' }} />
+          <ConfirmBlock
+            onConfirm={handleUpload}
+            onCancel={handleClose}
+            confirmText="Yes, send"
+            cancelText="Cancel"
+          />
         </InfoModalStyled>
       </Fade>
     </ModalWindowStyled>

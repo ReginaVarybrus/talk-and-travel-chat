@@ -90,12 +90,8 @@ const MessageBar = ({
       console.log('selected file', file);
       setSelectedFile(file);
       setOpen(true);
+      event.target.value = null;
     }
-    // if (selectedFile) {
-    //   setOpen(true);
-    // } else {
-    //   alert('Please select a file first!');
-    // }
   };
 
   const handleSubmit = e => {
