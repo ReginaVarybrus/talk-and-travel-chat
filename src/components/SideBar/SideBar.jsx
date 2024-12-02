@@ -60,10 +60,7 @@ const SideBar = () => {
         >
           {avatar?.image50x50 ? (
             <ImgAvatar
-              src={
-                `${avatar?.image50x50}?lastmod=${new Date().getTime()}` ||
-                undefined
-              }
+              src={avatar?.image50x50 || undefined}
               alt={`${userName}'s avatar`}
             />
           ) : (

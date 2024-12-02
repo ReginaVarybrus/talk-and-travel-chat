@@ -56,19 +56,11 @@ const AccountRoute = () => {
   // this avatarPreview is used to render Avatar when user tries to upload a new image.
   const [avatarPreview, setAvatarPreview] = useState(null);
   const [avatarBlob, setavatarBlob] = useState(null);
-  // handleAvatarChange catches the file picked by user
-  const handleAvatarChange = event => {
-    const file = event.target.files[0];
-    if (file) {
-      if (file.size > 2 * 1024 * 1024) {
-        console.error('File is too large. Please select a file under 2MB.');
-        return;
-      }
-      // Check the file type (e.g., allow only images)
-      if (!file.type.startsWith('image/')) {
-        console.error('Only image files are allowed.');
-        return;
-      }
+  const [cacheBuster, setCacheBuster] = useState(Date.now());
+
+  // delete the exif data from file before sending it to server:
+  function EXIFdelete(file) {
+    return new Promise((resolve, reject) => {
       const reader = new FileReader();
       reader.onload = e => {
         const img = new Image();
@@ -89,29 +81,21 @@ const AccountRoute = () => {
                   type: file.type, // Preserve the original file type
                   lastModified: Date.now(), // Set the last modification date
                 });
-
-                setavatarBlob(fileWithMetadata); // Use the File object instead of Blob
-                setAvatarPreview(URL.createObjectURL(fileWithMetadata)); // Set preview URL
+                resolve(fileWithMetadata); // Resolve with the cleaned file
+              } else {
+                reject(new Error('Failed to create blob.'));
               }
             },
             file.type, // Use the original file type
             1.0 // Quality (1.0 for full quality)
           );
         };
-
         img.src = e.target.result;
       };
-
+      reader.onerror = () => reject(new Error('Failed to read file.'));
       reader.readAsDataURL(file);
-      console.log(avatarPreview);
-      console.log(avatarBlob);
-
-      // Reset the input value to allow reselecting the same file
-      event.target.value = null;
-    } else {
-      console.error('No file selected');
-    }
-  };
+    });
+  }
 
   const formik = useFormik({
     initialValues: user,
@@ -122,14 +106,15 @@ const AccountRoute = () => {
       setLoading(true);
       try {
         let userUpdateResult;
-        console.log(avatarPreview);
-        console.log(avatarBlob);
-
         if (avatarPreview) {
+          const cleanedFile = await EXIFdelete(avatarBlob);
           const [avatarUpdateResult, userResult] = await Promise.all([
-            dispatch(updateUsersAvatar(avatarBlob)),
+            dispatch(updateUsersAvatar(cleanedFile)),
             dispatch(updateUser(values)),
           ]);
+          if (updateUsersAvatar.fulfilled.match(avatarUpdateResult)) {
+            setCacheBuster(Date.now()); // Update cacheBuster on successful avatar update
+          }
           if (!updateUsersAvatar.fulfilled.match(avatarUpdateResult)) {
             console.error('Avatar Update Failed:', avatarUpdateResult.error);
             return;
@@ -141,6 +126,8 @@ const AccountRoute = () => {
         if (updateUser.fulfilled.match(userUpdateResult)) {
           navigate(routesPath.ACCOUNT);
           resetForm();
+          setAvatarPreview(null);
+          setavatarBlob(null);
           setEditMode(false);
         } else {
           console.error('Update Failed:', userUpdateResult.error);
@@ -164,6 +151,40 @@ const AccountRoute = () => {
     setAvatarPreview(null);
     setEditMode(false);
   };
+
+  // handleAvatarChange catches the file picked by user
+  const handleAvatarChange = event => {
+    // Validation of file selected by user by size and by type:
+    const file = event.target.files[0];
+    if (file) {
+      // Check the file type (e.g., allow only images)
+      if (!file.type.startsWith('image/')) {
+        formik.setErrors({
+          ...formik.errors,
+          avatar: 'Only image files are allowed.',
+        });
+        return;
+      }
+      if (file.size > 2 * 1024 * 1024) {
+        formik.setErrors({
+          ...formik.errors,
+          avatar: 'Please select a file under 2MB.',
+        });
+        return;
+      }
+      formik.setErrors({ ...formik.errors, avatar: '' }); // Clear any previous avatar errors
+      setavatarBlob(file); // save file for further metadata change before submit
+      console.log(avatarBlob);
+      // Set preview URL for the selected image
+      setAvatarPreview(URL.createObjectURL(file));
+      console.log(avatarPreview);
+      // Reset the input value to allow reselecting the same file
+      event.target.value = null;
+    } else {
+      console.error('No file selected');
+    }
+  };
+
   /* On-fligth validation of ABOUT field to prevent user
   from typing any symbols above maximum length set in scheme  */
   const handleChange = e => {
@@ -193,7 +214,10 @@ const AccountRoute = () => {
       <ProfileContainer>
         <AvatarBlock>
           <Avatar
-            src={avatarPreview || user.avatar?.image256x256}
+            src={
+              avatarPreview ||
+              `${user.avatar?.image256x256}?cache=${cacheBuster}`
+            }
             alt="User Avatar"
           />
           {editMode && (
@@ -206,6 +230,11 @@ const AccountRoute = () => {
               />
               <TextButton htmlFor="file-upload" text="Change photo" />
             </>
+          )}
+          {formik.errors.avatar && (
+            <p style={{ color: 'red', marginTop: '8px' }}>
+              {formik.errors.avatar}
+            </p>
           )}
         </AvatarBlock>
         <InputBlock>
