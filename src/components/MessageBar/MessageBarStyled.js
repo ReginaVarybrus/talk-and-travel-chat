@@ -118,7 +118,6 @@ export const ButtonSendMessage = styled.button`
   height: 48px;
   background: var(--white-color);
   border-radius: 8px;
-  cursor: pointer;
   border: ${({ $isMessageNotEmpty }) =>
     $isMessageNotEmpty
       ? '1px solid var(--color-brand-blue)'

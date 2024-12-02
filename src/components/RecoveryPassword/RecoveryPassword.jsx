@@ -1,13 +1,13 @@
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
+import Swal from 'sweetalert2';
 import InputField from '@/components/InputField/InputField';
 import Modal from '@mui/material/Modal';
 import { IoCloseOutline } from 'react-icons/io5';
-import swal from 'sweetalert';
 import { axiosClient } from '@/services/api';
 import URLs from '@/constants/constants';
+import { SignUpBtn } from '@/routes/RegisterRoute/RegisterRouteStyled';
 import { BoxStyled, CloseBtn, Subtitle, Title } from './RecoveryPasswordStyled';
-import { SignUpBtn } from '../RegisterForm/RegisterForm.styled';
 
 const RecoveryPassword = ({ isOpen, onClose }) => {
   const sendRecoveryEmail = async email => {
@@ -16,20 +16,24 @@ const RecoveryPassword = ({ isOpen, onClose }) => {
         userEmail: email,
       });
       if (response.status === 202) {
-        swal(
-          'Check your email',
-          'We have sent you a recovery link. Please check your inbox',
-          'info'
-        );
+        Swal.fire({
+          title: 'Check your email',
+          text: 'We have sent you a recovery link. Please check your inbox',
+          icon: 'info',
+          showConfirmButton: false,
+          timer: 2000,
+        });
         onClose();
       }
     } catch (error) {
       console.error('Mock error:', error);
-      swal(
-        'Error',
-        'Failed to send recovery email. Please try again.',
-        'error'
-      );
+      Swal.fire({
+        title: 'Error',
+        text: 'Failed to send recovery email. Please try again.',
+        icon: 'error',
+        showConfirmButton: false,
+        timer: 2000,
+      });
     }
   };
 
