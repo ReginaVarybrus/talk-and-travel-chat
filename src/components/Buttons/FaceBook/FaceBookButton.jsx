@@ -3,7 +3,7 @@ import {
   FacebookLogoSVG,
 } from '@/components/Buttons/FaceBook/FaceBookButton.styled';
 import { useDispatch } from 'react-redux';
-import { logInWithFacebook } from '@/redux-store/slices/AuthOperations';
+import { logInWithFacebook } from '@/redux-store/auth/authOperations';
 
 /* global FB */
 

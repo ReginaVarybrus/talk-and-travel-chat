@@ -1,24 +1,6 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
-import swal from 'sweetalert';
-
 import { axiosClient } from '@/services/api';
-import { setUsers } from '@/redux-store/slices/userSlice';
 import URLs from '@/constants/constants';
-
-export const fetchCurrentUser = createAsyncThunk(
-  'user/fetch',
-  async (userId, { dispatch }) =>
-  {
-    try {
-      const response = await axiosClient.post(URLs.currentUser, userId);
-      dispatch(setUsers(response.data));
-      // console.log('fetchCurrentUser:', response.data);
-      return response.data;
-    } catch (e) {
-      throw new Error(swal('Error!', 'login failed', 'error'));
-    }
-  }
-);
 
 export const updateUser = createAsyncThunk('user/update', async user =>
 {
@@ -56,7 +38,7 @@ export const fetchUsersOnlineStatuses = createAsyncThunk(
   {
     try {
       const response = await axiosClient.get(URLs.getUsersOnlineStatusPath);
-      // console.log('Original response data:', response.data);
+      console.log('Original response data:', response.data);
       return Object.entries(response.data).map(([userId, userData]) => ({
         userId: Number(userId),
         status: {

@@ -4,6 +4,8 @@ import URLs from '@/constants/constants';
 import { CHAT_TYPES } from '@/constants/chatTypes';
 import { useWebSocket } from '@/hooks/useWebSocket.js';
 import BasicButton from '@/components/Buttons/BasicButton/BasicButton';
+import ModalAttachFile from '@/components/ModalAttachFile/ModalAttachFile';
+import { CloseBtn } from '@/components//AllUsersModal/AllUsersModalStyled';
 import { useChatContext } from '@/providers/ChatProvider';
 import { IoCloseOutline } from 'react-icons/io5';
 
@@ -22,7 +24,6 @@ import {
   ReplyMessageBox,
   MessageInputBox,
 } from './MessageBarStyled';
-import { CloseBtn } from '../AllUsersModal/AllUsersModalStyled';
 
 const MessageBar = ({
   chatId,
@@ -37,6 +38,8 @@ const MessageBar = ({
 }) => {
   const [message, setMessage] = useState('');
   const [isMaxLimit, setIsMaxLimit] = useState(false);
+  const [open, setOpen] = useState(false);
+  const [selectedFile, setSelectedFile] = useState(null);
 
   const { setSubscriptionRooms } = useChatContext();
   const typingStopTimeoutRef = useRef(null);
@@ -78,6 +81,17 @@ const MessageBar = ({
     typingStopTimeoutRef.current = setTimeout(() => {
       handleStopTyping();
     }, 1500);
+  };
+
+  // Attachment image feature
+  const handleFileChange = event => {
+    const file = event.target.files[0];
+    if (file) {
+      console.log('selected file', file);
+      setSelectedFile(file);
+      setOpen(true);
+      event.target.value = null;
+    }
   };
 
   const handleSubmit = e => {
@@ -124,6 +138,8 @@ const MessageBar = ({
     setIsMaxLimit(false);
   }, [chatId]);
 
+  const handleClose = () => setOpen(false);
+
   return (
     <MessageBarStyled>
       {isShowJoinBtn && isGroupChat ? (
@@ -141,7 +157,7 @@ const MessageBar = ({
       ) : (
         <MessageInputBox>
           {replyToMessage && (
-            <ReplyMessageBox className="reply-preview">
+            <ReplyMessageBox>
               <h6>Reply to {replyToMessage.userName} </h6>
               <p>{replyToMessage.content}</p>
               <CloseBtn onClick={handleCancelReply}>
@@ -150,7 +166,14 @@ const MessageBar = ({
             </ReplyMessageBox>
           )}
           <MessageInputs onSubmit={handleSubmit}>
-            <ButtonAttachFile component="label" variant="contained">
+            <ButtonAttachFile
+              component="label"
+              variant="contained"
+              type="file"
+              accept="image/*"
+              onChange={handleFileChange}
+              multiple
+            >
               <AttachmentIcon />
               <VisuallyHiddenInput type="file" />
             </ButtonAttachFile>
@@ -178,13 +201,20 @@ const MessageBar = ({
               type="submit"
               value="Send"
               $isMessageNotEmpty={isMessageNotEmpty}
-              disabled={!isMessageNotEmpty}
+              disabled={!isMessageNotEmpty || !selectedFile}
             >
               <SendIcon />
             </ButtonSendMessage>
           </MessageInputs>
         </MessageInputBox>
       )}
+      <ModalAttachFile
+        open={open}
+        handleClose={handleClose}
+        selectedFile={selectedFile}
+        chatId={chatId}
+        src={selectedFile ? URL.createObjectURL(selectedFile) : ''}
+      />
     </MessageBarStyled>
   );
 };

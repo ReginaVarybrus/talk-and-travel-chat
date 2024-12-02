@@ -113,7 +113,6 @@ export const CloseBtn = styled.button`
   top: 9px;
   background: none;
   border: none;
-  cursor: pointer;
 
   svg {
     stroke: var(--color-grey-9);
@@ -214,8 +213,6 @@ export const SendMessageBtn = styled.button`
   align-items: center;
   padding: 12px 24px;
   font-size: 16px;
-  font-weight: 700;
-  line-height: 19.2px;
   letter-spacing: -0.28px;
   width: 106px;
   height: 46px;
@@ -224,7 +221,6 @@ export const SendMessageBtn = styled.button`
   outline: none;
   background: var(--color-brand-blue);
   box-shadow: 4px 2px 16px 0px rgba(136, 165, 191, 0.48);
-  cursor: pointer;
   color: var(--white-color);
 
   &:hover {
@@ -334,14 +330,12 @@ export const MoreInfoBtn = styled.button`
   justify-content: center;
   align-items: center;
   font-size: 12px;
-  font-weight: 700;
   width: 85px;
   height: 30px;
   border: 1px solid var(--color-brand-blue);
   border-radius: 8px;
   outline: none;
   background: var(--white-color);
-  cursor: pointer;
   color: var(--color-grey-8);
 
   &:hover {
@@ -391,7 +385,6 @@ export const ButtonBack = styled.button`
   align-items: center;
   background: transparent;
   border: none;
-  cursor: pointer;
   width: 35px;
   height: 35px;
 

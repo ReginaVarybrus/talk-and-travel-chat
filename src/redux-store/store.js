@@ -10,9 +10,9 @@ import {
   REGISTER,
 } from 'redux-persist';
 import storage from 'redux-persist/lib/storage';
-import { authSlice } from './slices/authSlice';
-import { userSlice } from './slices/userSlice';
-import { userStatusesSlice } from './slices/userStatusesSlice';
+import { authSlice } from './auth/authSlice';
+import { userSlice } from './user/userSlice';
+import { userStatusesSlice } from './user/userStatusesSlice';
 
 const authPersistConfig = {
   key: 'auth',

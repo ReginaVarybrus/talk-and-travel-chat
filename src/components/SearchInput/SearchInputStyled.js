@@ -4,15 +4,15 @@ import { FiSearch } from 'react-icons/fi';
 
 export const AutocompleteInputStyled = styled.div`
   position: relative;
-  min-width: 90%;
+  width: 90%;
   @media ${device.tablet} {
-    min-width: 100%;
+    width: 100%;
   }
 `;
 
 export const AutocompleteInput = styled.input`
   box-sizing: border-box;
-  min-width: 100%;
+  width: 100%;
   height: 35px;
   font-size: 16px;
   margin-bottom: 25px;

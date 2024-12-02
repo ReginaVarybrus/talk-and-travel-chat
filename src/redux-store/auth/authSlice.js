@@ -6,7 +6,7 @@ import {
   verifyEmail,
   logInWithFacebook,
   logInWithGoogle,
-} from './AuthOperations.js';
+} from './authOperations.js';
 
 const initialState = {
   token: null,

@@ -1,6 +1,6 @@
 import Backdrop from '@mui/material/Backdrop';
 import Fade from '@mui/material/Fade';
-import { SignUpBtn } from '@/components/RegisterForm/RegisterForm.styled';
+import { SignUpBtn } from '@/routes/RegisterRoute/RegisterRouteStyled';
 import PropTypes from 'prop-types';
 import URLs from '@/constants/constants';
 import { axiosClient } from '@/services/api';
@@ -11,6 +11,7 @@ import { useWebSocket } from '@/hooks/useWebSocket';
 import { useState } from 'react';
 import { IoCloseOutline } from 'react-icons/io5';
 import { CloseBtn } from '@/components/CountryInfo/CountryInfoStyled.js';
+import ConfirmBlock from '@/components/ConfirmBlock/ConfirmBlock.jsx';
 import {
   ModalWindowStyled,
   InfoModalStyled,
@@ -22,7 +23,6 @@ import {
   InfoIcon,
   ButtonBlock,
   ButtonLeave,
-  ConfirmBlock,
   ConfirmModalStyled,
 } from './UserInfoModalStyled';
 
@@ -180,22 +180,12 @@ const UserInfoModal = ({
         <Fade in={confirmOpen}>
           <ConfirmModalStyled>
             <h5>Are you sure you want to leave the chat?</h5>
-            <ConfirmBlock>
-              <button
-                type="button"
-                className="confirm"
-                onClick={handleLeaveGroup}
-              >
-                Yes, leave
-              </button>
-              <button
-                type="button"
-                className="cancel"
-                onClick={closeConfirmation}
-              >
-                Cancel
-              </button>
-            </ConfirmBlock>
+            <ConfirmBlock
+              onConfirm={handleLeaveGroup}
+              onCancel={closeConfirmation}
+              confirmText="Yes, leave"
+              cancelText="Cancel"
+            />
           </ConfirmModalStyled>
         </Fade>
       </ModalWindowStyled>

@@ -110,6 +110,7 @@ const MessageList = ({
             userAvatarUrl={message.user?.avatar}
             date={message.creationDate}
             type={message.type}
+            attachment={message.attachment}
             isShownAvatar={isShownAvatar}
             isOnline={isOnline}
             isPrivateChat={isPrivateChat}
