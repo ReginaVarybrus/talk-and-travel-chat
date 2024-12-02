@@ -130,6 +130,10 @@ export const EditButton = styled.button`
   border: none;
   outline: none;
   cursor: pointer;
+
+  &:hover{
+    scale: 120%;
+  }
 `;
 
 export const EditPencilIcon = styled(LuPencil)`

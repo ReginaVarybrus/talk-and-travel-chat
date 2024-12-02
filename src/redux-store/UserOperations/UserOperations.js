@@ -7,11 +7,12 @@ import URLs from '@/constants/constants';
 
 export const fetchCurrentUser = createAsyncThunk(
   'user/fetch',
-  async (userId, { dispatch }) => {
+  async (userId, { dispatch }) =>
+  {
     try {
       const response = await axiosClient.post(URLs.currentUser, userId);
       dispatch(setUsers(response.data));
-      console.log('fetchCurrentUser:', response.data);
+      // console.log('fetchCurrentUser:', response.data);
       return response.data;
     } catch (e) {
       throw new Error(swal('Error!', 'login failed', 'error'));
@@ -19,7 +20,8 @@ export const fetchCurrentUser = createAsyncThunk(
   }
 );
 
-export const updateUser = createAsyncThunk('user/update', async user => {
+export const updateUser = createAsyncThunk('user/update', async user =>
+{
   try {
     const { data } = await axiosClient.put(URLs.updateUser, user);
     return data;
@@ -30,7 +32,8 @@ export const updateUser = createAsyncThunk('user/update', async user => {
 
 export const updateUsersAvatar = createAsyncThunk(
   'user/avatar',
-  async avatar => {
+  async avatar =>
+  {
     try {
       const formData = new FormData();
       formData.append('image', avatar);
@@ -49,10 +52,11 @@ export const updateUsersAvatar = createAsyncThunk(
 
 export const fetchUsersOnlineStatuses = createAsyncThunk(
   'onlineUsers/fetchStatuses',
-  async () => {
+  async () =>
+  {
     try {
       const response = await axiosClient.get(URLs.getUsersOnlineStatusPath);
-      console.log('Original response data:', response.data);
+      // console.log('Original response data:', response.data);
       return Object.entries(response.data).map(([userId, userData]) => ({
         userId: Number(userId),
         status: {

@@ -69,9 +69,43 @@ const AccountRoute = () => {
         console.error('Only image files are allowed.');
         return;
       }
-      setavatarBlob(file);
-      // Set preview URL for the selected image
-      setAvatarPreview(URL.createObjectURL(file));
+      const reader = new FileReader();
+      reader.onload = e => {
+        const img = new Image();
+        img.onload = () => {
+          const canvas = document.createElement('canvas');
+          canvas.width = img.width;
+          canvas.height = img.height;
+
+          const ctx = canvas.getContext('2d');
+          ctx.drawImage(img, 0, 0);
+
+          // Convert the canvas image to a Blob without EXIF metadata
+          canvas.toBlob(
+            blob => {
+              if (blob) {
+                // Convert the Blob into a File object
+                const fileWithMetadata = new File([blob], 'avatar.jpg', {
+                  type: file.type, // Preserve the original file type
+                  lastModified: Date.now(), // Set the last modification date
+                });
+
+                setavatarBlob(fileWithMetadata); // Use the File object instead of Blob
+                setAvatarPreview(URL.createObjectURL(fileWithMetadata)); // Set preview URL
+              }
+            },
+            file.type, // Use the original file type
+            1.0 // Quality (1.0 for full quality)
+          );
+        };
+
+        img.src = e.target.result;
+      };
+
+      reader.readAsDataURL(file);
+      console.log(avatarPreview);
+      console.log(avatarBlob);
+
       // Reset the input value to allow reselecting the same file
       event.target.value = null;
     } else {
@@ -88,6 +122,9 @@ const AccountRoute = () => {
       setLoading(true);
       try {
         let userUpdateResult;
+        console.log(avatarPreview);
+        console.log(avatarBlob);
+
         if (avatarPreview) {
           const [avatarUpdateResult, userResult] = await Promise.all([
             dispatch(updateUsersAvatar(avatarBlob)),
@@ -156,10 +193,7 @@ const AccountRoute = () => {
       <ProfileContainer>
         <AvatarBlock>
           <Avatar
-            src={
-              avatarPreview ||
-              `${user.avatar?.image256x256}?lastmod=${new Date().getTime()}`
-            }
+            src={avatarPreview || user.avatar?.image256x256}
             alt="User Avatar"
           />
           {editMode && (

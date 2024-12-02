@@ -128,10 +128,7 @@ const MessageItem = ({
           onClick={!isCurrentUser && !isPrivateChat ? handleOpen : undefined}
         >
           <ImgAvatar
-            src={
-              `${userAvatarUrl?.image50x50}?lastmod=${new Date().getTime()}` ||
-              undefined
-            }
+            src={userAvatarUrl?.image50x50 || undefined}
             alt={`${userName}'s avatar`}
             $userAvatarUrl={userAvatarUrl}
           />
