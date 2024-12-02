@@ -4,8 +4,10 @@ import { getUser } from '@/redux-store/selectors';
 import URLs from '@/constants/constants';
 import { axiosClient } from '@/services/api';
 import { MESSAGE_TYPES } from '@/constants/messageTypes.js';
+import { ATTACHMENT_TYPES } from '@/constants/attachmentTypes.js';
 import PropTypes from 'prop-types';
 import UserInfoModal from '@/components/UserInfoModal/UserInfoModal';
+import AttachImageModal from '@/components/AttachImageModal/AttachImageModal';
 import { timeStampConverter } from '@/components/utils/timeUtil.js';
 import { FaReply } from 'react-icons/fa6';
 
@@ -22,7 +24,9 @@ import {
   ButtonReply,
   ReplyingMessage,
   MessageBox,
+  MessageAttachBox,
   NameBox,
+  AttachmentImage,
 } from './MessageItemStyled';
 
 const MessageItem = ({
@@ -32,6 +36,7 @@ const MessageItem = ({
   userAvatarUrl,
   date,
   type,
+  attachment,
   isShownAvatar,
   isOnline,
   isPrivateChat,
@@ -43,6 +48,7 @@ const MessageItem = ({
   fetchMessageById,
 }) => {
   const [open, setOpen] = useState(false);
+  const [openImage, setOpenImage] = useState(false);
   const [userInfo, setUserInfo] = useState({});
 
   const currentUserId = useSelector(getUser)?.id;
@@ -56,6 +62,7 @@ const MessageItem = ({
   const messageTypeText = type === MESSAGE_TYPES.TEXT;
   const messageTypeJoin = type === MESSAGE_TYPES.JOIN;
   const messageTypeLeave = type === MESSAGE_TYPES.LEAVE;
+  const attachmentTypeImage = attachment?.type === ATTACHMENT_TYPES.IMAGE;
 
   useEffect(() => {
     const messageDate = new Date(date);
@@ -87,8 +94,14 @@ const MessageItem = ({
     }
   };
 
+  const handleOpenImage = () => {
+    setOpenImage(true);
+    console.log(attachment.thumbnailImageUrl);
+  };
+
   const checkToShowAvatar = messageTypeText && userId && isShownAvatar;
   const handleClose = () => setOpen(false);
+  const handleCloseImage = () => setOpenImage(false);
 
   const handleReplyClick = () => {
     if (onReply) {
@@ -143,10 +156,8 @@ const MessageItem = ({
       )}
 
       {messageTypeText && (
-        <MessageContentStyled
-          $backgroundMessage={isCurrentUser}
-          $isShownAvatar={isShownAvatar}
-        >
+        <>
+          {' '}
           {repliedMessage && (
             <ReplyingMessage
               $backgroundMessage={isCurrentUser}
@@ -158,18 +169,44 @@ const MessageItem = ({
               <p>{repliedMessage.content}</p>
             </ReplyingMessage>
           )}
-          <MessageBox>
-            <ContentMessage>{content || `message`}</ContentMessage>
-            <Time>{time || 'time'}</Time>
-            <ButtonReply onClick={handleReplyClick}>
-              <FaReply />
-            </ButtonReply>
-          </MessageBox>
-        </MessageContentStyled>
+          {attachment && attachmentTypeImage ? (
+            <MessageContentStyled
+              $backgroundMessage={isCurrentUser}
+              $isShownAvatar={isShownAvatar}
+            >
+              <MessageAttachBox>
+                <AttachmentImage
+                  onClick={handleOpenImage}
+                  src={attachment.thumbnailImageUrl}
+                  alt="attachment image"
+                />
+                <Time>{time || 'time'}</Time>
+                <ButtonReply onClick={handleReplyClick}>
+                  <FaReply />
+                </ButtonReply>
+              </MessageAttachBox>
+            </MessageContentStyled>
+          ) : (
+            <MessageContentStyled
+              $backgroundMessage={isCurrentUser}
+              $isShownAvatar={isShownAvatar}
+            >
+              <MessageBox>
+                <ContentMessage>{content || `message`}</ContentMessage>
+                <Time>{time || 'time'}</Time>
+                <ButtonReply onClick={handleReplyClick}>
+                  <FaReply />
+                </ButtonReply>
+              </MessageBox>
+            </MessageContentStyled>
+          )}
+        </>
       )}
+
       {(messageTypeJoin || messageTypeLeave) && (
         <ContentJoinOrLeave>{content || `message`}</ContentJoinOrLeave>
       )}
+
       <UserInfoModal
         open={open}
         handleClose={handleClose}
@@ -178,6 +215,11 @@ const MessageItem = ({
         userEmail={userInfo?.userEmail}
         about={userInfo?.about}
         id={userInfo?.id}
+      />
+      <AttachImageModal
+        openImage={openImage}
+        handleCloseImage={handleCloseImage}
+        src={attachment?.thumbnailImageUrl}
       />
     </MessageItemStyled>
   );
