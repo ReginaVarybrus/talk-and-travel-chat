@@ -1,5 +1,6 @@
-import GoogleLogo from '@/images/icons/GoogleLogo.svg'
 import styled from 'styled-components';
+import { FcGoogle } from 'react-icons/fc';
+import { device } from '@/constants/mediaQueries';
 
 export const GoogleButton = styled.button`
   width: 100%;
@@ -12,31 +13,24 @@ export const GoogleButton = styled.button`
   display: flex;
   justify-content: center;
   gap: 8px;
-  cursor: pointer;
-  
+  transition: all 0.3s ease;
+
   span {
     font-size: 14px;
-    font-weight: 700;
-    line-height: 20px;
-    letter-spacing: 0em;
-    text-align: center;
   }
-  
+
   &:hover {
     background-color: var(--color-blue-1);
   }
 
-  @media (min-width: 768px) {
-      background-color: var(--color-grey-4);
-    }
+  @media ${device.tablet} {
+    background-color: var(--color-grey-4);
+  }
 `;
 
-export const GoogleLogoSVG = styled.svg`
+export const GoogleLogoSVG = styled(FcGoogle)`
   width: 20px;
   height: 20px;
   min-width: 20px;
   min-height: 20px;
-  background-image: url(${GoogleLogo});
-  background-repeat: no-repeat;
-  background-size: contain;
 `;

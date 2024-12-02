@@ -1,17 +1,12 @@
 import { createSlice } from '@reduxjs/toolkit';
-import
-{
-  fetchCurrentUser,
-  updateUser,
-  updateUsersAvatar
-} from '@/redux-store/UserOperations/UserOperations';
+import { updateUser, updateUsersAvatar } from './userOperations.js';
 
 const initialState = {
   id: null,
   userName: '',
   userEmail: '',
   avatar: null,
-  about: ''
+  about: '',
 };
 
 const handlePending = state => ({
@@ -38,33 +33,19 @@ export const userSlice = createSlice({
   extraReducers: builder =>
     builder
       // TODO: update this call without userDto (by Demidas)
-      .addCase(fetchCurrentUser.pending, handlePending)
-      .addCase(fetchCurrentUser.rejected, handleRejected)
-      .addCase(fetchCurrentUser.fulfilled, (state, action) => ({
-        ...state,
-        userDto: action.payload.userDto,
-        isLoggedIn: true,
-        isRefresh: false,
-      }))
-
       .addCase(updateUser.pending, handlePending)
       .addCase(updateUser.rejected, handleRejected)
-      .addCase(updateUser.fulfilled, (state, action) =>
-      ({
+      .addCase(updateUser.fulfilled, (state, action) => ({
         ...state,
         ...action.payload,
-      })
-      )
+      }))
 
       .addCase(updateUsersAvatar.pending, handlePending)
       .addCase(updateUsersAvatar.rejected, handleRejected)
-      .addCase(updateUsersAvatar.fulfilled, (state, action) =>
-      ({
+      .addCase(updateUsersAvatar.fulfilled, (state, action) => ({
         ...state,
         avatar: action.payload,
-      })
-      )
-
+      })),
 });
 
 export const { setUsers, clearUser } = userSlice.actions;

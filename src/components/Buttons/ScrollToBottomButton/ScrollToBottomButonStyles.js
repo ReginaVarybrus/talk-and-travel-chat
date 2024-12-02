@@ -13,7 +13,6 @@ export const ScrollButton = styled.button`
   display: ${({ $isVisible }) => ($isVisible ? 'flex' : 'none')};
   align-items: center;
   justify-content: center;
-  cursor: pointer;
   z-index: 10;
   transition: all 0.3s ease;
 

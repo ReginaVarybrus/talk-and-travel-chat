@@ -4,7 +4,7 @@ import { routesPath } from '@/routes/routesConfig';
 import { getUser } from '@/redux-store/selectors';
 import { useChatContext } from '@/providers/ChatProvider';
 import { useWebSocket } from '@/hooks/useWebSocket.js';
-import { logOut } from '@/redux-store/slices/AuthOperations';
+import { logOut } from '@/redux-store/auth/authOperations';
 
 import {
   SideBarStyled,

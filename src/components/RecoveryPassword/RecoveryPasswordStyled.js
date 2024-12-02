@@ -31,7 +31,6 @@ export const CloseBtn = styled.button`
   top: 9px;
   background: none;
   border: none;
-  cursor: pointer;
 
   svg {
     stroke: var(--color-grey-9);

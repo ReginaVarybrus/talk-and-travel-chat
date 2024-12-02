@@ -1,6 +1,6 @@
 import Backdrop from '@mui/material/Backdrop';
 import Fade from '@mui/material/Fade';
-import { SignUpBtn } from '@/components/RegisterForm/RegisterForm.styled';
+import { SignUpBtn } from '@/routes/RegisterRoute/RegisterRouteStyled';
 import PropTypes from 'prop-types';
 import URLs from '@/constants/constants';
 import { axiosClient } from '@/services/api';

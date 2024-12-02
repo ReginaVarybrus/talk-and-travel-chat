@@ -1,18 +1,18 @@
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import { useNavigate, useLocation } from 'react-router-dom';
-import swal from 'sweetalert';
+import Swal from 'sweetalert2';
 import URLs from '@/constants/constants';
 import InputField from '@/components/InputField/InputField';
 import { axiosClient } from '@/services/api';
 import { routesPath } from '@/routes/routesConfig';
+import { SignUpBtn } from '@/routes/RegisterRoute/RegisterRouteStyled';
 import {
   ResetPasswordBackground,
   ResetPasswordContainer,
   SubtitleResetPage,
   TitleResetPage,
 } from './RecoveryPasswordStyled';
-import { SignUpBtn } from '../RegisterForm/RegisterForm.styled';
 
 const ResetPassword = () => {
   const navigate = useNavigate();
@@ -42,12 +42,23 @@ const ResetPassword = () => {
           newPassword: values.password,
         });
         if (response.status === 204) {
-          swal('Password successfully reset!', '', 'success');
+          Swal.fire({
+            text: 'Password successfully reset',
+            icon: 'success',
+            showConfirmButton: false,
+            timer: 2000,
+          });
+
           navigate(routesPath.LOGIN);
         }
       } catch (error) {
         console.error('Error resetting password:', error);
-        swal('Failed to reset password. Please try again.', '', 'error');
+        Swal.fire({
+          text: 'Failed to reset password. Please try again.',
+          icon: 'error',
+          showConfirmButton: false,
+          timer: 2000,
+        });
       }
     },
   });
