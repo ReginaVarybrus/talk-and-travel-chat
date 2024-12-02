@@ -100,6 +100,9 @@ p {
 
 button {
   cursor: pointer;
+  font-weight: 700;
+  line-height: 19.2px;
+  text-align: center;
 }
 
 svg{

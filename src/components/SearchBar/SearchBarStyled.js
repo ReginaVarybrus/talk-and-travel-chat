@@ -39,7 +39,6 @@ export const ButtonMapOpen = styled.button`
   min-height: 36px;
   margin-bottom: 34px;
   font-size: 14px;
-  font-weight: 700;
   background: var(--white-color);
   color: var(--color-grey-8);
   border-radius: 4px;

@@ -1,5 +1,6 @@
 import styled from 'styled-components';
 import { MdFacebook } from 'react-icons/md';
+import { device } from '@/constants/mediaQueries';
 
 export const FacebookButton = styled.button`
   width: 100%;
@@ -16,17 +17,13 @@ export const FacebookButton = styled.button`
 
   span {
     font-size: 14px;
-    font-weight: 700;
-    line-height: 20px;
-    letter-spacing: 0em;
-    text-align: center;
   }
 
   &:hover {
     background-color: var(--color-blue-1);
   }
 
-  @media (min-width: 768px) {
+  @media ${device.tablet} {
     background-color: var(--color-grey-4);
   }
 `;

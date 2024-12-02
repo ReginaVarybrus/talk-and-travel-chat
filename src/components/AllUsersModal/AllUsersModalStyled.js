@@ -213,8 +213,6 @@ export const SendMessageBtn = styled.button`
   align-items: center;
   padding: 12px 24px;
   font-size: 16px;
-  font-weight: 700;
-  line-height: 19.2px;
   letter-spacing: -0.28px;
   width: 106px;
   height: 46px;
@@ -332,7 +330,6 @@ export const MoreInfoBtn = styled.button`
   justify-content: center;
   align-items: center;
   font-size: 12px;
-  font-weight: 700;
   width: 85px;
   height: 30px;
   border: 1px solid var(--color-brand-blue);

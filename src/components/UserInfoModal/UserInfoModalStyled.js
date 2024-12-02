@@ -150,7 +150,6 @@ export const ButtonLeave = styled.button`
   justify-content: center;
   align-items: center;
   font-size: 16px;
-  font-weight: 700;
   background: var(--color-brand-blue);
   box-shadow: 4px 2px 16px 0px rgba(136, 165, 191, 0.48);
   color: var(--white-color);

@@ -254,7 +254,6 @@ export const ExitOrJoinBtn = styled.button`
   background: none;
   border: none;
   font-size: 14px;
-  font-weight: 700;
   color: var(--color-grey-9);
   transition: all 0.3s ease;
 
