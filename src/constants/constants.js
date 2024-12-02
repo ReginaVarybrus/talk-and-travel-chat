@@ -8,6 +8,7 @@ const URLs = {
   logout: 'authentication/logout',
   passwordRecovery: 'authentication/password-recovery',
   verifyEmail: 'authentication/registration-confirmation',
+  checkExistEmail: 'users/exists-by-email',
 
   // User operations
   currentUser: 'current',

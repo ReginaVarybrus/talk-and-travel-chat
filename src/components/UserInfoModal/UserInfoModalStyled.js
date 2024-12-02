@@ -150,10 +150,8 @@ export const ButtonLeave = styled.button`
   justify-content: center;
   align-items: center;
   font-size: 16px;
-  font-weight: 700;
   background: var(--color-brand-blue);
   box-shadow: 4px 2px 16px 0px rgba(136, 165, 191, 0.48);
-  cursor: pointer;
   color: var(--white-color);
   width: 136px;
   height: 46px;
@@ -183,7 +181,6 @@ export const ConfirmBlock = styled.div`
     width: 95px;
     height: 40px;
     transition: all 0.3s;
-    cursor: pointer;
   }
   .confirm {
     border: none;

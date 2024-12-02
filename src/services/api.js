@@ -8,6 +8,7 @@ const urlToOmit = [
   URLs.verifyEmail,
   URLs.registerWithSocial,
   URLs.loginWithSocial,
+  URLs.checkExistEmail,
 ];
 
 const axiosClient = axios.create({
@@ -29,11 +30,8 @@ axiosClient.interceptors.request.use(
     const token = authData ? authData?.token?.replace(/"/g, '') : null;
     const isAuthUrl = urlToOmit.includes(config.url);
 
-    // console.log('Is Auth URL:', isAuthUrl);
-
     if (!isAuthUrl) {
       config.headers.Authorization = `Bearer ${token}`;
-      // console.log('Added Authorization header:', config.headers.Authorization);
       return config;
     }
     delete config.headers.Authorization;

@@ -86,7 +86,6 @@ export const NewMessagesNotification = styled.div`
     display: flex;
     align-items: center;
     padding: 0;
-    cursor: pointer;
     transition: color 0.3s;
 
     &:hover {

@@ -45,6 +45,7 @@ const InputField = ({
   const [isPopupVisible, setIsPopupVisible] = useState(false);
   const location = useLocation();
   const isRegisterPage = location.pathname === routesPath.REGISTER;
+
   const togglePassword = () => {
     setShowPassword(!showPassword);
   };
@@ -57,6 +58,15 @@ const InputField = ({
 
   const handleBlur = () => {
     setIsPopupVisible(false);
+  };
+
+  const handlePreventAction = e => {
+    if (
+      isRegisterPage &&
+      (props.general === 'password' || props.general === 'repeatPassword')
+    ) {
+      e.preventDefault();
+    }
   };
 
   const renderValidationMessage = () => {
@@ -116,6 +126,9 @@ const InputField = ({
           }
           onFocus={handleFocus}
           onBlur={handleBlur}
+          onCopy={handlePreventAction}
+          onPaste={handlePreventAction}
+          onCut={handlePreventAction}
           disabled={disabled}
           onChange={formik.handleChange}
           value={formik.values[props.general] || ''}

@@ -63,7 +63,7 @@ export const ImgAvatar = styled.img`
 export const ContentMessage = styled.p`
   text-align: start;
   font-size: 14px;
-  word-break: break-all;
+  word-break: break-word;
   white-space: pre-wrap;
   color: var(--color-dark);
   user-select: text;
@@ -114,7 +114,6 @@ export const ButtonReply = styled.button`
   border: none;
   background-color: transparent;
   color: var(--color-blue-3);
-  cursor: pointer;
   transition: all 0.3s ease;
 
   &:hover,
