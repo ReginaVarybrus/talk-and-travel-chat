@@ -6,13 +6,13 @@ export const schema = yup.object().shape({
     userName: yup
         .string()
         .transform(value => (value ? value.trim() : ''))
-        .min(2, 'User name must be between 2 and 16 characters.')
-        .max(30, 'User name must be between 2 and 16 characters.')
-        .matches(/^[a-zA-Z0-9 ]{2,16}$/, 'User name must be between 2 and 16 characters.')
+        .min(2, 'Name must be between 2 and 16 characters.')
+        .max(30, 'Name must be between 2 and 16 characters.')
+        .matches(/^[a-zA-Z0-9 ]{2,16}$/, 'Name can only contain latin letters, numbers, and spaces, and must be between 2 and 16 characters.')
         .test(
             'not-only-spaces',
             'User name cannot consist of spaces only.',
-            value => value && value.trim() !== '' // Checks that the trimmed value is not empty
+            value => value && value.trim() !== ''
         )
         .required('User name must be between 2 and 16 characters.'),
     userEmail: yup

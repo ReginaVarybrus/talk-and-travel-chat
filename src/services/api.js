@@ -19,12 +19,13 @@ const axiosClient = axios.create({
 });
 
 axiosClient.interceptors.request.use(
-  config => {
+  config =>
+  {
     let authData;
     try {
       authData = JSON.parse(localStorage.getItem('persist:auth'));
     } catch (e) {
-      console.error('Error parsing auth data from local storage', e);
+      // console.error('Error parsing auth data from local storage', e);
       authData = null;
     }
     const token = authData ? authData?.token?.replace(/"/g, '') : null;
@@ -41,10 +42,12 @@ axiosClient.interceptors.request.use(
 );
 
 const token = {
-  set(tokenValue) {
+  set(tokenValue)
+  {
     axiosClient.defaults.headers.common.Authorization = `Bearer ${tokenValue}`;
   },
-  unset() {
+  unset()
+  {
     delete axiosClient.defaults.headers.common.Authorization;
   },
 };
