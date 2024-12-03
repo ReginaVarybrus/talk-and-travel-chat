@@ -39,43 +39,44 @@ export const ChatProvider = ({ children }) => {
   const updateUnreadMessagesCount = useCallback(
     (chatId, newCount, isPrivateChat) => {
       if (isPrivateChat) {
-        setDataUserChats(prevChats =>
-          prevChats.map(chat =>
+        setDataUserChats(prevChats => {
+          const updatedChats = prevChats.map(chat =>
             chat.chat.id === chatId
               ? {
                   ...chat,
                   chat: { ...chat.chat, unreadMessagesCount: newCount },
                 }
               : chat
-          )
-        );
+          );
+          const totalUnreadDMs = updatedChats.reduce(
+            (acc, chat) => acc + (chat.chat.unreadMessagesCount || 0),
+            0
+          );
+          setUnreadDMsCount(totalUnreadDMs);
+          return updatedChats;
+        });
       } else {
-        setSubscriptionRooms(prevRooms =>
-          prevRooms.map(room =>
+        setSubscriptionRooms(prevRooms => {
+          const updatedRooms = prevRooms.map(room =>
             room.id === chatId
               ? { ...room, unreadMessagesCount: newCount }
               : room
-          )
-        );
+          );
+          const totalUnreadRooms = updatedRooms.reduce(
+            (acc, room) => acc + (room.unreadMessagesCount || 0),
+            0
+          );
+          setUnreadRoomsCount(totalUnreadRooms);
+          return updatedRooms;
+        });
       }
-
-      const totalUnreadDMs = dataUserChats.reduce(
-        (acc, chat) => acc + chat.chat.unreadMessagesCount,
-        0
-      );
-      const totalUnreadRooms = subscriptionRooms.reduce(
-        (acc, room) => acc + room.unreadMessagesCount,
-        0
-      );
-      setUnreadDMsCount(totalUnreadDMs);
-      setUnreadRoomsCount(totalUnreadRooms);
     },
-    [dataUserChats, subscriptionRooms]
+    []
   );
 
-  const addMessageToChat = useCallback(message => {
-    setCurrentChatMessages(prevMessages => [...prevMessages, message]);
-  }, []);
+  // const addMessageToChat = useCallback(message => {
+  //   setCurrentChatMessages(prevMessages => [...prevMessages, message]);
+  // }, []);
 
   useEffect(() => {
     if (!isLoggedIn) return;
@@ -144,10 +145,12 @@ export const ChatProvider = ({ children }) => {
                 }
               : chat
           );
+
           const totalUnreadDMs = updatedChats.reduce(
             (acc, chat) => acc + (chat.chat.unreadMessagesCount || 0),
             0
           );
+
           setUnreadDMsCount(totalUnreadDMs);
 
           return updatedChats;
@@ -167,6 +170,7 @@ export const ChatProvider = ({ children }) => {
             (acc, room) => acc + (room.unreadMessagesCount || 0),
             0
           );
+
           setUnreadRoomsCount(totalUnreadRooms);
 
           return updatedRooms;
@@ -220,7 +224,7 @@ export const ChatProvider = ({ children }) => {
       setCurrentChatId,
       currentChatMessages,
       setCurrentChatMessages,
-      addMessageToChat,
+      // addMessageToChat,
       searchedValue,
       setSearchedValue,
       updateUnreadMessagesCount,
@@ -232,7 +236,7 @@ export const ChatProvider = ({ children }) => {
       dataUserChats,
       currentChatId,
       currentChatMessages,
-      addMessageToChat,
+      // addMessageToChat,
       handleNewMessage,
     ]
   );
