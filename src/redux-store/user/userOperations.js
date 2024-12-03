@@ -2,7 +2,8 @@ import { createAsyncThunk } from '@reduxjs/toolkit';
 import { axiosClient } from '@/services/api';
 import URLs from '@/constants/constants';
 
-export const updateUser = createAsyncThunk('user/update', async user => {
+export const updateUser = createAsyncThunk('user/update', async user =>
+{
   try {
     const { data } = await axiosClient.put(URLs.updateUser, user);
     return data;
@@ -13,7 +14,8 @@ export const updateUser = createAsyncThunk('user/update', async user => {
 
 export const updateUsersAvatar = createAsyncThunk(
   'user/avatar',
-  async avatar => {
+  async avatar =>
+  {
     try {
       const formData = new FormData();
       formData.append('image', avatar);
@@ -32,10 +34,11 @@ export const updateUsersAvatar = createAsyncThunk(
 
 export const fetchUsersOnlineStatuses = createAsyncThunk(
   'onlineUsers/fetchStatuses',
-  async () => {
+  async () =>
+  {
     try {
       const response = await axiosClient.get(URLs.getUsersOnlineStatusPath);
-      console.log('Original response data:', response.data);
+      // console.log('Original response data:', response.data);
       return Object.entries(response.data).map(([userId, userData]) => ({
         userId: Number(userId),
         status: {
