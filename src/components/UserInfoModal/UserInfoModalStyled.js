@@ -165,38 +165,3 @@ export const ButtonLeave = styled.button`
     background: var(--color-blue-5);
   }
 `;
-
-export const ConfirmBlock = styled.div`
-  display: flex;
-  flex-direction: row;
-  justify-content: center;
-  gap: 45px;
-
-  button {
-    border-radius: 8px;
-    outline: none;
-    font-size: 14px;
-    font-weight: 700;
-    box-shadow: 4px 2px 16px 0px rgba(136, 165, 191, 0.48);
-    width: 95px;
-    height: 40px;
-    transition: all 0.3s;
-  }
-  .confirm {
-    border: none;
-    background: var(--color-brand-blue);
-    color: var(--white-color);
-
-    &:hover {
-      background: var(--color-blue-5);
-    }
-  }
-  .cancel {
-    border: 1px solid #1976d2;
-    color: var(--color-grey-8);
-    background: var(--white-color);
-    &:hover {
-      background: var(--color-blue-1);
-    }
-  }
-`;

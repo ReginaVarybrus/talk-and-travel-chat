@@ -155,6 +155,13 @@ export const MessageBox = styled.div`
   justify-content: space-between;
 `;
 
+export const MessageAttachBox = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: end;
+  justify-content: space-between;
+`;
+
 export const NameBox = styled.div`
   display: flex;
   gap: 4px;
@@ -168,5 +175,20 @@ export const NameBox = styled.div`
     color: var(--color-blue-5);
     width: 11px;
     height: 11px;
+  }
+`;
+
+export const AttachmentImage = styled.img`
+  width: 120px;
+  height: 120px;
+  object-fit: contain;
+  cursor: pointer;
+  @media ${device.mobileL} {
+    width: 170px;
+    height: 170px;
+  }
+  @media ${device.tablet} {
+    width: 200px;
+    height: 200px;
   }
 `;
