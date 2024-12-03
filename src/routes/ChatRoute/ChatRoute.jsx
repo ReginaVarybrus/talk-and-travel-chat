@@ -34,28 +34,9 @@ const ChatRoute = () => {
     unsubscribeFromUsersStatuses,
   } = useWebSocket();
 
-  const {
-    filteredPrivateChats,
-    subscriptionRooms,
-    setSubscriptionRooms,
-    // setDataUserChats,
-    setUnreadRoomsCount,
-    // setUnreadDMsCount,
-    // unreadGroupMessagesCount,
-    // setUnreadGroupMessagesCount,
-    // setUnreadDMsMessagesCount,
-  } = useChatContext();
-
   const context = useOutletContext();
   const isChatVisible = context?.isChatVisible;
   const setIsChatVisible = context?.setIsChatVisible;
-
-  // useEffect(() => {
-  //   if (responseData) {
-  //     setSubscriptionRooms(responseData);
-  //   }
-  //   console.log('subscription rooms', subscriptionRooms);
-  // }, [responseData]);
 
   useEffect(() => {
     dispatch(fetchUsersOnlineStatuses());

@@ -48,6 +48,7 @@ export const useWebSocket = () => {
   };
 
   const unsubscribeFromMessages = () => unsubscribe('messages');
+
   const subscribeToMessages = (endpoint, handleNewMessage) =>
     subscribe(endpoint, handleNewMessage);
 

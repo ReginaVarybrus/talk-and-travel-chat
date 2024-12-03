@@ -48,7 +48,7 @@ const Chat = ({
 
   const [isUserTyping, setIsUserTyping] = useState(false);
   const [usersTyping, setUsersTyping] = useState([]);
-  const [messages, setMessages] = useState([]);
+  // const [messages, setMessages] = useState([]);
   const [page, setPage] = useState(0);
   const [unreadPage, setUnreadPage] = useState(0);
   const [hasMore, setHasMore] = useState(true);
@@ -69,6 +69,7 @@ const Chat = ({
   const isFetchingUnread = useRef(false);
   const previousChatIdRef = useRef(null);
   const fromMessageIdRef = useRef(null);
+  const lastProcessedMessageId = useRef(null);
 
   const {
     subscribeToMessages,
@@ -76,7 +77,13 @@ const Chat = ({
     unsubscribeFromMessages,
   } = useWebSocket();
 
-  const { updateUnreadMessagesCount, unreadRoomsCount } = useChatContext();
+  const {
+    currentChatId,
+    setCurrentChatId,
+    currentChatMessages,
+    setCurrentChatMessages,
+    updateUnreadMessagesCount,
+  } = useChatContext();
 
   const debouncedMarkAsRead = useRef(
     debounce(async (chatId, lastMessageId) => {
@@ -105,7 +112,7 @@ const Chat = ({
 
       const { content, page: pageData } = response.data;
 
-      setMessages(prevMessages => [...content, ...prevMessages]);
+      setCurrentChatMessages(prevMessages => [...content, ...prevMessages]);
       setPage(pageData.number + 1);
       setHasMore(pageData.number + 1 < pageData.totalPages);
       return content;
@@ -142,7 +149,7 @@ const Chat = ({
         fromMessageIdRef.current = content[0].id;
       }
 
-      setMessages(prevMessages => [...content, ...prevMessages]);
+      setCurrentChatMessages(prevMessages => [...content, ...prevMessages]);
 
       setPage(pageData.number + 1);
       setHasMore(pageData.number + 1 < pageData.totalPages);
@@ -182,7 +189,7 @@ const Chat = ({
 
   const fetchMessageById = async (messageId, currentPage = page) => {
     try {
-      let targetMessage = messages.find(msg => msg.id === messageId);
+      let targetMessage = currentChatMessages.find(msg => msg.id === messageId);
 
       if (targetMessage) {
         scrollToMessageElement(messageId);
@@ -196,14 +203,14 @@ const Chat = ({
           return;
         }
 
-        setMessages(prevMessages => {
+        setCurrentChatMessages(prevMessages => {
           const uniqueMessages = newMessages.filter(
             newMsg => !prevMessages.some(msg => msg.id === newMsg.id)
           );
           return [...prevMessages, ...uniqueMessages];
         });
 
-        targetMessage = [...messages, ...newMessages].find(
+        targetMessage = [...currentChatMessages, ...newMessages].find(
           msg => msg.id === messageId
         );
 
@@ -265,7 +272,7 @@ const Chat = ({
           ...fetchedUnreadMessages,
         ].sort((a, b) => new Date(a.creationDate) - new Date(b.creationDate));
 
-        setMessages(combinedMessages);
+        setCurrentChatMessages(combinedMessages);
 
         if (fetchedUnreadMessages.length > 0) {
           setUnreadMessages(fetchedUnreadMessages);
@@ -293,9 +300,10 @@ const Chat = ({
 
   useEffect(() => {
     if (id) {
-      const currentChatId = previousChatIdRef.current;
+      setCurrentChatId(id);
+      setCurrentChatMessages([]);
+      previousChatIdRef.current = id;
 
-      setMessages([]);
       setUnreadMessages([]);
       setPage(0);
       setUnreadPage(0);
@@ -303,6 +311,7 @@ const Chat = ({
       setMessagesToMarkAsRead([]);
       setHasInitialScrolled(false);
       setReplyToMessage(null);
+
       if (currentChatId && messagesToMarkAsRead.length > 0) {
         const lastMessageId =
           messagesToMarkAsRead[messagesToMarkAsRead.length - 1];
@@ -318,7 +327,7 @@ const Chat = ({
         fetchChatMessages();
       }, 300);
     }
-  }, [id]);
+  }, [id, setCurrentChatId, setCurrentChatMessages]);
 
   const scrollToBottom = () => {
     if (messageBlockRef.current) {
@@ -331,41 +340,71 @@ const Chat = ({
 
   // useEffect(() => {
   //   if (isSubscribed && id) {
-  //     subscribeToMessages(URLs.subscriptionToMessages(id), newMessage => {
-  //       setMessages(prevMessages => [...prevMessages, newMessage]);
-
-  //       if (newMessage.type === MESSAGE_TYPES.TEXT && messageBlockRef.current) {
-  //         const isAtBottom =
-  //           messageBlockRef.current.scrollTop +
-  //             messageBlockRef.current.clientHeight >=
-  //           messageBlockRef.current.scrollHeight - 10;
-  //         if (isAtBottom) {
-  //           messageBlockRef.current.scrollTo({
-  //             top: messageBlockRef.current.scrollHeight,
-  //             behavior: 'smooth',
-  //           });
-  //           setMessagesToMarkAsRead(prev => [...prev, newMessage.id]);
-  //         } else if (newMessage.user.id !== userId) {
-  //           setUnreadMessages(prev => [...prev, newMessage]);
-  //           setShowNewMessagesIndicator(true);
-  //         }
-  //         if (newMessage.user.id === userId) {
-  //           setMessagesToMarkAsRead(prev => [...prev, newMessage.id]);
-  //         }
+  //     if (newMessage.type === MESSAGE_TYPES.TEXT && messageBlockRef.current) {
+  //       const isAtBottom =
+  //         messageBlockRef.current.scrollTop +
+  //           messageBlockRef.current.clientHeight >=
+  //         messageBlockRef.current.scrollHeight - 10;
+  //       if (isAtBottom) {
+  //         messageBlockRef.current.scrollTo({
+  //           top: messageBlockRef.current.scrollHeight,
+  //           behavior: 'smooth',
+  //         });
+  //         setMessagesToMarkAsRead(prev => [...prev, newMessage.id]);
+  //       } else if (newMessage.user.id !== userId) {
+  //         setUnreadMessages(prev => [...prev, newMessage]);
+  //         setShowNewMessagesIndicator(true);
   //       }
-  //     });
-
-  //     if (!isPrivateChat && selectedCompanion) {
-  //       setSelectedCompanion(null);
+  //       if (newMessage.user.id === userId) {
+  //         setMessagesToMarkAsRead(prev => [...prev, newMessage.id]);
+  //       }
   //     }
-
-  //     subscribeToUserErrors(URLs.subscriptionToUserErrors(userId), setChatData);
-
-  //     return () => {
-  //       unsubscribeFromMessages();
-  //     };
   //   }
+
+  // if (!isPrivateChat && selectedCompanion) {
+  //   setSelectedCompanion(null);
+  // }
+
+  //   subscribeToUserErrors(URLs.subscriptionToUserErrors(userId), setChatData);
   // }, [id, isSubscribed, setChatData]);
+
+  useEffect(() => {
+    if (currentChatMessages.length > 0) {
+      const latestMessage = currentChatMessages[currentChatMessages.length - 1];
+
+      if (latestMessage.id !== lastProcessedMessageId.current) {
+        console.log('[DEBUG] Новое сообщение:', latestMessage);
+
+        if (
+          latestMessage.type === MESSAGE_TYPES.TEXT &&
+          messageBlockRef.current
+        ) {
+          const isAtBottom =
+            messageBlockRef.current.scrollTop +
+              messageBlockRef.current.clientHeight >=
+            messageBlockRef.current.scrollHeight - 10;
+
+          if (isAtBottom) {
+            messageBlockRef.current.scrollTo({
+              top: messageBlockRef.current.scrollHeight,
+              behavior: 'smooth',
+            });
+            setMessagesToMarkAsRead(prev => [...prev, latestMessage.id]);
+          } else if (latestMessage.user.id !== userId) {
+            setUnreadMessages(prev => [...prev, latestMessage]);
+            setShowNewMessagesIndicator(true);
+            updateUnreadMessagesCount(
+              id,
+              unreadMessages.length + 1,
+              isPrivateChat
+            );
+          }
+        }
+
+        lastProcessedMessageId.current = latestMessage.id;
+      }
+    }
+  }, [currentChatMessages, userId]);
 
   useEffect(() => {
     if (messagesToMarkAsRead.length > 0) {
@@ -567,14 +606,14 @@ const Chat = ({
           <LoaderStyleBox>
             <Loader size={50} />
           </LoaderStyleBox>
-        ) : !messages.length ? (
+        ) : !currentChatMessages.length ? (
           <NoMassegesNotification>
             <Logo src={logo} alt="logo" width="200" height="160" />
             <p>There are no discussions yet. Be the first to start.</p>
           </NoMassegesNotification>
         ) : (
           <MessageList
-            messages={messages}
+            messages={currentChatMessages}
             unreadMessages={unreadMessages}
             setIsUserTyping={setIsUserTyping}
             setUsersTyping={setUsersTyping}
