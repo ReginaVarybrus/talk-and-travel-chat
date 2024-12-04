@@ -10,7 +10,7 @@ import {
 import { axiosClient } from '@/services/api';
 import URLs from '@/constants/constants';
 import { useSelector } from 'react-redux';
-import { getIsLoggedIn, getToken } from '@/redux-store/selectors';
+import { getIsLoggedIn, getToken, getUser } from '@/redux-store/selectors';
 import { useWebSocket } from '@/hooks/useWebSocket';
 import { MESSAGE_TYPES } from '@/constants/messageTypes';
 
@@ -21,6 +21,7 @@ export const useChatContext = () => useContext(ChatContext);
 export const ChatProvider = ({ children }) => {
   const isUserLoggedIn = useSelector(getIsLoggedIn);
   const token = useSelector(getToken);
+  const userId = useSelector(getUser)?.id;
 
   const [subscriptionRooms, setSubscriptionRooms] = useState([]);
   const [dataUserChats, setDataUserChats] = useState([]);
@@ -30,7 +31,8 @@ export const ChatProvider = ({ children }) => {
   const [unreadDMsCount, setUnreadDMsCount] = useState(0);
   const [searchedValue, setSearchedValue] = useState('');
   const [loading, setLoading] = useState({ rooms: false, dms: false });
-
+  const [messagesToMarkAsRead, setMessagesToMarkAsRead] = useState([]);
+  const [newMessageFromWebsocket, setNewMessageFromWebsocket] = useState([]);
   const { subscribeToMessages, unsubscribeFromMessages } = useWebSocket();
   const currentChatIdRef = useRef(currentChatId);
 
@@ -128,6 +130,10 @@ export const ChatProvider = ({ children }) => {
 
     if (chatId === activeChatId) {
       setCurrentChatMessages(prevMessages => [...prevMessages, message]);
+      setNewMessageFromWebsocket(prev => [...prev, message]);
+      if (message.user?.id === userId) {
+        setMessagesToMarkAsRead(prev => [...prev, message.id]);
+      }
     } else {
       const isPrivateChat = dataUserChats.some(chat => chat.chat.id === chatId);
 
@@ -230,6 +236,10 @@ export const ChatProvider = ({ children }) => {
       updateUnreadMessagesCount,
       unreadDMsCount,
       unreadRoomsCount,
+      messagesToMarkAsRead,
+      setMessagesToMarkAsRead,
+      newMessageFromWebsocket,
+      setNewMessageFromWebsocket,
     }),
     [
       subscriptionRooms,

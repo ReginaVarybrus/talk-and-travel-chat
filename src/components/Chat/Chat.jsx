@@ -58,7 +58,6 @@ const Chat = ({
   const [hasInitialScrolled, setHasInitialScrolled] = useState(false);
   const [showNewMessagesIndicator, setShowNewMessagesIndicator] =
     useState(false);
-  const [messagesToMarkAsRead, setMessagesToMarkAsRead] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [replyToMessage, setReplyToMessage] = useState(null);
 
@@ -83,6 +82,10 @@ const Chat = ({
     currentChatMessages,
     setCurrentChatMessages,
     updateUnreadMessagesCount,
+    messagesToMarkAsRead,
+    setMessagesToMarkAsRead,
+    newMessageFromWebsocket,
+    setNewMessageFromWebsocket,
   } = useChatContext();
 
   const debouncedMarkAsRead = useRef(
@@ -338,73 +341,86 @@ const Chat = ({
     }
   };
 
-  // useEffect(() => {
-  //   if (isSubscribed && id) {
-  //     if (newMessage.type === MESSAGE_TYPES.TEXT && messageBlockRef.current) {
-  //       const isAtBottom =
-  //         messageBlockRef.current.scrollTop +
-  //           messageBlockRef.current.clientHeight >=
-  //         messageBlockRef.current.scrollHeight - 10;
-  //       if (isAtBottom) {
-  //         messageBlockRef.current.scrollTo({
-  //           top: messageBlockRef.current.scrollHeight,
-  //           behavior: 'smooth',
-  //         });
-  //         setMessagesToMarkAsRead(prev => [...prev, newMessage.id]);
-  //       } else if (newMessage.user.id !== userId) {
-  //         setUnreadMessages(prev => [...prev, newMessage]);
-  //         setShowNewMessagesIndicator(true);
-  //       }
-  //       if (newMessage.user.id === userId) {
-  //         setMessagesToMarkAsRead(prev => [...prev, newMessage.id]);
-  //       }
-  //     }
-  //   }
-
-  // if (!isPrivateChat && selectedCompanion) {
-  //   setSelectedCompanion(null);
-  // }
-
-  //   subscribeToUserErrors(URLs.subscriptionToUserErrors(userId), setChatData);
-  // }, [id, isSubscribed, setChatData]);
-
   useEffect(() => {
-    if (currentChatMessages.length > 0) {
-      const latestMessage = currentChatMessages[currentChatMessages.length - 1];
+    if (newMessageFromWebsocket.length > 0) {
+      const messagesForCurrentChat = newMessageFromWebsocket.filter(
+        msg => msg.chatId === id // Убедитесь, что сообщения относятся к текущему чату
+      );
 
-      if (latestMessage.id !== lastProcessedMessageId.current) {
-        console.log('[DEBUG] Новое сообщение:', latestMessage);
-
-        if (
-          latestMessage.type === MESSAGE_TYPES.TEXT &&
-          messageBlockRef.current
-        ) {
+      messagesForCurrentChat.forEach(message => {
+        if (message.type === MESSAGE_TYPES.TEXT && messageBlockRef.current) {
           const isAtBottom =
             messageBlockRef.current.scrollTop +
               messageBlockRef.current.clientHeight >=
             messageBlockRef.current.scrollHeight - 10;
 
+          // Если пользователь внизу чата
           if (isAtBottom) {
             messageBlockRef.current.scrollTo({
               top: messageBlockRef.current.scrollHeight,
               behavior: 'smooth',
             });
-            setMessagesToMarkAsRead(prev => [...prev, latestMessage.id]);
-          } else if (latestMessage.user.id !== userId) {
-            setUnreadMessages(prev => [...prev, latestMessage]);
+            // Добавляем сообщение в список прочитанных
+            setMessagesToMarkAsRead(prev => [...prev, message.id]);
+          } else if (message.user.id !== userId) {
+            // Если сообщение от другого пользователя
+            setUnreadMessages(prev => [...prev, message]);
             setShowNewMessagesIndicator(true);
-            updateUnreadMessagesCount(
-              id,
-              unreadMessages.length + 1,
-              isPrivateChat
-            );
+          }
+
+          // Если сообщение отправлено текущим пользователем
+          if (message.user.id === userId) {
+            setMessagesToMarkAsRead(prev => [...prev, message.id]);
           }
         }
+      });
 
-        lastProcessedMessageId.current = latestMessage.id;
-      }
+      // Удаляем обработанные сообщения из провайдера
+      setNewMessageFromWebsocket(prev => prev.filter(msg => msg.chatId !== id));
     }
-  }, [currentChatMessages, userId]);
+
+    // Сбрасываем selectedCompanion для группового чата
+    if (!isPrivateChat && selectedCompanion) {
+      setSelectedCompanion(null);
+    }
+  }, [newMessageFromWebsocket, id, isSubscribed, setChatData, userId]);
+
+  // useEffect(() => {
+  //   if (currentChatMessages.length > 0) {
+  //     const latestMessage = currentChatMessages[currentChatMessages.length - 1];
+
+  //     if (latestMessage.id !== lastProcessedMessageId.current) {
+  //       console.log('[DEBUG] Новое сообщение:', latestMessage);
+
+  //       if (
+  //         latestMessage.type === MESSAGE_TYPES.TEXT &&
+  //         messageBlockRef.current
+  //       ) {
+  //         const isAtBottom =
+  //           messageBlockRef.current.scrollTop +
+  //             messageBlockRef.current.clientHeight >=
+  //           messageBlockRef.current.scrollHeight - 10;
+
+  //         if (isAtBottom) {
+  //           messageBlockRef.current.scrollTo({
+  //             top: messageBlockRef.current.scrollHeight,
+  //             behavior: 'smooth',
+  //           });
+  //         } else if (latestMessage.user.id !== userId) {
+  //           setUnreadMessages(prev => [...prev, latestMessage]);
+  //           setShowNewMessagesIndicator(true);
+  //           updateUnreadMessagesCount(
+  //             id,
+  //             unreadMessages.length + 1,
+  //             isPrivateChat
+  //           );
+  //         }
+  //       }
+
+  //       lastProcessedMessageId.current = latestMessage.id;
+  //     }
+  //   }
+  // }, [currentChatMessages, userId]);
 
   useEffect(() => {
     if (messagesToMarkAsRead.length > 0) {
