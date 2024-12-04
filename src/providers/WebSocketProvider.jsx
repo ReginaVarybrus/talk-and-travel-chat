@@ -1,11 +1,12 @@
 import { StompSessionProvider } from 'react-stomp-hooks';
 import { useSelector } from 'react-redux';
-import { getToken } from '@/redux-store/selectors.js';
+import { getToken, getIsLoggedIn } from '@/redux-store/selectors.js';
 
 const WebSocketProvider = ({ children }) => {
   const token = useSelector(getToken);
+  const isLoggedIn = useSelector(getIsLoggedIn);
 
-  if (!token) {
+  if (!isLoggedIn || !token) {
     return children;
   }
 
