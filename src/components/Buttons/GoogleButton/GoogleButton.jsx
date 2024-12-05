@@ -49,6 +49,7 @@ const ButtonGoogle = () => {
           '853304957930-2cclc0tr0hs9l4m918bgoeg51t8ca5u5.apps.googleusercontent.com',
 
         callback: handleCredentialResponse,
+        ux_mode: 'popup',
       });
     } else {
       console.error('Google API is not loaded');
@@ -57,23 +58,17 @@ const ButtonGoogle = () => {
 
   const triggerGoogleSignIn = () => {
     document.body.classList.add('dim-background');
-    google.accounts.id.prompt();
 
-    const observer = new MutationObserver(mutations => {
-      mutations.forEach(mutation => {
-        const googleContainer = document.getElementById(
-          'credential_picker_container'
-        );
-        if (googleContainer) {
-          document.body.classList.add('dim-background');
-        } else {
-          document.body.classList.remove('dim-background');
-          observer.disconnect();
-        }
-      });
+    google.accounts.id.prompt(() => {
+      const googleContainer = document.getElementById(
+        'credential_picker_container'
+      );
+      if (googleContainer) {
+        document.body.classList.add('dim-background');
+      } else {
+        document.body.classList.remove('dim-background');
+      }
     });
-
-    observer.observe(document.body, { childList: true, subtree: true });
   };
 
   return (
