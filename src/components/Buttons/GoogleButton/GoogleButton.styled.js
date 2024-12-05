@@ -17,6 +17,7 @@ export const GoogleButton = styled.button`
 
   span {
     font-size: 14px;
+    color: var(--color-grey-8);
   }
 
   &:hover {

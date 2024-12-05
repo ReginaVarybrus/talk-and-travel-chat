@@ -87,7 +87,7 @@ export const NewMessagesNotification = styled.div`
     align-items: center;
     padding: 0;
     transition: color 0.3s;
-
+    font-weight: 400;
     &:hover {
       color: var(--color-blue-3);
     }

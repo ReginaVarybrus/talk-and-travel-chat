@@ -110,6 +110,8 @@ svg{
   padding: 0;
 }
 
+// Background for login with google
+
 .dim-background {
   background: rgba(0, 0, 0, 0.5); 
   position: fixed;
