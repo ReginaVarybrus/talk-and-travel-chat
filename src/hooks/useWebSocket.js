@@ -105,5 +105,6 @@ export const useWebSocket = () => {
     unsubscribeFromUsersStatuses,
     sendMessageOrEvent,
     handleDeactivateStopmClient,
+    isClientConnected,
   };
 };

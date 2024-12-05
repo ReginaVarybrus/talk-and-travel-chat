@@ -48,7 +48,6 @@ const Chat = ({
 
   const [isUserTyping, setIsUserTyping] = useState(false);
   const [usersTyping, setUsersTyping] = useState([]);
-  // const [messages, setMessages] = useState([]);
   const [page, setPage] = useState(0);
   const [unreadPage, setUnreadPage] = useState(0);
   const [hasMore, setHasMore] = useState(true);
@@ -68,13 +67,6 @@ const Chat = ({
   const isFetchingUnread = useRef(false);
   const previousChatIdRef = useRef(null);
   const fromMessageIdRef = useRef(null);
-  const lastProcessedMessageId = useRef(null);
-
-  const {
-    subscribeToMessages,
-    subscribeToUserErrors,
-    unsubscribeFromMessages,
-  } = useWebSocket();
 
   const {
     currentChatId,
@@ -126,9 +118,9 @@ const Chat = ({
 
   const fetchReadMessages = async (pageNumber = 0) => {
     if (isFetchingRead.current) {
-      console.warn('Already fetching messages. Skipping.');
       return [];
     }
+
     isFetchingRead.current = true;
 
     try {
@@ -344,7 +336,7 @@ const Chat = ({
   useEffect(() => {
     if (newMessageFromWebsocket.length > 0) {
       const messagesForCurrentChat = newMessageFromWebsocket.filter(
-        msg => msg.chatId === id // Убедитесь, что сообщения относятся к текущему чату
+        msg => msg.chatId === id
       );
 
       messagesForCurrentChat.forEach(message => {
@@ -354,73 +346,26 @@ const Chat = ({
               messageBlockRef.current.clientHeight >=
             messageBlockRef.current.scrollHeight - 10;
 
-          // Если пользователь внизу чата
           if (isAtBottom) {
             messageBlockRef.current.scrollTo({
               top: messageBlockRef.current.scrollHeight,
               behavior: 'smooth',
             });
-            // Добавляем сообщение в список прочитанных
             setMessagesToMarkAsRead(prev => [...prev, message.id]);
           } else if (message.user.id !== userId) {
-            // Если сообщение от другого пользователя
             setUnreadMessages(prev => [...prev, message]);
             setShowNewMessagesIndicator(true);
           }
 
-          // Если сообщение отправлено текущим пользователем
           if (message.user.id === userId) {
             setMessagesToMarkAsRead(prev => [...prev, message.id]);
           }
         }
       });
 
-      // Удаляем обработанные сообщения из провайдера
       setNewMessageFromWebsocket(prev => prev.filter(msg => msg.chatId !== id));
     }
-
-    // Сбрасываем selectedCompanion для группового чата
-    if (!isPrivateChat && selectedCompanion) {
-      setSelectedCompanion(null);
-    }
   }, [newMessageFromWebsocket, id, isSubscribed, setChatData, userId]);
-
-  // useEffect(() => {
-  //   if (currentChatMessages.length > 0) {
-  //     const latestMessage = currentChatMessages[currentChatMessages.length - 1];
-
-  //     if (latestMessage.id !== lastProcessedMessageId.current) {
-  //       console.log('[DEBUG] Новое сообщение:', latestMessage);
-
-  //       if (
-  //         latestMessage.type === MESSAGE_TYPES.TEXT &&
-  //         messageBlockRef.current
-  //       ) {
-  //         const isAtBottom =
-  //           messageBlockRef.current.scrollTop +
-  //             messageBlockRef.current.clientHeight >=
-  //           messageBlockRef.current.scrollHeight - 10;
-
-  //         if (isAtBottom) {
-  //           messageBlockRef.current.scrollTo({
-  //             top: messageBlockRef.current.scrollHeight,
-  //             behavior: 'smooth',
-  //           });
-  //         } else if (latestMessage.user.id !== userId) {
-  //           setUnreadMessages(prev => [...prev, latestMessage]);
-  //           setShowNewMessagesIndicator(true);
-  //           updateUnreadMessagesCount(
-  //             id,
-  //             unreadMessages.length + 1,
-  //             isPrivateChat
-  //           );
-  //         }
-  //       }
-
-  //       lastProcessedMessageId.current = latestMessage.id;
-  //     }
-  //   }
-  // }, [currentChatMessages, userId]);
 
   useEffect(() => {
     if (messagesToMarkAsRead.length > 0) {

@@ -8,6 +8,7 @@ import {
   useRef,
 } from 'react';
 import { axiosClient } from '@/services/api';
+import Swal from 'sweetalert2';
 import URLs from '@/constants/constants';
 import { useSelector } from 'react-redux';
 import { getIsLoggedIn, getToken, getUser } from '@/redux-store/selectors';
@@ -33,7 +34,8 @@ export const ChatProvider = ({ children }) => {
   const [loading, setLoading] = useState({ rooms: false, dms: false });
   const [messagesToMarkAsRead, setMessagesToMarkAsRead] = useState([]);
   const [newMessageFromWebsocket, setNewMessageFromWebsocket] = useState([]);
-  const { subscribeToMessages, unsubscribeFromMessages } = useWebSocket();
+  const { subscribeToMessages, unsubscribeFromMessages, isClientConnected } =
+    useWebSocket();
   const currentChatIdRef = useRef(currentChatId);
 
   const isLoggedIn = isUserLoggedIn && token;
@@ -76,12 +78,10 @@ export const ChatProvider = ({ children }) => {
     []
   );
 
-  // const addMessageToChat = useCallback(message => {
-  //   setCurrentChatMessages(prevMessages => [...prevMessages, message]);
-  // }, []);
-
   useEffect(() => {
-    if (!isLoggedIn) return;
+    if (!isLoggedIn || !token) {
+      return;
+    }
 
     const fetchChats = async () => {
       setLoading(prev => ({ ...prev, rooms: true, dms: true }));
@@ -109,13 +109,18 @@ export const ChatProvider = ({ children }) => {
         setUnreadDMsCount(totalUnreadDMs);
       } catch (error) {
         console.error('[DEBUG] Error fetching chats:', error);
+        Swal.fire({
+          text: 'Something went wrong while loading your chats, please try again.',
+          icon: 'error',
+          showConfirmButton: false,
+        });
       } finally {
         setLoading(prev => ({ ...prev, rooms: false, dms: false }));
       }
     };
 
     fetchChats();
-  }, [isLoggedIn]);
+  }, [isLoggedIn, token]);
 
   useEffect(() => {
     currentChatIdRef.current = currentChatId;
@@ -123,10 +128,6 @@ export const ChatProvider = ({ children }) => {
 
   const handleNewMessage = (chatId, message) => {
     const activeChatId = currentChatIdRef.current;
-
-    if (message.type !== MESSAGE_TYPES.TEXT) {
-      return;
-    }
 
     if (chatId === activeChatId) {
       setCurrentChatMessages(prevMessages => [...prevMessages, message]);
@@ -139,18 +140,21 @@ export const ChatProvider = ({ children }) => {
 
       if (isPrivateChat) {
         setDataUserChats(prevChats => {
-          const updatedChats = prevChats.map(chat =>
-            chat.chat.id === chatId
-              ? {
+          const updatedChats = prevChats.map(chat => {
+            if (chat.chat.id === chatId) {
+              if (message.type === MESSAGE_TYPES.TEXT) {
+                return {
                   ...chat,
                   chat: {
                     ...chat.chat,
                     unreadMessagesCount:
                       (chat.chat.unreadMessagesCount || 0) + 1,
                   },
-                }
-              : chat
-          );
+                };
+              }
+            }
+            return chat;
+          });
 
           const totalUnreadDMs = updatedChats.reduce(
             (acc, chat) => acc + (chat.chat.unreadMessagesCount || 0),
@@ -163,14 +167,17 @@ export const ChatProvider = ({ children }) => {
         });
       } else {
         setSubscriptionRooms(prevRooms => {
-          const updatedRooms = prevRooms.map(room =>
-            room.id === chatId
-              ? {
+          const updatedRooms = prevRooms.map(room => {
+            if (room.id === chatId) {
+              if (message.type === MESSAGE_TYPES.TEXT) {
+                return {
                   ...room,
                   unreadMessagesCount: (room.unreadMessagesCount || 0) + 1,
-                }
-              : room
-          );
+                };
+              }
+            }
+            return room;
+          });
 
           const totalUnreadRooms = updatedRooms.reduce(
             (acc, room) => acc + (room.unreadMessagesCount || 0),
@@ -192,6 +199,9 @@ export const ChatProvider = ({ children }) => {
     const subscriptions = new Map();
 
     const subscribeToChat = (chatId, isPrivate) => {
+      if (!isClientConnected()) {
+        return;
+      }
       if (!subscriptions.has(chatId)) {
         const subscription = subscribeToMessages(
           `/notify/chat/${chatId}/messages`,
@@ -230,7 +240,6 @@ export const ChatProvider = ({ children }) => {
       setCurrentChatId,
       currentChatMessages,
       setCurrentChatMessages,
-      // addMessageToChat,
       searchedValue,
       setSearchedValue,
       updateUnreadMessagesCount,
@@ -246,7 +255,6 @@ export const ChatProvider = ({ children }) => {
       dataUserChats,
       currentChatId,
       currentChatMessages,
-      // addMessageToChat,
       handleNewMessage,
     ]
   );
