@@ -49,7 +49,7 @@ const ButtonGoogle = () => {
           '853304957930-2cclc0tr0hs9l4m918bgoeg51t8ca5u5.apps.googleusercontent.com',
 
         callback: handleCredentialResponse,
-        ux_mode: 'popup',
+        ux_mode: 'redirect',
       });
     } else {
       console.error('Google API is not loaded');
