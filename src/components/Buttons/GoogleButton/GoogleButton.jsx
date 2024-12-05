@@ -57,9 +57,23 @@ const ButtonGoogle = () => {
 
   const triggerGoogleSignIn = () => {
     document.body.classList.add('dim-background');
-    google.accounts.id.prompt(() => {
-      document.body.classList.remove('dim-background');
+    google.accounts.id.prompt();
+
+    const observer = new MutationObserver(mutations => {
+      mutations.forEach(mutation => {
+        const googleContainer = document.getElementById(
+          'credential_picker_container'
+        );
+        if (googleContainer) {
+          document.body.classList.add('dim-background');
+        } else {
+          document.body.classList.remove('dim-background');
+          observer.disconnect();
+        }
+      });
     });
+
+    observer.observe(document.body, { childList: true, subtree: true });
   };
 
   return (
