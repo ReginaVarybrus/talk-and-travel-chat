@@ -26,6 +26,13 @@ const URLs = {
   getReadMessages: chatId => `/chats/${chatId}/messages/read`,
   getUnreadMessages: chatId => `/chats/${chatId}/messages/unread`,
   getMessages: chatId => `/chats/${chatId}/messages`,
+  getPrivateChats: 'v2/user/private-chats',
+  createPrivateChat: 'chats/private',
+  getAllUsers: 'v2/users',
+
+  // websocket connection
+  subscriptionToMessages: chatId => `/notify/chat/${chatId}/messages`,
+  subscriptionToUserErrors: userId => `/notify/user/${userId}/errors`,
   getCountries: 'v2/main-countries-chats',
   getUserCountriesChats: '/v2/user/public-chats',
   getPrivateChats: 'v2/user/private-chats',
@@ -41,6 +48,7 @@ const URLs = {
   leaveOutGroupChat: '/request/chat/events.leaveChat',
   startTyping: '/request/chat/events.startTyping',
   stopTyping: '/request/chat/events.stopTyping',
+  usersOnlineStatus: '/notify/users/onlineStatus',
   updateOnlineStatus: '/request/auth-user/events.updateOnlineStatus',
 };
 

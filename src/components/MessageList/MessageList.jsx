@@ -49,6 +49,7 @@ const MessageList = ({
         );
       }
     });
+    console.log('messages', messages);
   }, [messages, setIsUserTyping, setUsersTyping, currentUserName]);
 
   const renderMessagesWithDateSeparator = () => {
