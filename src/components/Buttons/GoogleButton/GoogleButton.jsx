@@ -57,16 +57,18 @@ const ButtonGoogle = () => {
   }, []);
 
   const triggerGoogleSignIn = () => {
-    document.body.classList.add('dim-background');
+    const dimElement = document.createElement('div');
+    dimElement.className = 'dim-background';
+
+    const rootElement = document.getElementById('root');
+    rootElement.appendChild(dimElement);
 
     google.accounts.id.prompt(() => {
       const googleContainer = document.getElementById(
         'credential_picker_container'
       );
-      if (googleContainer) {
-        document.body.classList.add('dim-background');
-      } else {
-        document.body.classList.remove('dim-background');
+      if (!googleContainer) {
+        rootElement.removeChild(dimElement);
       }
     });
   };
