@@ -15,7 +15,14 @@ import {
 
 import { SendedImage, LoaderStyleBox } from './ModalAttachFileStyled.js';
 
-const ModalAttachFile = ({ open, handleClose, selectedFile, chatId, src }) => {
+const ModalAttachFile = ({
+  open,
+  handleClose,
+  selectedFile,
+  setSelectedFile,
+  chatId,
+  src,
+}) => {
   const [isLoading, setIsLoading] = useState(false);
   // Attachment image feature
   const handleUpload = async () => {
@@ -47,6 +54,7 @@ const ModalAttachFile = ({ open, handleClose, selectedFile, chatId, src }) => {
       console.error('Error uploading file:', error);
     } finally {
       setIsLoading(false);
+      setSelectedFile(null);
       handleClose();
     }
   };
@@ -104,6 +112,7 @@ ModalAttachFile.propTypes = {
     type: PropTypes.string,
     webkitRelativePath: PropTypes.string,
   }),
+  setSelectedFile: PropTypes.func,
   chatId: PropTypes.number,
 };
 
