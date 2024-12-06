@@ -4,9 +4,9 @@ import { persistor } from '@/redux-store/store';
 import { useFormik } from 'formik';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
-import { formFields, schema } from './LoginValidationSchema';
-import { routesPath } from '../routesConfig';
 
+import { formFields, schema } from '@/routes/LoginRoute/LoginValidationSchema';
+import { routesPath } from '@/routes/routesConfig';
 import ButtonGoogle from '@/components/Buttons/GoogleButton/GoogleButton';
 import ButtonFacebook from '@/components/Buttons/FaceBook/FaceBookButton';
 import RecoveryPassword from '@/components/RecoveryPassword/RecoveryPassword';

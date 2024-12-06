@@ -6,8 +6,8 @@ import { persistor } from '@/redux-store/store';
 import InputField from '@/components/InputField/InputField';
 import ButtonGoogle from '@/components/Buttons/GoogleButton/GoogleButton';
 import ButtonFacebook from '@/components/Buttons/FaceBook/FaceBookButton';
-import { routesPath } from '../routesConfig';
-import { formFields, schema } from './ValidationSchema';
+import { routesPath } from '@/routes/routesConfig';
+import { formFields, schema } from '@/routes/RegisterRoute/ValidationSchema';
 import {
   RegisterFormBackground,
   RegisterFormContainer,
@@ -18,7 +18,7 @@ import {
   SignUpBtn,
   Separator,
   ButtonBlock,
-} from './RegisterRouteStyled';
+} from '@/routes/RegisterRoute/RegisterRouteStyled';
 
 const initialValues = {};
 Object.keys(formFields).forEach(key => {
