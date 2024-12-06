@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import backgroundImage from '@/images/bg-png.png';
+import backgroundImage from '@/images/login_and_registration_background.png';
 import { device } from '@/constants/mediaQueries';
 
 export const RegisterFormBackground = styled.section`

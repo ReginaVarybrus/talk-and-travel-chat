@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 import { device } from '@/constants/mediaQueries';
 import { Box } from '@mui/material';
-import backgroundImage from '@/images/bg-png.png';
+import backgroundImage from '@/images/login_and_registration_background.png';
 
 export const BoxStyled = styled(Box)`
   position: absolute;
