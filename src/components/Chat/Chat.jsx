@@ -334,38 +334,42 @@ const Chat = ({
   };
 
   useEffect(() => {
-    if (newMessageFromWebsocket.length > 0) {
-      const messagesForCurrentChat = newMessageFromWebsocket.filter(
-        msg => msg.chatId === id
-      );
+    if (!newMessageFromWebsocket.length) return;
 
-      messagesForCurrentChat.forEach(message => {
-        if (message.type === MESSAGE_TYPES.TEXT && messageBlockRef.current) {
-          const isAtBottom =
-            messageBlockRef.current.scrollTop +
-              messageBlockRef.current.clientHeight >=
-            messageBlockRef.current.scrollHeight - 10;
+    const textMessagesForCurrentChat = newMessageFromWebsocket.filter(
+      msg => msg.chatId === id && msg.type === MESSAGE_TYPES.TEXT
+    );
 
-          if (isAtBottom) {
-            messageBlockRef.current.scrollTo({
-              top: messageBlockRef.current.scrollHeight,
-              behavior: 'smooth',
-            });
-            setMessagesToMarkAsRead(prev => [...prev, message.id]);
-          } else if (message.user.id !== userId) {
-            setUnreadMessages(prev => [...prev, message]);
-            setShowNewMessagesIndicator(true);
-          }
+    if (textMessagesForCurrentChat.length === 0) return;
 
-          if (message.user.id === userId) {
-            setMessagesToMarkAsRead(prev => [...prev, message.id]);
-          }
-        }
-      });
+    textMessagesForCurrentChat.forEach(message => {
+      const isAtBottom =
+        messageBlockRef.current.scrollTop +
+          messageBlockRef.current.clientHeight >=
+        messageBlockRef.current.scrollHeight - 10;
 
-      setNewMessageFromWebsocket(prev => prev.filter(msg => msg.chatId !== id));
-    }
-  }, [newMessageFromWebsocket, id, isSubscribed, setChatData, userId]);
+      if (isAtBottom) {
+        messageBlockRef.current.scrollTo({
+          top: messageBlockRef.current.scrollHeight,
+          behavior: 'smooth',
+        });
+        setMessagesToMarkAsRead(prev => [...prev, message.id]);
+      } else if (message.user.id !== userId) {
+        setUnreadMessages(prev => [...prev, message]);
+        setShowNewMessagesIndicator(true);
+
+        updateUnreadMessagesCount(id, unreadMessages.length + 1, isPrivateChat);
+      }
+
+      if (message.user.id === userId) {
+        setMessagesToMarkAsRead(prev => [...prev, message.id]);
+      }
+    });
+
+    setNewMessageFromWebsocket(prev =>
+      prev.filter(msg => msg.chatId !== id || msg.type !== MESSAGE_TYPES.TEXT)
+    );
+  }, [newMessageFromWebsocket, id, userId, unreadMessages, isPrivateChat]);
 
   useEffect(() => {
     if (messagesToMarkAsRead.length > 0) {
@@ -375,6 +379,7 @@ const Chat = ({
 
         debouncedMarkAsRead(id, lastMessageId);
         setMessagesToMarkAsRead([]);
+        updateUnreadMessagesCount(id, 0, false);
       }, 3000);
 
       return () => clearTimeout(timer);
