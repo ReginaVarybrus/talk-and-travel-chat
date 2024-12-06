@@ -154,7 +154,6 @@ const MessageItem = ({
 
       {messageTypeText && (
         <>
-          {' '}
           {repliedMessage && (
             <ReplyingMessage
               $backgroundMessage={isCurrentUser}

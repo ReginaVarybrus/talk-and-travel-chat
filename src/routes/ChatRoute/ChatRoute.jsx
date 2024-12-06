@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { useOutletContext } from 'react-router-dom';
 import { useFetch } from '@/hooks/useFetch.js';
 import URLs from '@/constants/constants';
+import { MESSAGE_TYPES } from '@/constants/messageTypes';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchUsersOnlineStatuses } from '@/redux-store/user/userOperations.js';
 import { updateUserStatus } from '@/redux-store/user/userStatusesSlice.js';
@@ -23,29 +24,171 @@ const ChatRoute = () => {
   const [selectedCompanion, setSelectedCompanion] = useState(null);
   const [chatOpenedTime, setChatOpenedTime] = useState(null);
   const currentUserId = useSelector(getUser)?.id;
-  const { responseData } = useFetch(URLs.getUserCountriesChats);
+  // const { responseData } = useFetch(URLs.getUserCountriesChats);
   const {
     stompClient,
+    // subscribeToMessages,
+    // unsubscribeFromMessages,
     subscribeToUsersStatuses,
     sendMessageOrEvent,
     unsubscribeFromUsersStatuses,
   } = useWebSocket();
-
-  const { setSubscriptionRooms } = useChatContext();
 
   const context = useOutletContext();
   const isChatVisible = context?.isChatVisible;
   const setIsChatVisible = context?.setIsChatVisible;
 
   useEffect(() => {
-    if (responseData) {
-      setSubscriptionRooms(responseData);
-    }
-  }, [responseData]);
-
-  useEffect(() => {
     dispatch(fetchUsersOnlineStatuses());
   }, [dispatch]);
+
+  // const handleUnreadMessagesUpdate = (message, endpoint, setState) => {
+  //   const match = endpoint.match(/\/chat\/(\d+)\/messages/);
+  //   const chatId = match ? parseInt(match[1], 10) : null;
+
+  //   if (!chatId) {
+  //     console.error(`Failed to extract chatId from endpoint: ${endpoint}`);
+  //     return;
+  //   }
+
+  //   if (message.type === MESSAGE_TYPES.TEXT) {
+  //     setState(prevChats =>
+  //       prevChats.map(chat =>
+  //         chat.id === chatId
+  //           ? {
+  //               ...chat,
+  //               unreadMessagesCount: (chat.unreadMessagesCount || 0) + 1,
+  //             }
+  //           : chat
+  //       )
+  //     );
+  //   }
+  // };
+
+  // const handleUnreadRoomsMessagesUpdate = (message, endpoint) => {
+  //   const match = endpoint.match(/\/chat\/(\d+)\/messages/);
+  //   const chatId = match ? parseInt(match[1], 10) : null;
+
+  //   if (!chatId) {
+  //     console.error(`Failed to extract chatId from endpoint: ${endpoint}`);
+  //     return;
+  //   }
+
+  //   if (message.type === MESSAGE_TYPES.TEXT) {
+  //     setSubscriptionRooms(prevRooms =>
+  //       prevRooms.map(chat =>
+  //         chat.id === chatId
+  //           ? {
+  //               ...chat,
+  //               unreadMessagesCount: (chat.unreadMessagesCount || 0) + 1,
+  //             }
+  //           : chat
+  //       )
+  //     );
+  //   }
+
+  //   if (message.type === MESSAGE_TYPES.TEXT) {
+  //     setUnreadRoomsCount(prevCount => (prevCount || 0) + 1);
+  //   }
+  // };
+
+  // const handleUnreadDMsMessagesUpdate = (message, endpoint) => {
+  //   const match = endpoint.match(/\/chat\/(\d+)\/messages/);
+  //   const chatId = match ? parseInt(match[1], 10) : null;
+
+  //   if (!chatId) {
+  //     console.error(`Failed to extract chatId from endpoint: ${endpoint}`);
+  //     return;
+  //   }
+
+  //   if (message.type === MESSAGE_TYPES.TEXT) {
+  //     setDataUserChats(prevDMs =>
+  //       prevDMs.map(chat =>
+  //         chat.id === chatId
+  //           ? {
+  //               ...chat,
+  //               unreadMessagesCount: (chat.unreadMessagesCount || 0) + 1,
+  //             }
+  //           : chat
+  //       )
+  //     );
+  //   }
+  // };
+
+  // const useChatSubscriptions = (chats, handleUpdate) => {
+  //   useEffect(() => {
+  //     const previousChats = new Set();
+
+  //     chats.forEach(chat => {
+  //       if (!previousChats.has(chat.id)) {
+  //         subscribeToMessages(chat.id, message =>
+  //           handleUpdate(message, `/notify/chat/${chat.id}/messages`)
+  //         );
+  //         previousChats.add(chat.id);
+  //       }
+  //     });
+
+  //     return () => {
+  //       const currentIds = new Set(chats.map(chat => chat.id));
+  //       previousChats.forEach(id => {
+  //         if (!currentIds.has(id)) {
+  //           unsubscribeFromMessages(id);
+  //           previousChats.delete(id);
+  //         }
+  //       });
+  //     };
+  //   }, [chats, handleUpdate]);
+  // };
+
+  // useEffect(() => {
+  //   const previousRooms = new Set();
+
+  //   subscriptionRooms.forEach(chat => {
+  //     if (!previousRooms.has(chat.id)) {
+  //       subscribeToMessages(chat.id, handleUnreadRoomsMessagesUpdate);
+  //       previousRooms.add(chat.id);
+  //     }
+  //   });
+
+  //   return () => {
+  //     const currentIds = new Set(subscriptionRooms.map(chat => chat.id));
+  //     previousRooms.forEach(id => {
+  //       if (!currentIds.has(id)) {
+  //         unsubscribeFromMessages(id);
+  //         previousRooms.delete(id);
+  //       }
+  //     });
+  //   };
+  // }, [subscriptionRooms]);
+
+  // useEffect(() => {
+  //   const previousDMs = new Set();
+
+  //   filteredPrivateChats.forEach(chat => {
+  //     if (!previousDMs.has(chat.id)) {
+  //       subscribeToMessages(chat.id, handleUnreadDMsMessagesUpdate);
+  //       previousDMs.add(chat.id);
+  //     }
+  //   });
+
+  //   return () => {
+  //     const currentIds = new Set(filteredPrivateChats.map(chat => chat.id));
+  //     previousDMs.forEach(id => {
+  //       if (!currentIds.has(id)) {
+  //         unsubscribeFromMessages(id);
+  //         previousDMs.delete(id);
+  //       }
+  //     });
+  //   };
+  // }, [filteredPrivateChats]);
+
+  // useChatSubscriptions(subscriptionRooms, (message, endpoint) =>
+  //   handleUnreadMessagesUpdate(message, endpoint, setSubscriptionRooms)
+  // );
+
+  // useChatSubscriptions(filteredPrivateChats, (message, endpoint) =>
+  //   handleUnreadMessagesUpdate(message, endpoint, setDataUserChats)
+  // );
 
   const handleStatusUpdate = receivedStatus => {
     dispatch(
@@ -96,7 +239,7 @@ const ChatRoute = () => {
       <Chat
         chatData={chatData}
         setChatData={setChatData}
-        setSubscriptionRooms={setSubscriptionRooms}
+        // setSubscriptionRooms={setSubscriptionRooms}
         isSubscribed={isSubscribed}
         isShowJoinBtn={isShowJoinBtn}
         setIsShowJoinBtn={setIsShowJoinBtn}

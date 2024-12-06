@@ -32,6 +32,7 @@ const RoomsList = () => {
     setParticipantsAmount,
     setChatOpenedTime,
   } = useOutletContext();
+
   const { subscriptionRooms } = useChatContext();
 
   useEffect(() => {
