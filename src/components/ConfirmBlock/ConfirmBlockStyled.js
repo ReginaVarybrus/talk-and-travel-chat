@@ -11,7 +11,6 @@ export const Button = styled.button`
   border-radius: 8px;
   outline: none;
   font-size: 14px;
-  font-weight: 700;
   box-shadow: 4px 2px 16px 0px rgba(136, 165, 191, 0.48);
   width: 95px;
   height: 40px;

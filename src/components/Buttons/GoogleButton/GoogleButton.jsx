@@ -57,11 +57,20 @@ const ButtonGoogle = () => {
   }, []);
 
   const triggerGoogleSignIn = () => {
-    if (window.google) {
-      google.accounts.id.prompt();
-    } else {
-      console.error('Google API is not loaded');
-    }
+    const dimElement = document.createElement('div');
+    dimElement.className = 'dim-background';
+
+    const rootElement = document.getElementById('root');
+    rootElement.appendChild(dimElement);
+
+    google.accounts.id.prompt(() => {
+      const googleContainer = document.getElementById(
+        'credential_picker_container'
+      );
+      if (!googleContainer) {
+        rootElement.removeChild(dimElement);
+      }
+    });
   };
 
   return (
