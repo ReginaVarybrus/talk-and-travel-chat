@@ -34,9 +34,11 @@ export const ChatProvider = ({ children }) => {
   const [loading, setLoading] = useState({ rooms: false, dms: false });
   const [messagesToMarkAsRead, setMessagesToMarkAsRead] = useState([]);
   const [newMessageFromWebsocket, setNewMessageFromWebsocket] = useState([]);
+
+  const currentChatIdRef = useRef(currentChatId);
+
   const { subscribeToMessages, unsubscribeFromMessages, isClientConnected } =
     useWebSocket();
-  const currentChatIdRef = useRef(currentChatId);
 
   const isLoggedIn = isUserLoggedIn && token;
 
@@ -230,6 +232,18 @@ export const ChatProvider = ({ children }) => {
     handleNewMessage,
   ]);
 
+  const updateUserChats = async () => {
+    try {
+      const response = await axiosClient.get(URLs.getPrivateChats);
+      const validChats = response.data.filter(
+        chat => chat.companion && chat.companion.id !== null
+      );
+      setDataUserChats(validChats);
+    } catch (error) {
+      console.error('Error updating user chats:', error);
+    }
+  };
+
   const value = useMemo(
     () => ({
       subscriptionRooms,
@@ -249,6 +263,7 @@ export const ChatProvider = ({ children }) => {
       setMessagesToMarkAsRead,
       newMessageFromWebsocket,
       setNewMessageFromWebsocket,
+      updateUserChats,
     }),
     [
       subscriptionRooms,

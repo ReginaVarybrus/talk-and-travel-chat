@@ -42,12 +42,7 @@ const UserInfoModal = ({
   const navigate = useNavigate();
   const { sendMessageOrEvent } = useWebSocket();
 
-  const {
-    dataUserChats,
-    updateUserChats,
-
-    setFilteredPrivateChats,
-  } = useChatContext();
+  const { dataUserChats, updateUserChats, setDataUserChats } = useChatContext();
 
   const openConfirmation = () => {
     setConfirmOpen(true);
@@ -99,7 +94,7 @@ const UserInfoModal = ({
       chatId,
     };
     sendMessageOrEvent(dataEventToSend, URLs.leaveOutGroupChat);
-    setFilteredPrivateChats(prevRooms =>
+    setDataUserChats(prevRooms =>
       prevRooms.filter(chat => chat.chat.id !== chatId)
     );
     setChatData(null);
