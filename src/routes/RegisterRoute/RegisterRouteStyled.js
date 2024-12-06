@@ -160,7 +160,7 @@ export const TextForgotPassword = styled.button`
   transition: color 0.3s;
   border: none;
   background: transparent;
-
+  font-weight: 400;
   &:hover {
     color: var(--color-grey-7);
   }
