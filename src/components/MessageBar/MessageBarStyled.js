@@ -114,6 +114,9 @@ export const AttachmentIcon = styled(GrAttachment)`
 `;
 
 export const ButtonSendMessage = styled.button`
+  display: flex;
+  justify-content: center;
+  align-items: center;
   min-width: 48px;
   height: 48px;
   background: var(--white-color);
@@ -122,6 +125,11 @@ export const ButtonSendMessage = styled.button`
     $isMessageNotEmpty
       ? '1px solid var(--color-brand-blue)'
       : '1px solid var(--color-grey-6)'};
+  transition: border 0.3s ease;
+
+  &:disabled {
+    border: 1px solid var(--color-grey-6);
+  }
 `;
 
 export const SendIcon = styled(FiSend)`
