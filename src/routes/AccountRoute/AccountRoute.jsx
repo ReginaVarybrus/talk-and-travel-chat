@@ -27,6 +27,7 @@ import {
   ChoiceButtonBlock,
   LogoutButton,
   LogoutIcon,
+  ChangePhotoBox,
 } from '@/routes/AccountRoute/AccountRouteStyled';
 import InputField from '@/components/InputField/InputField';
 import {
@@ -228,13 +229,13 @@ const AccountRoute = () => {
                 style={{ display: 'none' }}
                 onChange={handleAvatarChange}
               />
-              <TextButton htmlFor="file-upload" text="Change photo" />
+              <ChangePhotoBox>
+                <TextButton htmlFor="file-upload" text="Change photo" />
+                {formik.errors.avatar && (
+                  <p style={{ color: 'red' }}>{formik.errors.avatar}</p>
+                )}
+              </ChangePhotoBox>
             </>
-          )}
-          {formik.errors.avatar && (
-            <p style={{ color: 'red', marginTop: '8px' }}>
-              {formik.errors.avatar}
-            </p>
           )}
         </AvatarBlock>
         <InputBlock>

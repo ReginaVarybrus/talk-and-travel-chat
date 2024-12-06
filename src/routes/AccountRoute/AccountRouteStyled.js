@@ -89,6 +89,15 @@ export const Avatar = styled.img`
   }
 `;
 
+export const ChangePhotoBox = styled.div`
+display: flex;
+align-items: center;
+
+ @media ${device.tablet} {
+    flex-direction: column;
+  }
+`
+
 export const InputBlock = styled.div`
   grid-area: form;
   margin-top: 24px;
