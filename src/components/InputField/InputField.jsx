@@ -77,6 +77,15 @@ const InputField = ({
     }
   };
 
+  const handleChange = e => {
+    // Trigger formik change
+    formik.handleChange(e);
+    // Trigger parent onChange if provided
+    if (onChange) {
+      onChange(e);
+    }
+  };
+
   const renderValidationMessage = () => {
     if (formik.errors[props.general]) {
       return (
@@ -112,7 +121,7 @@ const InputField = ({
             name={props.general}
             type={props.type}
             disabled={disabled}
-            onChange={onChange || formik.handleChange}
+            onChange={handleChange}
             value={formik.values[props.general] || ''}
             placeholder={props.placeholder}
             maxLength={maxLength}
@@ -138,7 +147,7 @@ const InputField = ({
           onPaste={handlePreventAction}
           onCut={handlePreventAction}
           disabled={disabled}
-          onChange={formik.handleChange}
+          onChange={handleChange}
           value={formik.values[props.general] || ''}
           placeholder={props.placeholder}
           $isErrorColor={formik.errors[props.general]}
