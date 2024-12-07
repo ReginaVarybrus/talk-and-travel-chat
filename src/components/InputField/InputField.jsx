@@ -56,8 +56,16 @@ const InputField = ({
     }
   };
 
-  const handleBlur = () => {
-    setIsPopupVisible(false);
+  const handleBlur = async e => {
+    if (props.general === 'password' && isRegisterPage) {
+      setIsPopupVisible(false);
+    }
+
+    formik.handleBlur(e);
+
+    if (props.general === 'userEmail') {
+      await formik.validateField('userEmail');
+    }
   };
 
   const handlePreventAction = e => {

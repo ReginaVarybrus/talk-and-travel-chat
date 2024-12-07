@@ -1,3 +1,5 @@
+import URLs from '@/constants/constants';
+import { axiosClient } from '@/services/api';
 import * as yup from 'yup';
 
 export const schema = yup.object().shape({
@@ -16,7 +18,23 @@ export const schema = yup.object().shape({
       /^([a-z0-9_.-]+)@([a-z09_.-]+).([a-z]{2,6})$/,
       'Invalid email address'
     )
-    .required('The field is empty'),
+    .required('The field is empty')
+    .test(
+      'is-email-unique',
+      'This email is already registered.',
+      async value => {
+        if (!value) return true;
+        try {
+          const response = await axiosClient.get(
+            `${URLs.checkExistEmail}?email=${value}`
+          );
+          return !response.data;
+        } catch (error) {
+          console.error('Failed to validate email:', error.message);
+          return false;
+        }
+      }
+    ),
   password: yup
     .string()
     .min(8, 'At least 8 characters & 1 number')

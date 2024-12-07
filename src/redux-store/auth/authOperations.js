@@ -5,23 +5,6 @@ import { token as authToken, axiosClient } from '@/services/api';
 import { clearUser, setUsers } from '@/redux-store/user/userSlice';
 import URLs from '@/constants/constants';
 
-export const checkEmailExists = createAsyncThunk(
-  'auth/checkEmailExists',
-  async (userEmail, { rejectWithValue }) => {
-    try {
-      const response = await axiosClient.get(
-        `${URLs.checkExistEmail}?email=${userEmail}`
-      );
-      return response.data;
-    } catch (error) {
-      console.error('Error checking email:', error.message);
-      return rejectWithValue(
-        error.response?.data?.message || 'Failed to check email'
-      );
-    }
-  }
-);
-
 export const register = createAsyncThunk(
   'auth/register',
   async (userData, { rejectWithValue }) => {
