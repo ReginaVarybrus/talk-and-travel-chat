@@ -112,6 +112,7 @@ const MessageItem = ({
       });
     }
   };
+
   const handleScrollToRepliedMessage = () => {
     if (repliedMessage) {
       const repliedMessageElement = document.getElementById(
@@ -153,51 +154,45 @@ const MessageItem = ({
       )}
 
       {messageTypeText && (
-        <>
-          {' '}
+        <MessageContentStyled
+          $backgroundMessage={isCurrentUser}
+          $isShownAvatar={isShownAvatar}
+        >
           {repliedMessage && (
             <ReplyingMessage
               $backgroundMessage={isCurrentUser}
               onClick={handleScrollToRepliedMessage}
             >
               <NameBox>
-                <FaReply /> <h5>{repliedMessage.user.userName}</h5>
+                <FaReply />
+                <h5>{repliedMessage.user.userName}</h5>
               </NameBox>
               <p>{repliedMessage.content}</p>
             </ReplyingMessage>
           )}
+
           {attachment && attachmentTypeImage ? (
-            <MessageContentStyled
-              $backgroundMessage={isCurrentUser}
-              $isShownAvatar={isShownAvatar}
-            >
-              <MessageAttachBox>
-                <AttachmentImage
-                  onClick={handleOpenImage}
-                  src={attachment.thumbnailImageUrl}
-                  alt="attachment image"
-                />
-                <Time>{time || 'time'}</Time>
-                <ButtonReply onClick={handleReplyClick}>
-                  <FaReply />
-                </ButtonReply>
-              </MessageAttachBox>
-            </MessageContentStyled>
+            <MessageAttachBox>
+              <AttachmentImage
+                onClick={handleOpenImage}
+                src={attachment.thumbnailImageUrl}
+                alt="attachment image"
+              />
+              <Time>{time || 'time'}</Time>
+              <ButtonReply onClick={handleReplyClick}>
+                <FaReply />
+              </ButtonReply>
+            </MessageAttachBox>
           ) : (
-            <MessageContentStyled
-              $backgroundMessage={isCurrentUser}
-              $isShownAvatar={isShownAvatar}
-            >
-              <MessageBox>
-                <ContentMessage>{content || `message`}</ContentMessage>
-                <Time>{time || 'time'}</Time>
-                <ButtonReply onClick={handleReplyClick}>
-                  <FaReply />
-                </ButtonReply>
-              </MessageBox>
-            </MessageContentStyled>
+            <MessageBox>
+              <ContentMessage>{content || `message`}</ContentMessage>
+              <Time>{time || 'time'}</Time>
+              <ButtonReply onClick={handleReplyClick}>
+                <FaReply />
+              </ButtonReply>
+            </MessageBox>
           )}
-        </>
+        </MessageContentStyled>
       )}
 
       {(messageTypeJoin || messageTypeLeave) && (

@@ -1,20 +1,27 @@
-// import { useState, useEffect, useRef } from 'react';
 import { useRef } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { routesPath } from '@/routes/routesConfig';
+import { useSelector } from 'react-redux';
+import { getUser } from '@/redux-store/selectors';
 import BottomNavigation from '@mui/material/BottomNavigation';
 import CssBaseline from '@mui/material/CssBaseline';
 import Paper from '@mui/material/Paper';
 
-import { RoomsIcon, DMsIcon } from '@/components/SideBar/SideBarStyled.js';
-import { TapBarStyled, TapBarButton, MoreIcon } from './TapBarStyled.js';
+import {
+  RoomsIcon,
+  DMsIcon,
+  ImgAvatar,
+  LetterAvatarStyled,
+} from '@/components/SideBar/SideBarStyled.js';
+import { TapBarStyled, TapBarButton } from './TapBarStyled.js';
 
 const TapBar = ({ isChatVisible }) => {
   const location = useLocation();
   const currentPage = location.pathname;
   const ref = useRef(null);
   const navigate = useNavigate();
+  const { userName, avatar } = useSelector(getUser) || {};
 
   const getValueByRoute = route => {
     switch (route) {
@@ -66,8 +73,18 @@ const TapBar = ({ isChatVisible }) => {
             $isActive={currentPage === routesPath.ROOMS}
           />
           <TapBarButton
-            label="More"
-            icon={<MoreIcon />}
+            icon={
+              avatar?.image50x50 ? (
+                <ImgAvatar
+                  src={avatar?.image50x50 || undefined}
+                  alt={`${userName}'s avatar`}
+                />
+              ) : (
+                <LetterAvatarStyled>
+                  {userName[0].toUpperCase()}
+                </LetterAvatarStyled>
+              )
+            }
             sx={{ flexDirection: 'row' }}
             onClick={handleProfileOpen}
             $isActive={currentPage === routesPath.ACCOUNT}

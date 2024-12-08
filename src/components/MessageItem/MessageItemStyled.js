@@ -1,5 +1,16 @@
-import styled from 'styled-components';
+import styled, { keyframes } from 'styled-components';
 import { device } from '@/constants/mediaQueries';
+
+const fadeInFromBottom = keyframes`
+  from {
+    opacity: 0; 
+    transform: translateY(10px); 
+  }
+  to {
+    opacity: 1; 
+    transform: translateY(0); 
+  }
+`;
 
 export const MessageItemStyled = styled.li`
   display: flex;
@@ -29,6 +40,9 @@ export const MessageContentStyled = styled.div`
   @media ${device.tablet} {
     max-width: 280px;
   }
+
+  opacity: 0;
+  animation: ${fadeInFromBottom} 0.3s ease forwards;
 `;
 
 export const Avatar = styled.div`
@@ -140,6 +154,7 @@ export const ReplyingMessage = styled.div`
   margin-bottom: 8px;
   border-radius: 8px;
   cursor: pointer;
+
   p {
     font-size: 11px;
     white-space: nowrap;
@@ -181,6 +196,7 @@ export const NameBox = styled.div`
 export const AttachmentImage = styled.img`
   width: 120px;
   height: 120px;
+  margin: 10px 0;
   object-fit: contain;
   cursor: pointer;
   @media ${device.mobileL} {

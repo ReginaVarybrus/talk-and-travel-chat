@@ -201,7 +201,7 @@ const MessageBar = ({
               type="submit"
               value="Send"
               $isMessageNotEmpty={isMessageNotEmpty}
-              disabled={!isMessageNotEmpty || !selectedFile}
+              disabled={!isMessageNotEmpty}
             >
               <SendIcon />
             </ButtonSendMessage>
@@ -212,6 +212,7 @@ const MessageBar = ({
         open={open}
         handleClose={handleClose}
         selectedFile={selectedFile}
+        setSelectedFile={setSelectedFile}
         chatId={chatId}
         src={selectedFile ? URL.createObjectURL(selectedFile) : ''}
       />
