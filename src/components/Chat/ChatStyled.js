@@ -6,7 +6,7 @@ export const ChatStyled = styled.div`
   align-items: center;
   flex-direction: column;
   width: 100%;
-  height: 100vh;
+  height: calc(var(--vh) * 100);
   background: var(--white-color);
   position: relative;
   overflow: hidden;
