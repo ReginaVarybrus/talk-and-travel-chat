@@ -48,7 +48,7 @@ export const ListItemsStyled = styled.div`
   top: 130px;
   left: -5.5%;
   width: 111%;
-  height: calc(100vh - 279px);
+  height: calc(100dvh - 279px);
   margin-bottom: 48px;
   background: var(--white-color);
   z-index: 10;
@@ -72,11 +72,11 @@ export const ListItemsStyled = styled.div`
   @media ${device.tablet} {
     left: -16px;
     width: 248px;
-    height: calc(100vh - 229px);
+    height: calc(100dvh - 229px);
   }
   @media ${device.laptop} {
     width: 298px;
-    height: calc(100vh - 229px);
+    height: calc(100dvh - 229px);
   }
 `;
 

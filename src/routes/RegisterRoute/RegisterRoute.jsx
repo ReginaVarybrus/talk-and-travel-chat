@@ -5,7 +5,6 @@ import { register } from '@/redux-store/auth/authOperations';
 import { persistor } from '@/redux-store/store';
 import InputField from '@/components/InputField/InputField';
 import ButtonGoogle from '@/components/Buttons/GoogleButton/GoogleButton';
-import ButtonFacebook from '@/components/Buttons/FaceBook/FaceBookButton';
 import { routesPath } from '../routesConfig';
 import { formFields, schema } from './ValidationSchema';
 import {
@@ -69,7 +68,6 @@ const RegisterRoute = () => {
           <Separator />
           <ButtonBlock>
             <ButtonGoogle type="button" />
-            <ButtonFacebook type="button" />
           </ButtonBlock>
         </SignInFormStyles>
       </RegisterFormContainer>
