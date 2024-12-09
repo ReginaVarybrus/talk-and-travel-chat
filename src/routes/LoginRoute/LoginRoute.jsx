@@ -6,9 +6,7 @@ import { useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { formFields, schema } from '@/routes/LoginRoute/LoginValidationSchema';
 import { routesPath } from '@/routes/routesConfig';
-
 import ButtonGoogle from '@/components/Buttons/GoogleButton/GoogleButton';
-import ButtonFacebook from '@/components/Buttons/FaceBook/FaceBookButton';
 import RecoveryPassword from '@/components/RecoveryPassword/RecoveryPassword';
 import InputField from '@/components/InputField/InputField';
 
@@ -87,7 +85,6 @@ const LoginRoute = () => {
             <Separator />
             <ButtonBlock>
               <ButtonGoogle type="button" />
-              <ButtonFacebook type="button" />
             </ButtonBlock>
           </LoginFormStyles>
           <TextForgotPassword onClick={handleOpen}>
