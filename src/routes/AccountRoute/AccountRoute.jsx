@@ -27,6 +27,7 @@ import {
   ChoiceButtonBlock,
   LogoutButton,
   LogoutIcon,
+  ChangePhotoBox,
 } from '@/routes/AccountRoute/AccountRouteStyled';
 import InputField from '@/components/InputField/InputField';
 import {
@@ -51,6 +52,7 @@ const AccountRoute = () => {
   const navigate = useNavigate();
   const { handleDeactivateStopmClient } = useWebSocket();
   const [editMode, setEditMode] = useState(false);
+  const [formChanged, setformChanged] = useState(false);
   // This {loading} is used to trigger display of <Loader/> while updateUser performig.
   const [loading, setLoading] = useState(false);
   // this avatarPreview is used to render Avatar when user tries to upload a new image.
@@ -129,6 +131,7 @@ const AccountRoute = () => {
           setAvatarPreview(null);
           setavatarBlob(null);
           setEditMode(false);
+          setformChanged(false);
         } else {
           console.error('Update Failed:', userUpdateResult.error);
         }
@@ -146,9 +149,9 @@ const AccountRoute = () => {
   /* This const is to toggle the Profile form from edit to view 
   mode and restore the form values. */
   const cancelEdit = () => {
-    formik.setValues(user);
-    formik.setErrors({});
+    formik.resetForm({ values: user });
     setAvatarPreview(null);
+    setformChanged(false);
     setEditMode(false);
   };
 
@@ -163,6 +166,8 @@ const AccountRoute = () => {
           ...formik.errors,
           avatar: 'Only image files are allowed.',
         });
+        setAvatarPreview(null);
+        setformChanged(false);
         return;
       }
       if (file.size > 2 * 1024 * 1024) {
@@ -170,6 +175,8 @@ const AccountRoute = () => {
           ...formik.errors,
           avatar: 'Please select a file under 2MB.',
         });
+        setAvatarPreview(null);
+        setformChanged(false);
         return;
       }
       formik.setErrors({ ...formik.errors, avatar: '' }); // Clear any previous avatar errors
@@ -177,7 +184,7 @@ const AccountRoute = () => {
       console.log(avatarBlob);
       // Set preview URL for the selected image
       setAvatarPreview(URL.createObjectURL(file));
-      console.log(avatarPreview);
+      setformChanged(true);
       // Reset the input value to allow reselecting the same file
       event.target.value = null;
     } else {
@@ -192,6 +199,11 @@ const AccountRoute = () => {
       formik.handleChange(e);
     }
   };
+
+  const handleInputChange = () => {
+    setformChanged(true);
+  };
+
   /* on page render user data is selected from redux */
   useEffect(() => {
     formik.setValues(user);
@@ -225,16 +237,17 @@ const AccountRoute = () => {
               <input
                 id="file-upload"
                 type="file"
+                aria-label="Upload your avatar"
                 style={{ display: 'none' }}
                 onChange={handleAvatarChange}
               />
-              <TextButton htmlFor="file-upload" text="Change photo" />
+              <ChangePhotoBox>
+                <TextButton htmlFor="file-upload" text="Change photo" />
+                {formik.errors.avatar && (
+                  <p style={{ color: 'red' }}>{formik.errors.avatar}</p>
+                )}
+              </ChangePhotoBox>
             </>
-          )}
-          {formik.errors.avatar && (
-            <p style={{ color: 'red', marginTop: '8px' }}>
-              {formik.errors.avatar}
-            </p>
           )}
         </AvatarBlock>
         <InputBlock>
@@ -246,6 +259,7 @@ const AccountRoute = () => {
                 key={user.userName}
                 props={formFields.userName}
                 formik={formik}
+                onChange={handleInputChange}
                 disabled={!editMode}
                 nolabel="false"
                 backgroundcolor="var(--color-white)"
@@ -254,6 +268,7 @@ const AccountRoute = () => {
                 key={user.userEmail}
                 props={formFields.userEmail}
                 formik={formik}
+                onChange={handleInputChange}
                 disabled={!editMode}
                 nolabel="false"
                 backgroundcolor="var(--color-white)"
@@ -266,7 +281,7 @@ const AccountRoute = () => {
                   disabled={!editMode}
                   nolabel="false"
                   backgroundcolor="var(--color-white)"
-                  onChange={handleChange}
+                  onChange={(handleChange, handleInputChange)}
                   maxLength={ABOUT_MAX_CHAR_LIMIT}
                 />
               ) : (
@@ -278,16 +293,17 @@ const AccountRoute = () => {
               {editMode && (
                 <ChoiceButtonBlock>
                   <MediumOutlinedButton
-                    style={{ margin: '0' }}
+                    type="button"
                     text="Cancel"
                     handleClick={cancelEdit}
                   />
-                  <MediumFilledButton
-                    style={{ margin: '0' }}
-                    handleClick={formik.handleSubmit}
-                    type="submit"
-                    text="Update"
-                  />
+                  {formChanged && (
+                    <MediumFilledButton
+                      handleClick={formik.handleSubmit}
+                      type="submit"
+                      text="Update"
+                    />
+                  )}
                 </ChoiceButtonBlock>
               )}
             </ProfileForm>

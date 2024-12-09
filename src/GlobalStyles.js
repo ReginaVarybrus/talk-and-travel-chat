@@ -42,7 +42,7 @@ body {
   font-family: "Roboto", sans-serif;
   margin: 0;
   user-select: none;
-    box-sizing: border-box;
+  box-sizing: border-box;
 }
 
 ul {
@@ -99,6 +99,7 @@ p {
 }
 
 button {
+  font-family: "Roboto", sans-serif;
   cursor: pointer;
   font-weight: 700;
   line-height: 19.2px;

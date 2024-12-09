@@ -100,11 +100,9 @@ axiosClient.interceptors.response.use(
 
 const token = {
   set(tokenValue) {
-    localStorage.setItem('persist:auth', JSON.stringify({ token: tokenValue }));
     axiosClient.defaults.headers.common.Authorization = `Bearer ${tokenValue}`;
   },
   unset() {
-    localStorage.removeItem('persist:auth');
     delete axiosClient.defaults.headers.common.Authorization;
   },
 };

@@ -89,6 +89,15 @@ export const Avatar = styled.img`
   }
 `;
 
+export const ChangePhotoBox = styled.div`
+display: flex;
+align-items: center;
+
+ @media ${device.tablet} {
+    flex-direction: column;
+  }
+`
+
 export const InputBlock = styled.div`
   grid-area: form;
   margin-top: 24px;
@@ -101,8 +110,6 @@ export const InputBlock = styled.div`
 `;
 
 export const ProfileForm = styled.form`
-  gap: 8px;
-
   @media ${device.tablet} {
     display: flex;
     flex-direction: column;
@@ -148,10 +155,10 @@ export const CloseIcon = styled(LuX)`
 `;
 
 export const ChoiceButtonBlock = styled.div`
-  display: flex;
+  display: grid;
   gap: 19px;
   padding-bottom: 12px;
-  justify-content: space-between;
+  grid-template-columns: 1fr 1fr;
 
   @media ${device.tablet} {
     display: grid;
