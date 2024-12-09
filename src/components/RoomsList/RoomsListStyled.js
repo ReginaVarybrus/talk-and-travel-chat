@@ -58,7 +58,7 @@ export const Text = styled.p`
 `;
 
 export const ListItemsStyled = styled.ul`
-  max-height: calc(100vh - 279px);
+  max-height: calc(100dvh - 279px);
   width: 100vw;
   overflow-y: auto;
 
@@ -79,11 +79,11 @@ export const ListItemsStyled = styled.ul`
 
   @media ${device.tablet} {
     width: 248px;
-    max-height: calc(100vh - 229px);
+    max-height: calc(100dvh - 229px);
   }
   @media ${device.laptop} {
     width: 298px;
-    max-height: calc(100vh - 229px);
+    max-height: calc(100dvh - 229px);
   }
 `;
 
