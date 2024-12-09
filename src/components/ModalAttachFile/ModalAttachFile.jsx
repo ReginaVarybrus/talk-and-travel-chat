@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import Backdrop from '@mui/material/Backdrop';
 import Fade from '@mui/material/Fade';
+import Swal from 'sweetalert2';
 import PropTypes from 'prop-types';
 import URLs from '@/constants/constants';
 import { axiosClient } from '@/services/api';
@@ -21,12 +22,58 @@ const ModalAttachFile = ({
   selectedFile,
   setSelectedFile,
   chatId,
-  src,
 }) => {
   const [isLoading, setIsLoading] = useState(false);
+  const fiftyMegabites = 50000000;
+
+  const allowedMimeTypes = [
+    'image/png',
+    'image/gif',
+    'image/svg+xml',
+    'image/jpeg',
+    'image/webp',
+    'image/tiff',
+  ];
+
   // Attachment image feature
   const handleUpload = async () => {
-    if (!selectedFile) return alert('Please select a file first!');
+    console.log('selected file', selectedFile);
+
+    if (!selectedFile) {
+      Swal.fire({
+        title: 'Error!',
+        text: 'Please select a file first!',
+        icon: 'error',
+        showConfirmButton: false,
+        timer: 2000,
+      });
+      handleClose();
+      return;
+    }
+
+    if (selectedFile?.size >= fiftyMegabites) {
+      Swal.fire({
+        title: 'Error!',
+        text: 'The selected file is too large. Please choose a file smaller than 50MB.',
+        icon: 'error',
+        showConfirmButton: false,
+        timer: 2000,
+      });
+      handleClose();
+      return;
+    }
+
+    if (!allowedMimeTypes.includes(selectedFile.type)) {
+      Swal.fire({
+        title: 'Error!',
+        text: `Unsupported file format! Please upload one of the following: PNG, GIF, SVG, JPG, WEBP, TIFF.`,
+        icon: 'error',
+        showConfirmButton: false,
+        timer: 3000,
+      });
+      handleClose();
+      return;
+    }
 
     setIsLoading(true);
 
@@ -51,6 +98,13 @@ const ModalAttachFile = ({
         console.log('Image uploaded successfully:', response.data);
       }
     } catch (error) {
+      Swal.fire({
+        title: 'Error!',
+        text: 'An error occurred while uploading the file. Please try again later.',
+        icon: 'error',
+        showConfirmButton: false,
+        timer: 2000,
+      });
       console.error('Error uploading file:', error);
     } finally {
       setIsLoading(false);
@@ -86,7 +140,16 @@ const ModalAttachFile = ({
               <Loader size={50} />
             </LoaderStyleBox>
           ) : (
-            <SendedImage src={src} alt="sended file" />
+            <SendedImage
+              src={
+                selectedFile?.type === 'image/tiff'
+                  ? '/src/images/tiff_icon.png'
+                  : selectedFile
+                    ? URL.createObjectURL(selectedFile)
+                    : ''
+              }
+              alt={selectedFile?.name}
+            />
           )}
           <hr style={{ margin: '24px 0' }} />
           <ConfirmBlock

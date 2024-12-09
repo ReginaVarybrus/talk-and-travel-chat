@@ -17,6 +17,7 @@
     "date-fns": "^4.1.0",
     "debounce": "^2.1.1",
     "formik": "^2.4.5",
+    "js-file-download": "^0.4.12",
     "leaflet": "^1.9.4",
     "lodash": "^4.17.21",
     "lodash.debounce": "^4.0.8",
