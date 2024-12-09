@@ -1,15 +1,33 @@
 import Backdrop from '@mui/material/Backdrop';
 import Fade from '@mui/material/Fade';
 import PropTypes from 'prop-types';
+import { axiosClient } from '@/services/api';
+// eslint-disable-next-line import/no-extraneous-dependencies
+import fileDownload from 'js-file-download';
 import { IoCloseOutline, IoCloudDownloadOutline } from 'react-icons/io5';
 import { CloseBtn } from '@/components/CountryInfo/CountryInfoStyled.js';
 import { SendedImage } from '@/components/ModalAttachFile/ModalAttachFileStyled.js';
 import { ModalWindowStyled } from '@/components/UserInfoModal/UserInfoModalStyled.js';
 import { InfoModalStyled, DownloadBtn } from './AttachImageModalStyled';
 
-const AttachImageModal = ({ openImage, handleCloseImage, src }) => {
-  const handleDownloadFile = () => {
+const AttachImageModal = ({ openImage, handleCloseImage, imgUrl, src }) => {
+  const handleDownloadFile = async (url, filename) => {
     console.log('download file in process...');
+    console.log('attach', imgUrl);
+
+    try {
+      const response = await axiosClient.get(url, {
+        responseType: 'blob',
+      });
+
+      fileDownload(response.data, filename);
+    } catch (error) {
+      console.error('Error downloading file:', error);
+    }
+  };
+
+  const handleDownload = () => {
+    handleDownloadFile(imgUrl, 'download-file');
   };
 
   return (
@@ -34,7 +52,7 @@ const AttachImageModal = ({ openImage, handleCloseImage, src }) => {
           <hr style={{ margin: '24px 0' }} />
           <SendedImage src={src} alt="opened file" />
           <hr style={{ margin: '24px 0' }} />
-          <DownloadBtn onClick={handleDownloadFile}>
+          <DownloadBtn onClick={handleDownload}>
             <IoCloudDownloadOutline />
           </DownloadBtn>
         </InfoModalStyled>
