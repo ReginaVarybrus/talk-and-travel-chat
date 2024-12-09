@@ -79,7 +79,8 @@ axiosClient.interceptors.request.use(
     const authData = JSON.parse(localStorage.getItem('persist:auth')) || {};
     const token = authData?.token?.replace(/"/g, '');
 
-    const isAuthUrl = urlToOmit.some(url => config.url.includes(url));
+    const isAuthUrl = urlToOmit.some(url => config.url.startsWith(url));
+
     if (!isAuthUrl && token) {
       config.headers.Authorization = `Bearer ${token}`;
     }
@@ -100,9 +101,11 @@ axiosClient.interceptors.response.use(
 
 const token = {
   set(tokenValue) {
+    localStorage.setItem('persist:auth', JSON.stringify({ token: tokenValue }));
     axiosClient.defaults.headers.common.Authorization = `Bearer ${tokenValue}`;
   },
   unset() {
+    localStorage.removeItem('persist:auth');
     delete axiosClient.defaults.headers.common.Authorization;
   },
 };
