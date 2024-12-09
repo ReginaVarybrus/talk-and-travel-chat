@@ -26,15 +26,17 @@ const URLs = {
   getReadMessages: chatId => `/chats/${chatId}/messages/read`,
   getUnreadMessages: chatId => `/chats/${chatId}/messages/unread`,
   getMessages: chatId => `/chats/${chatId}/messages`,
-  getCountries: 'v2/main-countries-chats',
-  getUserCountriesChats: '/v2/user/public-chats',
   getPrivateChats: 'v2/user/private-chats',
   createPrivateChat: 'chats/private',
   getAllUsers: 'v2/users',
 
-  // WS endpoints
+  // websocket connection
   subscriptionToMessages: chatId => `/notify/chat/${chatId}/messages`,
   subscriptionToUserErrors: userId => `/notify/user/${userId}/errors`,
+  getCountries: 'v2/main-countries-chats',
+  getUserCountriesChats: '/v2/user/public-chats',
+
+  // WS endpoints
   usersOnlineStatus: '/notify/users/onlineStatus',
   sendMessage: '/request/chat/messages',
   joinToGroupChat: '/request/chat/events.joinChat',

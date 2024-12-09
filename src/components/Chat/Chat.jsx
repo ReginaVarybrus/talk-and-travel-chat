@@ -48,7 +48,6 @@ const Chat = ({
 
   const [isUserTyping, setIsUserTyping] = useState(false);
   const [usersTyping, setUsersTyping] = useState([]);
-  const [messages, setMessages] = useState([]);
   const [page, setPage] = useState(0);
   const [unreadPage, setUnreadPage] = useState(0);
   const [hasMore, setHasMore] = useState(true);
@@ -58,7 +57,6 @@ const Chat = ({
   const [hasInitialScrolled, setHasInitialScrolled] = useState(false);
   const [showNewMessagesIndicator, setShowNewMessagesIndicator] =
     useState(false);
-  const [messagesToMarkAsRead, setMessagesToMarkAsRead] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [replyToMessage, setReplyToMessage] = useState(null);
 
@@ -71,12 +69,16 @@ const Chat = ({
   const fromMessageIdRef = useRef(null);
 
   const {
-    subscribeToMessages,
-    subscribeToUserErrors,
-    unsubscribeFromMessages,
-  } = useWebSocket();
-
-  const { updateUnreadMessagesCount } = useChatContext();
+    currentChatId,
+    setCurrentChatId,
+    currentChatMessages,
+    setCurrentChatMessages,
+    updateUnreadMessagesCount,
+    messagesToMarkAsRead,
+    setMessagesToMarkAsRead,
+    newMessageFromWebsocket,
+    setNewMessageFromWebsocket,
+  } = useChatContext();
 
   const debouncedMarkAsRead = useRef(
     debounce(async (chatId, lastMessageId) => {
@@ -105,7 +107,7 @@ const Chat = ({
 
       const { content, page: pageData } = response.data;
 
-      setMessages(prevMessages => [...content, ...prevMessages]);
+      setCurrentChatMessages(prevMessages => [...content, ...prevMessages]);
       setPage(pageData.number + 1);
       setHasMore(pageData.number + 1 < pageData.totalPages);
       return content;
@@ -116,9 +118,9 @@ const Chat = ({
 
   const fetchReadMessages = async (pageNumber = 0) => {
     if (isFetchingRead.current) {
-      console.warn('Already fetching messages. Skipping.');
       return [];
     }
+
     isFetchingRead.current = true;
 
     try {
@@ -142,7 +144,7 @@ const Chat = ({
         fromMessageIdRef.current = content[0].id;
       }
 
-      setMessages(prevMessages => [...content, ...prevMessages]);
+      setCurrentChatMessages(prevMessages => [...content, ...prevMessages]);
 
       setPage(pageData.number + 1);
       setHasMore(pageData.number + 1 < pageData.totalPages);
@@ -182,7 +184,7 @@ const Chat = ({
 
   const fetchMessageById = async (messageId, currentPage = page) => {
     try {
-      let targetMessage = messages.find(msg => msg.id === messageId);
+      let targetMessage = currentChatMessages.find(msg => msg.id === messageId);
 
       if (targetMessage) {
         scrollToMessageElement(messageId);
@@ -196,14 +198,14 @@ const Chat = ({
           return;
         }
 
-        setMessages(prevMessages => {
+        setCurrentChatMessages(prevMessages => {
           const uniqueMessages = newMessages.filter(
             newMsg => !prevMessages.some(msg => msg.id === newMsg.id)
           );
           return [...prevMessages, ...uniqueMessages];
         });
 
-        targetMessage = [...messages, ...newMessages].find(
+        targetMessage = [...currentChatMessages, ...newMessages].find(
           msg => msg.id === messageId
         );
 
@@ -265,7 +267,7 @@ const Chat = ({
           ...fetchedUnreadMessages,
         ].sort((a, b) => new Date(a.creationDate) - new Date(b.creationDate));
 
-        setMessages(combinedMessages);
+        setCurrentChatMessages(combinedMessages);
 
         if (fetchedUnreadMessages.length > 0) {
           setUnreadMessages(fetchedUnreadMessages);
@@ -281,6 +283,7 @@ const Chat = ({
       setIsLoading(false);
     }
   };
+
   useEffect(() => {
     if (unreadMessages.length > 0) {
       setUnreadCount(unreadMessages.length);
@@ -292,9 +295,10 @@ const Chat = ({
 
   useEffect(() => {
     if (id) {
-      const currentChatId = previousChatIdRef.current;
+      setCurrentChatId(id);
+      setCurrentChatMessages([]);
+      previousChatIdRef.current = id;
 
-      setMessages([]);
       setUnreadMessages([]);
       setPage(0);
       setUnreadPage(0);
@@ -302,6 +306,7 @@ const Chat = ({
       setMessagesToMarkAsRead([]);
       setHasInitialScrolled(false);
       setReplyToMessage(null);
+
       if (currentChatId && messagesToMarkAsRead.length > 0) {
         const lastMessageId =
           messagesToMarkAsRead[messagesToMarkAsRead.length - 1];
@@ -317,7 +322,7 @@ const Chat = ({
         fetchChatMessages();
       }, 300);
     }
-  }, [id]);
+  }, [id, setCurrentChatId, setCurrentChatMessages]);
 
   const scrollToBottom = () => {
     if (messageBlockRef.current) {
@@ -329,42 +334,42 @@ const Chat = ({
   };
 
   useEffect(() => {
-    if (isSubscribed && id) {
-      subscribeToMessages(URLs.subscriptionToMessages(id), newMessage => {
-        setMessages(prevMessages => [...prevMessages, newMessage]);
+    if (!newMessageFromWebsocket.length) return;
 
-        if (newMessage.type === MESSAGE_TYPES.TEXT && messageBlockRef.current) {
-          const isAtBottom =
-            messageBlockRef.current.scrollTop +
-              messageBlockRef.current.clientHeight >=
-            messageBlockRef.current.scrollHeight - 10;
-          if (isAtBottom) {
-            messageBlockRef.current.scrollTo({
-              top: messageBlockRef.current.scrollHeight,
-              behavior: 'smooth',
-            });
-            setMessagesToMarkAsRead(prev => [...prev, newMessage.id]);
-          } else if (newMessage.user.id !== userId) {
-            setUnreadMessages(prev => [...prev, newMessage]);
-            setShowNewMessagesIndicator(true);
-          }
-          if (newMessage.user.id === userId) {
-            setMessagesToMarkAsRead(prev => [...prev, newMessage.id]);
-          }
-        }
-      });
+    const textMessagesForCurrentChat = newMessageFromWebsocket.filter(
+      msg => msg.chatId === id && msg.type === MESSAGE_TYPES.TEXT
+    );
 
-      if (!isPrivateChat && selectedCompanion) {
-        setSelectedCompanion(null);
+    if (textMessagesForCurrentChat.length === 0) return;
+
+    textMessagesForCurrentChat.forEach(message => {
+      const isAtBottom =
+        messageBlockRef.current.scrollTop +
+          messageBlockRef.current.clientHeight >=
+        messageBlockRef.current.scrollHeight - 10;
+
+      if (isAtBottom) {
+        messageBlockRef.current.scrollTo({
+          top: messageBlockRef.current.scrollHeight,
+          behavior: 'smooth',
+        });
+        setMessagesToMarkAsRead(prev => [...prev, message.id]);
+      } else if (message.user.id !== userId) {
+        setUnreadMessages(prev => [...prev, message]);
+        setShowNewMessagesIndicator(true);
+
+        updateUnreadMessagesCount(id, unreadMessages.length + 1, isPrivateChat);
       }
 
-      subscribeToUserErrors(URLs.subscriptionToUserErrors(userId), setChatData);
+      if (message.user.id === userId) {
+        setMessagesToMarkAsRead(prev => [...prev, message.id]);
+      }
+    });
 
-      return () => {
-        unsubscribeFromMessages();
-      };
-    }
-  }, [id, isSubscribed, setChatData]);
+    setNewMessageFromWebsocket(prev =>
+      prev.filter(msg => msg.chatId !== id || msg.type !== MESSAGE_TYPES.TEXT)
+    );
+  }, [newMessageFromWebsocket, id, userId, unreadMessages, isPrivateChat]);
 
   useEffect(() => {
     if (messagesToMarkAsRead.length > 0) {
@@ -374,6 +379,7 @@ const Chat = ({
 
         debouncedMarkAsRead(id, lastMessageId);
         setMessagesToMarkAsRead([]);
+        updateUnreadMessagesCount(id, 0, false);
       }, 3000);
 
       return () => clearTimeout(timer);
@@ -566,14 +572,14 @@ const Chat = ({
           <LoaderStyleBox>
             <Loader size={50} />
           </LoaderStyleBox>
-        ) : !messages.length ? (
+        ) : !currentChatMessages.length ? (
           <NoMassegesNotification>
             <Logo src={logo} alt="logo" width="200" height="160" />
             <p>There are no discussions yet. Be the first to start.</p>
           </NoMassegesNotification>
         ) : (
           <MessageList
-            messages={messages}
+            messages={currentChatMessages}
             unreadMessages={unreadMessages}
             setIsUserTyping={setIsUserTyping}
             setUsersTyping={setUsersTyping}

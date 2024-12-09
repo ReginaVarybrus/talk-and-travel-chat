@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { useOutletContext, useLocation } from 'react-router-dom';
 import { useMediaQuery } from 'react-responsive';
@@ -42,8 +42,23 @@ const DMsList = () => {
     setIsChatVisible,
   } = useOutletContext();
 
-  const { filteredPrivateChats, searchedValue } = useChatContext();
+  const { dataUserChats, searchedValue } = useChatContext();
 
+  const filteredPrivateChats = useMemo(() => {
+    const searchValue = searchedValue.trim().toLowerCase();
+    if (!searchValue) return dataUserChats;
+
+    return dataUserChats.filter(chat => {
+      const fullName = chat.companion.userName.toLowerCase();
+      const [firstName, lastName] = fullName.split(' ');
+
+      return (
+        fullName.startsWith(searchValue.toLowerCase()) ||
+        (firstName && firstName.startsWith(searchValue.toLowerCase())) ||
+        (lastName && lastName.startsWith(searchValue.toLowerCase()))
+      );
+    });
+  }, [dataUserChats, searchedValue]);
   const { responseData: dataChat } = useFetch(
     selectedChat ? URLs.getChat(selectedChat) : null
   );
