@@ -232,6 +232,17 @@ MessageItem.propTypes = {
   isOnline: PropTypes.bool,
   setParticipantsAmount: PropTypes.func,
   chatOpenedTime: PropTypes.instanceOf(Date),
+  attachment: PropTypes.shape({
+    type: PropTypes.string,
+    id: PropTypes.string,
+    originalImageUrl: PropTypes.string,
+    thumbnailImageUrl: PropTypes.string,
+  }),
+  isPrivateChat: PropTypes.bool,
+  // onReply,
+  // replyMessageId,
+  // repliedMessage,
+  // fetchMessageById,
 };
 
 export default MessageItem;

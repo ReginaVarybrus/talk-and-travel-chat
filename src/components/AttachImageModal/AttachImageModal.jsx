@@ -2,7 +2,6 @@ import Backdrop from '@mui/material/Backdrop';
 import Fade from '@mui/material/Fade';
 import PropTypes from 'prop-types';
 import { axiosClient } from '@/services/api';
-// eslint-disable-next-line import/no-extraneous-dependencies
 import fileDownload from 'js-file-download';
 import { IoCloseOutline, IoCloudDownloadOutline } from 'react-icons/io5';
 import { CloseBtn } from '@/components/CountryInfo/CountryInfoStyled.js';
@@ -12,9 +11,6 @@ import { InfoModalStyled, DownloadBtn } from './AttachImageModalStyled';
 
 const AttachImageModal = ({ openImage, handleCloseImage, imgUrl, src }) => {
   const handleDownloadFile = async (url, filename) => {
-    console.log('download file in process...');
-    console.log('attach', imgUrl);
-
     try {
       const response = await axiosClient.get(url, {
         responseType: 'blob',
@@ -64,6 +60,7 @@ const AttachImageModal = ({ openImage, handleCloseImage, imgUrl, src }) => {
 AttachImageModal.propTypes = {
   openImage: PropTypes.bool,
   handleCloseImage: PropTypes.func,
+  imgUrl: PropTypes.string,
   src: PropTypes.string,
 };
 
