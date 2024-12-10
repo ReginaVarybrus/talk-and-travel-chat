@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useEffect } from 'react';
 import { useOutletContext } from 'react-router-dom';
 import { useMediaQuery } from 'react-responsive';
 import { device } from '@/constants/mediaQueries.js';
@@ -18,11 +18,6 @@ import {
 
 const RoomsList = () => {
   const isDesktop = useMediaQuery({ query: device.tablet });
-  const [selectedCountry, setSelectedCountry] = useState(null);
-
-  const { responseData } = useFetch(
-    selectedCountry ? URLs.getMainCountryChatByName(selectedCountry) : null
-  );
 
   const {
     setChatData,
@@ -31,7 +26,14 @@ const RoomsList = () => {
     setIsChatVisible,
     setParticipantsAmount,
     setChatOpenedTime,
+    selectedChat,
+    setSelectedChat,
   } = useOutletContext();
+
+  const { responseData } = useFetch(
+    selectedChat ? URLs.getMainCountryChatByName(selectedChat) : null
+  );
+
   const { subscriptionRooms } = useChatContext();
 
   useEffect(() => {
@@ -43,7 +45,7 @@ const RoomsList = () => {
   }, [responseData, setChatData, setIsSubscribed]);
 
   const handleOpenCountryRoom = countryName => {
-    setSelectedCountry(countryName);
+    setSelectedChat(countryName);
     setIsShowJoinBtn(false);
     setChatOpenedTime(new Date());
     if (!isDesktop) {
@@ -59,7 +61,7 @@ const RoomsList = () => {
             <Item
               key={room.country.flagCode}
               onClick={() => handleOpenCountryRoom(room.name)}
-              $isActive={room.name === selectedCountry}
+              $isActive={room.name === selectedChat}
             >
               <ChatNameBox>
                 <Flag
@@ -69,12 +71,12 @@ const RoomsList = () => {
                   src={`https://flagcdn.com/${room.country.flagCode}.svg`}
                   alt={`${room.country.flagCode} flag`}
                 />
-                <ChatName $isActive={room.name === selectedCountry}>
+                <ChatName $isActive={room.name === selectedChat}>
                   {room.name}
                 </ChatName>
               </ChatNameBox>
               {room.unreadMessagesCount > 0 && (
-                <UnreadMessagesCount $isActive={room.name === selectedCountry}>
+                <UnreadMessagesCount $isActive={room.name === selectedChat}>
                   {room.unreadMessagesCount}
                 </UnreadMessagesCount>
               )}

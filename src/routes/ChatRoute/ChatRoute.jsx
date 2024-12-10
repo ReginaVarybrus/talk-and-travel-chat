@@ -8,7 +8,6 @@ import { updateUserStatus } from '@/redux-store/user/userStatusesSlice.js';
 import { getUser } from '@/redux-store/selectors.js';
 import SearchBar from '@/components/SearchBar/SearchBar';
 import Chat from '@/components/Chat/Chat';
-
 import { useWebSocket } from '@/hooks/useWebSocket.js';
 import { useChatContext } from '@/providers/ChatProvider.jsx';
 import useUserActivity from '@/hooks/useUserActivity.js';
@@ -17,6 +16,7 @@ import { ChatRouteStyled } from './ChatRouteStyled.js';
 const ChatRoute = () => {
   const dispatch = useDispatch();
   const [chatData, setChatData] = useState({});
+  const [selectedChat, setSelectedChat] = useState(null);
   const [isSubscribed, setIsSubscribed] = useState(false);
   const [isShowJoinBtn, setIsShowJoinBtn] = useState(false);
   const [participantsAmount, setParticipantsAmount] = useState(null);
@@ -91,6 +91,8 @@ const ChatRoute = () => {
         isChatVisible={isChatVisible}
         setIsChatVisible={setIsChatVisible}
         setChatOpenedTime={setChatOpenedTime}
+        selectedChat={selectedChat}
+        setSelectedChat={setSelectedChat}
       />
 
       <Chat
@@ -107,6 +109,8 @@ const ChatRoute = () => {
         isChatVisible={isChatVisible}
         setIsChatVisible={setIsChatVisible}
         chatOpenedTime={chatOpenedTime}
+        selectedChat={selectedChat}
+        setSelectedChat={setSelectedChat}
       />
     </ChatRouteStyled>
   );

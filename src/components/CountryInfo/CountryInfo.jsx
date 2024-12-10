@@ -50,6 +50,7 @@ const CountryInfo = ({
   isShowJoinBtn,
   participants,
   loading,
+  setSelectedChat,
 }) => {
   const isDesktop = useMediaQuery({ query: device.tablet });
   const currentUserId = useSelector(getUser)?.id;
@@ -108,6 +109,7 @@ const CountryInfo = ({
     }
     setIsShowJoinBtn(true);
     setChatData(null);
+    setSelectedChat(null);
     onClose();
   };
 
