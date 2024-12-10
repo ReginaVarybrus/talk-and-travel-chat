@@ -96,7 +96,7 @@ const MessageItem = ({
 
   const handleOpenImage = () => {
     setOpenImage(true);
-    console.log(attachment.thumbnailImageUrl);
+    console.log('url', attachment.thumbnailImageUrl);
   };
 
   const checkToShowAvatar = messageTypeText && userId && isShownAvatar;
@@ -212,6 +212,7 @@ const MessageItem = ({
         openImage={openImage}
         handleCloseImage={handleCloseImage}
         src={attachment?.thumbnailImageUrl}
+        imgUrl={attachment?.originalImageUrl}
       />
     </MessageItemStyled>
   );
@@ -231,6 +232,17 @@ MessageItem.propTypes = {
   isOnline: PropTypes.bool,
   setParticipantsAmount: PropTypes.func,
   chatOpenedTime: PropTypes.instanceOf(Date),
+  attachment: PropTypes.shape({
+    type: PropTypes.string,
+    id: PropTypes.string,
+    originalImageUrl: PropTypes.string,
+    thumbnailImageUrl: PropTypes.string,
+  }),
+  isPrivateChat: PropTypes.bool,
+  // onReply,
+  // replyMessageId,
+  // repliedMessage,
+  // fetchMessageById,
 };
 
 export default MessageItem;
