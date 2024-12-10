@@ -20,6 +20,8 @@ const SearchBar = ({
   isChatVisible,
   setIsChatVisible,
   setChatOpenedTime,
+  selectedChat,
+  setSelectedChat,
 }) => {
   const location = useLocation();
   const isRoomRoute = location.pathname.includes('/rooms-chat');
@@ -44,6 +46,8 @@ const SearchBar = ({
             subscriptionRooms={subscriptionRooms}
             setParticipantsAmount={setParticipantsAmount}
             setChatOpenedTime={setChatOpenedTime}
+            selectedChat={selectedChat}
+            setSelectedChat={setSelectedChat}
           />
           <ButtonMapOpen onClick={handleOpenMap}>Search by map</ButtonMapOpen>
         </>
@@ -67,6 +71,8 @@ const SearchBar = ({
             setIsChatVisible,
             setParticipantsAmount,
             setChatOpenedTime,
+            selectedChat,
+            setSelectedChat,
           }}
         />
       </div>

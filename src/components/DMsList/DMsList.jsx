@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { useOutletContext, useLocation } from 'react-router-dom';
 import { useMediaQuery } from 'react-responsive';
@@ -31,7 +31,6 @@ import {
 
 const DMsList = () => {
   const isDesktop = useMediaQuery({ query: device.tablet });
-  const [selectedChat, setSelectedChat] = useState(null);
   const usersStatuses = useSelector(getUsersStatuses);
   const location = useLocation();
   const { privateChatId, companionObject } = location.state || {};
@@ -40,6 +39,8 @@ const DMsList = () => {
     setIsSubscribed,
     setSelectedCompanion,
     setIsChatVisible,
+    selectedChat,
+    setSelectedChat,
   } = useOutletContext();
 
   const { filteredPrivateChats, searchedValue } = useChatContext();

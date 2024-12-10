@@ -29,10 +29,12 @@ const SearchInput = ({
   setIsChatVisible,
   setParticipantsAmount,
   setChatOpenedTime,
+  selectedChat,
+  setSelectedChat,
 }) => {
   const isDesktop = useMediaQuery({ query: device.tablet });
   const navigate = useNavigate();
-  const [selectedCountry, setSelectedCountry] = useState(null);
+
   const [searchedValue, setSearchedValue] = useState('');
   const [countries, setCountries] = useState([]);
   const [showItem, setShowItem] = useState(false);
@@ -61,7 +63,7 @@ const SearchInput = ({
   };
 
   const { responseData } = useFetch(
-    selectedCountry ? URLs.getMainCountryChatByName(selectedCountry) : null
+    selectedChat ? URLs.getMainCountryChatByName(selectedChat) : null
   );
   const lowerCaseSearch = searchedValue.toLowerCase();
 
@@ -107,7 +109,7 @@ const SearchInput = ({
 
   const handleCountryClick = country => {
     const countryName = country.name;
-    setSelectedCountry(countryName);
+    setSelectedChat(countryName);
     setChatOpenedTime(new Date());
     const nameOfCountry = subscriptionRooms.find(
       item => item.name === countryName
