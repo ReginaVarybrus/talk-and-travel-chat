@@ -2,7 +2,7 @@ import Backdrop from '@mui/material/Backdrop';
 import Fade from '@mui/material/Fade';
 import PropTypes from 'prop-types';
 import { axiosClient } from '@/services/api';
-import fileDownload from 'js-file-download';
+import download from 'downloadjs';
 import { IoCloseOutline, IoCloudDownloadOutline } from 'react-icons/io5';
 import { CloseBtn } from '@/components/CountryInfo/CountryInfoStyled.js';
 import { SendedImage } from '@/components/ModalAttachFile/ModalAttachFileStyled.js';
@@ -12,11 +12,13 @@ import { InfoModalStyled, DownloadBtn } from './AttachImageModalStyled';
 const AttachImageModal = ({ openImage, handleCloseImage, imgUrl, src }) => {
   const handleDownloadFile = async (url, filename) => {
     try {
+      console.log(`Attempting to download file from: ${url}`);
       const response = await axiosClient.get(url, {
         responseType: 'blob',
       });
 
-      fileDownload(response.data, filename);
+      download(response.data, filename);
+      console.log('File downloaded successfully');
     } catch (error) {
       console.error('Error downloading file:', error);
     }
@@ -24,6 +26,7 @@ const AttachImageModal = ({ openImage, handleCloseImage, imgUrl, src }) => {
 
   const handleDownload = () => {
     handleDownloadFile(imgUrl, 'download-file');
+    handleCloseImage();
   };
 
   return (
