@@ -158,10 +158,7 @@ const SearchInput = ({
           {isFetching ? (
             <Loader size={40} />
           ) : !filterCountries.length ? (
-            <Text>
-              Sorry, the room for this country does not exist, try creating one
-              yourself
-            </Text>
+            <Text>Sorry, the room for this country does not exist</Text>
           ) : (
             <>
               {filterCountries.map(country => (
