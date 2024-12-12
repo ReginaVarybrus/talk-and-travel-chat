@@ -1,12 +1,11 @@
 ![Main Page Screenshot](public/og-image.png)
 
+---
+
 <div align="center">
   <img src="public/logo.png" alt="Talk and Travel Logo" width="200">
 </div>
 
-<h1 align="center">
-  Talk and Travel
-</h1>
 
 **Talk and Travel** is a chat platform designed for travelers to connect, share
 experiences, and plan their adventures together. The application allows users to
@@ -17,7 +16,6 @@ enthusiasts.
 
 The project is deployed using **Vite** for the frontend.
 
----
 
 ## Features
 
