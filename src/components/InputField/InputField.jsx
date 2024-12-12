@@ -62,10 +62,7 @@ const InputField = ({
     }
 
     formik.handleBlur(e);
-
-    if (props.general === 'userEmail') {
-      await formik.validateField('userEmail');
-    }
+    await formik.validateField(e.target.name);
   };
 
   const handlePreventAction = e => {
@@ -87,7 +84,7 @@ const InputField = ({
   };
 
   const renderValidationMessage = () => {
-    if (formik.errors[props.general]) {
+    if (formik.touched[props.general] && formik.errors[props.general]) {
       return (
         <ErrorStyled id={props.general}>
           {formik.errors[props.general]}
@@ -153,6 +150,7 @@ const InputField = ({
           $isErrorColor={formik.errors[props.general]}
           $isSuccessColor={formik.touched[props.general]}
           $backgroundcolor={backgroundcolor}
+          $isTouched={formik.touched[props.general]}
         />
       )}
       {isPopupVisible && props.general === 'password' && isRegisterPage && (

@@ -1,70 +1,155 @@
-# Getting Started with Create React App
+![Main Page Screenshot](public/og-image.png)
 
-This project was with [Create React App](https://github.com/facebook/create-react-app).
+# ![Talk and Travel Logo](public/logo.png) Talk and Travel
 
-## Available Scripts
+**Talk and Travel** is a chat platform designed for travelers to connect, share
+experiences, and plan their adventures together. The application allows users to
+engage in real-time conversations, join country-specific chat rooms, and
+maintain private chats with friends or fellow travelers. Its seamless user
+interface ensures a smooth communication experience, tailored for wanderlust
+enthusiasts.
 
-In the project directory, you can run:
+The project is deployed using **Vite** for the frontend.
 
-### `npm start`
+---
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+## Features
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+- **User Authentication**: Secure registration and login using JWT tokens.
+- **Chat Functionality**:
+  - Real-time communication via rooms and private chats.
+  - Country-specific chat rooms to connect with travelers worldwide.
+- **Dynamic Form Validation**: Ensures correct data entry with Formik and Yup.
+- **Modern UI/UX**: Styled-components for responsive and visually appealing
+  design.
+- **Efficient Chat Rendering**: Utilizes Intersection Observer API for smooth
+  chat experience.
 
-### `npm test`
+---
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+## Tech Stack
 
-### `npm run build`
+### Frontend:
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+- **React**: Component-based architecture for dynamic UI.
+- **Redux Toolkit**: Centralized state management.
+- **Formik & Yup**: Simplified form handling and validation.
+- **Styled-components**: Modern CSS styling for components.
+- **Axios**: API request handling.
+- **PropTypes**: Type validation.
+- **React-stomp-hooks**: Websocket handling.
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+---
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+## Server
 
-### `npm run eject`
+The backend of the project is built with **Java (Spring Boot)**. It includes:
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+- **Redis**: Efficient session management.
+- **PostgreSQL**: Reliable database solution.
+- **AWS S3**: Secure storage for files and attachments.
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+Explore the backend repository
+[here](https://github.com/LiashenkoAndrey/talk-and-travel) and the Swagger API
+documentation
+[here](https://api.talk-and-travel.online/swagger-ui/index.html#/).
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+---
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+## Developers
 
-## Learn More
+Meet the amazing team behind **Talk and Travel**:
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+1. **Frontend Developers:**
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+   - [Regina Varybrus](https://github.com/ReginaVarybrus)
+   - [Kostiantyn Demidas](https://github.com/doxliydriw)
+   - [Valentyna Hotsa](https://github.com/ValentinaHotsa)
 
-### Code Splitting
+2. **Backend Developers:**
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+   - [Andrey Liashenko](https://github.com/LiashenkoAndrey)
+   - [Oleksandr Prokopenko](https://github.com/OleksandrProkopenkoDev)
 
-### Analyzing the Bundle Size
+---
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+If you have any questions or want to contribute, feel free to explore the
+project or open an issue on GitHub. Happy coding!
 
-### Making a Progressive Web App
+# UA
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
+**Talk and Travel** — це додаток чату, створений для мандрівників, щоб
+об'єднуватися, ділитися досвідом і планувати свої подорожі разом. Додаток
+дозволяє користувачам спілкуватися в реальному часі, приєднуватися до групових
+чатів, прив'язаних до конкретних країн, та вести приватні чати з друзями або
+іншими мандрівниками. Інтуїтивно зрозумілий інтерфейс забезпечує плавний досвід
+комунікації, спеціально адаптований для любителів подорожей.
 
-### Advanced Configuration
+Проєкт розгорнуто з використанням **Vite** для фронтенду.
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
+---
 
-### Deployment
+## Особливості
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
+- **Аутентифікація користувачів**: Безпечна реєстрація та вхід за допомогою JWT
+  токенів.
+- **Функціональність чату**:
+  - Спілкування в реальному часі через групові та приватні чати.
+  - Групові чати для конкретних країн, щоб з'єднуватися з мандрівниками з усього
+    світу.
+- **Динамічна перевірка форм**: Забезпечує правильність введення даних з
+  використанням Formik та Yup.
+- **Сучасний UI/UX**: Styled-components для адаптивного та візуально
+  привабливого дизайну.
+- **Ефективна обробка чатів**: Використання Intersection Observer API для
+  плавної роботи чату.
 
-### `npm run build` fails to minify
+---
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+## Технологічний стек
+
+### Фронтенд:
+
+- **React**: Фреймворк для створення компонентного та динамічного інтерфейсу.
+- **Redux Toolkit**: Централізоване управління станом.
+- **Formik & Yup**: Спрощене оброблення та перевірка форм.
+- **Styled-components**: CSS-стилізування компонентів.
+- **Axios**: Обробка API-запитів.
+- **PropTypes**: Перевірка типів.
+- **React-stomp-hooks**: Робота з вебсокетами.
+
+---
+
+## Сервер
+
+Бекенд проєкту побудований з використанням **Java (Spring Boot)**. Він включає:
+
+- **Redis**: Ефективне управління сесіями.
+- **PostgreSQL**: Надійне рішення для баз даних.
+- **AWS S3**: Безпечне зберігання файлів та вкладень.
+
+Ознайомтеся з репозиторієм бекенду
+[тут](https://github.com/LiashenkoAndrey/talk-and-travel) та документацією
+Swagger API [тут](https://api.talk-and-travel.online/swagger-ui/index.html#/).
+
+---
+
+## Розробники
+
+Наша команда, що працювала над **Talk and Travel**:
+
+1. **Фронтенд-розробники:**
+
+   - [Регіна Варибрус](https://github.com/ReginaVarybrus)
+   - [Костянтин Демідас](https://github.com/doxliydriw)
+   - [Валентина Гоца](https://github.com/ValentinaHotsa)
+
+2. **Бекенд-розробники:**
+
+   - [Андрій Ляшенко](https://github.com/LiashenkoAndrey)
+   - [Олександр Прокопенко](https://github.com/OleksandrProkopenkoDev)
+
+---
+
+Якщо у вас є запитання або ви хочете зробити свій внесок, не соромтеся дослідити
+проєкт або створити запит на GitHub. Успішного кодування!
