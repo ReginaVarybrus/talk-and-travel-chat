@@ -41,6 +41,8 @@ const Chat = ({
   isChatVisible,
   setIsChatVisible,
   chatOpenedTime,
+  selectedChat,
+  setSelectedChat,
 }) => {
   const userId = useSelector(getUser)?.id;
   const { id, name, chatType, country } = chatData || {};
@@ -532,6 +534,8 @@ const Chat = ({
         setIsChatVisible={setIsChatVisible}
         isShowJoinBtn={isShowJoinBtn}
         setChatData={setChatData}
+        selectedChat={selectedChat}
+        setSelectedChat={setSelectedChat}
       />
       <MessageBlock ref={messageBlockRef} onScroll={handleScroll}>
         {isLoading ? (
