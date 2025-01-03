@@ -74,7 +74,7 @@ const ButtonGoogle = () => {
   };
 
   return (
-    <GoogleButton onClick={triggerGoogleSignIn}>
+    <GoogleButton type="button" onClick={triggerGoogleSignIn}>
       <GoogleLogoSVG />
       <span>Google</span>
     </GoogleButton>
