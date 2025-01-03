@@ -36,7 +36,7 @@ const ChatHeader = ({
   setIsShowJoinBtn,
   setIsChatVisible,
   isShowJoinBtn,
-
+  messageBlockRef,
   setSelectedChat,
 }) => {
   const [openModal, setOpenModal] = useState(false);
@@ -182,6 +182,7 @@ const ChatHeader = ({
         participants={participants}
         loading={loading}
         setSelectedChat={setSelectedChat}
+        messageBlockRef={messageBlockRef}
       />
       <UserInfoModal
         open={openModalDMs}
