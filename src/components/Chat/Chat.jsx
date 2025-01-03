@@ -536,6 +536,7 @@ const Chat = ({
         setChatData={setChatData}
         selectedChat={selectedChat}
         setSelectedChat={setSelectedChat}
+        messageBlockRef={messageBlockRef}
       />
       <MessageBlock ref={messageBlockRef} onScroll={handleScroll}>
         {isLoading ? (

@@ -51,6 +51,7 @@ const CountryInfo = ({
   participants,
   loading,
   setSelectedChat,
+  messageBlockRef,
 }) => {
   const isDesktop = useMediaQuery({ query: device.tablet });
   const currentUserId = useSelector(getUser)?.id;
@@ -110,6 +111,9 @@ const CountryInfo = ({
     setIsShowJoinBtn(true);
     setChatData(null);
     setSelectedChat(null);
+    if (messageBlockRef.current) {
+      messageBlockRef.current.scrollTop = 0; // Скроллим вверх
+    }
     onClose();
   };
 

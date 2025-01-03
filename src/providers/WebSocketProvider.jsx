@@ -1,9 +1,12 @@
 import { StompSessionProvider } from 'react-stomp-hooks';
 import { useSelector } from 'react-redux';
 import { getToken } from '@/redux-store/selectors.js';
+import useSessionTimeout from '@/hooks/useSessionTimeout';
 
 const WebSocketProvider = ({ children }) => {
   const token = useSelector(getToken);
+
+  useSessionTimeout(token);
 
   if (!token) {
     return children;
