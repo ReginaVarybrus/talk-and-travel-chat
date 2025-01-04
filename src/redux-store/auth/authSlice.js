@@ -33,6 +33,13 @@ const handleFulfilledLogin = (state, action) => {
 export const authSlice = createSlice({
   name: 'auth',
   initialState,
+  reducers: {
+    forceLogOut: state => {
+      state.token = null;
+      state.isLoggedIn = false;
+      state.error = null;
+    },
+  },
   extraReducers: builder =>
     builder
       .addCase(register.pending, handlePending)
@@ -66,4 +73,5 @@ export const authSlice = createSlice({
       .addCase(logInWithGoogle.fulfilled, handleFulfilledLogin),
 });
 
+export const { forceLogOut } = authSlice.actions;
 export default authSlice.reducer;
