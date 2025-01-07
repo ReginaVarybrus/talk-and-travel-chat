@@ -12,8 +12,7 @@ const ButtonGoogle = () => {
 
   const handleGoogleSignIn = () => {
     const client = google.accounts.oauth2.initTokenClient({
-      client_id:
-        '853304957930-2cclc0tr0hs9l4m918bgoeg51t8ca5u5.apps.googleusercontent.com',
+      client_id: import.meta.env.VITE_GOOGLE_CLIENT_ID,
       scope: 'email profile',
       callback: response => {
         if (response.access_token) {
