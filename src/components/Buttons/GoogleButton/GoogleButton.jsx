@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import Swal from 'sweetalert2';
 import {
   GoogleButton,
   GoogleLogoSVG,
@@ -10,71 +10,54 @@ import { logInWithGoogle } from '@/redux-store/auth/authOperations';
 const ButtonGoogle = () => {
   const dispatch = useDispatch();
 
-  const handleCredentialResponse = response => {
-    try {
-      const jwtParts = response.credential.split('.');
-      if (jwtParts.length !== 3) {
-        throw new Error('Invalid JWT structure');
-      }
+  const handleGoogleSignIn = () => {
+    const client = google.accounts.oauth2.initTokenClient({
+      client_id:
+        '853304957930-2cclc0tr0hs9l4m918bgoeg51t8ca5u5.apps.googleusercontent.com',
+      scope: 'email profile',
+      callback: response => {
+        if (response.access_token) {
+          fetch(
+            `https://www.googleapis.com/oauth2/v3/userinfo?access_token=${response.access_token}`
+          )
+            .then(res => res.json())
+            .then(userInfo => {
+              const { email, name, email_verified: emailVerified } = userInfo;
 
-      const decodeBase64Url = str =>
-        decodeURIComponent(
-          atob(str.replace(/-/g, '+').replace(/_/g, '/'))
-            .split('')
-            .map(c => `%${`00${c.charCodeAt(0).toString(16)}`.slice(-2)}`)
-            .join('')
-        );
+              if (!emailVerified) {
+                Swal.fire({
+                  text: 'Email is not verified. Please use a verified Google account.',
+                  icon: 'error',
+                  confirmButtonText: 'OK',
+                });
+                return;
+              }
 
-      const tokenData = JSON.parse(decodeBase64Url(jwtParts[1]));
-
-      if (!tokenData.email || !tokenData.name) {
-        throw new Error('Missing email or name in token data');
-      }
-
-      if (!tokenData.email_verified) {
-        console.error('Email is not verified');
-        return;
-      }
-
-      dispatch(logInWithGoogle(tokenData));
-    } catch (error) {
-      console.error('Error parsing token data or dispatching login:', error);
-    }
-  };
-
-  useEffect(() => {
-    if (window.google) {
-      google.accounts.id.initialize({
-        client_id:
-          '853304957930-2cclc0tr0hs9l4m918bgoeg51t8ca5u5.apps.googleusercontent.com',
-
-        callback: handleCredentialResponse,
-        ux_mode: 'popup',
-      });
-    } else {
-      console.error('Google API is not loaded');
-    }
-  }, []);
-
-  const triggerGoogleSignIn = () => {
-    const dimElement = document.createElement('div');
-    dimElement.className = 'dim-background';
-
-    const rootElement = document.getElementById('root');
-    rootElement.appendChild(dimElement);
-
-    google.accounts.id.prompt(() => {
-      const googleContainer = document.getElementById(
-        'credential_picker_container'
-      );
-      if (!googleContainer) {
-        rootElement.removeChild(dimElement);
-      }
+              dispatch(logInWithGoogle({ email, name }));
+            })
+            .catch(err => {
+              console.error('Failed to fetch user info:', err);
+              Swal.fire({
+                text: 'Failed to login with Google. Please try again later.',
+                icon: 'error',
+                confirmButtonText: 'OK',
+              });
+            });
+        } else {
+          Swal.fire({
+            text: 'Failed to login with Google. Please try again.',
+            icon: 'error',
+            confirmButtonText: 'OK',
+          });
+        }
+      },
     });
+
+    client.requestAccessToken();
   };
 
   return (
-    <GoogleButton type="button" onClick={triggerGoogleSignIn}>
+    <GoogleButton type="button" onClick={handleGoogleSignIn}>
       <GoogleLogoSVG />
       <span>Google</span>
     </GoogleButton>

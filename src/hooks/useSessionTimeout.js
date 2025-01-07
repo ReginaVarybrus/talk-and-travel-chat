@@ -3,7 +3,7 @@ import { useEffect } from 'react';
 import Swal from 'sweetalert2';
 import { useDispatch } from 'react-redux';
 import { logOut } from '@/redux-store/auth/authOperations';
-import { clearUser } from '@/redux-store/user/userSlice';
+
 import { forceLogOut } from '@/redux-store/auth/authSlice';
 
 const useSessionTimeout = token => {
