@@ -96,7 +96,6 @@ const MessageItem = ({
 
   const handleOpenImage = () => {
     setOpenImage(true);
-    console.log('url', attachment.thumbnailImageUrl);
   };
 
   const checkToShowAvatar = messageTypeText && userId && isShownAvatar;

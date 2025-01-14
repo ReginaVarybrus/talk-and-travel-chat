@@ -37,8 +37,6 @@ const ModalAttachFile = ({
 
   // Attachment image feature
   const handleUpload = async () => {
-    console.log('selected file', selectedFile);
-
     if (!selectedFile) {
       Swal.fire({
         title: 'Error!',
